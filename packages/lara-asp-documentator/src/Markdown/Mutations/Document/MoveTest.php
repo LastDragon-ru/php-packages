@@ -69,16 +69,29 @@ final class MoveTest extends TestCase {
                 MARKDOWN,
                 '/path/to/file.md',
             ],
-            'Query & Fragment'             => [
+            'Query'                        => [
                 <<<'MARKDOWN'
-                [foo]: ../from/path?a=123#fragment
-                [bar]: ?a=123#fragment
+                [foo]: ../from/path?a=123
+                [bar]: ../from/file.md?a=123
 
                 MARKDOWN,
                 '/path/from/file.md',
                 <<<'MARKDOWN'
-                [foo]: path?a=123#fragment
-                [bar]: file.md?a=123#fragment
+                [foo]: path?a=123
+                [bar]: file.md?a=123
+                MARKDOWN,
+                '/path/to/file.md',
+            ],
+            'Fragment'                     => [
+                <<<'MARKDOWN'
+                [foo]: ../from/path#fragment
+                [bar]: #fragment
+
+                MARKDOWN,
+                '/path/from/file.md',
+                <<<'MARKDOWN'
+                [foo]: path#fragment
+                [bar]: file.md#fragment
                 MARKDOWN,
                 '/path/to/file.md',
             ],
