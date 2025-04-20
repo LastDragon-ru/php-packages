@@ -20,6 +20,19 @@ use PHPUnit\Framework\Attributes\DataProvider;
 final class UtilsTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
+    public function testIsPath(): void {
+        self::assertFalse(Utils::isPath('tel:+70000000000'));
+        self::assertFalse(Utils::isPath('urn:example.example'));
+        self::assertFalse(Utils::isPath('https://example.com/'));
+        self::assertFalse(Utils::isPath('mailto:mail@example.com'));
+        self::assertTrue(Utils::isPath('//example.com/'));
+        self::assertTrue(Utils::isPath('/path/to/file.md'));
+        self::assertTrue(Utils::isPath('path/to/file.md'));
+        self::assertTrue(Utils::isPath('./path/to/file.md'));
+        self::assertTrue(Utils::isPath('?query'));
+        self::assertTrue(Utils::isPath('#fragment'));
+    }
+
     public function testIsPathRelative(): void {
         // Nope
         self::assertFalse(Utils::isPathRelative('tel:+70000000000'));
@@ -48,7 +61,7 @@ final class UtilsTest extends TestCase {
         self::assertFalse(Utils::isPathToSelf($a, '..'));
         self::assertTrue(Utils::isPathToSelf($a, '#fragment'));
         self::assertTrue(Utils::isPathToSelf($a, './a.md#fragment'));
-        self::assertTrue(Utils::isPathToSelf($a, '?a=bc'));
+        self::assertFalse(Utils::isPathToSelf($a, '?a=bc'));
         self::assertTrue(Utils::isPathToSelf($a, 'a.md'));
         self::assertTrue(Utils::isPathToSelf($a, './a.md'));
         self::assertTrue(Utils::isPathToSelf($a, '../to/a.md'));
@@ -63,15 +76,12 @@ final class UtilsTest extends TestCase {
         self::assertFalse(Utils::isPathToSelf($c, '..'));
         self::assertTrue(Utils::isPathToSelf($c, '#fragment'));
         self::assertFalse(Utils::isPathToSelf($c, './a.md#fragment'));
-        self::assertTrue(Utils::isPathToSelf($c, '?a=bc'));
+        self::assertFalse(Utils::isPathToSelf($c, '?a=bc'));
         self::assertFalse(Utils::isPathToSelf($c, 'a.md'));
         self::assertFalse(Utils::isPathToSelf($c, './a.md'));
         self::assertFalse(Utils::isPathToSelf($c, '../to/a.md'));
         self::assertFalse(Utils::isPathToSelf($c, '/a.md'));
         self::assertFalse(Utils::isPathToSelf($c, '../a.md'));
-
-        self::assertTrue(Utils::isPathToSelf($a, new FilePath('a.md')));
-        self::assertTrue(Utils::isPathToSelf($a, new FilePath('../to/a.md')));
     }
 
     #[DataProvider('dataProviderGetTitle')]

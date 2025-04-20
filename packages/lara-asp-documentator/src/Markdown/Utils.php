@@ -11,7 +11,6 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Document\MakeSplittabl
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Document\Title;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Text;
 use LastDragon_ru\LaraASP\Documentator\Utils\Text as TextUtils;
-use LastDragon_ru\Path\FilePath;
 use LastDragon_ru\Path\Path;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
@@ -30,7 +29,6 @@ use function mb_strlen;
 use function mb_strpos;
 use function mb_substr;
 use function mb_trim;
-use function parse_url;
 use function preg_match;
 use function str_contains;
 use function str_replace;
@@ -39,7 +37,6 @@ use function strtr;
 
 use const FILTER_NULL_ON_FAILURE;
 use const FILTER_VALIDATE_URL;
-use const PHP_URL_PATH;
 
 /**
  * @internal
@@ -199,6 +196,12 @@ class Utils {
         return $parent;
     }
 
+    public static function isPath(string $path): bool {
+        return filter_var($path, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE) === null
+            && !str_starts_with($path, 'tel:+') // see https://www.php.net/manual/en/filter.filters.validate.php
+            && !str_starts_with($path, 'urn:'); // see https://www.php.net/manual/en/filter.filters.validate.php
+    }
+
     public static function isPathRelative(string $path): bool {
         // Fast
         if (str_starts_with($path, './') || str_starts_with($path, '../') || str_starts_with($path, '#')) {
@@ -210,32 +213,27 @@ class Utils {
         }
 
         // Long
-        return filter_var($path, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE) === null
-            && !str_starts_with($path, 'tel:+') // see https://www.php.net/manual/en/filter.filters.validate.php
-            && !str_starts_with($path, 'urn:')  // see https://www.php.net/manual/en/filter.filters.validate.php
+        return self::isPath($path)
             && Path::make($path)->relative;
     }
 
-    public static function isPathToSelf(Document $document, FilePath|string $path): bool {
-        $self = $document->path;
-        $path = (string) parse_url((string) $path, PHP_URL_PATH);
-
-        if ($path === '.' || $path === '..') {
-            // This is directory path, not file path.
-            return false;
-        }
-
-        if ($path === '') {
-            // This is `#` or `?`
+    public static function isPathToSelf(Document $document, string $path): bool {
+        // Fragment?
+        if (str_starts_with($path, '#')) {
             return true;
         }
 
-        if ($self === null) {
-            // Cannot be determined
+        // Possible?
+        if ($document->path === null) {
             return false;
         }
 
-        return $self->equals($self->resolve(Path::make($path)));
+        // Match?
+        $path  = $document->path->resolve(Path::make($path));
+        $match = $document->path->equals($path)
+            || str_starts_with($path->path, "{$document->path}#");
+
+        return $match;
     }
 
     /**
