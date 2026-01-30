@@ -8,14 +8,20 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as ResolverContract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\Adapters\SymfonyFileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
+use LastDragon_ru\LaraASP\Documentator\Processor\Hook;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
+use Mockery;
 use Override;
 use Symfony\Component\Finder\Finder;
+
+use function array_first;
+use function is_array;
 
 /**
  * @phpstan-require-extends TestCase
@@ -56,6 +62,19 @@ trait WithProcessor {
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $output);
 
         return $filesystem;
+    }
+
+    protected function runProcessorHookTask(
+        HookTask $task,
+        FileSystem $fs,
+        ?Hook $hook = null,
+        ?File $file = null,
+    ): void {
+        $file ??= Mockery::mock(File::class);
+        $hook ??= $task::hook();
+        $hook   = is_array($hook) ? array_first($hook) : $hook;
+
+        $task($this->getProcessorResolver($fs), $file, $hook);
     }
 
     protected function runProcessorFileTask(FileTask $task, FileSystem $fs, File $file): void {

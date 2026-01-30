@@ -9,10 +9,10 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Hook;
 use Override;
 
 /**
- * Removes all files in `output` directory. It will do nothing if `output` is
- * equal to `input`.
+ * Removes all files and directories in `output` directory. It will do nothing
+ * if `output` is equal to `input`.
  */
-class Task implements HookTask {
+class OutputCleanup implements HookTask {
     #[Override]
     public static function hook(): Hook {
         return Hook::Before;
