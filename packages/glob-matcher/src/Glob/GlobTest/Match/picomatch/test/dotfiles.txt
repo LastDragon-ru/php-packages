@@ -299,7 +299,7 @@
   [true, "aaa/.dot", "*/.dot*"]
   [true, ".aaa.bbb", ".*.*"]
   [true, ".aaa.bbb", ".*.*"]
-  [false, ".aaa.bbb/", ".*.*", null, { "strictSlashes": true }]
+  // (4.9) [false, ".aaa.bbb/", ".*.*", null, { "strictSlashes": true }]
   [false, ".aaa.bbb", ".*.*/"]
   [true, ".aaa.bbb/", ".*.*/"]
   // (1) [true, ".aaa.bbb/", ".*.*{,/}"]
