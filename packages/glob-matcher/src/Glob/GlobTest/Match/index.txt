@@ -25,7 +25,7 @@
 # 2. Some features (like `[..]*` or `(a|b)*`) are strange/not standard and thus
 #    not supported.
 # 3. Some options don't have equivalents, these tests are skipped
-#    * `strictSlashes` - always `true` in our case
+#    * `strictSlashes` - always `true` in our case, except `*` (if it is the last node, it may implicitly include ending `/`)
 #    * `keepQuotes`    - always `true` in our case
 #    * `windows`       - windows paths are not supported
 # 4. Differences from "picomatch":
@@ -40,6 +40,7 @@
 #    4.7. Slashes inside characters always treated as segments
 #         (`[a/b]` => `[a` `/` `b]`)
 #    4.8. Slashes inside extglob not supported.
+#    4.9. Because of `strictSlashes` (3) the `a/*` will match `a/a` and `a/a/` both
 #
 # Picomatch options map:
 # * `dot`           => `hidden`
@@ -201,3 +202,14 @@
   [false, "b/c", "!(a/b)"]
   [false, "b", "!(a/**)"]
   [false, "b/c", "!(a/**)"]
+## (4.9)
+  [true, ".aaa.bbb/", ".*.*", null, { "strictSlashes": true }]
+  [true, "a/", "**/*", null, { "strictSlashes": true }]
+  [true, "/a/", "/*", null, { "strictSlashes": true }]
+  [true, "/a/", "**/*", null, { "strictSlashes": true }]
+  [true, "/a/", "*/*", null, { "strictSlashes": true }]
+  [true, "a/", "*", null, { "strictSlashes": true }]
+  [true, "a/a/", "**/a/*", null, { "strictSlashes": true }]
+  [true, "a/", "*", null, { "strictSlashes": true }]
+  [true, "foo/bar/", "**/*", null, { "strictSlashes": true }]
+  [true, "deep/foo/bar/baz/", "**/bar/*", null, { "strictSlashes": true }]

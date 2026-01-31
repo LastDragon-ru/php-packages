@@ -238,7 +238,7 @@
   [false, "a/x/y", "*/"]
   [false, "a/x/y", "*/*"]
   [false, "a/x/y", "a/*"]
-  [false, "a/", "*", null, { "strictSlashes": true }]
+  // (4.9) [false, "a/", "*", null, { "strictSlashes": true }]
   // (4.2) [true, "a/", "*"]
   [true, "a", "*"]
   [true, "a/", "*/"]
@@ -282,7 +282,7 @@
   [false, "foo/bar", "**/"]
   [false, "foo/bar", "**/*/"]
   [false, "foo/bar", "*/*/"]
-  [false, "foo/bar/", "**/*", null, { "strictSlashes": true }]
+  // (4.9) [false, "foo/bar/", "**/*", null, { "strictSlashes": true }]
 
   [true, "/home/foo/..", "**/.."]
   [true, "a", "**/a"]

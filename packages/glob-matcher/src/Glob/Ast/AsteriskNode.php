@@ -19,7 +19,7 @@ class AsteriskNode implements Node, NameNodeChild, NodeMergeable {
 
     #[Override]
     public static function toRegex(Options $options, Cursor $cursor): string {
-        return '[^/]*?';
+        return '[^/]*?'.(self::isLast($cursor) ? '/?' : '');
     }
 
     #[Override]
@@ -30,5 +30,24 @@ class AsteriskNode implements Node, NameNodeChild, NodeMergeable {
         }
 
         return $current;
+    }
+
+    /**
+     * @param Cursor<covariant static> $cursor
+     */
+    private static function isLast(Cursor $cursor): bool {
+        $last   = true;
+        $parent = $cursor;
+
+        while ($parent !== null) {
+            if ($parent->next !== null) {
+                $last = false;
+                break;
+            }
+
+            $parent = $parent->parent;
+        }
+
+        return $last;
     }
 }

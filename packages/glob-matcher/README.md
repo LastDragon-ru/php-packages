@@ -305,7 +305,7 @@ Only `/` allowed as a path separator. The `\` used by Windows is not supported (
 
 The `\` is always used as an escape character, so `[\b]` will be treated as `[b]` (`\` is gone), `[\\b]` should be used instead.
 
-The `/`, `.` and `..` always match explicitly. Thus, the `a/**` will not match `a`, but will `a/` (slightly different from bash). Also, the `/` cannot be escaped and should not be inside the character class, extended pattern, etc. This means that, e.g. `[a/b]` will be parsed as `[a`, `/`, `b]` and not as characters `a/b`.
+The `/`, `.` and `..` always match explicitly. Thus, the `a/**` will not match `a`, but will `a/`. Also, the `/` cannot be escaped and should not be inside the character class, extended pattern, etc. This means that, e.g. `[a/b]` will be parsed as `[a`, `/`, `b]` and not as characters `a/b`.
 
 # Gratitude
 

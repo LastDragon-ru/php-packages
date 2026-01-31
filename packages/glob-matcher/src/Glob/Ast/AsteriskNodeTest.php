@@ -15,9 +15,12 @@ use PHPUnit\Framework\Attributes\DataProvider;
 final class AsteriskNodeTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
+    /**
+     * @param Cursor<covariant AsteriskNode> $cursor
+     */
     #[DataProvider('dataProviderToRegex')]
-    public function testToRegex(string $expected, AsteriskNode $node, Options $options): void {
-        self::assertSame($expected, $node::toRegex($options, new Cursor($node)));
+    public function testToRegex(string $expected, Cursor $cursor, Options $options): void {
+        self::assertSame($expected, AsteriskNode::toRegex($options, $cursor));
     }
 
     public function testMerge(): void {
@@ -39,13 +42,26 @@ final class AsteriskNodeTest extends TestCase {
     // <editor-fold desc="DataProvider">
     // =========================================================================
     /**
-     * @return array<string, array{string, AsteriskNode, Options}>
+     * @return array<string, array{string, Cursor<covariant AsteriskNode>, Options}>
      */
     public static function dataProviderToRegex(): array {
         return [
-            'default' => [
+            'default'   => [
                 '[^/]*?',
-                new AsteriskNode(),
+                new Cursor(
+                    new AsteriskNode(),
+                    new Cursor( // @phpstan-ignore argument.type
+                        new NameNode([
+                            new StringNode('string'),
+                        ]),
+                    ),
+                    -1,
+                ),
+                new Options(),
+            ],
+            'last node' => [
+                '[^/]*?/?',
+                new Cursor(new AsteriskNode()),
                 new Options(),
             ],
         ];

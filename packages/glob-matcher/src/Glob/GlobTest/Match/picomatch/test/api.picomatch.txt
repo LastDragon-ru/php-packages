@@ -188,7 +188,7 @@
   [false, "foo/baz/bar", "foo**bar"]
   [false, "foo/baz/bar", "foo*bar"]
   [false, "deep/foo/bar/baz", "**/bar/*/"]
-  [false, "deep/foo/bar/baz/", "**/bar/*", null, { "strictSlashes": true }]
+  // (4.9) [false, "deep/foo/bar/baz/", "**/bar/*", null, { "strictSlashes": true }]
   // (4.2) [true, "deep/foo/bar/baz/", "**/bar/*"]
   [true, "deep/foo/bar/baz", "**/bar/*"]
   // (4.2) [true, "foo", "foo/**"]
