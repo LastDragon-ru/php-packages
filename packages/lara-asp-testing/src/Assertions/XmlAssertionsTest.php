@@ -9,7 +9,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * @deprecated %{VERSION}
+ * @deprecated 10.1.0
  * @internal
  */
 #[CoversClass(XmlAssertions::class)]

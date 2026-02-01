@@ -64,7 +64,7 @@ class TestResponseMixin {
     }
 
     /**
-     * @deprecated %{VERSION}
+     * @deprecated 10.1.0
      * @return Closure(SplFileInfo, string): TestResponse<Response>
      */
     public function assertXmlMatchesSchema(): Closure {

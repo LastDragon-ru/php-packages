@@ -18,7 +18,7 @@ use function ksort;
 use function sprintf;
 
 /**
- * @deprecated %{VERSION} The {@see DirectoryEquals} should be used instead.
+ * @deprecated 10.1.0 The {@see DirectoryEquals} should be used instead.
  *
  * @see DirectoryEquals
  */

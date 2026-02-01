@@ -6,7 +6,7 @@ use LastDragon_ru\LaraASP\Testing\Testing\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * @deprecated %{VERSION} The `\LastDragon_ru\PhpUnit\Utils\TempFile` should be used instead.
+ * @deprecated 10.1.0 The `\LastDragon_ru\PhpUnit\Utils\TempFile` should be used instead.
  * @internal
  */
 #[CoversClass(WithTempFile::class)]

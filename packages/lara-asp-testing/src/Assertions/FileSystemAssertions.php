@@ -7,7 +7,7 @@ use LastDragon_ru\PhpUnit\Filesystem\Assertions;
 use PHPUnit\Framework\Assert;
 
 /**
- * @deprecated %{VERSION} The {@see Assertions} should be used instead.
+ * @deprecated 10.1.0 The {@see Assertions} should be used instead.
  * @mixin Assert
  * @see Assertions
  */

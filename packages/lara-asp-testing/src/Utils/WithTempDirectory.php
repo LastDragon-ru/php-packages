@@ -13,7 +13,7 @@ use function sys_get_temp_dir;
  * Allows to create a temporary directory. The directory will be removed
  * automatically after script shutdown.
  *
- * @deprecated %{VERSION} The {@see TempDirectory} should be used instead.
+ * @deprecated 10.1.0 The {@see TempDirectory} should be used instead.
  * @see TempDirectory
  */
 trait WithTempDirectory {

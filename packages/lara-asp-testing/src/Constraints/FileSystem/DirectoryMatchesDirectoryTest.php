@@ -14,7 +14,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
- * @deprecated %{VERSION}
+ * @deprecated 10.1.0
  * @internal
  */
 #[CoversClass(DirectoryMatchesDirectory::class)]

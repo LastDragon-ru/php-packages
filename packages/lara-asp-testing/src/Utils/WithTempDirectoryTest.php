@@ -7,7 +7,7 @@ use LastDragon_ru\PhpUnit\Utils\TempDirectory;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * @deprecated %{VERSION} The {@see TempDirectory} should be used instead.
+ * @deprecated 10.1.0 The {@see TempDirectory} should be used instead.
  * @internal
  * @see TempDirectory
  */

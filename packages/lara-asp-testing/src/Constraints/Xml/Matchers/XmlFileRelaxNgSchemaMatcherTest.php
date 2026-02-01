@@ -8,7 +8,7 @@ use LastDragon_ru\LaraASP\Testing\Testing\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * @deprecated %{VERSION}
+ * @deprecated 10.1.0
  * @internal
  */
 #[CoversClass(XmlFileRelaxNgSchemaMatcher::class)]

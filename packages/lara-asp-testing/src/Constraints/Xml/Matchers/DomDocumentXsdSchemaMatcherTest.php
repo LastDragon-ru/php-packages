@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use SplFileInfo;
 
 /**
- * @deprecated %{VERSION}
+ * @deprecated 10.1.0
  * @internal
  */
 #[CoversClass(DomDocumentXsdSchemaMatcher::class)]

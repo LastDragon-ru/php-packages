@@ -13,7 +13,7 @@ use function sys_get_temp_dir;
  * Allows to create a temporary file. The file will be removed automatically
  * after script shutdown.
  *
- * @deprecated %{VERSION} The `\LastDragon_ru\PhpUnit\Utils\TempFile` should be used instead.
+ * @deprecated 10.1.0 The `\LastDragon_ru\PhpUnit\Utils\TempFile` should be used instead.
  */
 trait WithTempFile {
     public static function getTempFile(?string $content = null, string $suffix = ''): SplFileInfo {
