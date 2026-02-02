@@ -181,9 +181,6 @@ readonly class Mutator extends Base {
         return $changes;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function isOverlapped(array $coordinates, Coordinate $coordinate, ?int &$key = null): bool {
         return $coordinate->line !== PHP_INT_MAX

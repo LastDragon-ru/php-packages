@@ -101,9 +101,6 @@ final class DirectiveTest extends TestCase {
                     : null;
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getDefinitions(): array {
                 return [];

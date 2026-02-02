@@ -27,9 +27,6 @@ class ResourceCollection extends AnonymousResourceCollection implements SafeReso
         parent::__construct($resource, $class);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function preparePaginatedResponse($request) {
         // Our PaginatedResponse does not return any links, so we shouldn't

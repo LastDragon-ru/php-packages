@@ -12,18 +12,12 @@ use function end;
  * @extends NodeParentFactory<ExpressionNode, ExpressionNodeChild>
  */
 class ExpressionNodeFactory extends NodeParentFactory {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         // Expression cannot be empty
         return $children !== [] ? new ExpressionNode($children) : null;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         // Operator is always allowed

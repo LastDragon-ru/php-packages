@@ -17,9 +17,6 @@ use Override;
 class PackageProvider extends ServiceProvider {
     // <editor-fold desc="\Illuminate\Support\ServiceProvider">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function register() {
         parent::register();

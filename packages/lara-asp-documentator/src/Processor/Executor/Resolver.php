@@ -117,9 +117,6 @@ class Resolver implements Contract {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function queue(FilePath|iterable $path): void {
         $iterator = $path instanceof FilePath ? [$path] : $path;
@@ -132,9 +129,6 @@ class Resolver implements Contract {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function delete(DirectoryPath|FilePath|File|iterable $path): void {
         $iterator = match (true) {
@@ -154,9 +148,6 @@ class Resolver implements Contract {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function search(
         ?DirectoryPath $directory = null,

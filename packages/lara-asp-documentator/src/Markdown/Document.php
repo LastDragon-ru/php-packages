@@ -49,9 +49,6 @@ class Document extends DocumentImpl implements DocumentContract {
         return $this->node;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutate(Mutation|iterable ...$mutations): DocumentContract {
         $mutator  = new Mutator($mutations);

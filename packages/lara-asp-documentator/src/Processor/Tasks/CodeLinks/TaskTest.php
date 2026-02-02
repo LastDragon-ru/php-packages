@@ -89,9 +89,6 @@ final class TaskTest extends TestCase {
         $task     = new class(
             $this->app()->make(LinkFactory::class),
         ) extends Task {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function parse(DocumentContract $document): array {
                 return parent::parse($document);

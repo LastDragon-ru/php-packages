@@ -25,9 +25,6 @@ readonly class Prefix extends Base {
         parent::__construct();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         $label    = $this->getLabel($document, $node);

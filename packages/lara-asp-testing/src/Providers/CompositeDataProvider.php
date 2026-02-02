@@ -61,9 +61,6 @@ class CompositeDataProvider extends BaseDataProvider {
 
     // <editor-fold desc="API">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getData(bool $raw = false): array {
         $array    = array_reverse($this->getProviders());

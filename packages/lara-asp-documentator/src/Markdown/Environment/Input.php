@@ -37,9 +37,6 @@ class Input implements MarkdownInputInterface {
         return $this->content;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getLines(): iterable {
         return new ArrayIterator($this->lines());

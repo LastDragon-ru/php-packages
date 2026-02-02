@@ -57,17 +57,11 @@ class Environment implements EnvironmentInterface, EnvironmentBuilderInterface, 
         return $this->environment->getConfiguration();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getExtensions(): iterable {
         return $this->environment->getExtensions();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getBlockStartParsers(): iterable {
         // Locator?
@@ -95,9 +89,6 @@ class Environment implements EnvironmentInterface, EnvironmentBuilderInterface, 
         yield from [];
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getInlineParsers(): iterable {
         // Locator?
@@ -136,9 +127,6 @@ class Environment implements EnvironmentInterface, EnvironmentBuilderInterface, 
         return $this->environment->getDelimiterProcessors();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getRenderersForClass(string $nodeClass): iterable {
         return $this->environment->getRenderersForClass($nodeClass);

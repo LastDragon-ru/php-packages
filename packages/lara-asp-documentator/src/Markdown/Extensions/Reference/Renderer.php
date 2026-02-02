@@ -25,9 +25,6 @@ class Renderer implements NodeRendererInterface, XmlNodeRendererInterface {
         return Package::Name.':reference';
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getXmlAttributes(Node $node): array {
         return match (true) {

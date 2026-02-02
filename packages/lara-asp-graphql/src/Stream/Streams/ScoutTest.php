@@ -30,9 +30,6 @@ final class ScoutTest extends TestCase {
 
     // <editor-fold desc="Prepare">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function defineEnvironment($app): void {
         parent::defineEnvironment($app);

@@ -21,9 +21,6 @@ class Serializer implements SerializerContract {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function serialize(object $object, ?string $format = null, array $context = []): string {
         $format ??= $this->format;
@@ -38,9 +35,6 @@ class Serializer implements SerializerContract {
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function deserialize(
         string $object,

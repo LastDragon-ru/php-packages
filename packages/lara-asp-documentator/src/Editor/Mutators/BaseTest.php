@@ -37,9 +37,6 @@ final class BaseTest extends TestCase {
     #[DataProvider('dataProviderIsOverlapped')]
     public function testIsOverlapped(array $expected, array $lines, Coordinate $coordinate): void {
         $base = new readonly class() extends Base {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function isOverlapped(
                 array $coordinates,

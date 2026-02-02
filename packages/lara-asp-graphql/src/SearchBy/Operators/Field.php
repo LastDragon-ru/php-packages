@@ -18,9 +18,6 @@ class Field extends Operator {
     use HandlerOperator;
     use WithScoutSupport;
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected static function locations(): array {
         return [

@@ -62,9 +62,6 @@ class Task implements FileTask {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function glob(): array|string {
         return '*.md';

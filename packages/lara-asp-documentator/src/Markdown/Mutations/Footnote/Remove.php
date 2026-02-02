@@ -12,9 +12,6 @@ use Override;
  * Removes all footnotes.
  */
 readonly class Remove extends Base {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         return [new Delete(Location::get($node))];

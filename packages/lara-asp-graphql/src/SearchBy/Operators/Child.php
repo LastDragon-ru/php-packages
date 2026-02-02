@@ -16,9 +16,6 @@ use function is_a;
 class Child extends Operator {
     use HandlerOperator;
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected static function locations(): array {
         return [

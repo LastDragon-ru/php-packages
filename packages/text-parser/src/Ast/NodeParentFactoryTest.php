@@ -109,17 +109,11 @@ class NodeParentFactoryTest_ChildIgnored extends NodeParentFactoryTest_Child {
  * @extends NodeParentFactory<NodeParentFactoryTest_Parent, NodeParentFactoryTest_Child>
  */
 class NodeParentFactoryTest_Factory extends NodeParentFactory {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         return new NodeParentFactoryTest_Parent($children);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         return !($node instanceof NodeParentFactoryTest_ChildIgnored);

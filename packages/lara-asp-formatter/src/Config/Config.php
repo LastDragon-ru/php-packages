@@ -161,7 +161,6 @@ class Config extends Configuration {
 
     /**
      * @deprecated 7.0.0 Array-based config is deprecated. Please migrate to object-based config.
-     * @inheritDoc
      */
     #[Override]
     public static function fromArray(array $array): static {

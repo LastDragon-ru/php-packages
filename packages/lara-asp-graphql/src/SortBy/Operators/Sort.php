@@ -32,9 +32,6 @@ class Sort extends Operator {
         parent::__construct($resolver);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected static function locations(): array {
         return [

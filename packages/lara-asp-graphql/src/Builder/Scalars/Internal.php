@@ -23,9 +23,6 @@ class Internal extends ScalarType {
         $this->error(Error::class);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function parseLiteral(Node $valueNode, ?array $variables = null): mixed {
         $this->error(Error::class);

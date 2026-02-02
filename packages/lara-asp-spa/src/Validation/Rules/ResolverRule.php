@@ -32,9 +32,6 @@ class ResolverRule extends Rule implements ValueProvider {
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getMessageReplace(): array {
         return array_merge(parent::getMessageReplace(), [
@@ -42,9 +39,6 @@ class ResolverRule extends Rule implements ValueProvider {
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getMessageVariants(): array {
         $defaults   = parent::getMessageVariants();

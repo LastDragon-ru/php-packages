@@ -10,9 +10,6 @@ use LastDragon_ru\LaraASP\GraphQL\Builder\Sources\ObjectSource;
 use Override;
 
 class Root extends Type {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getFields(
         Manipulator $manipulator,

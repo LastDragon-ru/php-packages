@@ -11,17 +11,11 @@ use Override;
  * @extends NodeParentFactory<GlobNode, GlobNodeChild>
  */
 class GlobNodeFactory extends NodeParentFactory {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         return $children !== [] ? new GlobNode($children) : null;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         return true;

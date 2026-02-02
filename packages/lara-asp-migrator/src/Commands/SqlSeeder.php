@@ -42,7 +42,6 @@ class SqlSeeder extends GeneratorCommand {
     }
 
     /**
-     * @inheritDoc
      * @noinspection PhpMissingReturnTypeInspection
      */
     #[Override]

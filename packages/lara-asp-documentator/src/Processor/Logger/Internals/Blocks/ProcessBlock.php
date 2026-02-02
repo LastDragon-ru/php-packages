@@ -79,8 +79,6 @@ class ProcessBlock extends Block {
 
     /**
      * @param int<0, max> $padding
-     *
-     * @inheritDoc
      */
     #[Override]
     public function render(Renderer $renderer, Formatter $formatter, int $padding): iterable {

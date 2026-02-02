@@ -46,9 +46,6 @@ readonly class Rule implements RuleContract {
         return InClassNode::class;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function processNode(Node $node, Scope $scope): array {
         // Skip?

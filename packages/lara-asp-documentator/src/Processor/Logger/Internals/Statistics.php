@@ -26,9 +26,6 @@ class Statistics implements IteratorAggregate, ArrayAccess {
         $this->storage = new SplObjectStorage();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getIterator(): Traversable {
         foreach ($this->storage as $flag) {

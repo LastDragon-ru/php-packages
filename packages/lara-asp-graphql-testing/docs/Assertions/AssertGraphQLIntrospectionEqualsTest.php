@@ -29,8 +29,6 @@ final class AssertGraphQLIntrospectionEqualsTest extends TestCase {
 
     /**
      * Preparation for test.
-     *
-     * @inheritDoc
      */
     #[Override]
     protected function getPackageProviders(mixed $app): array {

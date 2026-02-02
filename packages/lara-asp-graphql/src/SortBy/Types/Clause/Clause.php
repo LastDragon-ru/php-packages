@@ -10,9 +10,6 @@ use LastDragon_ru\LaraASP\GraphQL\Builder\Sources\ObjectSource;
 use Override;
 
 class Clause extends Type {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getOperators(
         Manipulator $manipulator,

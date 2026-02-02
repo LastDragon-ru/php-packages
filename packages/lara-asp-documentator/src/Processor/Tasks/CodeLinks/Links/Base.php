@@ -61,9 +61,6 @@ abstract class Base implements Link {
         return (string) $link === (string) $this;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getSource(File $file, Package $package): array|FilePath|null {
         return $package->resolve($this->class);

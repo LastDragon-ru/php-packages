@@ -13,9 +13,6 @@ use Override;
  * Unlink all links.
  */
 readonly class Unlink extends Base {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         $location = Location::get($node);

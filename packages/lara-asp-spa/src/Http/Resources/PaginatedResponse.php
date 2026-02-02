@@ -11,8 +11,6 @@ use Override;
  */
 class PaginatedResponse extends PaginatedResourceResponse {
     /**
-     * @inheritDoc
-     *
      * @return array<array-key, mixed>
      */
     #[Override]
@@ -23,8 +21,6 @@ class PaginatedResponse extends PaginatedResourceResponse {
     }
 
     /**
-     * @inheritDoc
-     *
      * @param array<array-key, mixed> $paginated
      *
      * @return array<array-key, mixed>
@@ -46,8 +42,6 @@ class PaginatedResponse extends PaginatedResourceResponse {
     }
 
     /**
-     * @inheritDoc
-     *
      * @param array<array-key, mixed> $data
      */
     #[Override]
@@ -57,9 +51,6 @@ class PaginatedResponse extends PaginatedResourceResponse {
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function wrapper() {
         return 'items';

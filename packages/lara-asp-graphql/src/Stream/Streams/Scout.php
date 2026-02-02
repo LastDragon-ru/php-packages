@@ -31,9 +31,6 @@ class Scout extends Stream {
         $this->page = new Page($limit, max(0, $offset));
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getItems(): iterable {
         $items = $this->getPaginator()->items();

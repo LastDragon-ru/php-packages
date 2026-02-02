@@ -11,17 +11,11 @@ use Override;
  * @extends NodeParentFactory<NameNode, NameNodeChild>
  */
 class NameNodeFactory extends NodeParentFactory {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         return $children !== [] ? new NameNode($children) : null;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         return true;

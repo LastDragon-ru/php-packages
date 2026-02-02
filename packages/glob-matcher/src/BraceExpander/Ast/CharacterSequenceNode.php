@@ -25,9 +25,6 @@ class CharacterSequenceNode extends IncrementalSequenceNode {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function toIterable(Cursor $cursor): iterable {
         $start = mb_ord($cursor->node->start, Package::Encoding);

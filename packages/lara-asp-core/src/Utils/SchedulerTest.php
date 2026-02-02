@@ -19,9 +19,6 @@ final class SchedulerTest extends TestCase {
     public function testRegisterClass(): void {
         // Mocks
         $job = new class() implements Schedulable {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getSchedule(): array {
                 return [
@@ -76,9 +73,6 @@ final class SchedulerTest extends TestCase {
     public function testRegisterShouldQueue(): void {
         // Mocks
         $job = new class() implements ShouldQueue, Schedulable {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getSchedule(): array {
                 return [
@@ -120,9 +114,6 @@ final class SchedulerTest extends TestCase {
 
     public function testRegisterEmptyCron(): void {
         $job = new class() implements Schedulable {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getSchedule(): array {
                 return [
@@ -142,9 +133,6 @@ final class SchedulerTest extends TestCase {
 
     public function testRegisterDisabled(): void {
         $job = new class() implements Schedulable {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getSchedule(): array {
                 return [

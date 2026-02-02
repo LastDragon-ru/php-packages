@@ -205,9 +205,6 @@ class SchemaDirective__Directive extends SchemaDirective {
         return 'Test';
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getScalars(): array {
         return [

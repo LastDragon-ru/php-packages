@@ -99,9 +99,6 @@ final class LoggerTest extends TestCase {
             }
         };
         $listener = new class ($output, new Formatter()) extends Logger {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function path(FilePath|DirectoryPath $path): array {
                 return parent::path($path);

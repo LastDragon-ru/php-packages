@@ -15,8 +15,6 @@ use Override;
  */
 trait FixRecentlyCreated {
     /**
-     * @inheritDoc
-     *
      * @param Collection<array-key,Model> $instances
      */
     #[Override]

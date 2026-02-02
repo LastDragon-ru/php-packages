@@ -25,9 +25,6 @@ use function iterator_to_array;
 final class CommandsTest extends TestCase {
     // <editor-fold desc="Prepare">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getPackageProviders(mixed $app): array {
         return array_merge(parent::getPackageProviders($app), [

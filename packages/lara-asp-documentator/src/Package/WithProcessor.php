@@ -39,9 +39,6 @@ trait WithProcessor {
             ? ($output instanceof DirectoryPath ? $output : new DirectoryPath($output))->normalized()
             : $input;
         $adapter    = new class() extends SymfonyFileSystem {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             protected function getFinder(
                 DirectoryPath $directory,

@@ -48,9 +48,6 @@ class Operators extends BuilderOperators {
         return Scope::class;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getDisabledOperators(AstManipulator $manipulator): array {
         return array_merge(

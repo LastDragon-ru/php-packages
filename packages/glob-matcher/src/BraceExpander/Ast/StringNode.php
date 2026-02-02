@@ -7,9 +7,6 @@ use LastDragon_ru\TextParser\Ast\NodeString;
 use Override;
 
 class StringNode extends NodeString implements BraceExpansionNodeChild {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function toIterable(Cursor $cursor): iterable {
         return [$cursor->node->string];

@@ -37,9 +37,6 @@ class Relationship extends Operator {
 
     // <editor-fold desc="Directive">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected static function locations(): array {
         return [

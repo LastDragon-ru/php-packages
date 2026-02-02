@@ -19,9 +19,6 @@ use function array_merge;
 abstract class TestCase extends PackageTestCase {
     use Assertions;
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getPackageProviders(mixed $app): array {
         return array_merge(parent::getPackageProviders($app), [

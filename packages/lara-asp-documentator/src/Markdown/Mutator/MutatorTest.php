@@ -50,9 +50,6 @@ final class MutatorTest extends TestCase {
             MARKDOWN,
         );
         $aMutation = new class() implements Mutation {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function nodes(): array {
                 return [
@@ -60,9 +57,6 @@ final class MutatorTest extends TestCase {
                 ];
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function mutagens(Document $document, Node $node): array {
                 return [
@@ -76,9 +70,6 @@ final class MutatorTest extends TestCase {
             }
         };
         $bMutation = new class() implements Mutation {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function nodes(): array {
                 return [
@@ -87,9 +78,6 @@ final class MutatorTest extends TestCase {
                 ];
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function mutagens(Document $document, Node $node): array {
                 return [
@@ -148,9 +136,6 @@ final class MutatorTest extends TestCase {
                 };
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function nodes(): array {
                 return [
@@ -158,9 +143,6 @@ final class MutatorTest extends TestCase {
                 ];
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function mutagens(Document $document, Node $node): array {
                 return [
@@ -171,9 +153,6 @@ final class MutatorTest extends TestCase {
             }
         };
         $bMutation = new class() implements Mutation {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function nodes(): array {
                 return [
@@ -182,9 +161,6 @@ final class MutatorTest extends TestCase {
                 ];
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function mutagens(Document $document, Node $node): array {
                 return [
@@ -236,43 +212,28 @@ final class MutatorTest extends TestCase {
 
     public function testGetNodeMutations(): void {
         $a       = new class() implements Mutation {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function nodes(): array {
                 return [AbstractBlock::class];
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function mutagens(Document $document, Node $node): array {
                 return [];
             }
         };
         $b       = new class() implements Mutation {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function nodes(): array {
                 return [Paragraph::class];
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function mutagens(Document $document, Node $node): array {
                 return [];
             }
         };
         $mutator = new class([$b, $a]) extends Mutator {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getNodeMutations(Node $node): array {
                 return parent::getNodeMutations($node);

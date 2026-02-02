@@ -28,9 +28,6 @@ class SymfonyFileSystem implements Adapter {
             : is_dir((string) $path);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function search(
         DirectoryPath $directory,

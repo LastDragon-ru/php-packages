@@ -24,9 +24,6 @@ readonly class RemoveUnused implements Mutation {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function nodes(): array {
         return [
@@ -34,9 +31,6 @@ readonly class RemoveUnused implements Mutation {
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         // Find (un)used references (is it possible to optimize?)

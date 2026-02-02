@@ -98,9 +98,6 @@ final class DirectiveTest extends TestCase {
 
     // <editor-fold desc="Prepare">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getPackageProviders(mixed $app): array {
         return array_merge(parent::getPackageProviders($app), [
@@ -1212,9 +1209,6 @@ final class DirectiveTest extends TestCase {
                 // empty
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getItems(): iterable {
                 return [];

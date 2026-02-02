@@ -20,9 +20,6 @@ class ParsedCollector extends NodeVisitorAbstract {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function beforeTraverse(array $nodes): null {
         parent::beforeTraverse($nodes);

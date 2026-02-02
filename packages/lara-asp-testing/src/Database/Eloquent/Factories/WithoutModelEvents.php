@@ -13,9 +13,6 @@ use Override;
  * @phpstan-require-extends Factory
  */
 trait WithoutModelEvents {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function make($attributes = [], ?Model $parent = null) {
         return $this->callWithoutModelEvents(function () use ($attributes, $parent) {
@@ -23,9 +20,6 @@ trait WithoutModelEvents {
         });
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function create($attributes = [], ?Model $parent = null) {
         return $this->callWithoutModelEvents(function () use ($attributes, $parent) {

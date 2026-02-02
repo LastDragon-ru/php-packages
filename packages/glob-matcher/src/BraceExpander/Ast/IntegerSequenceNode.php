@@ -33,9 +33,6 @@ class IntegerSequenceNode extends IncrementalSequenceNode {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function toIterable(Cursor $cursor): iterable {
         $start  = static::parse($cursor->node->start);

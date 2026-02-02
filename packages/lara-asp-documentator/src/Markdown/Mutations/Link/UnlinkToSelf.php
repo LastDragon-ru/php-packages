@@ -13,9 +13,6 @@ use function rawurldecode;
  * Unlink all links to the self.
  */
 readonly class UnlinkToSelf extends Unlink {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         $url      = rawurldecode($node->getUrl());

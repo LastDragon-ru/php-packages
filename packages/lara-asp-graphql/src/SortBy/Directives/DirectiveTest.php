@@ -69,9 +69,6 @@ final class DirectiveTest extends TestCase {
 
     // <editor-fold desc="Prepare">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getPackageProviders(mixed $app): array {
         return array_merge(parent::getPackageProviders($app), [
@@ -912,9 +909,6 @@ class DirectiveTest__QueryBuilderResolver {
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
  */
 class DirectiveTest__CustomOperatorDirective extends Child {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected static function locations(): array {
         return array_merge(parent::locations(), [DirectiveLocation::FIELD_DEFINITION]);

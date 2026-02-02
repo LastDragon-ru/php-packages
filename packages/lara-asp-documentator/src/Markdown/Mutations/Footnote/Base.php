@@ -15,9 +15,6 @@ abstract readonly class Base implements Mutation {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function nodes(): array {
         return [

@@ -11,9 +11,6 @@ use Override;
  * @internal
  */
 class ArgumentSetFactory extends LighthouseArgumentSetFactory {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function makeDefinitionMap(iterable $argumentDefinitions): array {
         $argumentDefinitionMap = [];

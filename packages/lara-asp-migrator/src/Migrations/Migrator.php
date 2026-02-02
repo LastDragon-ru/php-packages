@@ -27,7 +27,6 @@ class Migrator extends IlluminateMigrator {
     // =========================================================================
     /**
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-     * @inheritDoc
      * @param array<array-key, mixed>|string $paths
      */
     #[Override]

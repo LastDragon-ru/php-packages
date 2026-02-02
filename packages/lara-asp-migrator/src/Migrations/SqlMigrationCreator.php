@@ -14,7 +14,6 @@ class SqlMigrationCreator extends MigrationCreator {
     // <editor-fold desc="Illuminate\Database\Migrations\MigrationCreator">
     // =========================================================================
     /**
-     * @inheritDoc
      * @noinspection PhpMissingReturnTypeInspection
      */
     #[Override]
@@ -31,7 +30,6 @@ class SqlMigrationCreator extends MigrationCreator {
     }
 
     /**
-     * @inheritDoc
      * @noinspection PhpMissingReturnTypeInspection
      */
     #[Override]
