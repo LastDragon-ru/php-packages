@@ -20,21 +20,25 @@
         <exclude name="PSR12.Files.DeclareStatement.SpaceFoundAfterDirective"/>
         <exclude name="PSR12.Files.DeclareStatement.SpaceFoundBeforeDirectiveValue"/>
         <exclude name="PSR12.Files.FileHeader.SpacingAfterTagBlock"/>
-        <exclude name="PSR12.Files.FileHeader.SpacingAfterDocblockBlock"/>
+        <exclude name="PSR12.Files.FileHeader.SpacingAfterDocblockBlock"><!--
+            False positive:
+            * https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/21
+            * https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/1330
+        --></exclude>
         <exclude name="PSR12.Files.OpenTag.NotAlone"/>
         <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceBefore"/>
         <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceAfter"/>
         <exclude name="PSR12.Files.FileHeader.IncorrectOrder"/>
         <exclude name="PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword"/>
-
-        <!-- Would be nice to move all test classes into *Test directory/namespace and enable this rule -->
-        <exclude name="Squiz.Classes.ValidClassName.NotPascalCase"/>
-
-        <!-- False positive: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/559 -->
-        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNoNewline"/>
-
-        <!-- Too annoying disable it in many files, see https://github.com/squizlabs/PHP_CodeSniffer/issues/3606 -->
-        <exclude name="Generic.Files.LineLength.TooLong"/>
+        <exclude name="Squiz.Classes.ValidClassName.NotPascalCase"><!--
+            Would be nice to move all test classes into *Test directory/namespace and enable this rule
+        --></exclude>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNoNewline"><!--
+            False positive: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/559
+        --></exclude>
+        <exclude name="Generic.Files.LineLength.TooLong"><!--
+            Too annoying disable it in many files, see https://github.com/squizlabs/PHP_CodeSniffer/issues/3606
+        --></exclude>
     </rule>
     <rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
     <rule ref="Generic.Classes.OpeningBraceSameLine"/>
