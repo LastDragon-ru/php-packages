@@ -11,7 +11,11 @@ use function trigger_deprecation;
 
 // phpcs:disable PSR1.Files.SideEffects
 
-trigger_deprecation(Package::Name, '10.0.0', 'The `\LastDragon_ru\Path\DirectoryPath` from `lastdragon-ru/path` package should be used instead.');
+trigger_deprecation(
+    Package::Name,
+    '10.0.0',
+    'The `\LastDragon_ru\Path\DirectoryPath` from `lastdragon-ru/path` package should be used instead.',
+);
 
 /**
  * @deprecated 10.0.0 The `\LastDragon_ru\Path\FilePath` from `lastdragon-ru/path` package should be used instead.

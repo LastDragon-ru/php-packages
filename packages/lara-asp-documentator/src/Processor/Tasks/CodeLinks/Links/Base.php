@@ -74,7 +74,10 @@ abstract class Base implements Link {
         // Class?
         $expected = mb_ltrim($this->class, '\\');
         $parsed   = $resolver->cast($source, Parsed::class);
-        $class    = array_find($parsed->classes, static fn ($class) => (string) $class->node->namespacedName === $expected);
+        $class    = array_find(
+            $parsed->classes,
+            static fn ($class) => (string) $class->node->namespacedName === $expected,
+        );
 
         if ($class === null) {
             return null;
