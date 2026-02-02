@@ -11,7 +11,6 @@ use Override;
 trait WithoutTimestamps {
     /**
      * @noinspection PhpMissingReturnTypeInspection
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
      */
     #[Override]
     public function usesTimestamps() {

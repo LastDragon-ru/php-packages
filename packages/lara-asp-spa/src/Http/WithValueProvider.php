@@ -62,7 +62,6 @@ trait WithValueProvider {
 
     /**
      * @noinspection  PhpMissingReturnTypeInspection
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      *
      * @return ValidatorContract
      */

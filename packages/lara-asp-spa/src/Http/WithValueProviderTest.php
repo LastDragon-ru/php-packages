@@ -84,8 +84,6 @@ final class WithValueProviderTest extends TestCase {
             }
 
             /**
-             * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
-             *
              * @return Validator
              */
             #[Override]
