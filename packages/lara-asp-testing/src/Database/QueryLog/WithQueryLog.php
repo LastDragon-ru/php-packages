@@ -49,7 +49,9 @@ trait WithQueryLog {
     /**
      * @param Connection|ConnectionResolverInterface|Model|class-string<Model>|string|null $connection
      */
-    protected function getQueryLog(ConnectionResolverInterface|Connection|Model|string|null $connection = null): QueryLog {
+    protected function getQueryLog(
+        ConnectionResolverInterface|Connection|Model|string|null $connection = null,
+    ): QueryLog {
         // Normalize connection
         if (is_string($connection) && is_a($connection, Model::class, true)) {
             $connection = new $connection();

@@ -176,4 +176,9 @@
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly"/>
     <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall"/>
+    <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature">
+        <properties>
+            <property name="withParametersWithAttributes" value="true"/>
+        </properties>
+    </rule>
 </ruleset>
