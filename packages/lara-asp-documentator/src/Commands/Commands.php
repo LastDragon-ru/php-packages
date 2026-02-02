@@ -27,7 +27,6 @@ class Commands extends Command {
     public const string Name = Package::Name.':commands';
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     public $signature = self::Name.<<<'SIGNATURE'

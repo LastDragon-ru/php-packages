@@ -22,19 +22,16 @@ class TestObjectSearchable extends Model {
     use WithoutTimestamps;
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var ?string
      */
     protected $table = 'test_objects';
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     protected $keyType = 'string';
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var bool
      */
     public $incrementing = false;

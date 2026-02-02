@@ -76,7 +76,6 @@
             <property name="spacesCountAroundEqualsSign" value="1"/>
         </properties>
     </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
     <rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>

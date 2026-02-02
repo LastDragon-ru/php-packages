@@ -59,9 +59,6 @@ class Operators extends BuilderOperators {
     public const  string Object   = self::Prefix.'Object';
     public const  string Disabled = self::Prefix.'Disabled';
 
-    /**
-     * @inheritDoc
-     */
     protected array $default = [
         // Built-in
         Type::ID      => [

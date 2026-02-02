@@ -73,7 +73,6 @@ final class ScheduleAssertionsTest extends TestCase {
 )]
 class ScheduleAssertionsTest__Command extends Command {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     protected $signature = 'test {file : example file}';

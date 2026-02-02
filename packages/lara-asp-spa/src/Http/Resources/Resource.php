@@ -23,7 +23,6 @@ use function is_scalar;
 
 abstract class Resource extends JsonResource implements SafeResource {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string|null
      */
     public static $wrap        = null;

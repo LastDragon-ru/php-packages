@@ -11,7 +11,6 @@ use function sprintf;
 
 class ResourceCollection extends AnonymousResourceCollection implements SafeResource {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string|null
      */
     public static $wrap = null;

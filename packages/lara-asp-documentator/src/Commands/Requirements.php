@@ -54,7 +54,6 @@ class Requirements extends Command {
     private const string HEAD = 'HEAD';
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     public $signature = self::Name.<<<'SIGNATURE'
@@ -62,7 +61,6 @@ class Requirements extends Command {
     SIGNATURE;
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     protected $help = <<<'HELP'
