@@ -181,4 +181,5 @@
             <property name="withParametersWithAttributes" value="true"/>
         </properties>
     </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassKeywordOrder"/>
 </ruleset>
