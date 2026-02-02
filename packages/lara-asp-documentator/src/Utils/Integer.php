@@ -12,7 +12,9 @@ use const PHP_INT_MAX;
 class Integer {
     public static function add(int $a, int $b): int {
         $sum = $a + $b;
-        $sum = is_int($sum) ? $sum : PHP_INT_MAX; // @phpstan-ignore function.alreadyNarrowedType (if overflow it will be float)
+        $sum = is_int($sum) // @phpstan-ignore function.alreadyNarrowedType (if overflow it will be float)
+            ? $sum
+            : PHP_INT_MAX;
 
         return $sum;
     }

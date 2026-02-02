@@ -27,9 +27,6 @@ class Database extends Stream {
      */
     private ?int $length = null;
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getItems(): iterable {
         return $this->getCollection();

@@ -125,9 +125,6 @@ class Task implements FileTask {
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function glob(): array|string {
         return '*.md';

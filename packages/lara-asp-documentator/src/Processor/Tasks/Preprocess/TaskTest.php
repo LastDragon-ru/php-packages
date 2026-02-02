@@ -77,9 +77,6 @@ final class TaskTest extends TestCase {
             $this->app()->make(Container::class),
             $this->app()->make(Serializer::class),
         ) extends Task {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function parse(Resolver $resolver, File $file, Document $document): array {
                 return parent::parse($resolver, $file, $document);

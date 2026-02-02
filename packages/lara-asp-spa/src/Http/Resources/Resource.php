@@ -23,7 +23,6 @@ use function is_scalar;
 
 abstract class Resource extends JsonResource implements SafeResource {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string|null
      */
     public static $wrap        = null;
@@ -32,8 +31,6 @@ abstract class Resource extends JsonResource implements SafeResource {
     // <editor-fold desc="JsonResource">
     // =========================================================================
     /**
-     * @inheritDoc
-     *
      * @return array<array-key, mixed>|Arrayable<array-key,mixed>|JsonSerializable
      */
     #[Override]
@@ -48,8 +45,6 @@ abstract class Resource extends JsonResource implements SafeResource {
     }
 
     /**
-     * @inheritDoc
-     *
      * @return array<array-key, mixed>
      */
     #[Override]
@@ -66,8 +61,6 @@ abstract class Resource extends JsonResource implements SafeResource {
     }
 
     /**
-     * @inheritDoc
-     *
      * @param array<array-key, mixed> $data
      *
      * @return array<array-key, mixed>
@@ -89,8 +82,6 @@ abstract class Resource extends JsonResource implements SafeResource {
     }
 
     /**
-     * @inheritDoc
-     *
      * @return AnonymousResourceCollection<array-key, mixed>
      */
     #[Override]

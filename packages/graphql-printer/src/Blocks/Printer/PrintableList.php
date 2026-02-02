@@ -56,9 +56,6 @@ class PrintableList extends ListBlock implements ArrayAccess {
 
     // <editor-fold desc="Content">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getItems(): iterable {
         return $this->blocks;

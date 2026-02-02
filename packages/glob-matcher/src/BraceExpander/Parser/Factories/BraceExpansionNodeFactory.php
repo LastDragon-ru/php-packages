@@ -11,17 +11,11 @@ use Override;
  * @extends NodeParentFactory<BraceExpansionNode, BraceExpansionNodeChild>
  */
 class BraceExpansionNodeFactory extends NodeParentFactory {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         return new BraceExpansionNode($children);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         return true;

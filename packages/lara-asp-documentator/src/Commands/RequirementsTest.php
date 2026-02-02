@@ -17,9 +17,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 final class RequirementsTest extends TestCase {
     public function testGetMergedVersions(): void {
         $command  = new class($this->app()->make(Sorter::class)) extends Requirements {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getMergedVersions(array $versions, array $merge): array {
                 return parent::getMergedVersions($versions, $merge);
@@ -75,9 +72,6 @@ final class RequirementsTest extends TestCase {
             'php'               => 'PHP',
         ];
         $command  = new class($this->app()->make(Sorter::class)) extends Requirements {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getRequirements(array $packages, Metadata $metadata): array {
                 return parent::getRequirements($packages, $metadata);
@@ -128,9 +122,6 @@ final class RequirementsTest extends TestCase {
             ],
         );
         $command  = new class($this->app()->make(Sorter::class)) extends Requirements {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getPackageRequirements(array $require, array $merge, ComposerJson $package): array {
                 return parent::getPackageRequirements(

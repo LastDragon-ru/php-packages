@@ -24,9 +24,6 @@ class Renderer implements NodeRendererInterface, XmlNodeRendererInterface {
         return Package::Name.':ast-restorer';
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getXmlAttributes(Node $node): array {
         return [];

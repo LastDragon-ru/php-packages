@@ -17,18 +17,12 @@ final class SequenceNodeTest extends TestCase {
     public function testToIterable(): void {
         $node = new SequenceNode([
             new class () implements SequenceNodeChild {
-                /**
-                 * @inheritDoc
-                 */
                 #[Override]
                 public static function toIterable(Cursor $cursor): iterable {
                     return ['aa', 'ab'];
                 }
             },
             new class () implements SequenceNodeChild {
-                /**
-                 * @inheritDoc
-                 */
                 #[Override]
                 public static function toIterable(Cursor $cursor): iterable {
                     return ['ba', 'bb', 'bc'];

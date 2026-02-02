@@ -20,9 +20,6 @@ final class ExtensionTest extends TestCase {
 
     public function testParse(): void {
         $markdown = new class() extends Markdown {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             protected function extensions(): array {
                 return [

@@ -25,9 +25,6 @@ readonly class Remove implements Mutation {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function nodes(): array {
         return [
@@ -37,9 +34,6 @@ readonly class Remove implements Mutation {
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         return $this->isComment($node)

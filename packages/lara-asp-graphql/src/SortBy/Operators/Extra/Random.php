@@ -19,9 +19,6 @@ use Override;
 class Random extends Operator {
     // <editor-fold desc="Directive">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected static function locations(): array {
         return [

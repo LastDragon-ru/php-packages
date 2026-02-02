@@ -20,7 +20,6 @@ use function mb_trim;
 )]
 class SqlSeeder extends GeneratorCommand {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     protected $type = 'Seeder';
@@ -42,7 +41,6 @@ class SqlSeeder extends GeneratorCommand {
     }
 
     /**
-     * @inheritDoc
      * @noinspection PhpMissingReturnTypeInspection
      */
     #[Override]

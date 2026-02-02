@@ -350,19 +350,17 @@ abstract class DefinitionBlock extends Block implements NamedBlock {
         }
 
         // Extensions nodes can also add directives
-        $astExtensionNodes = property_exists($definition, 'extensionASTNodes') && is_iterable($definition->extensionASTNodes)
-            ? $definition->extensionASTNodes
-            : [];
-
-        foreach ($astExtensionNodes as $astExtensionNode) {
-            if (
-                $astExtensionNode instanceof TypeSystemExtensionNode
-                && property_exists($astExtensionNode, 'directives')
-                && is_iterable($astExtensionNode->directives)
-            ) {
-                foreach ($astExtensionNode->directives as $directive) {
-                    if ($directive instanceof DirectiveNode) {
-                        $directives[] = $directive;
+        if (property_exists($definition, 'extensionASTNodes') && is_iterable($definition->extensionASTNodes)) {
+            foreach ($definition->extensionASTNodes as $astExtensionNode) {
+                if (
+                    $astExtensionNode instanceof TypeSystemExtensionNode
+                    && property_exists($astExtensionNode, 'directives')
+                    && is_iterable($astExtensionNode->directives)
+                ) {
+                    foreach ($astExtensionNode->directives as $directive) {
+                        if ($directive instanceof DirectiveNode) {
+                            $directives[] = $directive;
+                        }
                     }
                 }
             }

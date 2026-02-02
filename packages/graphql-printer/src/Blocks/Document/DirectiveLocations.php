@@ -13,9 +13,6 @@ use Override;
  * @extends UsageList<DirectiveLocation, array-key, NameNode|string>
  */
 class DirectiveLocations extends UsageList {
-    /**
-     * @inheritDoc
-     */
     public function __construct(
         Context $context,
         iterable $items,

@@ -18,17 +18,11 @@ class PatternListNodeFactory extends NodeParentFactory {
         parent::__construct();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         return new PatternListNode($this->quantifier, $children);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         return true;

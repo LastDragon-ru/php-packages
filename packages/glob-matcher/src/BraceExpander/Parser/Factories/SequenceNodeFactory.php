@@ -13,17 +13,11 @@ use function count;
  * @extends NodeParentFactory<SequenceNode, SequenceNodeChild>
  */
 class SequenceNodeFactory extends NodeParentFactory {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         return count($children) > 1 ? new SequenceNode($children) : null;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         return true;

@@ -13,9 +13,6 @@ use function array_merge;
  * @internal
  */
 abstract class TestCase extends PackageTestCase {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getPackageProviders(mixed $app): array {
         return array_merge(parent::getPackageProviders($app), [

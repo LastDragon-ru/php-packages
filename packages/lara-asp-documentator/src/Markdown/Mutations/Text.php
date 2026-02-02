@@ -22,9 +22,6 @@ readonly class Text implements Mutation {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function nodes(): array {
         return [
@@ -32,9 +29,6 @@ readonly class Text implements Mutation {
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         return [

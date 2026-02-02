@@ -25,9 +25,6 @@ use function iterator_to_array;
 final class CommandsTest extends TestCase {
     // <editor-fold desc="Prepare">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getPackageProviders(mixed $app): array {
         return array_merge(parent::getPackageProviders($app), [
@@ -92,7 +89,6 @@ class CommandsTest_Provider extends ServiceProvider {
  */
 class CommandsTest_CommandA extends Command {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     protected $signature = <<<'SIGNATURE'
@@ -117,13 +113,11 @@ class CommandsTest_CommandA extends Command {
 )]
 class CommandsTest_CommandB extends Command {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     protected $description = 'Command B description.';
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var array<array-key, mixed>
      */
     protected $aliases = ['command-b-alias'];
@@ -142,7 +136,6 @@ class CommandsTest_CommandB extends Command {
 )]
 class CommandsTest_CommandC extends Command {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var bool
      */
     protected $hidden = true;

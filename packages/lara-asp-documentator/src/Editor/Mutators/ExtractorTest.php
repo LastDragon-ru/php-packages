@@ -45,9 +45,6 @@ final class ExtractorTest extends TestCase {
 
     public function testUnpack(): void {
         $extractor = new readonly class() extends Extractor {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function unpack(iterable $locations): array {
                 return parent::unpack($locations);
@@ -72,9 +69,6 @@ final class ExtractorTest extends TestCase {
 
     public function testPrepare(): void {
         $extractor   = new readonly class() extends Extractor {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function prepare(array $coordinates): array {
                 return parent::prepare($coordinates);

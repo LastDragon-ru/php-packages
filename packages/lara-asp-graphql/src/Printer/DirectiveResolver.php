@@ -75,9 +75,6 @@ class DirectiveResolver implements DirectiveResolverContract {
         return $this->definitions[$name] ?? null;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getDefinitions(): array {
         return [];

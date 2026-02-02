@@ -48,9 +48,6 @@ abstract class Rule implements RuleContract, ValidationRule {
 
     // <editor-fold desc="Rule">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function passes($attribute, $value): bool {
         trigger_deprecation(

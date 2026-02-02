@@ -21,17 +21,11 @@ class ResultImpl implements Result {
         return $this->content;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getUsedTypes(): array {
         return $this->collector->getUsedTypes();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getUsedDirectives(): array {
         return $this->collector->getUsedDirectives();

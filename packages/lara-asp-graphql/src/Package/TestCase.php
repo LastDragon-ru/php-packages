@@ -37,9 +37,6 @@ abstract class TestCase extends PackageTestCase {
         getGraphQLPrinter as private getDefaultGraphQLPrinter;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getPackageProviders(mixed $app): array {
         return array_merge(parent::getPackageProviders($app), [

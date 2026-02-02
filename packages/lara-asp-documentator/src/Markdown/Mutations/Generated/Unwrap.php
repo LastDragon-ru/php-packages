@@ -21,9 +21,6 @@ readonly class Unwrap implements Mutation {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function nodes(): array {
         return [
@@ -31,9 +28,6 @@ readonly class Unwrap implements Mutation {
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         $startMarker = StartMarkerLocation::optional()->get($node);

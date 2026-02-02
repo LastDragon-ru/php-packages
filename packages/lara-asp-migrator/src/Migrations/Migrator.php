@@ -26,8 +26,6 @@ class Migrator extends IlluminateMigrator {
     // <editor-fold desc="\Illuminate\Database\Migrations\Migrator">
     // =========================================================================
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-     * @inheritDoc
      * @param array<array-key, mixed>|string $paths
      */
     #[Override]

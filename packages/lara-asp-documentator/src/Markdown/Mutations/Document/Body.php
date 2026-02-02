@@ -27,9 +27,6 @@ readonly class Body implements IteratorAggregate {
     #[Override]
     public function getIterator(): Generator {
         yield new readonly class() implements Mutation {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function nodes(): array {
                 return [
@@ -37,9 +34,6 @@ readonly class Body implements IteratorAggregate {
                 ];
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function mutagens(Document $document, Node $node): array {
                 $location      = LocationData::get($node);

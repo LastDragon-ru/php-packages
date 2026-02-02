@@ -81,9 +81,6 @@ class SerializableNormalizer extends AbstractObjectNormalizer {
         ];
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed {
         $class = $this->getTypeClass($type, $data);

@@ -87,7 +87,6 @@ class Offset extends ScalarType {
     }
 
     /**
-     * @inheritDoc
      * @return StreamOffset|int<0, max>
      */
     #[Override]

@@ -38,9 +38,6 @@ class JsonStringType extends StringType {
         return $this->validate($value, Error::class);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function parseLiteral(Node $valueNode, ?array $variables = null): string {
         if (!($valueNode instanceof StringValueNode)) {

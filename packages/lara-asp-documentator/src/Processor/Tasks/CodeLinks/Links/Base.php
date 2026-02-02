@@ -61,9 +61,6 @@ abstract class Base implements Link {
         return (string) $link === (string) $this;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getSource(File $file, Package $package): array|FilePath|null {
         return $package->resolve($this->class);
@@ -74,7 +71,10 @@ abstract class Base implements Link {
         // Class?
         $expected = mb_ltrim($this->class, '\\');
         $parsed   = $resolver->cast($source, Parsed::class);
-        $class    = array_find($parsed->classes, static fn ($class) => (string) $class->node->namespacedName === $expected);
+        $class    = array_find(
+            $parsed->classes,
+            static fn ($class) => (string) $class->node->namespacedName === $expected,
+        );
 
         if ($class === null) {
             return null;

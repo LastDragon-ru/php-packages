@@ -17,17 +17,11 @@ class CharacterNodeFactory extends NodeParentFactory {
         parent::__construct();
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         return $children !== [] ? new CharacterNode($this->negated, $children) : null;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         return true;

@@ -248,7 +248,7 @@
       "./vendor/bin/phpunit"
     ],
     "phpcs": [
-      "./vendor-bin/phpcs/vendor/bin/phpcs"
+      "./vendor-bin/phpcs/vendor/bin/phpcs -s"
     ],
     "markdownlint": [
       "npm run markdownlint"

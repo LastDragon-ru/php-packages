@@ -92,9 +92,6 @@ final class MutatorTest extends TestCase {
 
     public function testUnpack(): void {
         $mutator  = new readonly class() extends Mutator {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function unpack(iterable $changes): array {
                 return parent::unpack($changes);
@@ -116,9 +113,6 @@ final class MutatorTest extends TestCase {
 
     public function testCleanup(): void {
         $mutator  = new readonly class() extends Mutator {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function cleanup(array $changes): array {
                 return parent::cleanup($changes);
@@ -158,9 +152,6 @@ final class MutatorTest extends TestCase {
 
     public function testPrepare(): void {
         $mutator  = new readonly class() extends Mutator {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function prepare(array $changes): array {
                 return parent::prepare($changes);

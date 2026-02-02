@@ -32,9 +32,6 @@ class Output implements Contract {
         return mb_strlen($string);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function split(string $string, int $limit): array {
         return mb_str_split($string, $limit);

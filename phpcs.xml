@@ -19,18 +19,26 @@
         <exclude name="PSR2.Classes.PropertyDeclaration.SpacingAfterType"/>
         <exclude name="PSR12.Files.DeclareStatement.SpaceFoundAfterDirective"/>
         <exclude name="PSR12.Files.DeclareStatement.SpaceFoundBeforeDirectiveValue"/>
-        <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/>
+        <exclude name="PSR12.Files.FileHeader.SpacingAfterTagBlock"/>
+        <exclude name="PSR12.Files.FileHeader.SpacingAfterDocblockBlock"><!--
+            False positive:
+            * https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/21
+            * https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/1330
+        --></exclude>
         <exclude name="PSR12.Files.OpenTag.NotAlone"/>
         <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceBefore"/>
         <exclude name="PSR12.Operators.OperatorSpacing.NoSpaceAfter"/>
         <exclude name="PSR12.Files.FileHeader.IncorrectOrder"/>
         <exclude name="PSR12.Classes.AnonClassDeclaration.SpaceAfterKeyword"/>
-
-        <!-- False positive: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/559 -->
-        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNoNewline"/>
-
-        <!-- Too annoying disable it in many files, see https://github.com/squizlabs/PHP_CodeSniffer/issues/3606 -->
-        <exclude name="Generic.Files.LineLength.TooLong"/>
+        <exclude name="Squiz.Classes.ValidClassName.NotPascalCase"><!--
+            Would be nice to move all test classes into *Test directory/namespace and enable this rule
+        --></exclude>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNoNewline"><!--
+            False positive: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/559
+        --></exclude>
+        <exclude name="Generic.Files.LineLength.TooLong"><!--
+            Too annoying disable it in many files, see https://github.com/squizlabs/PHP_CodeSniffer/issues/3606
+        --></exclude>
     </rule>
     <rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
     <rule ref="Generic.Classes.OpeningBraceSameLine"/>
@@ -68,9 +76,6 @@
             <property name="spacesCountAroundEqualsSign" value="1"/>
         </properties>
     </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
     <rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
@@ -82,9 +87,6 @@
     <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
         <properties>
             <property name="searchAnnotations" value="true"/>
-            <property name="ignoredAnnotationNames" type="array">
-                <element value="@dataProvider"/>
-            </property>
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
@@ -149,12 +151,11 @@
             <property name="linesCount" value="0"/>
         </properties>
     </rule>
-    <!-- Temporary disabled: https://github.com/slevomat/coding-standard/issues/1767 -->
-    <!-- <rule ref="SlevomatCodingStandard.Attributes.AttributesOrder">-->
-    <!--    <properties>-->
-    <!--         <property name="orderAlphabetically" value="true"/>-->
-    <!--     </properties>-->
-    <!-- </rule>-->
+    <rule ref="SlevomatCodingStandard.Attributes.AttributesOrder">
+        <properties>
+            <property name="orderAlphabetically" value="true"/>
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Attributes.DisallowAttributesJoining"/>
     <rule ref="SlevomatCodingStandard.Attributes.DisallowMultipleAttributesPerLine"/>
     <rule ref="SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment"/>
@@ -168,4 +169,11 @@
     <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly"/>
+    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall"/>
+    <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature">
+        <properties>
+            <property name="withParametersWithAttributes" value="true"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassKeywordOrder"/>
 </ruleset>

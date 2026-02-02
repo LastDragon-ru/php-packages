@@ -40,9 +40,6 @@ final class BaseTest extends TestCase {
     #[DataProvider('dataProviderGetTitle')]
     public function testGetTitle(?string $expected, string $value): void {
         $link = new class($value) extends Base {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public function getSource(File $file, Package $package): array|FilePath|null {
                 return null;
@@ -242,9 +239,6 @@ readonly class BaseTest_Link implements Link {
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getSource(File $file, Package $package): array|FilePath|null {
         return null;

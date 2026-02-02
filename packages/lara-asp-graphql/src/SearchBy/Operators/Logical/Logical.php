@@ -23,9 +23,6 @@ use function count;
 use function is_array;
 
 abstract class Logical extends Operator {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected static function locations(): array {
         return [

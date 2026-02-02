@@ -20,9 +20,6 @@ use function str_starts_with;
  * @since 10.0.0
  */
 readonly class AutolinkExpand extends Base {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         // Autolink?

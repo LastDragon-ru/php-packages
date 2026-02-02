@@ -45,7 +45,13 @@ readonly class StringTokenizeIterable implements IteratorAggregate {
 
     #[Override]
     public function getIterator(): Traversable {
-        $iterable = new StringSplitIterable($this->iterable, array_keys($this->map), $this->buffer, $this->offset, true);
+        $iterable = new StringSplitIterable(
+            $this->iterable,
+            array_keys($this->map),
+            $this->buffer,
+            $this->offset,
+            true,
+        );
 
         foreach ($iterable as $offset => $value) {
             yield new Token($this->map[$value] ?? null, $value, $offset);

@@ -61,7 +61,6 @@ class Preprocess extends Command {
     private const string DeprecationMarker = '💀';
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     public $signature = self::Name.<<<'SIGNATURE'
@@ -70,7 +69,6 @@ class Preprocess extends Command {
     SIGNATURE;
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string
      */
     public $help = <<<'HELP'

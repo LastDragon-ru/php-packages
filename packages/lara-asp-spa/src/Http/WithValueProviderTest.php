@@ -25,9 +25,6 @@ final class WithValueProviderTest extends TestCase {
         $resolverRuleA = new ResolverRule(
             $translator,
             new class($router) extends Resolver {
-                /**
-                 * @inheritDoc
-                 */
                 #[Override]
                 protected function resolve(mixed $value, array $parameters): mixed {
                     return ['a' => $value];
@@ -37,9 +34,6 @@ final class WithValueProviderTest extends TestCase {
         $resolverRuleB = new ResolverRule(
             $translator,
             new class($router) extends Resolver {
-                /**
-                 * @inheritDoc
-                 */
                 #[Override]
                 protected function resolve(mixed $value, array $parameters): mixed {
                     return ['b' => $value];
@@ -90,8 +84,6 @@ final class WithValueProviderTest extends TestCase {
             }
 
             /**
-             * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
-             *
              * @return Validator
              */
             #[Override]

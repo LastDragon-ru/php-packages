@@ -18,9 +18,6 @@ use function mb_strlen;
  * @extends ListBlock<TBlock, TKey, TItem>
  */
 abstract class UsageList extends ListBlock {
-    /**
-     * @inheritDoc
-     */
     public function __construct(
         Context $context,
         iterable $items,

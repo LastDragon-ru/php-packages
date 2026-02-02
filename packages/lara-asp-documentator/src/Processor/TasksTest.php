@@ -171,9 +171,6 @@ final class TasksTest extends TestCase {
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
  */
 class TasksTest__FileTask implements FileTask {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function glob(): array|string {
         return ['*.txt', '*.md'];
@@ -190,9 +187,6 @@ class TasksTest__FileTask implements FileTask {
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
  */
 class TasksTest__HookTask implements HookTask {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function hook(): array|Hook {
         return Hook::File;
@@ -209,17 +203,11 @@ class TasksTest__HookTask implements HookTask {
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
  */
 class TasksTest__Task implements FileTask, HookTask {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function hook(): array|Hook {
         return [Hook::Before];
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function glob(): array|string {
         return ['*.task'];

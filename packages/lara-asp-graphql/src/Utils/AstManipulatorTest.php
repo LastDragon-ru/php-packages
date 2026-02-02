@@ -53,9 +53,6 @@ use function is_string;
 final class AstManipulatorTest extends TestCase {
     // <editor-fold desc="Prepare">
     // =========================================================================
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getPackageProviders(mixed $app): array {
         return array_merge(parent::getPackageProviders($app), [

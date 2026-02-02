@@ -279,9 +279,6 @@ class OperatorsTest__Operators extends Operators {
         return OperatorsTest__Scope::class;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getDisabledOperators(AstManipulator $manipulator): array {
         return $this->getTypeOperators($manipulator, 'Disabled');

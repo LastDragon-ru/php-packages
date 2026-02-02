@@ -11,7 +11,6 @@ use function sprintf;
 
 class ResourceCollection extends AnonymousResourceCollection implements SafeResource {
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var string|null
      */
     public static $wrap = null;
@@ -27,9 +26,6 @@ class ResourceCollection extends AnonymousResourceCollection implements SafeReso
         parent::__construct($resource, $class);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function preparePaginatedResponse($request) {
         // Our PaginatedResponse does not return any links, so we shouldn't

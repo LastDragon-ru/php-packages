@@ -19,9 +19,6 @@ use function rawurldecode;
  * Inlines all references.
  */
 readonly class Inline extends Base {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         // Reference?

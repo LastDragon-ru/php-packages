@@ -17,7 +17,6 @@ class TestObject extends Model {
     use WithoutTimestamps;
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
      * @var ?string
      */
     protected $table = 'test_objects';

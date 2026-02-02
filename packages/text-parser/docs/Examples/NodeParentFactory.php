@@ -30,17 +30,11 @@ class ParentNode extends NodeParentImpl {
  * @extends NodeParentFactory<ParentNode, ChildNode>
  */
 class ParentNodeFactory extends NodeParentFactory {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onCreate(array $children): ?object {
         return $children !== [] ? new ParentNode($children) : null;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function onPush(array $children, ?object $node): bool {
         return true;

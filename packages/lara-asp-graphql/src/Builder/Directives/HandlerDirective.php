@@ -65,8 +65,6 @@ abstract class HandlerDirective extends BaseDirective implements Handler, Enhanc
     // <editor-fold desc="Handle">
     // =========================================================================
     /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint
-     *
      * @param EloquentBuilder<Model>|QueryBuilder $builder
      *
      * @return EloquentBuilder<Model>|QueryBuilder

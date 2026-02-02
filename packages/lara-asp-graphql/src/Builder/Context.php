@@ -30,9 +30,6 @@ class Context implements ContextContract {
             : null;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function override(array $context): static {
         $overridden = clone $this;

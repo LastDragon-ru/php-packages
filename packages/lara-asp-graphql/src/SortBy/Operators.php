@@ -22,9 +22,6 @@ class Operators extends BuilderOperators {
     public const  string Object   = self::Prefix.'Object';
     public const  string Disabled = self::Prefix.'Disabled';
 
-    /**
-     * @inheritDoc
-     */
     protected array $default = [
         self::Extra  => [
             SortByOperatorFieldDirective::class,
@@ -48,9 +45,6 @@ class Operators extends BuilderOperators {
         return Scope::class;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getDisabledOperators(AstManipulator $manipulator): array {
         return array_merge(

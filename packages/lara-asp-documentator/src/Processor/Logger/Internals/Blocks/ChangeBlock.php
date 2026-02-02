@@ -54,9 +54,6 @@ abstract class ChangeBlock extends Block {
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function render(Renderer $renderer, Formatter $formatter, int $padding): iterable {
         yield Verbosity::VeryVerbose => $renderer->run(

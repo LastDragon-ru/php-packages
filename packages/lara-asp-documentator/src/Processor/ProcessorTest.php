@@ -808,9 +808,6 @@ final class ProcessorTest extends TestCase {
         $events    = [];
         $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
         $task      = new class() implements HookTask {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function hook(): array {
                 return [Hook::Before];
@@ -894,9 +891,6 @@ final class ProcessorTest extends TestCase {
     public function testRunHookAfterProcessingQueue(): void {
         $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
         $task      = new class() implements HookTask {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function hook(): array {
                 return [Hook::After];
@@ -924,9 +918,6 @@ final class ProcessorTest extends TestCase {
         $events    = [];
         $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
         $task      = new class() implements HookTask {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             public static function hook(): array {
                 return [Hook::Before];
@@ -1098,9 +1089,6 @@ class ProcessorTest__Task implements FileTask {
         // empty
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function glob(): array|string {
         return ['*.txt', '*.md'];
@@ -1132,9 +1120,6 @@ class ProcessorTest__Task implements FileTask {
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
  */
 class ProcessorTest__Adapter extends SymfonyFileSystem {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getFinder(
         DirectoryPath $directory,

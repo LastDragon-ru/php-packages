@@ -9,9 +9,6 @@ use Override;
  * @extends ParentNode<BraceExpansionNodeChild>
  */
 class BraceExpansionNode extends ParentNode implements SequenceNodeChild {
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public static function toIterable(Cursor $cursor): iterable {
         yield from self::iterate($cursor, 0, '');

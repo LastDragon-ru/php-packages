@@ -25,8 +25,6 @@ final class DirectoryPath extends Path {
     }
 
     /**
-     * @inheritDoc
-     *
      * @return non-empty-string
      */
     #[Override]

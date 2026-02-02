@@ -25,9 +25,6 @@ class Schema extends SchemaDirective {
         return Directive::Name.'Operators';
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     protected function getScalars(): array {
         $constants = (new ReflectionClass(Operators::class))->getConstants(ReflectionClassConstant::IS_PUBLIC);

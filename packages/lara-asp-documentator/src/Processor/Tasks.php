@@ -44,9 +44,6 @@ class Tasks implements IteratorAggregate {
         $this->instances = new Instances($container, InstancesOrder::Asc);
     }
 
-    /**
-     * @inheritDoc
-     */
     #[Override]
     public function getIterator(): Traversable {
         yield from $this->instances->classes();

@@ -18,9 +18,6 @@ final class ResolverTest extends TestCase {
     public function testGet(): void {
         $router   = $this->app()->make(Router::class);
         $resolver = new class($router) extends Resolver {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             protected function resolve(mixed $value, array $parameters): mixed {
                 return (object) [
@@ -29,9 +26,6 @@ final class ResolverTest extends TestCase {
                 ];
             }
 
-            /**
-             * @inheritDoc
-             */
             #[Override]
             protected function resolveParameters(?Request $request = null, ?Route $route = null): array {
                 return [
@@ -71,9 +65,6 @@ final class ResolverTest extends TestCase {
 
         $router   = $this->app()->make(Router::class);
         $resolver = new class($router) extends Resolver {
-            /**
-             * @inheritDoc
-             */
             #[Override]
             protected function resolve(mixed $value, array $parameters): mixed {
                 return null;
