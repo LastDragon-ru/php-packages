@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPUnit\Framework\Attributes\CoversClass;
 
+use function array_first;
 use function array_map;
 
 /**
