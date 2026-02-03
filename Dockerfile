@@ -18,7 +18,7 @@ RUN apt install -y \
 RUN <<EOF
 set -eux
 
-PHP_VERSION=8.4
+PHP_VERSION=8.5
 PHP_CONFIG="/etc/php/${PHP_VERSION}"
 
 LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
@@ -39,7 +39,6 @@ sed -i 's/^error_reporting = .\+$/error_reporting = E_ALL \& ~E_DEPRECATED/' "${
 sed -i 's/^display_errors = .\+$/display_errors = On/'                       "${PHP_CONFIG}/cli/php.ini"
 sed -i 's/^;opcache\.enable=.\+$/opcache.enable=1/'                          "${PHP_CONFIG}/cli/php.ini"
 sed -i 's/^;opcache\.enable_cli=.\+$/opcache.enable_cli=1/'                  "${PHP_CONFIG}/cli/php.ini"
-sed -i 's/^opcache\.jit=.\+$/opcache.jit=disable/'                           "${PHP_CONFIG}/mods-available/opcache.ini"
 tee -a "${PHP_CONFIG}/mods-available/xdebug.ini" > /dev/null <<"EOT"
 xdebug.output_dir = /project/.xdebug
 xdebug.profiler_output_name = callgrind.out.%t.%r
