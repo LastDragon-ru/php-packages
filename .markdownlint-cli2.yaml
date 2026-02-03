@@ -296,3 +296,7 @@ config:
 
   # MD059/descriptive-link-text - Link text should be descriptive
   MD059: true
+
+  # MD060/table-column-style - Table column style
+  # Because rule is not fixable and dependencies tables are auto-generated and not aligned
+  MD060: false
