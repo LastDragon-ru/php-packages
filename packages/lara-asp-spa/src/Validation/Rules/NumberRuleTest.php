@@ -17,24 +17,34 @@ use const NAN;
 final class NumberRuleTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
-    #[DataProvider('dataProviderIsValid')]
-    public function testRule(bool $expected, mixed $value): void {
+    public function testRulePasses(): void {
         $rule      = $this->app()->make(NumberRule::class);
         $factory   = $this->app()->make(Factory::class);
-        $validator = $factory->make(['value' => $value], ['value' => $rule]);
+        $validator = $factory->make(['value' => 123.45], ['value' => $rule]);
 
-        self::assertSame($expected, !$validator->fails());
+        self::assertFalse($validator->fails());
+        self::assertEquals(
+            [
+                // empty
+            ],
+            $validator->errors()->toArray(),
+        );
+    }
 
-        if ($expected === false) {
-            self::assertEquals(
-                [
-                    'value' => [
-                        'The value is not an number.',
-                    ],
+    public function testRuleFails(): void {
+        $rule      = $this->app()->make(NumberRule::class);
+        $factory   = $this->app()->make(Factory::class);
+        $validator = $factory->make(['value' => '123.45'], ['value' => $rule]);
+
+        self::assertTrue($validator->fails());
+        self::assertEquals(
+            [
+                'value' => [
+                    'The value is not an number.',
                 ],
-                $validator->errors()->toArray(),
-            );
-        }
+            ],
+            $validator->errors()->toArray(),
+        );
     }
 
     #[DataProvider('dataProviderIsValid')]
