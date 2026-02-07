@@ -20,24 +20,20 @@ final class ArtisanSerializerTest extends TestCase {
     // =========================================================================
     #[DataProvider('dataProviderGetArgumentSignature')]
     public function testGetArgumentSignature(string $signature): void {
-        $parsed = Parser::parse("command {{$signature}}")[1] ?? [];
-
-        self::assertIsArray($parsed);
-
+        $parsed   = Parser::parse("command {{$signature}}")[1];
         $argument = reset($parsed);
 
+        /** @phpstan-ignore staticMethod.impossibleType (https://github.com/laravel/framework/pull/58670) */
         self::assertInstanceOf(InputArgument::class, $argument);
         self::assertSame($signature, (new ArtisanSerializer())->getArgumentSignature($argument));
     }
 
     #[DataProvider('dataProviderGetOptionSignature')]
     public function testGetOptionSignature(string $signature): void {
-        $parsed = Parser::parse("command {{$signature}}")[2] ?? [];
-
-        self::assertIsArray($parsed);
-
+        $parsed = Parser::parse("command {{$signature}}")[2];
         $option = reset($parsed);
 
+        /** @phpstan-ignore staticMethod.impossibleType (https://github.com/laravel/framework/pull/58670) */
         self::assertInstanceOf(InputOption::class, $option);
         self::assertSame($signature, (new ArtisanSerializer())->getOptionSignature($option));
     }

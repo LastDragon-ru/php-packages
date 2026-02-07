@@ -60,17 +60,11 @@ class Preprocess extends Command {
     public const  string Name              = Package::Name.':preprocess';
     private const string DeprecationMarker = '💀';
 
-    /**
-     * @var string
-     */
     public $signature = self::Name.<<<'SIGNATURE'
         {path?       : Directory to process.}
         {--exclude=* : Glob(s) to exclude.}
     SIGNATURE;
 
-    /**
-     * @var string
-     */
     public $help = <<<'HELP'
         ## Tasks
 
