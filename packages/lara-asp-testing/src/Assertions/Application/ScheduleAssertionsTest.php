@@ -72,9 +72,6 @@ final class ScheduleAssertionsTest extends TestCase {
     description: 'Test command.',
 )]
 class ScheduleAssertionsTest__Command extends Command {
-    /**
-     * @var string
-     */
     protected $signature = 'test {file : example file}';
 
     public function __invoke(): int {

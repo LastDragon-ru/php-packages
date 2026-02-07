@@ -88,9 +88,6 @@ class CommandsTest_Provider extends ServiceProvider {
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
  */
 class CommandsTest_CommandA extends Command {
-    /**
-     * @var string
-     */
     protected $signature = <<<'SIGNATURE'
         test-namespace:command-a
         {arg-a        : Argument a}
@@ -112,15 +109,8 @@ class CommandsTest_CommandA extends Command {
     name: 'test-namespace:command-b',
 )]
 class CommandsTest_CommandB extends Command {
-    /**
-     * @var string
-     */
     protected $description = 'Command B description.';
-
-    /**
-     * @var array<array-key, mixed>
-     */
-    protected $aliases = ['command-b-alias'];
+    protected $aliases     = ['command-b-alias'];
 
     public function __invoke(): void {
         throw new Exception('Should not be called.');
@@ -135,9 +125,6 @@ class CommandsTest_CommandB extends Command {
     name: 'test-namespace:command-c',
 )]
 class CommandsTest_CommandC extends Command {
-    /**
-     * @var bool
-     */
     protected $hidden = true;
 
     public function __invoke(): void {
