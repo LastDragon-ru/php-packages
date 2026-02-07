@@ -19,9 +19,6 @@ use function mb_trim;
     ],
 )]
 class SqlSeeder extends GeneratorCommand {
-    /**
-     * @var string
-     */
     protected $type = 'Seeder';
 
     private ?SqlSeederHelper $sqlSeederHelper = null;
