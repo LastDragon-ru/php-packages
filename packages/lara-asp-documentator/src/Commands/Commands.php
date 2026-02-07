@@ -26,9 +26,6 @@ use function is_dir;
 class Commands extends Command {
     public const string Name = Package::Name.':commands';
 
-    /**
-     * @var string
-     */
     public $signature = self::Name.<<<'SIGNATURE'
         {namespace  : The namespace of the commands.}
         {target     : Directory to save generated files. It will be created if not exist. All files/directories inside it will be removed otherwise.}

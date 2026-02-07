@@ -53,16 +53,10 @@ class Requirements extends Command {
     public const  string Name = Package::Name.':requirements';
     private const string HEAD = 'HEAD';
 
-    /**
-     * @var string
-     */
     public $signature = self::Name.<<<'SIGNATURE'
         {cwd? : working directory (should be a git repository)}
     SIGNATURE;
 
-    /**
-     * @var string
-     */
     protected $help = <<<'HELP'
         Requirements will be cached into `<cwd>/metadata.json`. You can also use
         this file to specify the required requirements. For example, to include
