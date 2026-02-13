@@ -89,15 +89,21 @@ class PrintableList extends ListBlock implements ArrayAccess {
      */
     #[Override]
     public function offsetExists(mixed $offset): bool {
-        return isset($this->blocks[$this->offset($offset)]);
+        $key    = $this->offset($offset);
+        $exists = $key !== null && isset($this->blocks[$key]);
+
+        return $exists;
     }
 
     /**
      * @param Block $offset
      */
     #[Override]
-    public function offsetGet(mixed $offset): Block {
-        return $this->blocks[$this->offset($offset)];
+    public function offsetGet(mixed $offset): ?Block {
+        $key   = $this->offset($offset);
+        $block = $key !== null ? $this->blocks[$key] : null;
+
+        return $block;
     }
 
     /**
@@ -106,10 +112,10 @@ class PrintableList extends ListBlock implements ArrayAccess {
      */
     #[Override]
     public function offsetSet(mixed $offset, mixed $value): void {
-        $offset = $this->offset($offset ?? $value);
+        $key = $this->offset($offset ?? $value);
 
-        if ($offset !== null) {
-            $this->blocks[$offset] = $value;
+        if ($key !== null) {
+            $this->blocks[$key] = $value;
         } else {
             $this->blocks[] = $value;
         }
@@ -122,7 +128,11 @@ class PrintableList extends ListBlock implements ArrayAccess {
      */
     #[Override]
     public function offsetUnset(mixed $offset): void {
-        unset($this->blocks[$this->offset($offset)]);
+        $key = $this->offset($offset);
+
+        if ($key !== null) {
+            unset($this->blocks[$key]);
+        }
 
         parent::reset();
     }

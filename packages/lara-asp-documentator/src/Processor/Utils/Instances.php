@@ -99,6 +99,10 @@ class Instances {
         $exists = $tags === [] && ($this->tags !== [] || $this->enums->count() > 0);
 
         foreach ($tags as $tag) {
+            if ($tag === null) {
+                continue;
+            }
+
             if ($tag instanceof UnitEnum ? isset($this->enums[$tag]) : isset($this->tags[$tag])) {
                 $exists = true;
                 break;
@@ -115,6 +119,10 @@ class Instances {
         $classes = $tags === [] ? $this->classes() : [];
 
         foreach ($tags as $tag) {
+            if ($tag === null) {
+                continue;
+            }
+
             $merge   = $tag instanceof UnitEnum ? ($this->enums[$tag] ?? []) : ($this->tags[$tag] ?? []);
             $classes = array_merge($classes, $merge);
         }

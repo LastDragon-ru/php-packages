@@ -23,8 +23,11 @@ abstract class BaseDataProvider implements DataProvider {
      */
     private function processExpectedValues(array $items): array {
         foreach ($items as $name => $args) {
-            $key                = array_key_first($args);
-            $items[$name][$key] = $this->getExpectedValue($args[$key]);
+            $key = array_key_first($args);
+
+            if ($key !== null) {
+                $items[$name][$key] = $this->getExpectedValue($args[$key]);
+            }
         }
 
         return $items;

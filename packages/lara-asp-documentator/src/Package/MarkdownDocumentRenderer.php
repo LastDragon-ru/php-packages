@@ -191,7 +191,7 @@ class MarkdownDocumentRenderer {
         $this->xml->endElement();
     }
 
-    private function writeObjectProperty(string $property, mixed $value): void {
+    private function writeObjectProperty(string|int $property, mixed $value): void {
         $this->writeKeyValue('property', 'name', $property, $value);
     }
 
@@ -223,7 +223,7 @@ class MarkdownDocumentRenderer {
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     private function getObjectProperties(object $object): array {
         $properties = get_object_vars($object);

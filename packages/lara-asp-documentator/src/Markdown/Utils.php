@@ -83,10 +83,10 @@ class Utils {
             "'" => ["'" => "\\'"],
         ];
         $wrapper  = match (true) {
-            isset($wrappers[$wrapper]) => $wrapper,
-            !str_contains($title, '"') => '"',
-            !str_contains($title, "'") => "'",
-            default                    => ')',
+            $wrapper !== null && isset($wrappers[$wrapper]) => $wrapper,
+            !str_contains($title, '"')                      => '"',
+            !str_contains($title, "'")                      => "'",
+            default                                         => ')',
         };
         $title = match ($wrapper) {
             '"'     => '"'.strtr($title, $wrappers['"']).'"',
