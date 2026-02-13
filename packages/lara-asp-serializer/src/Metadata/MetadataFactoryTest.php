@@ -3,6 +3,7 @@
 namespace LastDragon_ru\LaraASP\Serializer\Metadata;
 
 use JsonSerializable;
+use LastDragon_ru\LaraASP\Serializer\Attributes\TypeMap;
 use LastDragon_ru\LaraASP\Serializer\Attributes\VersionMap;
 use LastDragon_ru\LaraASP\Serializer\Package\TestCase;
 use Override;
@@ -41,6 +42,7 @@ final class MetadataFactoryTest extends TestCase {
         $a       = $factory->getMetadataFor(MetadataFactoryTest_A::class);
         $b       = $factory->getMetadataFor(MetadataFactoryTest_B::class);
         $c       = $factory->getMetadataFor(MetadataFactoryTest_C::class);
+        $d       = $factory->getMetadataFor(MetadataFactoryTest_D::class);
 
         self::assertEquals(
             [
@@ -97,6 +99,19 @@ final class MetadataFactoryTest extends TestCase {
             [
                 'property' => $c->getClassDiscriminatorMapping()?->getTypeProperty(),
                 'mapping'  => $c->getClassDiscriminatorMapping()?->getTypesMapping(),
+            ],
+        );
+        self::assertEquals(
+            [
+                'property' => '$type',
+                'mapping'  => [
+                    'a' => MetadataFactoryTest_A::class,
+                    'b' => MetadataFactoryTest_B::class,
+                ],
+            ],
+            [
+                'property' => $d->getClassDiscriminatorMapping()?->getTypeProperty(),
+                'mapping'  => $d->getClassDiscriminatorMapping()?->getTypesMapping(),
             ],
         );
     }
@@ -209,5 +224,14 @@ class MetadataFactoryTest_B extends MetadataFactoryTest_A {
  */
 #[VersionMap(['b' => MetadataFactoryTest_B::class, 'a' => MetadataFactoryTest_A::class])]
 class MetadataFactoryTest_C {
+    // empty
+}
+
+/**
+ * @internal
+ * @noinspection PhpMultipleClassesDeclarationsInOneFile
+ */
+#[TypeMap(['b' => MetadataFactoryTest_B::class, 'a' => MetadataFactoryTest_A::class])]
+class MetadataFactoryTest_D {
     // empty
 }
