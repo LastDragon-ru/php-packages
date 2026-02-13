@@ -106,6 +106,7 @@ class Renderer {
 
         if ($last === null) {
             yield from $lines;
+            return;
         }
 
         $fill   = $this->formatter->mark(Mark::Fill);

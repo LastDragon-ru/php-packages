@@ -23,7 +23,6 @@ final class ArtisanSerializerTest extends TestCase {
         $parsed   = Parser::parse("command {{$signature}}")[1];
         $argument = reset($parsed);
 
-        /** @phpstan-ignore staticMethod.impossibleType (https://github.com/laravel/framework/pull/58670) */
         self::assertInstanceOf(InputArgument::class, $argument);
         self::assertSame($signature, (new ArtisanSerializer())->getArgumentSignature($argument));
     }
@@ -33,7 +32,6 @@ final class ArtisanSerializerTest extends TestCase {
         $parsed = Parser::parse("command {{$signature}}")[2];
         $option = reset($parsed);
 
-        /** @phpstan-ignore staticMethod.impossibleType (https://github.com/laravel/framework/pull/58670) */
         self::assertInstanceOf(InputOption::class, $option);
         self::assertSame($signature, (new ArtisanSerializer())->getOptionSignature($option));
     }
