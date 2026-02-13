@@ -5,7 +5,6 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor;
 use Closure;
 use Exception;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
-use LastDragon_ru\LaraASP\Documentator\Package\WithPathComparator;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Event;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
@@ -56,8 +55,6 @@ use function file_put_contents;
 #[CoversClass(Iterator::class)]
 #[CoversClass(Resolver::class)]
 final class ProcessorTest extends TestCase {
-    use WithPathComparator;
-
     public function testRun(): void {
         $input  = (new DirectoryPath(self::getTestData()->path('')))->normalized();
         $events = [];

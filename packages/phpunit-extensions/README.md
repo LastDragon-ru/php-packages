@@ -97,6 +97,23 @@ final class RequirementsExtensionTest extends TestCase {
 
 [//]: # (end: preprocess/a201179110b693b9)
 
+## Path Comparator
+
+The [`DirectoryPath`][code-links/eff996e6f7f5e6b3]/[`FilePath`][code-links/43d8e2c832b53052] have internal properties which make direct comparison impossible. The extension provides a special comparator that compares paths via [`Path::equals()`][code-links/4159fe98c06c052e].
+
+To [register extension](https://docs.phpunit.de/en/12.5/extending-phpunit.html#registering-an-extension-from-a-composer-package) update your `phpunit.xml`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit>
+    <!-- ... -->
+    <extensions>
+        <bootstrap class="\LastDragon_ru\PhpUnit\Extensions\PathComparator\Extension"/>
+    </extensions>
+    <!-- ... -->
+</phpunit>
+```
+
 # Assertions
 
 > [!NOTE]
@@ -170,6 +187,15 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 
 [//]: # (start: code-links)
 [//]: # (warning: Generated automatically. Do not edit.)
+
+[code-links/eff996e6f7f5e6b3]: ../path/src/DirectoryPath.php
+    "\LastDragon_ru\Path\DirectoryPath"
+
+[code-links/43d8e2c832b53052]: ../path/src/FilePath.php
+    "\LastDragon_ru\Path\FilePath"
+
+[code-links/4159fe98c06c052e]: ../path/src/Path.php#L245-L248
+    "\LastDragon_ru\Path\Path::equals()"
 
 [code-links/8ddbbc27bf46e25a]: src/Assertions.php
     "\LastDragon_ru\PhpUnit\Assertions"
