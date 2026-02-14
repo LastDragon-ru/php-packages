@@ -38,7 +38,7 @@ composer require --dev lastdragon-ru/phpunit-extensions
 
 ## Strict Scalar Compare
 
-By default, PHPUnit compares scalars via `==` operator, so `Assert::assertEquals(1, true)` will pass. The extension adds own [`Comparator`][code-links/62e94c1c0fe743de] to compare scalars via `===` operator.
+By default, PHPUnit compares scalars via `==` operator, so `Assert::assertEquals(1, true)` will pass. The extension adds own [`Comparator`][code-links/90a38a9b706aebb5] to compare scalars via `===` operator.
 
 To [register extension](https://docs.phpunit.de/en/12.5/extending-phpunit.html#registering-an-extension-from-a-composer-package) update your `phpunit.xml`:
 
@@ -47,7 +47,7 @@ To [register extension](https://docs.phpunit.de/en/12.5/extending-phpunit.html#r
 <phpunit>
     <!-- ... -->
     <extensions>
-        <bootstrap class="\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension"/>
+        <bootstrap class="\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension"/>
     </extensions>
     <!-- ... -->
 </phpunit>
@@ -200,8 +200,8 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 [code-links/8ddbbc27bf46e25a]: src/Assertions.php
     "\LastDragon_ru\PhpUnit\Assertions"
 
-[code-links/62e94c1c0fe743de]: src/Extensions/StrictScalarCompare/Comparator.php
-    "\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Comparator"
+[code-links/90a38a9b706aebb5]: src/Extensions/StrictScalarComparator/Comparator.php
+    "\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Comparator"
 
 [code-links/d3222cbf284d2c91]: src/Filesystem/Assertions.php
     "\LastDragon_ru\PhpUnit\Filesystem\Assertions"
