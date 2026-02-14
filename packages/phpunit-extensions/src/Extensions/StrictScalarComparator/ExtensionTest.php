@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare;
+namespace LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator;
 
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;

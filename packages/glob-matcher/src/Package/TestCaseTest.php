@@ -3,7 +3,7 @@
 namespace LastDragon_ru\GlobMatcher\Package;
 
 use Exception;
-use LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension;
+use LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\ExpectationFailedException;
 

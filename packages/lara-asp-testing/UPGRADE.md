@@ -38,7 +38,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] Extension [`💀\LastDragon_ru\LaraASP\Testing\Requirements\PhpUnit\Extension`][code-links/26cc04e820d354b1] deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension`][code-links/7e51b51dd292df33] instead 🤝
 *
-* [ ] Trait [`💀StrictAssertEquals`][code-links/2187ed1b4d4e6c14] deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension`][code-links/50cb69b702caae36] instead 🤝
+* [ ] Trait [`💀StrictAssertEquals`][code-links/2187ed1b4d4e6c14] deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension`][code-links/4ec6b74a682f8155] instead 🤝
 
 * [ ] Trait [`💀WithTestData`][code-links/c1153ff984856b36] and [`💀\LastDragon_ru\LaraASP\Testing\Utils\TestData`][code-links/84706d7f00aadc5e] deprecated, please use [`\LastDragon_ru\PhpUnit\Utils\TestData`][code-links/ded4ad00d1ea1842] instead 🤝
 
@@ -131,8 +131,8 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 [code-links/7e51b51dd292df33]: ../phpunit-extensions/src/Extensions/Requirements/Extension.php
     "\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension"
 
-[code-links/50cb69b702caae36]: ../phpunit-extensions/src/Extensions/StrictScalarCompare/Extension.php
-    "\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension"
+[code-links/4ec6b74a682f8155]: ../phpunit-extensions/src/Extensions/StrictScalarComparator/Extension.php
+    "\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension"
 
 [code-links/d3222cbf284d2c91]: ../phpunit-extensions/src/Filesystem/Assertions.php
     "\LastDragon_ru\PhpUnit\Filesystem\Assertions"
