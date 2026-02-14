@@ -16,8 +16,10 @@ use LastDragon_ru\LaraASP\Testing\Providers\DataProvider as DataProviderContract
 use LastDragon_ru\LaraASP\Testing\Providers\ExpectedFinal;
 use LastDragon_ru\LaraASP\Testing\Providers\UnknownValue;
 use LastDragon_ru\LaraASP\Testing\Responses\JsonResponse;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use SplFileInfo;
 
 /**
  * @internal
@@ -71,14 +73,14 @@ final class SpaControllerTest extends TestCase {
                 'settings returned (default)' => [
                     new JsonResponse(
                         new Ok(),
-                        new JsonSchemaFile(self::getTestData()->file('.settings.default.json')),
+                        new JsonSchemaFile(new SplFileInfo(TestData::get()->file('settings.default.json')->path)),
                     ),
                     [],
                 ],
                 'settings returned (custom)'  => [
                     new JsonResponse(
                         new Ok(),
-                        new JsonSchemaFile(self::getTestData()->file('.settings.custom.json')),
+                        new JsonSchemaFile(new SplFileInfo(TestData::get()->file('settings.custom.json')->path)),
                     ),
                     [
                         'custom' => 'value',

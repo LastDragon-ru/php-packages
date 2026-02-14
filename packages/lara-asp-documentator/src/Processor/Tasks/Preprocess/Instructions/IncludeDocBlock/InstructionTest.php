@@ -8,7 +8,7 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Document;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Context;
-use LastDragon_ru\Path\FilePath;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -24,11 +24,12 @@ final class InstructionTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
     /**
-     * @param Closure(self, Context, Parameters): Exception|string $expected
+     * @param Closure(self, Context, Parameters): Exception|non-empty-string $expected
+     * @param non-empty-string                                               $file
      */
     #[DataProvider('dataProviderProcess')]
     public function testInvoke(Closure|string $expected, string $file, Parameters $params): void {
-        $path     = (new FilePath(self::getTestData()->path($file)))->normalized();
+        $path     = TestData::get()->file($file);
         $fs       = $this->getFileSystem($path->directory());
         $file     = $fs->get($path);
         $context  = $this->getPreprocessInstructionContext($fs, $file);
@@ -37,7 +38,7 @@ final class InstructionTest extends TestCase {
         if ($expected instanceof Closure) {
             self::expectExceptionObject($expected($this, $context, $params));
         } else {
-            $expected = mb_trim(self::getTestData()->content($expected));
+            $expected = mb_trim(TestData::get()->content($expected));
         }
 
         $actual = ($instance)($context, $params);
@@ -50,7 +51,7 @@ final class InstructionTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{Closure(self, Context, Parameters): Exception|string, string, Parameters}>
+     * @return array<string, array{Closure(self, Context, Parameters): Exception|non-empty-string, non-empty-string, Parameters}>
      */
     public static function dataProviderProcess(): array {
         return [

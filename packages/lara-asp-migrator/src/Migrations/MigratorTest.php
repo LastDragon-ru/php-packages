@@ -8,6 +8,7 @@ use Illuminate\Filesystem\Filesystem;
 use LastDragon_ru\LaraASP\Migrator\Package\TestCase;
 use LastDragon_ru\LaraASP\Migrator\PackageProvider;
 use LastDragon_ru\LaraASP\Migrator\Seeders\SeederService;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -40,7 +41,8 @@ final class MigratorTest extends TestCase {
 
     public function testMigrate(): void {
         // Prepare
-        $path         = self::getTestData()->path('/migrations');
+        $data         = TestData::get();
+        $path         = $data->directory('migrations')->path;
         $migrations   = [
             ['migration' => '2024_05_29_055655_sql_migration_a'],
             ['migration' => '2024_05_29_055655_sql_migration_b'],
@@ -81,7 +83,7 @@ final class MigratorTest extends TestCase {
         ]);
 
         self::assertSame(
-            $this->prepare(self::getTestData()->content($expectedUp)),
+            $this->prepare($data->content($expectedUp)),
             $this->prepare($output->fetch()),
         );
 
@@ -91,14 +93,15 @@ final class MigratorTest extends TestCase {
         ]);
 
         self::assertSame(
-            $this->prepare(self::getTestData()->content($expectedDown)),
+            $this->prepare($data->content($expectedDown)),
             $this->prepare($output->fetch()),
         );
     }
 
     public function testMigrateRaw(): void {
         // Prepare
-        $path         = self::getTestData()->path('/raw');
+        $data         = TestData::get();
+        $path         = $data->directory('raw')->path;
         $migrations   = [
             ['migration' => '2021_05_09_055650_raw_migration_a'],
             ['migration' => '2021_05_09_055655_raw_data_migration_a'],
@@ -146,7 +149,7 @@ final class MigratorTest extends TestCase {
         ]);
 
         self::assertSame(
-            $this->prepare(self::getTestData()->content($expectedUp)),
+            $this->prepare($data->content($expectedUp)),
             $this->prepare($output->fetch()),
         );
 
@@ -156,7 +159,7 @@ final class MigratorTest extends TestCase {
         ]);
 
         self::assertSame(
-            $this->prepare(self::getTestData()->content($expectedDown)),
+            $this->prepare($data->content($expectedDown)),
             $this->prepare($output->fetch()),
         );
     }

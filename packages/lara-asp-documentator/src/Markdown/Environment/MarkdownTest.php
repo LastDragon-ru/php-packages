@@ -7,6 +7,7 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Environment\Parsers\BlockStartPa
 use LastDragon_ru\LaraASP\Documentator\Markdown\Environment\Parsers\InlineParserWrapper;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithMarkdown;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -24,27 +25,31 @@ final class MarkdownTest extends TestCase {
 
     // <editor-fold desc="Tests">
     // =========================================================================
+    /**
+     * @param non-empty-string $expected
+     * @param non-empty-string $file
+     */
     #[DataProvider('dataProviderParse')]
     public function testParse(string $expected, string $file): void {
         $markdown = $this->app()->make(Markdown::class);
-        $document = $markdown->parse(self::getTestData()->content($file));
+        $document = $markdown->parse(TestData::get()->content($file));
         $lines    = Lines::optional()->get($document->node);
 
         self::assertIsArray($lines);
 
         $this->assertMarkdownDocumentEquals(
-            self::getTestData()->content($expected),
+            TestData::get()->content($expected),
             $document,
         );
     }
 
     public function testRender(): void {
         $markdown = $this->app()->make(Markdown::class);
-        $document = $markdown->parse(self::getTestData()->content('~document.md'));
+        $document = $markdown->parse(TestData::get()->content('Document.md'));
         $actual   = mb_trim($markdown->render($document))."\n";
 
         self::assertSame(
-            self::getTestData()->content('~document.html'),
+            TestData::get()->content('Document.html'),
             $actual,
         );
     }
@@ -53,7 +58,7 @@ final class MarkdownTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{string, string}>
+     * @return array<string, array{non-empty-string, non-empty-string}>
      */
     public static function dataProviderParse(): array {
         return [

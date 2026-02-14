@@ -7,6 +7,7 @@ use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use LastDragon_ru\PhpUnit\Utils\TempDirectory;
 use LastDragon_ru\PhpUnit\Utils\TempFile;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 use function file_get_contents;
@@ -31,7 +32,7 @@ final class SymfonyFileSystemTest extends TestCase {
     }
 
     public function testSearch(): void {
-        $path    = new DirectoryPath(self::getTestData()->path(''));
+        $path    = TestData::get()->directory();
         $adapter = new SymfonyFileSystem();
 
         self::assertSame(
@@ -118,7 +119,7 @@ final class SymfonyFileSystemTest extends TestCase {
     }
 
     public function testRead(): void {
-        $path     = new FilePath(self::getTestData()->path('a/aa.txt'));
+        $path     = TestData::get()->file('a/aa.txt');
         $adapter  = new SymfonyFileSystem();
         $expected = "a\na\n";
 

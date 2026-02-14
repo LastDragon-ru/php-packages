@@ -8,7 +8,7 @@ use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeTemplate\Exceptions\TemplateDataMissed;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeTemplate\Exceptions\TemplateVariablesMissed;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeTemplate\Exceptions\TemplateVariablesUnused;
-use LastDragon_ru\Path\FilePath;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -26,16 +26,18 @@ final class InstructionTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
     /**
+     * @param non-empty-string           $expected
+     * @param non-empty-string           $source
      * @param array<string, scalar|null> $data
      */
     #[DataProvider('dataProviderInvoke')]
     public function testInvoke(string $expected, string $source, array $data): void {
         $fs       = $this->getFileSystem(__DIR__);
         $file     = $fs->get($fs->input->file(__FILE__));
-        $params   = new Parameters(self::getTestData()->path($source), $data);
+        $params   = new Parameters(TestData::get()->file($source)->path, $data);
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);
-        $expected = self::getTestData()->content($expected);
+        $expected = TestData::get()->content($expected);
         $actual   = ($instance)($context, $params);
 
         if (pathinfo($source, PATHINFO_EXTENSION) === 'md') {
@@ -62,7 +64,7 @@ final class InstructionTest extends TestCase {
     }
 
     public function testInvokeVariablesUnused(): void {
-        $path     = (new FilePath(self::getTestData()->path('.md')))->normalized();
+        $path     = TestData::get()->file('Document.md');
         $fs       = $this->getFileSystem($path->directory());
         $file     = $fs->get($path);
         $params   = new Parameters((string) $file->path, [
@@ -82,7 +84,7 @@ final class InstructionTest extends TestCase {
     }
 
     public function testInvokeVariablesMissed(): void {
-        $path     = (new FilePath(self::getTestData()->path('.md')))->normalized();
+        $path     = TestData::get()->file('Document.md');
         $fs       = $this->getFileSystem($path->directory());
         $file     = $fs->get($path);
         $params   = new Parameters((string) $file->path, [
@@ -102,7 +104,7 @@ final class InstructionTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{string, string, array<string, scalar|null>}>
+     * @return array<string, array{non-empty-string, non-empty-string, array<string, scalar|null>}>
      */
     public static function dataProviderInvoke(): array {
         return [

@@ -5,6 +5,7 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instruct
 use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Document;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -21,14 +22,18 @@ final class InstructionTest extends TestCase {
 
     // <editor-fold desc="Tests">
     // =========================================================================
+    /**
+     * @param non-empty-string $expected
+     * @param non-empty-string $source
+     */
     #[DataProvider('dataProviderInvoke')]
     public function testInvoke(string $expected, string $source): void {
         $fs       = $this->getFileSystem(__DIR__);
         $file     = $fs->get($fs->input->file(__FILE__));
-        $params   = new Parameters(self::getTestData()->path($source));
+        $params   = new Parameters(TestData::get()->file($source)->path);
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);
-        $expected = self::getTestData()->content($expected);
+        $expected = TestData::get()->content($expected);
         $actual   = ($instance)($context, $params);
 
         if (pathinfo($source, PATHINFO_EXTENSION) === 'md') {
@@ -44,7 +49,7 @@ final class InstructionTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{string, string}>
+     * @return array<string, array{non-empty-string, non-empty-string}>
      */
     public static function dataProviderInvoke(): array {
         return [

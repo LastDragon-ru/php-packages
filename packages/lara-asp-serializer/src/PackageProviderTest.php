@@ -16,6 +16,7 @@ use LastDragon_ru\LaraASP\Serializer\Exceptions\FailedToSerialize;
 use LastDragon_ru\LaraASP\Serializer\Exceptions\PartialUnserializable;
 use LastDragon_ru\LaraASP\Serializer\Normalizers\SerializableNormalizer;
 use LastDragon_ru\LaraASP\Serializer\Package\TestCase;
+use LastDragon_ru\LaraASP\Testing\Utils\WithTestData;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -41,6 +42,8 @@ use function sprintf;
 #[CoversClass(Serializer::class)]
 #[CoversClass(SerializableNormalizer::class)]
 final class PackageProviderTest extends TestCase {
+    use WithTestData;
+
     // <editor-fold desc="Tests">
     // =========================================================================
     public function testRegister(): void {
