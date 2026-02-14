@@ -4,6 +4,7 @@ namespace LastDragon_ru\LaraASP\Testing\Constraints\Xml;
 
 use DOMDocument;
 use LastDragon_ru\LaraASP\Testing\Testing\TestCase;
+use LastDragon_ru\LaraASP\Testing\Utils\WithTestData;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -17,6 +18,8 @@ use function is_string;
  */
 #[CoversClass(XmlMatchesSchema::class)]
 final class XmlMatchesSchemaTest extends TestCase {
+    use WithTestData;
+
     // <editor-fold desc="Tests">
     // =========================================================================
     #[DataProvider('dataProviderEvaluate')]

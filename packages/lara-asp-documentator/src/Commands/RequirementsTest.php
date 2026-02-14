@@ -7,6 +7,7 @@ use LastDragon_ru\LaraASP\Documentator\Metadata\Metadata;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Utils\Sorter;
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializer;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -65,7 +66,7 @@ final class RequirementsTest extends TestCase {
     }
 
     public function testGetRequirements(): void {
-        $metadata = self::getTestData()->content('.json');
+        $metadata = TestData::get()->content('metadata.json');
         $metadata = $this->app()->make(Serializer::class)->deserialize(Metadata::class, $metadata);
         $packages = [
             'laravel/framework' => 'Laravel',

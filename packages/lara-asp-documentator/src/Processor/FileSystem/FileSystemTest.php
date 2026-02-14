@@ -22,6 +22,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathNotWritable;
 use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathUnavailable;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use Mockery;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -42,7 +43,7 @@ final class FileSystemTest extends TestCase {
     // =========================================================================
     public function testExists(): void {
         $fs   = $this->getFileSystem(__DIR__);
-        $base = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $base = TestData::get()->directory();
 
         self::assertTrue($fs->exists($base->file('c.txt')));
         self::assertFalse($fs->exists($base->file('404.txt')));
@@ -50,11 +51,11 @@ final class FileSystemTest extends TestCase {
 
     public function testGet(): void {
         $fs           = $this->getFileSystem(__DIR__);
-        $path         = (new FilePath(self::getTestData()->path('c.txt')))->normalized();
+        $path         = TestData::get()->file('c.txt');
         $file         = $fs->get($path);
         $readonly     = $fs->get($fs->input->file(__FILE__));
         $relative     = $fs->get($fs->input->resolve(new FilePath($readonly->name)));
-        $internal     = $fs->get(new FilePath(self::getTestData()->path('c.html')));
+        $internal     = $fs->get(TestData::get()->file('c.html'));
         $fromFilePath = $fs->get($path);
 
         self::assertSame(
@@ -68,13 +69,13 @@ final class FileSystemTest extends TestCase {
         );
 
         self::assertSame(
-            (string) (new FilePath(self::getTestData()->path('c.html')))->normalized(),
+            (string) TestData::get()->file('c.html'),
             (string) $internal->path,
         );
 
         self::assertEquals($file->path, $fromFilePath->path);
         self::assertSame(
-            (string) (new FilePath(self::getTestData()->path('c.txt')))->normalized(),
+            (string) TestData::get()->file('c.txt'),
             (string) $fromFilePath->path,
         );
     }
@@ -97,7 +98,7 @@ final class FileSystemTest extends TestCase {
     }
 
     public function testSearch(): void {
-        $input      = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input      = TestData::get()->directory();
         $filesystem = $this->getFileSystem($input);
         $directory  = $input;
         $map        = static function (DirectoryPath|FilePath $path) use ($directory): string {
@@ -197,7 +198,7 @@ final class FileSystemTest extends TestCase {
 
     public function testRead(): void {
         $content = 'content';
-        $input   = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
         $adapter = Mockery::mock(Adapter::class);
         $adapter
@@ -225,7 +226,7 @@ final class FileSystemTest extends TestCase {
     }
 
     public function testReadError(): void {
-        $input   = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
         $adapter = Mockery::mock(Adapter::class);
         $adapter
@@ -258,7 +259,7 @@ final class FileSystemTest extends TestCase {
 
     public function testWriteFile(): void {
         $content    = 'content';
-        $input      = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input      = TestData::get()->directory();
         $path       = $input->file('file.md');
         $dispatcher = Mockery::mock(Dispatcher::class);
         $adapter    = Mockery::mock(Adapter::class);
@@ -274,7 +275,7 @@ final class FileSystemTest extends TestCase {
 
     public function testWriteFileNoChanges(): void {
         $content    = 'content';
-        $input      = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input      = TestData::get()->directory();
         $adapter    = Mockery::mock(Adapter::class);
         $dispatcher = new FileSystemTest__Dispatcher();
         $filesystem = Mockery::mock(FileSystem::class, [$adapter, $dispatcher, $input, $input]);
@@ -303,7 +304,7 @@ final class FileSystemTest extends TestCase {
     }
 
     public function testWriteCreate(): void {
-        $input   = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
         $content = 'content';
         $adapter = Mockery::mock(Adapter::class);
@@ -342,7 +343,7 @@ final class FileSystemTest extends TestCase {
     public function testWriteCreateFailed(): void {
         self::expectException(Exception::class);
 
-        $input   = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
         $content = 'content';
         $adapter = Mockery::mock(Adapter::class);
@@ -399,7 +400,7 @@ final class FileSystemTest extends TestCase {
     }
 
     public function testDelete(): void {
-        $input      = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input      = TestData::get()->directory();
         $adapter    = Mockery::mock(Adapter::class);
         $dispatcher = new FileSystemTest__Dispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
@@ -433,7 +434,7 @@ final class FileSystemTest extends TestCase {
     public function testDeleteFailed(): void {
         self::expectException(Exception::class);
 
-        $input   = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
         $adapter = Mockery::mock(Adapter::class);
         $adapter

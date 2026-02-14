@@ -5,6 +5,7 @@ namespace LastDragon_ru\LaraASP\Documentator\Markdown\Extensions\Generated;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Environment\Markdown;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithMarkdown;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -27,10 +28,10 @@ final class ExtensionTest extends TestCase {
             }
         };
 
-        $document = $markdown->parse(self::getTestData()->content('~document.md'));
+        $document = $markdown->parse(TestData::get()->content('Document.md'));
 
         $this->assertMarkdownDocumentEquals(
-            self::getTestData()->content('~document.xml'),
+            TestData::get()->content('Document.xml'),
             $document,
         );
     }

@@ -7,6 +7,7 @@ use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeExample\Contracts\Runner;
 use LastDragon_ru\Path\FilePath;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -30,7 +31,7 @@ final class InstructionTest extends TestCase {
         $path    = (new FilePath(__FILE__))->normalized();
         $fs      = $this->getFileSystem($path->directory());
         $file    = $fs->get($path);
-        $params  = new Parameters(self::getTestData()->path('Example.md'));
+        $params  = new Parameters(TestData::get()->file('Example.md')->path);
         $target  = $params->target;
         $context = $this->getPreprocessInstructionContext($fs, $file);
 
@@ -53,7 +54,7 @@ final class InstructionTest extends TestCase {
     public function testInvokeNoRun(): void {
         self::assertFalse($this->app()->bound(Runner::class));
 
-        $path     = (new FilePath(self::getTestData()->path('Example.md')))->normalized();
+        $path     = TestData::get()->file('Example.md');
         $fs       = $this->getFileSystem($path->directory());
         $file     = $fs->get($path);
         $params   = new Parameters($file->name);

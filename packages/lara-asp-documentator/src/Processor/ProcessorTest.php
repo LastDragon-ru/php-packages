@@ -38,6 +38,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\Adapters\SymfonyFile
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use LastDragon_ru\PhpUnit\Utils\TempDirectory;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use Mockery;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -56,7 +57,7 @@ use function file_put_contents;
 #[CoversClass(Resolver::class)]
 final class ProcessorTest extends TestCase {
     public function testRun(): void {
-        $input  = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input  = TestData::get()->directory();
         $events = [];
 
         $mock = Mockery::mock(FileTask::class);
@@ -265,7 +266,7 @@ final class ProcessorTest extends TestCase {
 
     public function testRunFile(): void {
         $task      = new ProcessorTest__Task();
-        $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
+        $input     = TestData::get()->file('excluded.txt');
         $events    = [];
         $processor = new Processor(
             Mockery::mock(Container::class),
@@ -316,7 +317,7 @@ final class ProcessorTest extends TestCase {
                 return '*';
             }
         };
-        $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
+        $input     = TestData::get()->file('excluded.txt');
         $events    = [];
         $processor = new Processor(
             Mockery::mock(Container::class),
@@ -360,7 +361,7 @@ final class ProcessorTest extends TestCase {
     }
 
     public function testRunWildcard(): void {
-        $input     = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input     = TestData::get()->directory();
         $events    = [];
         $taskA     = new class([
             'b.html' => [
@@ -535,7 +536,7 @@ final class ProcessorTest extends TestCase {
     }
 
     public function testRunOutputInsideInput(): void {
-        $input     = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input     = TestData::get()->directory();
         $output    = $input->directory('a');
         $events    = [];
         $task      = new ProcessorTest__Task([
@@ -621,7 +622,7 @@ final class ProcessorTest extends TestCase {
     }
 
     public function testRunFileNotFound(): void {
-        $input     = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input     = TestData::get()->directory();
         $task      = new ProcessorTest__Task(['*' => ['404.html']]);
         $path      = $input->file('a/404.html');
         $processor = new Processor(
@@ -637,7 +638,7 @@ final class ProcessorTest extends TestCase {
     }
 
     public function testRunCircularDependency(): void {
-        $input     = (new DirectoryPath(self::getTestData()->path('')))->normalized();
+        $input     = TestData::get()->directory();
         $task      = new ProcessorTest__Task([
             'a.txt'  => ['../b/b.txt'],
             'b.txt'  => ['../b/a/ba.txt'],
@@ -667,7 +668,7 @@ final class ProcessorTest extends TestCase {
     }
 
     public function testRunCircularDependencySelf(): void {
-        $input     = (new DirectoryPath(self::getTestData()->path('a/a')))->normalized();
+        $input     = TestData::get()->directory('a/a');
         $task      = new ProcessorTest__Task([
             'aa.txt' => ['aa.txt'],
         ]);
@@ -700,7 +701,7 @@ final class ProcessorTest extends TestCase {
     }
 
     public function testRunCircularDependencySelfThrough(): void {
-        $input     = (new DirectoryPath(self::getTestData()->path('a/a')))->normalized();
+        $input     = TestData::get()->directory('a/a');
         $task      = new ProcessorTest__Task([
             'aa.txt'       => ['excluded.txt'],
             'excluded.txt' => ['aa.txt'],
@@ -728,8 +729,8 @@ final class ProcessorTest extends TestCase {
 
     public function testRunCircularDependencyNotWritable(): void {
         $events    = [];
-        $output    = (new DirectoryPath(self::getTestData()->path('b')))->normalized();
-        $input     = (new DirectoryPath(self::getTestData()->path('a')))->normalized();
+        $output    = TestData::get()->directory('b');
+        $input     = TestData::get()->directory('a');
         $task      = new ProcessorTest__Task([
             'aa.txt' => ['../a.txt'],
         ]);
@@ -803,7 +804,7 @@ final class ProcessorTest extends TestCase {
 
     public function testRunHookBeforeProcessing(): void {
         $events    = [];
-        $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
+        $input     = TestData::get()->file('excluded.txt');
         $task      = new class() implements HookTask {
             #[Override]
             public static function hook(): array {
@@ -846,7 +847,7 @@ final class ProcessorTest extends TestCase {
 
     public function testRunHookAfterProcessing(): void {
         $events    = [];
-        $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
+        $input     = TestData::get()->file('excluded.txt');
         $task      = new class() implements HookTask {
             #[Override]
             public static function hook(): Hook {
@@ -886,7 +887,7 @@ final class ProcessorTest extends TestCase {
     }
 
     public function testRunHookAfterProcessingQueue(): void {
-        $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
+        $input     = TestData::get()->file('excluded.txt');
         $task      = new class() implements HookTask {
             #[Override]
             public static function hook(): array {
@@ -913,7 +914,7 @@ final class ProcessorTest extends TestCase {
     public function testRunOnError(): void {
         $exception = null;
         $events    = [];
-        $input     = (new FilePath(self::getTestData()->path('excluded.txt')))->normalized();
+        $input     = TestData::get()->file('excluded.txt');
         $task      = new class() implements HookTask {
             #[Override]
             public static function hook(): array {

@@ -4,6 +4,7 @@ namespace LastDragon_ru\LaraASP\Testing\Constraints\Xml\Matchers;
 
 use LastDragon_ru\LaraASP\Testing\Constraints\Xml\XmlMatchesSchemaTest;
 use LastDragon_ru\LaraASP\Testing\Testing\TestCase;
+use LastDragon_ru\LaraASP\Testing\Utils\WithTestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use SplFileInfo;
 
@@ -13,6 +14,8 @@ use SplFileInfo;
  */
 #[CoversClass(DomDocumentRelaxNgSchemaMatcher::class)]
 final class DomDocumentRelaxNgSchemaMatcherTest extends TestCase {
+    use WithTestData;
+
     public function testEvaluateValid(): void {
         $schema = self::getTestData(XmlMatchesSchemaTest::class)->file('.rng');
         $dom    = self::getTestData(XmlMatchesSchemaTest::class)->dom('.xml');

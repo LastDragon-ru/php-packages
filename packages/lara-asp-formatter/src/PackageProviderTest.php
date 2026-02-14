@@ -5,6 +5,7 @@ namespace LastDragon_ru\LaraASP\Formatter;
 use Exception;
 use Illuminate\Contracts\Config\Repository;
 use LastDragon_ru\LaraASP\Formatter\Package\TestCase;
+use LastDragon_ru\LaraASP\Testing\Utils\WithTestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
@@ -12,6 +13,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
  */
 #[CoversClass(PackageProvider::class)]
 final class PackageProviderTest extends TestCase {
+    use WithTestData;
+
     public function testRegister(): void {
         self::assertSame(
             $this->app()->make(Formatter::class),

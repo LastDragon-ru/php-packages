@@ -470,12 +470,12 @@ Next, lets add JSON Validation Error:
 namespace Tests\Responses;
 
 use LastDragon_ru\LaraASP\Testing\Constraints\Json\JsonMatchesSchema;
-use LastDragon_ru\LaraASP\Testing\Constraints\Json\JsonSchema;
+use LastDragon_ru\LaraASP\Testing\Constraints\Json\JsonSchemaValue;
 use LastDragon_ru\LaraASP\Testing\Constraints\Response\Body;
 use LastDragon_ru\LaraASP\Testing\Constraints\Response\ContentTypes\JsonContentType;
 use LastDragon_ru\LaraASP\Testing\Constraints\Response\Response;
 use LastDragon_ru\LaraASP\Testing\Constraints\Response\StatusCodes\UnprocessableEntity;
-use LastDragon_ru\LaraASP\Testing\Utils\WithTestData;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 
 class ValidationErrorResponse extends Response {
     use WithTestData;
@@ -485,7 +485,7 @@ class ValidationErrorResponse extends Response {
             new UnprocessableEntity(),
             new JsonContentType(),
             new Body([
-                new JsonMatchesSchema(new JsonSchema(self::getTestData(self::class)->file('.json'))),
+                new JsonMatchesSchema(new JsonSchemaValue(TestData::get()->content('schema.json'))),
             ]),
         );
     }

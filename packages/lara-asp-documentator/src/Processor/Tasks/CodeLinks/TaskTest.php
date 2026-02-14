@@ -12,7 +12,7 @@ use LastDragon_ru\LaraASP\Documentator\Package\WithProcessor;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Contracts\LinkFactory;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Exceptions\CodeLinkUnresolved;
 use LastDragon_ru\LaraASP\Documentator\Utils\Text;
-use LastDragon_ru\Path\FilePath;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use League\CommonMark\Node\Node;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -33,11 +33,12 @@ final class TaskTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
     /**
-     * @param string|Closure(): Exception $expected
+     * @param non-empty-string|Closure(): Exception $expected
+     * @param non-empty-string                      $document
      */
     #[DataProvider('dataProviderInvoke')]
     public function testInvoke(Closure|string $expected, string $document): void {
-        $path = (new FilePath(self::getTestData()->path($document)))->normalized();
+        $path = TestData::get()->file($document);
         $fs   = $this->getFileSystem($path->directory());
         $file = $fs->get($path);
         $task = $this->app()->make(Task::class);
@@ -45,7 +46,7 @@ final class TaskTest extends TestCase {
         if ($expected instanceof Closure) {
             self::expectExceptionObject($expected());
         } else {
-            $expected = self::getTestData()->content($expected);
+            $expected = TestData::get()->content($expected);
         }
 
         $this->runProcessorFileTask($task, $fs, $file);
@@ -138,7 +139,7 @@ final class TaskTest extends TestCase {
         $xml->endDocument();
 
         $actual   = $xml->outputMemory();
-        $expected = self::getTestData()->content('Parse.xml');
+        $expected = TestData::get()->content('Parse.xml');
 
         self::assertSame($expected, $actual);
     }
@@ -147,7 +148,7 @@ final class TaskTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{Closure(): Exception|string, string}>
+     * @return array<string, array{Closure(): Exception|non-empty-string, non-empty-string}>
      */
     public static function dataProviderInvoke(): array {
         return [

@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\ServiceProvider;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\PhpUnit\Utils\TempDirectory;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -57,8 +58,8 @@ final class CommandsTest extends TestCase {
 
         self::assertEquals(
             [
-                'command-a.md' => self::getTestData()->content('~a.md'),
-                'command-b.md' => self::getTestData()->content('~b.md'),
+                'command-a.md' => TestData::get()->content('a.md'),
+                'command-b.md' => TestData::get()->content('b.md'),
             ],
             $files,
         );

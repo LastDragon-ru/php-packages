@@ -9,6 +9,7 @@ use LastDragon_ru\LaraASP\GraphQL\SearchBy\Definitions\SearchByOperatorBetweenDi
 use LastDragon_ru\LaraASP\GraphQL\SearchBy\Definitions\SearchByOperatorEqualDirective;
 use LastDragon_ru\LaraASP\GraphQL\SortBy\Definitions\SortByOperatorRandomDirective;
 use LastDragon_ru\LaraASP\GraphQL\SortBy\Operators as SortByOperators;
+use LastDragon_ru\LaraASP\Testing\Utils\WithTestData;
 use Nuwave\Lighthouse\Schema\Directives\RenameDirective;
 use Nuwave\Lighthouse\Validation\ValidateDirective;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
  */
 #[CoversClass(PackageProvider::class)]
 final class PackageProviderTest extends TestCase {
+    use WithTestData;
+
     public function testConfig(): void {
         self::assertConfigurationExportable(PackageConfig::class);
     }

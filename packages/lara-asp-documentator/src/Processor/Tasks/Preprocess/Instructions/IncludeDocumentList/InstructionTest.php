@@ -7,7 +7,7 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Extensions\Reference\Node;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializer;
-use LastDragon_ru\Path\FilePath;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use League\CommonMark\Node\Query;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -26,10 +26,13 @@ final class InstructionTest extends TestCase {
 
     // <editor-fold desc="Tests">
     // =========================================================================
+    /**
+     * @param non-empty-string $path
+     */
     #[DataProvider('dataProviderInvoke')]
     public function testInvoke(string $expected, string $path, string $content): void {
         // Prepare
-        $path        = (new FilePath(self::getTestData()->path($path)))->normalized();
+        $path        = TestData::get()->file($path);
         $fs          = $this->getFileSystem($path->directory());
         $file        = $fs->get($path);
         $document    = $this->app()->make(Markdown::class)->parse($content, $path);
@@ -58,7 +61,7 @@ final class InstructionTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{string, string, string}>
+     * @return array<string, array{string, non-empty-string, string}>
      */
     public static function dataProviderInvoke(): array {
         return [
@@ -77,35 +80,35 @@ final class InstructionTest extends TestCase {
                 [Read more](<Document A.md>).
 
                 MARKDOWN,
-                'Document.md',
+                'Documents/Document.md',
                 <<<'MARKDOWN'
                 [include:document-list]: ./
                 MARKDOWN,
             ],
             'Another Directory / Default parameters' => [
                 <<<'MARKDOWN'
-                # [`<` Document B `>`](<InstructionTest/Document B.md>)
+                # [`<` Document B `>`](<Documents/Document B.md>)
 
                 Summary text.
 
-                [Read more](<InstructionTest/Document B.md>).
+                [Read more](<Documents/Document B.md>).
 
-                # [Document](<InstructionTest/Document.md>)
+                # [Document](<Documents/Document.md>)
 
                 Document summary.
 
-                [Read more](<InstructionTest/Document.md>).
+                [Read more](<Documents/Document.md>).
 
-                # [Document A](<InstructionTest/Document A.md>)
+                # [Document A](<Documents/Document A.md>)
 
                 Summary text with special characters `<`, `>`, `&`.
 
-                [Read more](<InstructionTest/Document A.md>).
+                [Read more](<Documents/Document A.md>).
 
                 MARKDOWN,
-                '.php',
+                'Document.md',
                 <<<'MARKDOWN'
-                [include:document-list]: ./InstructionTest
+                [include:document-list]: ./Documents
                 MARKDOWN,
             ],
             'Nested Directories'                     => [
@@ -129,7 +132,7 @@ final class InstructionTest extends TestCase {
                 [Read more](<Document C.md>).
 
                 MARKDOWN,
-                'nested/Document.md',
+                'Documents/nested/Document.md',
                 <<<'MARKDOWN'
                 [include:document-list]: . ({"include": ["**/*.md"], "order": "Desc"})
                 MARKDOWN,
@@ -149,7 +152,7 @@ final class InstructionTest extends TestCase {
                 [Read more](<Document A.md>).
 
                 MARKDOWN,
-                'Document.md',
+                'Documents/Document.md',
                 <<<'MARKDOWN'
                 # Header
 
@@ -173,7 +176,7 @@ final class InstructionTest extends TestCase {
                 [Read more](<Document A.md>).
 
                 MARKDOWN,
-                'Document.md',
+                'Documents/Document.md',
                 <<<'MARKDOWN'
                 ### Header
 
@@ -197,7 +200,7 @@ final class InstructionTest extends TestCase {
                 [Read more](<Document A.md>).
 
                 MARKDOWN,
-                'Document.md',
+                'Documents/Document.md',
                 <<<'MARKDOWN'
                 # Header
 
@@ -215,7 +218,7 @@ final class InstructionTest extends TestCase {
                 [Read more](<B/Document B.md>).
 
                 MARKDOWN,
-                'nested/Document.md',
+                'Documents/nested/Document.md',
                 <<<'MARKDOWN'
                 [include:document-list]: . ({"include": ["**/*B.md"]})
                 MARKDOWN,

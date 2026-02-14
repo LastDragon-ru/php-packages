@@ -13,6 +13,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Logger\Enums\Verbosity;
 use LastDragon_ru\LaraASP\Documentator\Processor\Logger\Internals\Memory;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
+use LastDragon_ru\PhpUnit\Utils\TestData;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -26,6 +27,10 @@ use function mb_rtrim;
 final class LoggerTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
+    /**
+     * @param non-empty-string $expected
+     * @param non-empty-string $source
+     */
     #[DataProvider('dataProviderInvoke')]
     public function testInvoke(string $expected, string $source): void {
         $formatter = new Formatter();
@@ -60,7 +65,7 @@ final class LoggerTest extends TestCase {
         };
 
         /** @var list<array{float, Event}> $events */
-        $events = include_once self::getTestData()->path($source);
+        $events = include_once TestData::get()->file($source)->path;
 
         foreach ($events as [$time, $event]) {
             if ($event instanceof ProcessBegin) {
@@ -77,7 +82,7 @@ final class LoggerTest extends TestCase {
         }
 
         self::assertSame(
-            self::getTestData()->content($expected),
+            TestData::get()->content($expected),
             $output->buffer,
         );
     }
@@ -116,12 +121,12 @@ final class LoggerTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{string, string}>
+     * @return array<string, array{non-empty-string, non-empty-string}>
      */
     public static function dataProviderInvoke(): array {
         return [
-            'Default' => ['~DefaultOutput.txt', '~DefaultEvents.php'],
-            'Delete'  => ['~DeleteOutput.txt', '~DeleteEvents.php'],
+            'Default' => ['DefaultOutput.txt', 'DefaultEvents.php'],
+            'Delete'  => ['DeleteOutput.txt', 'DeleteEvents.php'],
         ];
     }
 
@@ -129,8 +134,8 @@ final class LoggerTest extends TestCase {
      * @return array<string, array{array{Mark, string}, DirectoryPath, DirectoryPath, DirectoryPath|FilePath}>
      */
     public static function dataProviderPath(): array {
-        $a = (new DirectoryPath(self::getTestData()->path('a')))->normalized();
-        $b = (new DirectoryPath(self::getTestData()->path('b')))->normalized();
+        $a = TestData::get()->directory('a');
+        $b = TestData::get()->directory('b');
 
         return [
             '(a, b): in file'            => [
@@ -146,7 +151,7 @@ final class LoggerTest extends TestCase {
                 new FilePath('../b/b.txt'),
             ],
             '(a, b): external file'      => [
-                [Mark::External, (new FilePath(self::getTestData()->path('c.txt')))->normalized()->path],
+                [Mark::External, TestData::get()->file('c.txt')->path],
                 $a,
                 $b,
                 new FilePath('../c.txt'),
@@ -158,7 +163,7 @@ final class LoggerTest extends TestCase {
                 new FilePath('../a/a.txt'),
             ],
             '(a, a): external file'      => [
-                [Mark::External, (new FilePath(self::getTestData()->path('c.txt')))->normalized()->path],
+                [Mark::External, TestData::get()->file('c.txt')->path],
                 $a,
                 $a,
                 new FilePath('../c.txt'),
