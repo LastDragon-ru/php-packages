@@ -36,6 +36,20 @@ composer require --dev lastdragon-ru/phpunit-extensions
 
 # Extensions
 
+> [!NOTE]
+> You can include all available extensions via
+>
+> ```xml
+> <?xml version="1.0" encoding="UTF-8"?>
+> <phpunit>
+>     <!-- ... -->
+>     <extensions>
+>         <bootstrap class="\LastDragon_ru\PhpUnit\Extensions\Extension"/>
+>     </extensions>
+>     <!-- ... -->
+> </phpunit>
+> ```
+
 ## Strict Scalar Compare
 
 By default, PHPUnit compares scalars via `==` operator, so `Assert::assertEquals(1, true)` will pass. The extension adds own [`Comparator`][code-links/90a38a9b706aebb5] to compare scalars via `===` operator.

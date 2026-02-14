@@ -5,8 +5,7 @@
          executionOrder="random"
          colors="true">
     <extensions>
-        <bootstrap class="\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension"/>
-        <bootstrap class="\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension"/>
+        <bootstrap class="\LastDragon_ru\PhpUnit\Extensions\Extension"/>
     </extensions>
     <testsuites>
         <testsuite name="package">
