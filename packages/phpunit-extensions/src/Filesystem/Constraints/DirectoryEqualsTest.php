@@ -82,7 +82,12 @@ final class DirectoryEqualsTest extends TestCase {
                         'b/' => [
                             [
                                 'name'    => 'a.txt',
-                                'content' => 'not',
+                                'size'    => 8,
+                                'content' => <<<'TXT'
+                                    b/a.txt
+
+                                    TXT
+                                ,
                             ],
                         ],
                     ],
@@ -90,7 +95,12 @@ final class DirectoryEqualsTest extends TestCase {
                         'b/' => [
                             [
                                 'name'    => 'a.txt',
-                                'content' => 'equals',
+                                'size'    => 8,
+                                'content' => <<<'TXT'
+                                    b/b.txt
+
+                                    TXT
+                                ,
                             ],
                         ],
                     ],
@@ -102,16 +112,26 @@ final class DirectoryEqualsTest extends TestCase {
                     'expected' => [
                         './' => [
                             [
-                                'name' => 'a.txt',
-                                'size' => 6,
+                                'name'    => 'a.txt',
+                                'size'    => 6,
+                                'content' => <<<'TXT'
+                                    a.txt
+
+                                    TXT
+                                ,
                             ],
                         ],
                     ],
                     'actual'   => [
                         './' => [
                             [
-                                'name' => 'a.txt',
-                                'size' => 29,
+                                'name'    => 'a.txt',
+                                'size'    => 29,
+                                'content' => <<<'TXT'
+                                    File with different content.
+
+                                    TXT
+                                ,
                             ],
                         ],
                     ],
