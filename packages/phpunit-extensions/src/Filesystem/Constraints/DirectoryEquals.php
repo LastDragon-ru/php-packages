@@ -12,12 +12,15 @@ use SplDoublyLinkedList;
 use SplFileInfo;
 use SplQueue;
 
+use function array_diff_uassoc;
 use function array_keys;
 use function array_merge;
 use function array_unique;
 use function array_values;
 use function assert;
+use function file_get_contents;
 use function ksort;
+use function max;
 use function sort;
 
 /**
@@ -104,7 +107,7 @@ class DirectoryEquals extends Constraint {
             [$expectedObjects, $expectedProperties] = $this->listing($this->expected->resolve($path));
 
             if ($expectedProperties !== $otherProperties) {
-                $this->difference = $this->difference($path, $expectedProperties, $otherProperties);
+                $this->difference = $this->difference($other, $path, $expectedProperties, $otherProperties);
                 break;
             }
 
@@ -119,9 +122,14 @@ class DirectoryEquals extends Constraint {
                 // Compare file
                 if (!isset($otherObjects[$filename]) || !$this->equal($object, $otherObjects[$filename])) {
                     $this->difference = $this->difference(
+                        $other,
                         $path,
-                        [$filename => ['name' => $filename, 'content' => 'not']],
-                        [$filename => ['name' => $filename, 'content' => 'equals']],
+                        [
+                            $filename => ($expectedProperties[$filename] ?? []) + ['content' => 'not'],
+                        ],
+                        [
+                            $filename => ($otherProperties[$filename] ?? []) + ['content' => 'equal'],
+                        ],
                     );
 
                     break 2;
@@ -189,35 +197,54 @@ class DirectoryEquals extends Constraint {
 
     /**
      * @param array<string, array<non-empty-string, scalar|null>> $expected
-     * @param array<string, array<non-empty-string, scalar|null>> $other
+     * @param array<string, array<non-empty-string, scalar|null>> $actual
      *
      * @return array{
      *     array<string, list<?array<non-empty-string, scalar|null>>>,
      *     array<string, list<?array<non-empty-string, scalar|null>>>,
      *     }
      */
-    private function difference(DirectoryPath $directory, array $expected, array $other): array {
+    private function difference(DirectoryPath $other, DirectoryPath $directory, array $expected, array $actual): array {
         // Only different directories/files are interested
         $expectedPresent = [];
-        $otherPresent    = [];
-        $keys            = array_unique(array_merge(array_keys($expected), array_keys($other)));
+        $actualPresent   = [];
+        $keys            = array_unique(array_merge(array_keys($expected), array_keys($actual)));
+        $cmp             = static fn ($a, $b) => $a === $b ? 0 : 1;
 
         sort($keys);
 
         foreach ($keys as $key) {
-            if (isset($expected[$key]) && isset($other[$key])) {
-                if ($expected[$key] !== $other[$key]) {
+            if (isset($expected[$key]) && isset($actual[$key])) {
+                if ($expected[$key] !== $actual[$key]) {
+                    // Save
                     $expectedPresent[$key] = $expected[$key];
-                    $otherPresent[$key]    = $other[$key];
+                    $actualPresent[$key]   = $actual[$key];
+
+                    // Content helps a lot to find what does not match.
+                    $expectedSize = $expectedPresent[$key]['size'] ?? -1;
+                    $actualSize   = $actualPresent[$key]['size'] ?? -1;
+                    $diff         = array_keys(array_diff_uassoc($expectedPresent[$key], $actualPresent[$key], $cmp));
+                    $size         = $diff === ['content'] || $diff === ['size']
+                        ? max($expectedSize, $actualSize)
+                        : -1;
+
+                    if ($size > 0 && $size < 256 * 1024 && $key !== '') {
+                        $expectedPresent[$key]['content'] = file_get_contents(
+                            $this->expected->resolve($directory)->file($key)->path,
+                        );
+                        $actualPresent[$key]['content']   = file_get_contents(
+                            $other->resolve($directory)->file($key)->path,
+                        );
+                    }
                 } else {
                     continue;
                 }
             } elseif (isset($expected[$key])) {
                 $expectedPresent[$key] = $expected[$key];
-                $otherPresent[$key]    = null;
-            } elseif (isset($other[$key])) {
+                $actualPresent[$key]   = null;
+            } elseif (isset($actual[$key])) {
                 $expectedPresent[$key] = null;
-                $otherPresent[$key]    = $other[$key];
+                $actualPresent[$key]   = $actual[$key];
             } else {
                 // empty
             }
@@ -227,7 +254,7 @@ class DirectoryEquals extends Constraint {
 
         return [
             [$path => array_values($expectedPresent)],
-            [$path => array_values($otherPresent)],
+            [$path => array_values($actualPresent)],
         ];
     }
 }
