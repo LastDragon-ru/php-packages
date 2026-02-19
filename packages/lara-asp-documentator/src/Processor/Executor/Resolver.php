@@ -21,11 +21,11 @@ use WeakMap;
  */
 class Resolver implements Contract {
     /**
-     * @var array<class-string<Cast<object>>, Cast<object>>
+     * @var array<class-string<Cast<mixed>>, Cast<mixed>>
      */
     private array $casts;
     /**
-     * @var WeakMap<File, array<class-string<Cast<object>>, object>>
+     * @var WeakMap<File, array<class-string<Cast<mixed>>, mixed>>
      */
     private WeakMap $files;
 
@@ -87,7 +87,7 @@ class Resolver implements Contract {
     }
 
     #[Override]
-    public function cast(File|FilePath $path, string $cast): object {
+    public function cast(File|FilePath $path, string $cast): mixed {
         $file = $path instanceof File ? $path : $this->get($path);
 
         if (!isset($this->files[$file][$cast])) {
@@ -96,7 +96,7 @@ class Resolver implements Contract {
             $this->files[$file][$cast] = ($this->casts[$cast])($this, $file);
         }
 
-        return $this->files[$file][$cast]; // @phpstan-ignore return.type (https://github.com/phpstan/phpstan/issues/9521)
+        return $this->files[$file][$cast];
     }
 
     #[Override]

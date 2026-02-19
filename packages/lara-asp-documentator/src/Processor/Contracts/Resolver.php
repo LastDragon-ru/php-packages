@@ -26,16 +26,16 @@ interface Resolver {
     public function find(FilePath $path): ?File;
 
     /**
-     * Converts the file into the object. The result will be cached until the
+     * Converts the file into something. The result will be cached until the
      * file is changed.
      *
-     * @template T of object
+     * @template T
      *
      * @param class-string<Cast<T>> $cast
      *
      * @return T
      */
-    public function cast(File|FilePath $path, string $cast): object;
+    public function cast(File|FilePath $path, string $cast): mixed;
 
     /**
      * If the file exists, it will be overwritten.
