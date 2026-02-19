@@ -3,11 +3,11 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Contracts;
 
 /**
- * @template TObject of object
+ * @template TValue
  */
 interface Cast {
     /**
-     * @return TObject
+     * @return TValue
      */
-    public function __invoke(Resolver $resolver, File $file): object;
+    public function __invoke(Resolver $resolver, File $file): mixed;
 }
