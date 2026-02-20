@@ -11,6 +11,7 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Document\MakeSplittabl
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Document\Title;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Text;
 use LastDragon_ru\LaraASP\Documentator\Utils\Text as TextUtils;
+use LastDragon_ru\Path\FilePath;
 use LastDragon_ru\Path\Path;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
@@ -217,21 +218,21 @@ class Utils {
             && Path::make($path)->relative;
     }
 
-    public static function isPathToSelf(Document $document, string $path): bool {
+    public static function isPathToSelf(?FilePath $self, string $path): bool {
         // Fragment?
-        if (str_starts_with($path, '#')) {
+        if (str_starts_with($path, '#') || $path === '') {
             return true;
         }
 
         // Possible?
-        if ($document->path === null) {
+        if ($self === null) {
             return false;
         }
 
         // Match?
-        $path  = $document->path->resolve(Path::make($path));
-        $match = $document->path->equals($path)
-            || str_starts_with($path->path, "{$document->path}#");
+        $path  = $self->resolve(Path::make($path));
+        $match = $self->equals($path)
+            || str_starts_with($path->path, "{$self}#");
 
         return $match;
     }

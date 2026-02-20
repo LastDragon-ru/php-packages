@@ -101,7 +101,7 @@ readonly class Move implements Mutation {
     private function target(Document $document, FilePath $docPath, FilePath $newPath, string $target): string {
         $target = rawurldecode($target);
 
-        if (Utils::isPathToSelf($document, $target)) {
+        if (Utils::isPathToSelf($document->path, $target)) {
             $path   = (string) parse_url($target, PHP_URL_PATH);
             $target = mb_substr($target, mb_strlen($path));
             $target = $target !== '' ? $target : '#';
