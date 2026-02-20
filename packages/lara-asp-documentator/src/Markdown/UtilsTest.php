@@ -85,6 +85,27 @@ final class UtilsTest extends TestCase {
         self::assertFalse(Utils::isPathToSelf($c, '../a.md'));
     }
 
+    public function testIsPathEmpty(): void {
+        $a = new FilePath('/path/to/a.md');
+        $b = null;
+
+        self::assertTrue(Utils::isPathEmpty($a, ''));
+        self::assertTrue(Utils::isPathEmpty($a, '#'));
+        self::assertFalse(Utils::isPathEmpty($a, '#fragment'));
+        self::assertTrue(Utils::isPathEmpty($a, 'a.md'));
+        self::assertTrue(Utils::isPathEmpty($a, 'a.md#'));
+        self::assertFalse(Utils::isPathEmpty($a, 'a.md#fragment'));
+        self::assertFalse(Utils::isPathEmpty($a, 'a/a.md'));
+
+        self::assertTrue(Utils::isPathEmpty($b, ''));
+        self::assertTrue(Utils::isPathEmpty($b, '#'));
+        self::assertFalse(Utils::isPathEmpty($b, '#fragment'));
+        self::assertFalse(Utils::isPathEmpty($b, 'a.md'));
+        self::assertFalse(Utils::isPathEmpty($b, 'a.md#'));
+        self::assertFalse(Utils::isPathEmpty($b, 'a.md#fragment'));
+        self::assertFalse(Utils::isPathEmpty($b, 'a/a.md'));
+    }
+
     #[DataProvider('dataProviderGetTitle')]
     public function testGetTitle(?string $expected, string $document, ?FilePath $path): void {
         $document = $this->app()->make(Markdown::class)->parse($document, $path);
