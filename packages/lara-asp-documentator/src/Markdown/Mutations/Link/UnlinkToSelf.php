@@ -16,7 +16,7 @@ readonly class UnlinkToSelf extends Unlink {
     #[Override]
     public function mutagens(Document $document, Node $node): array {
         $url      = rawurldecode($node->getUrl());
-        $self     = Utils::isPathRelative($url) && Utils::isPathToSelf($document, $url);
+        $self     = Utils::isPathRelative($url) && Utils::isPathToSelf($document->path, $url);
         $mutagens = $self
             ? parent::mutagens($document, $node)
             : [];
