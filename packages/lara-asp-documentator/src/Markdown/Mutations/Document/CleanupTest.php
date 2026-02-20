@@ -14,14 +14,15 @@ use PHPUnit\Framework\Attributes\CoversClass;
 final class CleanupTest extends TestCase {
     public function testInvoke(): void {
         $content = <<<'MARKDOWN'
-            Text text text[^2] text text text text [`link`][link] text
-            text text ![image][image] text text.
+            Text text text[^1] text text text text [`link`][link] text
+            text text ![image][image] text text [empty](<>) [link][empty].
 
             [^1]: footnote 1
             [^2]: Unused footnote
             [link]: https://example.com
             [image]: https://example.com
             [unused]: https://example.com (Unused reference)
+            [empty]: # (Empty link)
 
             [reference]: https://example.com (Reference is unused, because `^footnote` is not used)
             [^footnote]: [footnote][reference]
@@ -32,20 +33,35 @@ final class CleanupTest extends TestCase {
 
         $markdown = $this->app()->make(Markdown::class);
         $document = $markdown->parse($content, new FilePath(__FILE__));
-        $actual   = (string) $document->mutate(new Cleanup());
+        $actual   = $document->mutate(new Cleanup());
 
         self::assertSame(
             <<<'MARKDOWN'
-            Text text text[^2] text text text text [`link`][link] text
-            text text ![image][image] text text.
+            Text text text[^1] text text text text [`link`][link] text
+            text text ![image][image] text text empty link.
 
-            [^2]: Unused footnote
+            [^1]: footnote 1
             [link]: https://example.com
             [image]: https://example.com
+            [empty]: # (Empty link)
+
             [reference]: https://example.com (Reference is unused, because `^footnote` is not used)
 
             MARKDOWN,
-            $actual,
+            (string) $actual,
+        );
+
+        self::assertSame(
+            <<<'MARKDOWN'
+            Text text text[^1] text text text text [`link`][link] text
+            text text ![image][image] text text empty link.
+
+            [^1]: footnote 1
+            [link]: https://example.com
+            [image]: https://example.com
+
+            MARKDOWN,
+            (string) $actual->mutate(new Cleanup()),
         );
     }
 }

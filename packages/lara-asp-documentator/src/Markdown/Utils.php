@@ -30,6 +30,7 @@ use function mb_strlen;
 use function mb_strpos;
 use function mb_substr;
 use function mb_trim;
+use function parse_url;
 use function preg_match;
 use function str_contains;
 use function str_replace;
@@ -38,6 +39,7 @@ use function strtr;
 
 use const FILTER_NULL_ON_FAILURE;
 use const FILTER_VALIDATE_URL;
+use const PHP_URL_FRAGMENT;
 
 /**
  * @internal
@@ -235,6 +237,28 @@ class Utils {
             || str_starts_with($path->path, "{$self}#");
 
         return $match;
+    }
+
+    public static function isPathEmpty(?FilePath $self, string $path): bool {
+        // Empty?
+        if ($path === '' || $path === '#') {
+            return true;
+        }
+
+        // To self?
+        if (!self::isPathToSelf($self, $path)) {
+            return false;
+        }
+
+        // Empty fragment?
+        $fragment = parse_url($path, PHP_URL_FRAGMENT);
+
+        if ($fragment === null || $fragment === '') {
+            return true;
+        }
+
+        // Empty
+        return false;
     }
 
     /**
