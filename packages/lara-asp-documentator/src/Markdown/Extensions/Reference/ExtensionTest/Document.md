@@ -2,6 +2,8 @@
 
 <!-- markdownlint-disable -->
 
+Text text [simple:a][simple:a] text text.
+
 [simple:a]: https://example.com/
 
 [simple:b]: https://example.com/ "example.com"

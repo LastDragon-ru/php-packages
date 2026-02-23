@@ -989,17 +989,50 @@
                                     </array>
                                 </item>
                                 <item key="reference">
-                                    <object class="League\CommonMark\Reference\Reference">
-                                        <property name="destination">
-                                            <string><![CDATA[./class.php]]></string>
-                                        </property>
-                                        <property name="label">
-                                            <string><![CDATA[class]]></string>
-                                        </property>
-                                        <property name="title">
-                                            <string><![CDATA[App\ClassE]]></string>
-                                        </property>
-                                    </object>
+                                    <node name="lara-asp-documentator:reference">
+                                        <data>
+                                            <item key="attributes">
+                                                <array length="0"/>
+                                            </item>
+                                            <item key="lara-asp-documentator">
+                                                <array length="1">
+                                                    <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Location">
+                                                        <object class="LastDragon_ru\LaraASP\Documentator\Editor\Locations\Location">
+                                                            <property name="endLine">
+                                                                <int>14</int>
+                                                            </property>
+                                                            <property name="internalPadding">
+                                                                <null/>
+                                                            </property>
+                                                            <property name="length">
+                                                                <null/>
+                                                            </property>
+                                                            <property name="offset">
+                                                                <int>0</int>
+                                                            </property>
+                                                            <property name="startLine">
+                                                                <int>14</int>
+                                                            </property>
+                                                            <property name="startLinePadding">
+                                                                <int>0</int>
+                                                            </property>
+                                                        </object>
+                                                    </item>
+                                                </array>
+                                            </item>
+                                        </data>
+                                        <attributes>
+                                            <attribute name="destination">
+                                                <string><![CDATA[./class.php]]></string>
+                                            </attribute>
+                                            <attribute name="label">
+                                                <string><![CDATA[class]]></string>
+                                            </attribute>
+                                            <attribute name="title">
+                                                <string><![CDATA[App\ClassE]]></string>
+                                            </attribute>
+                                        </attributes>
+                                    </node>
                                 </item>
                             </data>
                             <attributes>
@@ -1152,17 +1185,50 @@
                                     </array>
                                 </item>
                                 <item key="reference">
-                                    <object class="League\CommonMark\Reference\Reference">
-                                        <property name="destination">
-                                            <string><![CDATA[./class.php]]></string>
-                                        </property>
-                                        <property name="label">
-                                            <string><![CDATA[class]]></string>
-                                        </property>
-                                        <property name="title">
-                                            <string><![CDATA[App\ClassE]]></string>
-                                        </property>
-                                    </object>
+                                    <node name="lara-asp-documentator:reference">
+                                        <data>
+                                            <item key="attributes">
+                                                <array length="0"/>
+                                            </item>
+                                            <item key="lara-asp-documentator">
+                                                <array length="1">
+                                                    <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Location">
+                                                        <object class="LastDragon_ru\LaraASP\Documentator\Editor\Locations\Location">
+                                                            <property name="endLine">
+                                                                <int>14</int>
+                                                            </property>
+                                                            <property name="internalPadding">
+                                                                <null/>
+                                                            </property>
+                                                            <property name="length">
+                                                                <null/>
+                                                            </property>
+                                                            <property name="offset">
+                                                                <int>0</int>
+                                                            </property>
+                                                            <property name="startLine">
+                                                                <int>14</int>
+                                                            </property>
+                                                            <property name="startLinePadding">
+                                                                <int>0</int>
+                                                            </property>
+                                                        </object>
+                                                    </item>
+                                                </array>
+                                            </item>
+                                        </data>
+                                        <attributes>
+                                            <attribute name="destination">
+                                                <string><![CDATA[./class.php]]></string>
+                                            </attribute>
+                                            <attribute name="label">
+                                                <string><![CDATA[class]]></string>
+                                            </attribute>
+                                            <attribute name="title">
+                                                <string><![CDATA[App\ClassE]]></string>
+                                            </attribute>
+                                        </attributes>
+                                    </node>
                                 </item>
                             </data>
                             <attributes>
@@ -1647,17 +1713,50 @@
                                     </array>
                                 </item>
                                 <item key="reference">
-                                    <object class="League\CommonMark\Reference\Reference">
-                                        <property name="destination">
-                                            <string><![CDATA[./class.php]]></string>
-                                        </property>
-                                        <property name="label">
-                                            <string><![CDATA[method]]></string>
-                                        </property>
-                                        <property name="title">
-                                            <string><![CDATA[  App\ClassE::method()  ]]></string>
-                                        </property>
-                                    </object>
+                                    <node name="lara-asp-documentator:reference">
+                                        <data>
+                                            <item key="attributes">
+                                                <array length="0"/>
+                                            </item>
+                                            <item key="lara-asp-documentator">
+                                                <array length="1">
+                                                    <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Location">
+                                                        <object class="LastDragon_ru\LaraASP\Documentator\Editor\Locations\Location">
+                                                            <property name="endLine">
+                                                                <int>16</int>
+                                                            </property>
+                                                            <property name="internalPadding">
+                                                                <null/>
+                                                            </property>
+                                                            <property name="length">
+                                                                <null/>
+                                                            </property>
+                                                            <property name="offset">
+                                                                <int>0</int>
+                                                            </property>
+                                                            <property name="startLine">
+                                                                <int>15</int>
+                                                            </property>
+                                                            <property name="startLinePadding">
+                                                                <int>0</int>
+                                                            </property>
+                                                        </object>
+                                                    </item>
+                                                </array>
+                                            </item>
+                                        </data>
+                                        <attributes>
+                                            <attribute name="destination">
+                                                <string><![CDATA[./class.php]]></string>
+                                            </attribute>
+                                            <attribute name="label">
+                                                <string><![CDATA[method]]></string>
+                                            </attribute>
+                                            <attribute name="title">
+                                                <string><![CDATA[  App\ClassE::method()  ]]></string>
+                                            </attribute>
+                                        </attributes>
+                                    </node>
                                 </item>
                             </data>
                             <attributes>

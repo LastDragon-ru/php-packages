@@ -162,6 +162,8 @@ class MarkdownDocumentRenderer {
             $this->xml->writeElement('int', var_export($value, true));
         } elseif (is_array($value)) {
             $this->writeArray($value);
+        } elseif ($value instanceof Node) {
+            $this->writeNode($value);
         } elseif (is_object($value)) {
             $this->writeObject($value);
         } else {
