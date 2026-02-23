@@ -55,9 +55,7 @@ readonly class RemoveUnused implements Mutation {
         $mutagens = [];
 
         foreach ($references as $reference) {
-            $origin = $reference->getReference();
-
-            if ($origin !== null && !isset($used[$origin])) {
+            if (!isset($used[$reference])) {
                 $mutagens[] = new Delete(Location::get($reference));
             }
         }
