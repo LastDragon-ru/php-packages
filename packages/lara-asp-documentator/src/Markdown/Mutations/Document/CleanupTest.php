@@ -45,8 +45,6 @@ final class CleanupTest extends TestCase {
             [^1]: footnote 1
             [link]: https://example.com
             [image]: https://example.com
-            [empty]: # (Empty link)
-
             [reference]: https://example.com (Reference is unused, because `^footnote` is not used)
 
             MARKDOWN,
