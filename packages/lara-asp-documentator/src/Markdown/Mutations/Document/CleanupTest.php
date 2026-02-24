@@ -15,7 +15,8 @@ final class CleanupTest extends TestCase {
     public function testInvoke(): void {
         $content = <<<'MARKDOWN'
             Text text text[^1] text text text text [`link`][link] text
-            text text ![image][image] text text [empty](<>) [link][empty].
+            text text ![image][image] text text [empty](<>) [link][empty]
+            text text ![image][empty] text text ![image](<>).
 
             [^1]: footnote 1
             [^2]: Unused footnote
@@ -38,7 +39,8 @@ final class CleanupTest extends TestCase {
         self::assertSame(
             <<<'MARKDOWN'
             Text text text[^1] text text text text [`link`][link] text
-            text text ![image][image] text text empty link.
+            text text ![image][image] text text empty link
+            text text  text text .
 
             [^1]: footnote 1
             [link]: https://example.com
@@ -54,7 +56,8 @@ final class CleanupTest extends TestCase {
         self::assertSame(
             <<<'MARKDOWN'
             Text text text[^1] text text text text [`link`][link] text
-            text text ![image][image] text text empty link.
+            text text ![image][image] text text empty link
+            text text  text text .
 
             [^1]: footnote 1
             [link]: https://example.com
