@@ -9,6 +9,7 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Comment\Remove as Comm
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Footnote\RemoveUnused as FootnotesRemoveUnused;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Image\RemoveEmpty as ImagesRemoveEmpty;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Link\UnlinkEmpty as LunksUnlinkEmpty;
+use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Reference\RemoveEmpty as ReferencesRemoveEmpty;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Reference\RemoveUnused as ReferencesRemoveUnused;
 use League\CommonMark\Node\Node;
 use Override;
@@ -36,6 +37,7 @@ readonly class Cleanup implements IteratorAggregate {
             new LunksUnlinkEmpty(),
             new ImagesRemoveEmpty(),
             new FootnotesRemoveUnused(),
+            new ReferencesRemoveEmpty(),
             new ReferencesRemoveUnused(),
             new CommentsRemove(),
         ];
