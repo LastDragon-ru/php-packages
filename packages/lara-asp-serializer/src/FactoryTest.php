@@ -7,6 +7,7 @@ use LastDragon_ru\LaraASP\Serializer\Config\Config;
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializer;
 use LastDragon_ru\LaraASP\Serializer\Normalizers\DateTimeNormalizer;
 use LastDragon_ru\LaraASP\Serializer\Normalizers\EnumNormalizer;
+use LastDragon_ru\LaraASP\Serializer\Normalizers\PathNormalizer;
 use LastDragon_ru\LaraASP\Serializer\Normalizers\SerializableNormalizer;
 use LastDragon_ru\LaraASP\Serializer\Package\TestCase;
 use Mockery;
@@ -92,6 +93,7 @@ final class FactoryTest extends TestCase {
                             ArrayDenormalizer::class,
                             DateIntervalNormalizer::class,
                             EnumNormalizer::class,
+                            PathNormalizer::class,
                         ],
                         $normalizers,
                     );
