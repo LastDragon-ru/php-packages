@@ -17,6 +17,7 @@ use LastDragon_ru\LaraASP\Serializer\Exceptions\PartialUnserializable;
 use LastDragon_ru\LaraASP\Serializer\Normalizers\SerializableNormalizer;
 use LastDragon_ru\LaraASP\Serializer\Package\TestCase;
 use LastDragon_ru\LaraASP\Testing\Utils\WithTestData;
+use LastDragon_ru\Path\FilePath;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -164,6 +165,7 @@ final class PackageProviderTest extends TestCase {
      * @return array<string, array{Exception|string, Serializable}>
      */
     public static function dataProviderSerialization(): array {
+        $path         = new FilePath('path/to/file.md');
         $object       = new ProviderTest__Class();
         $invalid      = new class($object) implements Serializable {
             public function __construct(
@@ -175,7 +177,7 @@ final class PackageProviderTest extends TestCase {
         $datetime     = Carbon::make('2023-08-11T10:45:00');
         $unitEnum     = ProviderTest__UnitEnum::A;
         $backedEnum   = ProviderTest__BackedEnum::A;
-        $serializable = new ProviderTest__Simple($datetime, $unitEnum, $backedEnum);
+        $serializable = new ProviderTest__Simple($datetime, $unitEnum, $backedEnum, $path);
         $partial      = new ProviderTest__Partial(1, 2);
         $curcular     = new class() implements Serializable {
             public Serializable $a; // @phpstan-ignore-line property.uninitialized (required for tests)
@@ -194,6 +196,7 @@ final class PackageProviderTest extends TestCase {
                     "e": "2023-08-11T10:45:00.000+00:00",
                     "f": "A",
                     "g": 0,
+                    "j": "path/to/file.md",
                     "hRenamed": "renamed"
                 }
                 JSON,
@@ -210,6 +213,7 @@ final class PackageProviderTest extends TestCase {
                         "e": "2023-08-11T10:45:00.000+00:00",
                         "f": "A",
                         "g": 0,
+                        "j": "path/to/file.md",
                         "hRenamed": "renamed"
                     },
                     "array": ["2023-08-11T10:45:00.000+00:00","2023-08-11T10:45:00.000+00:00"],
@@ -276,6 +280,7 @@ final class PackageProviderTest extends TestCase {
      * @return array<string, array{Exception|Serializable, class-string<Serializable>, string}>
      */
     public static function dataProviderDeserialization(): array {
+        $path         = new FilePath('path/to/file.md');
         $object       = new ProviderTest__Class();
         $invalid      = new class($object) implements Serializable {
             public function __construct(
@@ -287,7 +292,7 @@ final class PackageProviderTest extends TestCase {
         $datetime     = Carbon::make('2023-08-11T10:45:00');
         $unitEnum     = ProviderTest__UnitEnum::B;
         $backedEnum   = ProviderTest__BackedEnum::B;
-        $serializable = new ProviderTest__Simple($datetime, $unitEnum, $backedEnum);
+        $serializable = new ProviderTest__Simple($datetime, $unitEnum, $backedEnum, $path);
 
         return [
             'empty object'                       => [
@@ -304,6 +309,7 @@ final class PackageProviderTest extends TestCase {
                     "e": "2023-08-11T10:45:00.000+00:00",
                     "f": "B",
                     "g": 1,
+                    "j": "path/to/file.md",
                     "hRenamed": "renamed"
                 }
                 JSON,
@@ -448,6 +454,7 @@ class ProviderTest__Simple implements Serializable, Stringable, JsonSerializable
     public ?DateTimeInterface        $e = null;
     public ?ProviderTest__UnitEnum   $f = null;
     public ?ProviderTest__BackedEnum $g;
+    public ?FilePath                 $j;
 
     #[SerializedName('hRenamed')]
     public string $h = 'renamed';
@@ -456,10 +463,12 @@ class ProviderTest__Simple implements Serializable, Stringable, JsonSerializable
         ?DateTimeInterface $e = null,
         ?ProviderTest__UnitEnum $f = null,
         ?ProviderTest__BackedEnum $g = null,
+        ?FilePath $j = null,
     ) {
         $this->e = $e;
         $this->f = $f;
         $this->g = $g;
+        $this->j = $j;
     }
 
     #[Override]
