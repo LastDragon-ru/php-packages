@@ -86,108 +86,63 @@ final class RelinkTest extends TestCase {
             [absolute-path]: /path/to/file.txt
             [url]: https://example.com/
             MARKDOWN;
+        $expected = <<<'MARKDOWN'
+            # General
+
+            Text text [link](<relinked: path/to/file.txt>) text [link][relative-path] text
+            text text [link](<relinked: /path/to/file.txt>) text [link][absolute-path] text
+            text text [link](<relinked: https://example.com/>) text [link][url] text
+            text text ![image](<relinked: path/to/file.txt>) text ![image][relative-path] text
+            text text ![image](<relinked: /path/to/file.txt>) text ![image][absolute-path] text
+            text text ![image](<relinked: https://example.com/>) text ![image][url] text
+            text text.
+
+            # Special
+
+            ## Target escaping
+
+            ![image](<relinked: ./\<file\>/ /a>)
+            ![image](<relinked: /\<file\>/ /a>)
+
+            ## Title escaping
+
+            Text ![title](<relinked: path/to/file.txt> "title with ( ) and with ' '" ) text
+            text ![title](<relinked: /path/to/file.txt> (title with \( \) and with ' ')) text
+            text ![title](<relinked: https://example.com/> "title with ( ) and with ' ' and with \" \"").
+
+            ## Inside Quote
+
+            > Text text [link](<relinked: path/to/file.txt>) text [link][relative-path] text
+            > text text [link](<relinked: /path/to/file.txt>) text [link][absolute-path] text
+            > text text [link](<relinked: https://example.com/>) text [link][url] text
+            > text text ![image](<relinked: path/to/file.txt>) text ![image][relative-path] text
+            > text text ![image](<relinked: /path/to/file.txt>) text ![image][absolute-path] text
+            > text text ![image](<relinked: https://example.com/>) text ![image][url] text
+            > text text.
+
+            ## Inside Table
+
+            | Header                             |  Value                               |
+            |------------------------------------|--------------------------------------|
+            | Cell [link](<relinked: path/to/file.txt>).     | Cell `\|` \\| [link][relative-path]. |
+            | Cell [link](<relinked: /path/to/file.txt>).    | Cell `\|` \\| [link][absolute-path]. |
+            | Cell [link](<relinked: https://example.com/>). | Cell `\|` \\| [link][url].           |
+
+            [relative-path]: <relinked: path/to/file.txt> "title"
+            [absolute-path]: <relinked: /path/to/file.txt>
+            [url]: <relinked: https://example.com/>
+
+            MARKDOWN;
 
         return [
             'Without path' => [
-                <<<'MARKDOWN'
-                # General
-
-                Text text [link](<relinked: path/to/file.txt>) text [link][relative-path] text
-                text text [link](<relinked: /path/to/file.txt>) text [link][absolute-path] text
-                text text [link](<relinked: https://example.com/>) text [link][url] text
-                text text ![image](<relinked: path/to/file.txt>) text ![image][relative-path] text
-                text text ![image](<relinked: /path/to/file.txt>) text ![image][absolute-path] text
-                text text ![image](<relinked: https://example.com/>) text ![image][url] text
-                text text.
-
-                # Special
-
-                ## Target escaping
-
-                ![image](<relinked: ./\<file\>/ /a>)
-                ![image](<relinked: /\<file\>/ /a>)
-
-                ## Title escaping
-
-                Text ![title](<relinked: path/to/file.txt> "title with ( ) and with ' '" ) text
-                text ![title](<relinked: /path/to/file.txt> (title with \( \) and with ' ')) text
-                text ![title](<relinked: https://example.com/> "title with ( ) and with ' ' and with \" \"").
-
-                ## Inside Quote
-
-                > Text text [link](<relinked: path/to/file.txt>) text [link][relative-path] text
-                > text text [link](<relinked: /path/to/file.txt>) text [link][absolute-path] text
-                > text text [link](<relinked: https://example.com/>) text [link][url] text
-                > text text ![image](<relinked: path/to/file.txt>) text ![image][relative-path] text
-                > text text ![image](<relinked: /path/to/file.txt>) text ![image][absolute-path] text
-                > text text ![image](<relinked: https://example.com/>) text ![image][url] text
-                > text text.
-
-                ## Inside Table
-
-                | Header                             |  Value                               |
-                |------------------------------------|--------------------------------------|
-                | Cell [link](<relinked: path/to/file.txt>).     | Cell `\|` \\| [link][relative-path]. |
-                | Cell [link](<relinked: /path/to/file.txt>).    | Cell `\|` \\| [link][absolute-path]. |
-                | Cell [link](<relinked: https://example.com/>). | Cell `\|` \\| [link][url].           |
-
-                [relative-path]: <relinked: path/to/file.txt> "title"
-                [absolute-path]: <relinked: /path/to/file.txt>
-                [url]: <relinked: https://example.com/>
-
-                MARKDOWN,
+                $expected,
                 null,
                 $markdown,
                 $callback,
             ],
             'With path'    => [
-                <<<'MARKDOWN'
-                # General
-
-                Text text [link](<relinked: /path/to/file.txt>) text [link][relative-path] text
-                text text [link](<relinked: /path/to/file.txt>) text [link][absolute-path] text
-                text text [link](<relinked: https://example.com/>) text [link][url] text
-                text text ![image](<relinked: /path/to/file.txt>) text ![image][relative-path] text
-                text text ![image](<relinked: /path/to/file.txt>) text ![image][absolute-path] text
-                text text ![image](<relinked: https://example.com/>) text ![image][url] text
-                text text.
-
-                # Special
-
-                ## Target escaping
-
-                ![image](<relinked: /\<file\>/ /a>)
-                ![image](<relinked: /\<file\>/ /a>)
-
-                ## Title escaping
-
-                Text ![title](<relinked: /path/to/file.txt> "title with ( ) and with ' '" ) text
-                text ![title](<relinked: /path/to/file.txt> (title with \( \) and with ' ')) text
-                text ![title](<relinked: https://example.com/> "title with ( ) and with ' ' and with \" \"").
-
-                ## Inside Quote
-
-                > Text text [link](<relinked: /path/to/file.txt>) text [link][relative-path] text
-                > text text [link](<relinked: /path/to/file.txt>) text [link][absolute-path] text
-                > text text [link](<relinked: https://example.com/>) text [link][url] text
-                > text text ![image](<relinked: /path/to/file.txt>) text ![image][relative-path] text
-                > text text ![image](<relinked: /path/to/file.txt>) text ![image][absolute-path] text
-                > text text ![image](<relinked: https://example.com/>) text ![image][url] text
-                > text text.
-
-                ## Inside Table
-
-                | Header                             |  Value                               |
-                |------------------------------------|--------------------------------------|
-                | Cell [link](<relinked: /path/to/file.txt>).     | Cell `\|` \\| [link][relative-path]. |
-                | Cell [link](<relinked: /path/to/file.txt>).    | Cell `\|` \\| [link][absolute-path]. |
-                | Cell [link](<relinked: https://example.com/>). | Cell `\|` \\| [link][url].           |
-
-                [relative-path]: <relinked: /path/to/file.txt> "title"
-                [absolute-path]: <relinked: /path/to/file.txt>
-                [url]: <relinked: https://example.com/>
-
-                MARKDOWN,
+                $expected,
                 '/document.md',
                 $markdown,
                 $callback,

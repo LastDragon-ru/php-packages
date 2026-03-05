@@ -10,7 +10,6 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Extensions\Reference\Node as Ref
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Text;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutator\Mutagens\Replace;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Utils;
-use LastDragon_ru\Path\Path;
 use League\CommonMark\Extension\CommonMark\Node\Inline\AbstractWebResource;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Image as ImageNode;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link as LinkNode;
@@ -32,7 +31,7 @@ use function rawurldecode;
 readonly class Relink implements Mutation {
     public function __construct(
         /**
-         * @var Closure(string): string
+         * @var Closure(string, LinkNode|ImageNode|ReferenceNode, Document): string
          */
         protected Closure $callback,
     ) {
@@ -58,10 +57,7 @@ readonly class Relink implements Mutation {
         // Update?
         $url    = $node instanceof ReferenceNode ? $node->getDestination() : $node->getUrl();
         $url    = rawurldecode($url);
-        $url    = $document->path !== null && Utils::isPath($url)
-            ? $document->path->resolve(Path::make($url))->path
-            : $url;
-        $target = ($this->callback)($url);
+        $target = ($this->callback)($url, $node, $document);
 
         if ($url === $target) {
             return [];
