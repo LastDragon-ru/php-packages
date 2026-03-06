@@ -6,11 +6,9 @@ use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as ResolverContract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\Adapters\SymfonyFileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Hook;
@@ -18,9 +16,11 @@ use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use Mockery;
 use Override;
+use PHPUnit\Framework\Attributes\After;
 use Symfony\Component\Finder\Finder;
 
 use function array_first;
+use function count;
 use function is_array;
 
 /**
@@ -28,7 +28,14 @@ use function is_array;
  * @internal
  */
 trait WithProcessor {
+    private ?WithProcessorResolver $withProcessorResolver = null;
+
     abstract protected function app(): Application;
+
+    #[After]
+    protected function withProcessorAfter(): void {
+        $this->withProcessorResolver = null;
+    }
 
     protected function getFileSystem(
         DirectoryPath|string $input,
@@ -64,8 +71,8 @@ trait WithProcessor {
     protected function runProcessorHookTask(
         HookTask $task,
         FileSystem $fs,
-        ?Hook $hook = null,
         ?File $file = null,
+        ?Hook $hook = null,
     ): void {
         $file ??= Mockery::mock(File::class);
         $hook ??= $task::hook();
@@ -78,24 +85,75 @@ trait WithProcessor {
         $task($this->getProcessorResolver($fs), $file);
     }
 
-    protected function getProcessorResolver(FileSystem $filesystem): ResolverContract {
-        $dispatcher = new Dispatcher(null);
-        $container  = $this->app()->make(Container::class);
-        $callback   = static function (): void {
-            // empty
-        };
-        $resolver   = new class(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $callback,
-            $callback,
-            $callback,
-            $callback,
-        ) extends Resolver {
-            // empty
-        };
+    private function getProcessorResolver(FileSystem $filesystem): WithProcessorResolver {
+        $dispatcher                  = new Dispatcher(null);
+        $container                   = $this->app()->make(Container::class);
+        $this->withProcessorResolver = new WithProcessorResolver($container, $dispatcher, $filesystem);
 
-        return $resolver;
+        return $this->withProcessorResolver;
+    }
+
+    protected function assertProcessorResolvedPathsCount(int $count): void {
+        self::assertSame(
+            $count,
+            $this->withProcessorResolver !== null
+                ? count($this->withProcessorResolver->resolved)
+                : null,
+        );
+    }
+
+    /**
+     * @param list<FilePath> $paths
+     */
+    protected function assertProcessorResolvedPaths(array $paths): void {
+        self::assertEquals($paths, $this->withProcessorResolver->resolved ?? null);
+    }
+
+    protected function assertProcessorSavedPathsCount(int $count): void {
+        self::assertSame(
+            $count,
+            $this->withProcessorResolver !== null
+                ? count($this->withProcessorResolver->saved)
+                : null,
+        );
+    }
+
+    /**
+     * @param list<FilePath> $paths
+     */
+    protected function assertProcessorSavedPaths(array $paths): void {
+        self::assertEquals($paths, $this->withProcessorResolver->saved ?? null);
+    }
+
+    protected function assertProcessorQueuedPathsCount(int $count): void {
+        self::assertSame(
+            $count,
+            $this->withProcessorResolver !== null
+                ? count($this->withProcessorResolver->queued)
+                : null,
+        );
+    }
+
+    /**
+     * @param list<FilePath> $paths
+     */
+    protected function assertProcessorQueuedPaths(array $paths): void {
+        self::assertEquals($paths, $this->withProcessorResolver->queued ?? null);
+    }
+
+    protected function assertProcessorDeletedPathsCount(int $count): void {
+        self::assertSame(
+            $count,
+            $this->withProcessorResolver !== null
+                ? count($this->withProcessorResolver->deleted)
+                : null,
+        );
+    }
+
+    /**
+     * @param list<DirectoryPath|FilePath> $paths
+     */
+    protected function assertProcessorDeletedPaths(array $paths): void {
+        self::assertEquals($paths, $this->withProcessorResolver->deleted ?? null);
     }
 }
