@@ -11,8 +11,8 @@ use LastDragon_ru\LaraASP\Migrator\Traits\SqlHelper;
 use ReflectionClass;
 
 abstract class SqlMigration extends Migration {
-    use SqlHelper;
     use Conditionable;
+    use SqlHelper;
 
     protected ?IlluminateMigrator $migrator       = null;
     protected ?string             $up             = null;

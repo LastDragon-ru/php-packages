@@ -93,8 +93,8 @@ use const JSON_THROW_ON_ERROR;
  */
 #[CoversClass(Directive::class)]
 final class DirectiveTest extends TestCase {
-    use WithTestObject;
     use MakesGraphQLRequests;
+    use WithTestObject;
 
     // <editor-fold desc="Prepare">
     // =========================================================================

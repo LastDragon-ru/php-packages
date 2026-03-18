@@ -24,8 +24,8 @@ use function iterator_to_array;
  */
 #[CoversClass(ChunkedChangeSafeIterator::class)]
 final class ChunkedChangeSafeIteratorTest extends TestCase {
-    use WithTestObject;
     use WithQueryLog;
+    use WithTestObject;
 
     // <editor-fold desc="Tests">
     // =========================================================================

@@ -21,13 +21,12 @@ use Override;
 abstract class TestCase extends TestbenchTestCase {
     use Assertions;
     use Concerns;
-    use WithFaker;
-    use WithConfig;
-    use WithTranslations;
-
     use PhpUnitAssertions {
         PhpUnitAssertions::assertDirectoryEquals insteadof Assertions;
     }
+    use WithConfig;
+    use WithFaker;
+    use WithTranslations;
 
     #[Override]
     protected function app(): Application {

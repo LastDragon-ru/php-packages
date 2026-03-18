@@ -176,4 +176,5 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassKeywordOrder"/>
+    <rule ref="SlevomatCodingStandard.Classes.TraitUseOrder"/>
 </ruleset>
