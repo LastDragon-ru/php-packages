@@ -27,11 +27,11 @@ use PHPUnit\Framework\Attributes\CoversNothing;
  */
 #[CoversNothing]
 final class AssertQueryLogEqualsTest extends TestCase {
+    use DatabaseQueryComparator;
     /**
      * Trait where assertion defined.
      */
     use WithQueryLog;
-    use DatabaseQueryComparator;
 
     #[Override]
     protected function app(): Application {

@@ -11,6 +11,6 @@ use Illuminate\Database\Eloquent\Model;
  * @extends EloquentFactory<TModel>
  */
 abstract class Factory extends EloquentFactory {
-    use WithoutModelEvents;
     use FixRecentlyCreated;
+    use WithoutModelEvents;
 }

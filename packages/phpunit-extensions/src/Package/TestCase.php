@@ -10,6 +10,6 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
  * @internal
  */
 abstract class TestCase extends PHPUnitTestCase {
-    use MockeryPHPUnitIntegration;
     use Assertions;
+    use MockeryPHPUnitIntegration;
 }

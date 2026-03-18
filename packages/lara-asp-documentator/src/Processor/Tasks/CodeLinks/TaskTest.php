@@ -27,8 +27,8 @@ use function str_repeat;
  */
 #[CoversClass(Task::class)]
 final class TaskTest extends TestCase {
-    use WithProcessor;
     use WithMarkdown;
+    use WithProcessor;
 
     // <editor-fold desc="Tests">
     // =========================================================================

@@ -14,8 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
  * @internal
  */
 class Assert extends PHPUnitAssert {
-    use XmlAssertions;
     use JsonAssertions;
+    use XmlAssertions;
 
     /**
      * Asserts that TestResponse satisfies given constraint.

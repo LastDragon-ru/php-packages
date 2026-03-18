@@ -18,8 +18,8 @@ use function iterator_to_array;
  */
 #[CoversClass(ChunkedIterator::class)]
 final class ChunkedIteratorTest extends TestCase {
-    use WithTestObject;
     use WithQueryLog;
+    use WithTestObject;
 
     public function testGetIterator(): void {
         TestObject::factory()->create(['value' => '1']);
