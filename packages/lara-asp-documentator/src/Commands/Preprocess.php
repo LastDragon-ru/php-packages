@@ -350,8 +350,8 @@ class Preprocess extends Command {
     }
 
     /**
-     * @param ReflectionClass<object>|ReflectionProperty $object
-     * @param ?int<0, max>                               $padding
+     * @param ReflectionClass<covariant object>|ReflectionProperty $object
+     * @param ?int<0, max>                                         $padding
      */
     private function getDocBlock(
         ReflectionClass|ReflectionProperty $object,
@@ -391,7 +391,7 @@ class Preprocess extends Command {
     }
 
     /**
-     * @param ReflectionClass<object>|ReflectionProperty $object
+     * @param ReflectionClass<covariant object>|ReflectionProperty $object
      */
     private function getDeprecatedMark(ReflectionClass|ReflectionProperty $object): string {
         $comment    = $object->getDocComment();
