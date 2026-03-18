@@ -3,7 +3,6 @@
 namespace LastDragon_ru\LaraASP\Migrator\Migrations;
 
 use Illuminate\Database\Migrations\Migrator as IlluminateMigrator;
-use LastDragon_ru\LaraASP\Core\Utils\Cast;
 use LastDragon_ru\Path\DirectoryPath;
 use Override;
 use Symfony\Component\Finder\Finder;
@@ -34,13 +33,21 @@ class Migrator extends IlluminateMigrator {
             $paths = [$paths];
         }
 
+        $strings = [];
+
         foreach ($paths as $path) {
-            foreach (Finder::create()->in(Cast::toString($path))->directories() as $dir) {
-                $paths[] = (string) (new DirectoryPath($dir->getPathname()))->normalized();
+            if (!is_string($path)) {
+                continue;
+            }
+
+            $strings[] = $path;
+
+            foreach (Finder::create()->in($path)->directories() as $dir) {
+                $strings[] = (string) (new DirectoryPath($dir->getPathname()))->normalized();
             }
         }
 
-        return parent::getMigrationFiles(array_unique($paths));
+        return parent::getMigrationFiles(array_unique($strings));
     }
     // </editor-fold>
 }
