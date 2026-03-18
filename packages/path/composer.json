@@ -17,9 +17,8 @@
     "forum": "https://github.com/LastDragon-ru/php-packages/discussions"
   },
   "require": {
-    "php": "^8.3|^8.4",
+    "php": "^8.4|^8.5",
     "ext-mbstring": "*",
-    "symfony/polyfill-php84": "^1.31",
     "symfony/polyfill-php85": "^1.33"
   },
   "require-dev": {

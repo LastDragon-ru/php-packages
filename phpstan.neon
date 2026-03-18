@@ -13,7 +13,7 @@ parameters:
     level: 10
 
     # Settings
-    phpVersion: 80300
+    phpVersion: 80400
     rememberPossiblyImpureFunctionValues: false
     checkMissingOverrideMethodAttribute: true
     checkMissingCallableSignature: true

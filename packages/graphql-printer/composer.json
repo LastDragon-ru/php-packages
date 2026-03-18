@@ -20,10 +20,9 @@
     "lastdragon-ru/phpunit-graphql": "Useful assertions for PHPUnit to check printed/exported type/queries."
   },
   "require": {
-    "php": "^8.3|^8.4",
+    "php": "^8.4|^8.5",
     "ext-mbstring": "*",
     "symfony/deprecation-contracts": "^3.0.0",
-    "symfony/polyfill-php84": "^1.31",
     "composer/semver": "^3.2",
     "webonyx/graphql-php": "^15.4.0"
   },
