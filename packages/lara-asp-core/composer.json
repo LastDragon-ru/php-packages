@@ -25,7 +25,8 @@
     "illuminate/contracts": "^12.0.1",
     "illuminate/support": "^12.0.1",
     "symfony/deprecation-contracts": "^3.0.0",
-    "symfony/filesystem": "^7.1.0"
+    "symfony/filesystem": "^7.1.0",
+    "symfony/polyfill-php85": "^1.33"
   },
   "require-dev": {
     "phpunit/phpunit": "^11.3.0|^12.0.0",

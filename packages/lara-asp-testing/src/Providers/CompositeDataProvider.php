@@ -4,13 +4,13 @@ namespace LastDragon_ru\LaraASP\Testing\Providers;
 
 use Override;
 
+use function array_first;
 use function array_merge;
 use function array_reduce;
 use function array_reverse;
 use function array_slice;
 use function assert;
 use function is_array;
-use function reset;
 
 /**
  * The data provider allows merging several data providers into one. It works in
@@ -68,7 +68,7 @@ class CompositeDataProvider extends BaseDataProvider {
             $data = [];
 
             foreach ($current->getData(true) as $cKey => $cData) {
-                $cExpected   = reset($cData);
+                $cExpected   = array_first($cData);
                 $cParameters = array_slice($cData, 1);
 
                 if ($this->isExpectedFinal($cExpected) || $previous === []) {
@@ -78,7 +78,7 @@ class CompositeDataProvider extends BaseDataProvider {
                         assert(is_array($pData));
 
                         $key         = "{$cKey} / {$pKey}";
-                        $pExpected   = reset($pData);
+                        $pExpected   = array_first($pData);
                         $pParameters = array_slice($pData, 1);
                         $data[$key]  = array_merge([$pExpected], $cParameters, $pParameters);
                     }

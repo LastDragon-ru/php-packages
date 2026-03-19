@@ -29,6 +29,7 @@
     "nikic/php-parser": "^5.4.0",
     "nette/neon": "^3.4.1",
     "phpstan/phpstan": "^2.1.1",
+    "symfony/polyfill-php85": "^1.33",
     "symfony/var-dumper": "^7.0.0"
   },
   "require-dev": {

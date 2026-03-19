@@ -3,7 +3,7 @@
 namespace LastDragon_ru\TextParser\Ast;
 
 use function array_key_last;
-use function end;
+use function array_last;
 
 /**
  * @see NodeMergeable
@@ -53,8 +53,7 @@ abstract class NodeParentFactory {
 
         // Same?
         $key      = null;
-        $previous = end($this->children);
-        $previous = $previous !== false ? $previous : null;
+        $previous = array_last($this->children);
 
         if ($previous instanceof NodeMergeable && $previous instanceof $node && $node instanceof $previous) {
             $key  = array_key_last($this->children);

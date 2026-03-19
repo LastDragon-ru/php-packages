@@ -22,10 +22,10 @@ use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 use Stringable;
 
+use function array_last;
 use function array_map;
 use function array_slice;
 use function debug_backtrace;
-use function end;
 use function implode;
 use function mb_trim;
 use function sprintf;
@@ -132,7 +132,7 @@ final class Example implements Runner {
     private static function getExpression(string $method): ?string {
         // File?
         $context = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-        $context = end($context);
+        $context = array_last($context);
 
         if (!isset($context['file']) || !isset($context['line'])) {
             return null;

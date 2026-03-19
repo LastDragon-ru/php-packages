@@ -23,6 +23,7 @@
     "php": "^8.4|^8.5",
     "ext-libxml": "*",
     "ext-dom": "*",
+    "ext-mbstring": "*",
     "ext-xmlreader": "*",
     "lastdragon-ru/path": "self.version",
     "lastdragon-ru/phpunit-extensions": "self.version",

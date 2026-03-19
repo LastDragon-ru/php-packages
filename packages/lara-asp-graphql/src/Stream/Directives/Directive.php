@@ -71,6 +71,7 @@ use ReflectionException;
 use ReflectionFunction;
 use ReflectionNamedType;
 
+use function array_first;
 use function array_key_exists;
 use function array_key_first;
 use function class_exists;
@@ -83,7 +84,6 @@ use function is_callable;
 use function is_object;
 use function is_string;
 use function json_encode;
-use function reset;
 use function uksort;
 
 use const JSON_THROW_ON_ERROR;
@@ -748,7 +748,7 @@ class Directive extends BaseDirective implements FieldResolver, FieldManipulator
         } elseif (count($instances) === 0) {
             throw new ArgumentMissed($source, $directive);
         } elseif (count($values) === 1) {
-            $argument = reset($values);
+            $argument = array_first($values);
             $instance = $instances[$argument];
         } else {
             uksort($instances, static function (mixed $a, mixed $b) use ($manipulator, $arguments): int {

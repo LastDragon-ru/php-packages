@@ -17,14 +17,14 @@ use League\CommonMark\Parser\InlineParserContext;
 use League\Config\ConfigurationAwareInterface;
 use Override;
 
+use function array_first;
+use function array_last;
 use function array_slice;
 use function count;
-use function end;
 use function implode;
 use function mb_strlen;
 use function mb_substr;
 use function mb_substr_count;
-use function reset;
 use function str_replace;
 
 /**
@@ -96,7 +96,7 @@ class InlineParserWrapper implements InlineParserInterface, EnvironmentAwareInte
         $inlineLinesCount = count($inlineLines) - 1;
         $startLine        = $beforeLinesCount;
         $endLine          = $startLine + $inlineLinesCount;
-        $start            = ((string) end($beforeLines)).((string) reset($inlineLines));
+        $start            = ((string) array_last($beforeLines)).((string) array_first($inlineLines));
 
         if ($beforeLinesCount > 0) {
             $correction = (mb_strlen(implode("\n", array_slice($beforeLines, 0, -1))) + 1);

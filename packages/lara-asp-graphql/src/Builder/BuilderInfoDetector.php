@@ -35,8 +35,8 @@ use Override;
 use ReflectionFunction;
 use ReflectionNamedType;
 
+use function array_first;
 use function class_exists;
-use function reset;
 
 class BuilderInfoDetector {
     use WithSource;
@@ -131,7 +131,7 @@ class BuilderInfoDetector {
                     || $directive instanceof WithRelationDirective;
             },
         );
-        $directive  = reset($directives);
+        $directive  = array_first($directives);
 
         if ($directive instanceof Directive) {
             $type = null;

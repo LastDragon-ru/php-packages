@@ -2,9 +2,9 @@
 
 namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
 
+use function array_last;
 use function array_pop;
 use function count;
-use function end;
 use function is_nan;
 
 use const NAN;
@@ -36,7 +36,7 @@ class ExpressionNode extends ParentNode implements ExpressionNodeChild {
 
             // Process
             if ($child instanceof OperatorNode) {
-                while ($operators !== [] && end($operators)->priority() >= $child->priority()) {
+                while ($operators !== [] && array_last($operators)->priority() >= $child->priority()) {
                     $operands[] = $this->calc(array_pop($operators), $operands);
                 }
 
@@ -51,7 +51,7 @@ class ExpressionNode extends ParentNode implements ExpressionNodeChild {
             }
 
             // Nan?
-            if ($operands !== [] && is_nan(end($operands))) {
+            if ($operands !== [] && is_nan(array_last($operands))) {
                 $operators = [];
                 break;
             }
@@ -61,7 +61,7 @@ class ExpressionNode extends ParentNode implements ExpressionNodeChild {
             $operands[] = $this->calc(array_pop($operators), $operands);
         }
 
-        return count($operands) === 1 ? end($operands) : NAN;
+        return count($operands) === 1 ? array_last($operands) : NAN;
     }
 
     /**

@@ -20,9 +20,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionAttribute;
 use ReflectionClass;
 
+use function array_first;
 use function is_a;
 use function is_array;
-use function reset;
 use function sprintf;
 
 /**
@@ -129,8 +129,7 @@ trait OperatorTests {
     private function getOperator(): string {
         $class = new ReflectionClass($this);
         $attrs = $class->getAttributes(CoversClass::class, ReflectionAttribute::IS_INSTANCEOF);
-        $attr  = reset($attrs);
-        $class = $attr !== false ? $attr->newInstance()->className() : null;
+        $class = array_first($attrs)?->newInstance()->className();
 
         if ($class === null || !is_a($class, Operator::class, true)) {
             throw new LogicException(

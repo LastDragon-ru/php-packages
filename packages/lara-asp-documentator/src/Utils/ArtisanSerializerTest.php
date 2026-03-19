@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-use function reset;
+use function array_first;
 
 /**
  * @internal
@@ -21,7 +21,7 @@ final class ArtisanSerializerTest extends TestCase {
     #[DataProvider('dataProviderGetArgumentSignature')]
     public function testGetArgumentSignature(string $signature): void {
         $parsed   = Parser::parse("command {{$signature}}")[1];
-        $argument = reset($parsed);
+        $argument = array_first($parsed);
 
         self::assertInstanceOf(InputArgument::class, $argument);
         self::assertSame($signature, (new ArtisanSerializer())->getArgumentSignature($argument));
@@ -30,7 +30,7 @@ final class ArtisanSerializerTest extends TestCase {
     #[DataProvider('dataProviderGetOptionSignature')]
     public function testGetOptionSignature(string $signature): void {
         $parsed = Parser::parse("command {{$signature}}")[2];
-        $option = reset($parsed);
+        $option = array_first($parsed);
 
         self::assertInstanceOf(InputOption::class, $option);
         self::assertSame($signature, (new ArtisanSerializer())->getOptionSignature($option));

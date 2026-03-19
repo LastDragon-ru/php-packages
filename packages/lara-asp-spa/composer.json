@@ -31,7 +31,8 @@
     "guzzlehttp/psr7": "^2.4.5",
     "lastdragon-ru/lara-asp-core": "self.version",
     "symfony/deprecation-contracts": "^3.0.0",
-    "symfony/http-kernel": "^7.0.0"
+    "symfony/http-kernel": "^7.0.0",
+    "symfony/polyfill-php85": "^1.33"
   },
   "require-dev": {
     "phpunit/phpunit": "^11.3.0|^12.0.0",

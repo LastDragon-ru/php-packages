@@ -44,6 +44,12 @@ parameters:
                 - packages/*/docs/*
     disallowedFunctionCalls:
         -
+            function: 'reset()'
+            message: 'use array_first() instead'
+        -
+            function: 'end()'
+            message: 'use array_last() instead'
+        -
             function: 'strlen()'
             message: 'use mb_strlen() instead'
         -

@@ -6,7 +6,7 @@ use LastDragon_ru\TextParser\Ast\NodeParentFactory;
 use LogicException;
 use Override;
 
-use function end;
+use function array_last;
 
 /**
  * @extends NodeParentFactory<ExpressionNode, ExpressionNodeChild>
@@ -26,8 +26,8 @@ class ExpressionNodeFactory extends NodeParentFactory {
         }
 
         // Other nodes must be separated by any Operator
-        $previous = end($children);
-        $valid    = $previous === false || $previous instanceof OperatorNode;
+        $previous = array_last($children);
+        $valid    = $previous === null || $previous instanceof OperatorNode;
 
         if (!$valid) {
             throw new LogicException('Operator is missing.');

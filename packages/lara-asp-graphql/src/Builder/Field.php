@@ -2,9 +2,9 @@
 
 namespace LastDragon_ru\LaraASP\GraphQL\Builder;
 
+use function array_last;
 use function array_slice;
 use function array_values;
-use function end;
 
 class Field {
     /**
@@ -19,7 +19,7 @@ class Field {
     }
 
     public function getName(): string {
-        return (string) end($this->path);
+        return (string) array_last($this->path);
     }
 
     /**

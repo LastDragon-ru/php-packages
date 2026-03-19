@@ -8,17 +8,17 @@ use LastDragon_ru\TextParser\Package;
 use Override;
 use Traversable;
 
+use function array_first;
+use function array_last;
 use function array_map;
 use function array_pop;
 use function array_reverse;
 use function array_unique;
-use function end;
 use function implode;
 use function max;
 use function mb_strlen;
 use function preg_quote;
 use function preg_split;
-use function reset;
 use function strval;
 use function usort;
 
@@ -79,7 +79,7 @@ readonly class StringSplitIterable implements IteratorAggregate {
 
                 yield from $this->iterator($offset, $items);
 
-                $last   = $items !== [] ? end($items) : ['', 0];
+                $last   = $items !== [] ? array_last($items) : ['', 0];
                 $offset = $offset + mb_strlen($last[0], Package::Encoding) + $last[1];
                 $buffer = implode('', array_reverse($skipped));
             }
@@ -102,7 +102,7 @@ readonly class StringSplitIterable implements IteratorAggregate {
         usort($separators, static fn ($a, $b) => mb_strlen($b, Package::Encoding) <=> mb_strlen($a, Package::Encoding));
 
         // Longest
-        $longest = mb_strlen((string) reset($separators), Package::Encoding);
+        $longest = mb_strlen((string) array_first($separators), Package::Encoding);
 
         // Regexp
         $quoted = array_map(preg_quote(...), $separators);
