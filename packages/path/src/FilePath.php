@@ -3,7 +3,6 @@
 namespace LastDragon_ru\Path;
 
 use InvalidArgumentException;
-use Override;
 
 use function pathinfo;
 use function str_ends_with;
@@ -11,9 +10,6 @@ use function str_ends_with;
 use const PATHINFO_EXTENSION;
 
 /**
- * @property-read non-empty-string  $name
- * @property-read ?non-empty-string $extension
- *
  * @extends Path<non-empty-string>
  */
 final class FilePath extends Path {
@@ -33,23 +29,14 @@ final class FilePath extends Path {
     }
 
     /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
+     * @var ?non-empty-string
      */
-    #[Override]
-    public function __get(string $name): mixed {
-        return match ($name) {
-            'extension' => $this->extension(),
-            default     => parent::__get($name),
-        };
-    }
+    public ?string $extension {
+        get {
+            $extension = pathinfo($this->name, PATHINFO_EXTENSION);
+            $extension = $extension !== '' ? $extension : null;
 
-    /**
-     * @return ?non-empty-string
-     */
-    private function extension(): ?string {
-        $extension = pathinfo($this->path, PATHINFO_EXTENSION);
-        $extension = $extension !== '' ? $extension : null;
-
-        return $extension;
+            return $extension;
+        }
     }
 }

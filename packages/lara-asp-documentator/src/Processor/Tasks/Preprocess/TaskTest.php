@@ -11,6 +11,7 @@ use LastDragon_ru\LaraASP\Documentator\Package\WithProcessor;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver as ResolverImpl;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction;
@@ -86,9 +87,9 @@ final class TaskTest extends TestCase {
         $task->addInstruction($a::class);
         $task->addInstruction($b);
 
-        $file     = Mockery::mock(File::class);
+        $file     = Mockery::mock(FileImpl::class);
         $document = $this->app()->make(Markdown::class)->parse(self::MARKDOWN);
-        $resolver = Mockery::mock(Resolver::class);
+        $resolver = Mockery::mock(ResolverImpl::class);
         $tokens   = $task->parse($resolver, $file, $document);
         $actual   = array_map(
             static function (array $tokens): array {
@@ -379,12 +380,15 @@ readonly class TaskTest__DocumentInstruction implements Instruction {
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
  */
 readonly class TaskTest__Parameters implements Parameters {
-    /**
-     * @param array<string, string> $b
-     */
     public function __construct(
+        /**
+         * @var non-empty-string
+         */
         public string $target,
         public string $a = 'a',
+        /**
+         * @var array<string, string> $b
+         */
         public array $b = [],
     ) {
         // empty
@@ -397,6 +401,9 @@ readonly class TaskTest__Parameters implements Parameters {
  */
 readonly class TaskTest__ParametersEmpty implements Parameters {
     public function __construct(
+        /**
+         * @var non-empty-string
+         */
         public string $target,
     ) {
         // empty

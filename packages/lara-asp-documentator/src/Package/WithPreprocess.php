@@ -3,6 +3,7 @@
 namespace LastDragon_ru\LaraASP\Documentator\Package;
 
 use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Document;
+use LastDragon_ru\LaraASP\Documentator\Markdown\Document as DocumentImpl;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Extensions\Reference\Node;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
@@ -25,7 +26,7 @@ trait WithPreprocess {
         return new Context(
             $this->getProcessorResolver($fs),
             $file,
-            $document ?? Mockery::mock(Document::class),
+            $document ?? Mockery::mock(DocumentImpl::class),
             $node ?? new Node(),
         );
     }

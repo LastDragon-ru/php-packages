@@ -26,34 +26,11 @@ use function str_starts_with;
 /**
  * URL/URI/etc not supported and treatment as path.
  *
- * @property-read TPath                  $name
- * @property-read Type                   $type
- * @property-read non-empty-list<string> $parts
- * @property-read bool                   $relative
- * @property-read bool                   $normalized
- *
  * @template TPath of string = string
  *
  * @phpstan-sealed DirectoryPath|FilePath
  */
 abstract class Path implements Stringable {
-    /**
-     * @internal `private` will lead to an error https://github.com/phpstan/phpstan/issues/
-     */
-    protected ?bool $cNormalized = null;
-
-    /**
-     * @internal `private` will lead to an error https://github.com/phpstan/phpstan/issues/
-     *
-     * @var non-empty-list<string>
-     */
-    protected ?array $cParts = null;
-
-    /**
-     * @internal `private` will lead to an error https://github.com/phpstan/phpstan/issues/
-     */
-    protected ?Type $cType = null;
-
     public function __construct(
         /**
          * @var TPath
@@ -64,32 +41,40 @@ abstract class Path implements Stringable {
     }
 
     /**
+     * @var TPath
+     */
+    public string $name {
+        get => self::name($this->parts); // @phpstan-ignore return.type (if instance was created, then the name is fine)
+    }
+
+    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
+    public private(set) Type $type {
+        get => $this->type ??= self::type($this->path);
+    }
+
+    /**
+     * @var non-empty-list<string>
+     */
+    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
+    public private(set) array $parts {
+        get => $this->parts ??= self::parts($this->type, $this->path);
+    }
+
+    public bool $relative {
+        get => $this->is(Type::Relative, Type::WindowsRelative);
+    }
+
+    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
+    public private(set) bool $normalized {
+        get => $this->normalized ??= static::normalize($this->type, $this->parts) === $this->path;
+    }
+
+    /**
      * @return TPath
      */
     #[Override]
     public function __toString(): string {
         return $this->path;
-    }
-
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __isset(string $name): bool {
-        return $this->__get($name) !== null;
-    }
-
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __get(string $name): mixed {
-        return match ($name) {
-            'name'       => self::name($this->parts),
-            'type'       => $this->cType       ??= self::type($this->path),
-            'parts'      => $this->cParts      ??= self::parts($this->type, $this->path),
-            'normalized' => $this->cNormalized ??= static::normalize($this->type, $this->parts) === $this->path,
-            'relative'   => $this->is(Type::Relative, Type::WindowsRelative),
-            default      => null,
-        };
     }
 
     /**
@@ -103,8 +88,8 @@ abstract class Path implements Stringable {
             ? new DirectoryPath($path)
             : new FilePath($path);
 
-        $path->cType  = $type;
-        $path->cParts = $parts;
+        $path->type  = $type;
+        $path->parts = $parts;
 
         return $path;
     }
@@ -124,8 +109,8 @@ abstract class Path implements Stringable {
                 ? new DirectoryPath($resolved)
                 : new FilePath($resolved); // @phpstan-ignore argument.type (ok. it will throw error if empty)
 
-            $resolved->cType       = $this->type;
-            $resolved->cNormalized = true;
+            $resolved->type       = $this->type;
+            $resolved->normalized = true;
         } elseif ($path->is(Type::WindowsRelative)) {
             /**
              * Relative path resolves based on the current directory for the
@@ -151,8 +136,8 @@ abstract class Path implements Stringable {
                 ? new DirectoryPath($resolved)
                 : new FilePath($resolved); // @phpstan-ignore argument.type (ok. it will throw error if empty)
 
-            $resolved->cType       = $type;
-            $resolved->cNormalized = true;
+            $resolved->type       = $type;
+            $resolved->normalized = true;
         } else {
             $resolved = $path->normalized();
         }
@@ -215,8 +200,8 @@ abstract class Path implements Stringable {
             ? new DirectoryPath($relative)
             : new FilePath($relative); // @phpstan-ignore argument.type (ok. it will throw error if empty)
 
-        $relative->cType       = $type;
-        $relative->cNormalized = true;
+        $relative->type       = $type;
+        $relative->normalized = true;
 
         // Return
         return $relative;
@@ -226,7 +211,7 @@ abstract class Path implements Stringable {
      * @return ($this is DirectoryPath ? DirectoryPath : FilePath)
      */
     public function normalized(): self {
-        if ($this->cNormalized === true) {
+        if ($this->normalized) {
             // @phpstan-ignore return.type (sealed not narrowed correctly, see https://github.com/phpstan/phpstan/issues/13839)
             return $this;
         }
@@ -236,8 +221,8 @@ abstract class Path implements Stringable {
             ? new DirectoryPath($path)
             : new FilePath($path); // @phpstan-ignore argument.type (ok. it will throw error if empty)
 
-        $path->cType       = $this->type;
-        $path->cNormalized = true;
+        $path->type       = $this->type;
+        $path->normalized = true;
 
         return $path;
     }
@@ -275,8 +260,8 @@ abstract class Path implements Stringable {
         // Root
         $body = implode('/', $result);
         $root = match ($type) {
-            Type::Relative  => str_starts_with($body, '~') ? './' : '',
-            default         => $parts[0],
+            Type::Relative => str_starts_with($body, '~') ? './' : '',
+            default        => $parts[0],
         };
 
         // Return

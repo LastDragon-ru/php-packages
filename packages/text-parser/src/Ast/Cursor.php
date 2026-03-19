@@ -18,43 +18,38 @@ use function is_object;
  *
  * @template TNode of object
  *
- * @property-read ?$this $previous
- * @property-read ?$this $next
- *
  * @implements IteratorAggregate<int, (TNode is NodeParent<covariant object> ? self<template-type<TNode, NodeParent, 'TChild'>> : null)>
  * @implements ArrayAccess<int<0, max>, (TNode is NodeParent<covariant object> ? self<template-type<TNode, NodeParent, 'TChild'>> : null)>
  */
-readonly class Cursor implements IteratorAggregate, ArrayAccess, Countable {
+class Cursor implements IteratorAggregate, ArrayAccess, Countable {
     final public function __construct(
         /**
          * @var TNode
          */
-        public object $node,
+        public readonly object $node,
         /**
          * @var (TNode is NodeChild<object> ? self<template-type<TNode, NodeChild, 'TParent'>>|null : null)
          */
-        public ?self $parent = null,
-        public ?int $index = null,
+        public readonly ?self $parent = null,
+        public readonly ?int $index = null,
     ) {
         // empty
     }
 
     /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
+     * @var ?$this
      */
-    public function __isset(string $name): bool {
-        return $this->__get($name) !== null;
+    public ?self $next {
+        // @phpstan-ignore return.type (the types are not great, so waiting for refactor)
+        get => $this->index !== null ? ($this->parent[$this->index + 1] ?? null) : null;
     }
 
     /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
+     * @var ?$this
      */
-    public function __get(string $name): mixed {
-        return match ($name) {
-            'previous' => $this->index !== null ? ($this->parent[$this->index - 1] ?? null) : null,
-            'next'     => $this->index !== null ? ($this->parent[$this->index + 1] ?? null) : null,
-            default    => null,
-        };
+    public ?self $previous {
+        // @phpstan-ignore return.type (the types are not great, so waiting for refactor)
+        get => $this->index !== null ? ($this->parent[$this->index - 1] ?? null) : null;
     }
 
     #[Override]

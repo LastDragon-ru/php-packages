@@ -250,6 +250,8 @@ class PreprocessTest__Parameters implements Parameters {
          *
          * Target target target target target target target target target
          * target target target target target target target target target.
+         *
+         * @var non-empty-string
          */
         public readonly string $target,
         /**
@@ -281,6 +283,8 @@ readonly class PreprocessTest__ParametersEmpty implements Parameters {
          *
          * Target target target target target target target target target
          * target target target target target target target target target.
+         *
+         * @var non-empty-string
          */
         public string $target,
     ) {

@@ -2,19 +2,20 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Markdown\Contracts;
 
-use LastDragon_ru\LaraASP\Documentator\Markdown\DocumentImpl;
 use LastDragon_ru\Path\FilePath;
 use League\CommonMark\Node\Block\Document as DocumentNode;
 use League\CommonMark\Node\Node;
 use Stringable;
 
-/**
- * @property-read DocumentNode $node
- * @property ?FilePath         $path
- *
- * @phpstan-require-extends DocumentImpl
- */
 interface Document extends Stringable {
+    public DocumentNode $node {
+        get;
+    }
+    public ?FilePath    $path {
+        get;
+        set;
+    }
+
     /**
      * @param Mutation<covariant Node>|iterable<mixed, Mutation<covariant Node>> ...$mutations
      */

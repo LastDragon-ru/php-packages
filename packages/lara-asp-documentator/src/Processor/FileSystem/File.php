@@ -35,22 +35,15 @@ class File implements Contract {
         }
     }
 
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __isset(string $name): bool {
-        return $this->__get($name) !== null;
+    public string $name {
+        get => $this->path->name;
     }
 
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __get(string $name): mixed {
-        return match ($name) {
-            'content'   => $this->fs->read($this),
-            'extension' => $this->path->extension,
-            'name'      => $this->path->name,
-            default     => null,
-        };
+    public ?string $extension {
+        get => $this->path->extension;
+    }
+
+    public string $content {
+        get => $this->fs->read($this);
     }
 }

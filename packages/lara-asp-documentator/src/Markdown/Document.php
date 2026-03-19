@@ -18,35 +18,19 @@ use Override;
 /**
  * @internal
  */
-class Document extends DocumentImpl implements DocumentContract {
-    private ?DocumentNode $node = null;
-
+class Document implements DocumentContract {
     public function __construct(
         protected readonly Markdown $markdown,
         protected readonly MarkdownParserInterface $parser,
         protected readonly string $content,
-        protected ?FilePath $path = null,
+        public ?FilePath $path = null,
     ) {
         // empty
     }
 
-    #[Override]
-    protected function getPath(): ?FilePath {
-        return $this->path;
-    }
-
-    #[Override]
-    protected function setPath(?FilePath $path): void {
-        $this->path = $path;
-    }
-
-    #[Override]
-    protected function getNode(): DocumentNode {
-        if ($this->node === null) {
-            $this->node = $this->parser->parse($this->content);
-        }
-
-        return $this->node;
+    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
+    public private(set) DocumentNode $node {
+        get => $this->node ??= $this->parser->parse($this->content);
     }
 
     #[Override]
@@ -61,7 +45,7 @@ class Document extends DocumentImpl implements DocumentContract {
      * @return array<int, string>
      */
     protected function getLines(): array {
-        return Lines::get($this->getNode());
+        return Lines::get($this->node);
     }
 
     #[Override]

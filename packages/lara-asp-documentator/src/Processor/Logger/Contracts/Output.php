@@ -6,11 +6,18 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Logger\Defaults\Output as Imple
 use LastDragon_ru\LaraASP\Documentator\Processor\Logger\Enums\Verbosity;
 
 /**
- * @property-read positive-int $width the number of characters per line (columns)
- *
  * @phpstan-require-extends Implementation
  */
 interface Output {
+    /**
+     * The number of characters per line (columns).
+     *
+     * @var positive-int
+     */
+    public int $width {
+        get;
+    }
+
     public function write(string $line, Verbosity $verbosity): void;
 
     /**
