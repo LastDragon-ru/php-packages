@@ -10,8 +10,9 @@ Various useful assertions/extensions for PHPUnit.
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.4` |   `HEAD ⋯ 10.0.0`   |
-|  | `^8.3` |   `HEAD ⋯ 10.0.0`   |
+|  PHP  | `^8.5` |  `HEAD`   |
+|  | `^8.4` |   `HEAD ⋯ 10.0.0`   |
+|  | `^8.3` |   `10.3.0 ⋯ 10.0.0`   |
 |  PHPUnit  | `^12.0.0` |   `HEAD ⋯ 10.0.0`   |
 |  | `^11.3.0` |   `HEAD ⋯ 10.1.0`   |
 |  | `^11.2.0` |  `10.0.0`   |
@@ -208,7 +209,7 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 [code-links/43d8e2c832b53052]: ../path/src/FilePath.php
     "\LastDragon_ru\Path\FilePath"
 
-[code-links/4159fe98c06c052e]: ../path/src/Path.php#L245-L248
+[code-links/4159fe98c06c052e]: ../path/src/Path.php#L230-L233
     "\LastDragon_ru\Path\Path::equals()"
 
 [code-links/8ddbbc27bf46e25a]: src/Assertions.php

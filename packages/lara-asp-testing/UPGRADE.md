@@ -29,15 +29,26 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 # Upgrade from v10
 
-* [ ] Class [`💀WithTempFile`][code-links/1e768fc484194d84] deprecated, the [`TempFile`][code-links/2ed0bfaade389715] should be used instead 🤝
-* [ ] Class [`💀WithTempDirectory`][code-links/8ccb455c0defa9b1] deprecated, the [`TempDirectory`][code-links/988d0b3180c21a3f] should be used instead 🤝
-* [ ] Trait [`💀FileSystemAssertions`][code-links/f05d4c94687fa6e8] deprecated, the [`Assertions`][code-links/d3222cbf284d2c91] should be used instead 🤝
-* [ ] XML Assertions are deprecated, the [`lastdragon-ru/phpunit-xml`](../phpunit-xml/README.md) should be used instead 🤝
+[include:file]: ../../docs/Shared/Upgrade/FromV10.md
+[//]: # (start: preprocess/3f19382f79c2085d)
+[//]: # (warning: Generated automatically. Do not edit.)
+
+* [ ] PHP 8.3 is not supported anymore. Migrate to the newer version.
+
+[//]: # (end: preprocess/3f19382f79c2085d)
 
 # Upgrade from v9
 
+* [ ] Class [`💀WithTempFile`][code-links/1e768fc484194d84] deprecated, the [`TempFile`][code-links/2ed0bfaade389715] should be used instead 🤝
+
+* [ ] Class [`💀WithTempDirectory`][code-links/8ccb455c0defa9b1] deprecated, the [`TempDirectory`][code-links/988d0b3180c21a3f] should be used instead 🤝
+
+* [ ] Trait [`💀FileSystemAssertions`][code-links/f05d4c94687fa6e8] deprecated, the [`Assertions`][code-links/d3222cbf284d2c91] should be used instead 🤝
+
+* [ ] XML Assertions are deprecated, the [`lastdragon-ru/phpunit-xml`](../phpunit-xml/README.md) should be used instead 🤝
+
 * [ ] Extension [`💀\LastDragon_ru\LaraASP\Testing\Requirements\PhpUnit\Extension`][code-links/26cc04e820d354b1] deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension`][code-links/7e51b51dd292df33] instead 🤝
-*
+
 * [ ] Trait [`💀StrictAssertEquals`][code-links/2187ed1b4d4e6c14] deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension`][code-links/4ec6b74a682f8155] instead 🤝
 
 * [ ] Trait [`💀WithTestData`][code-links/c1153ff984856b36] and [`💀\LastDragon_ru\LaraASP\Testing\Utils\TestData`][code-links/84706d7f00aadc5e] deprecated, please use [`\LastDragon_ru\PhpUnit\Utils\TestData`][code-links/ded4ad00d1ea1842] instead 🤝

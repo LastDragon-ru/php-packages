@@ -29,6 +29,16 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 ## Upgrade from v10
 
+[include:file]: ../../docs/Shared/Upgrade/FromV10.md
+[//]: # (start: preprocess/3f19382f79c2085d)
+[//]: # (warning: Generated automatically. Do not edit.)
+
+* [ ] PHP 8.3 is not supported anymore. Migrate to the newer version.
+
+[//]: # (end: preprocess/3f19382f79c2085d)
+
+## Upgrade from v9
+
 * [ ] Extension [`💀\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension`][code-links/50cb69b702caae36] renamed to [`\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension`][code-links/4ec6b74a682f8155] 🤝
 
 [//]: # (start: code-links)

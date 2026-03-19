@@ -12,8 +12,9 @@ There are several tools to generate full-featured parsers even for PHP[^1]. They
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.4` |   `HEAD ⋯ 9.2.0`   |
-|  | `^8.3` |   `HEAD ⋯ 9.2.0`   |
+|  PHP  | `^8.5` |  `HEAD`   |
+|  | `^8.4` |   `HEAD ⋯ 9.2.0`   |
+|  | `^8.3` |   `10.3.0 ⋯ 9.2.0`   |
 
 [//]: # (end: preprocess/78cfc4c7c7c55577)
 
@@ -727,8 +728,34 @@ LastDragon_ru\TextParser\Ast\Cursor {
     }
     +parent: null
     +index: null
+    +next: Symfony\Component\VarDumper\Caster\VirtualStub {#2
+      +type: 1
+      +class: "~ ?LastDragon_ru\TextParser\Ast\Cursor"
+      +value: "Virtual property"
+      +cut: 0
+      +handle: 0
+      +refCount: 0
+      +position: 0
+      +attr: [
+        "virtual" => true,
+      ]
+    }
+    +previous: Symfony\Component\VarDumper\Caster\VirtualStub {#3
+      +type: 1
+      +class: "~ ?LastDragon_ru\TextParser\Ast\Cursor"
+      +value: "Virtual property"
+      +cut: 0
+      +handle: 0
+      +refCount: 0
+      +position: 0
+      +attr: [
+        "virtual" => true,
+      ]
+    }
   }
   +index: 2
+  +next: Symfony\Component\VarDumper\Caster\VirtualStub {#2}
+  +previous: Symfony\Component\VarDumper\Caster\VirtualStub {#3}
 }
 ```
 
