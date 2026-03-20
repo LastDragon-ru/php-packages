@@ -62,6 +62,62 @@ jobs:
         run: |
           composer run-script composer-dependency-analyser
 
+  dependencies-constraint:
+    name: Dependencies constraints
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'schedule' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install PHP
+        uses: ./.github/actions/php
+        with:
+          version: "lowest"
+          dependencies: false
+      - name: Prepare
+        run: |
+          # Unwanted
+          # (because it will install whole "laravel/framework")
+          composer remove --no-interaction --no-progress --ansi --no-update "orchestra/testbench"
+          composer remove --no-interaction --no-progress --ansi --no-update --dev "orchestra/testbench"
+
+          # PHPStan
+          # (because it used only to run phpstan and will give false-positive)
+          composer remove --no-interaction --no-progress --ansi --no-update --dev "phpstan/*"
+          composer remove --no-interaction --no-progress --ansi --no-update --dev "larastan/larastan"
+          composer remove --no-interaction --no-progress --ansi --no-update --dev "spaze/phpstan-disallowed-calls"
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: lowest
+      - name: Check
+        run: |
+          # Prepare
+          mkdir -p tmp
+
+          # Locked packages
+          composer show --locked --direct --format=json | jq '.locked | map (.name + ":" + (.version | sub("^[^\\d]+"; ""))) | sort | .[]' -r > "tmp/locked.txt"
+
+          # Required packages
+          jq '.require + ."require-dev" | del(.[keys[] | select(startswith("ext-") or . == "php")]) | with_entries(.value |= (split("|") | first)) | to_entries | map (.key + ":" + (.value | sub("^[^\\d]+"; ""))) | unique | sort | .[]' -r composer.json > "tmp/required.txt"
+
+          # Compare
+          PACKAGES=$(comm -3 "tmp/required.txt" "tmp/locked.txt" | jq -nR '[inputs | select(length>0)] | map (. | sub("^[\\s]+"; "") | sub(":.+?$"; "")) | unique | sort | .[]' -r)
+
+          if [[ -n "${PACKAGES}" ]]; then
+            while IFS= read -r PKG
+            do
+              PKG_INSTALLED=$(grep -m1 "^${PKG}" "tmp/locked.txt" | sed -E 's/^[^:]+://')
+              PKG_REQUIRED=$(grep -m1 "^${PKG}" "tmp/required.txt" | sed -E 's/^[^:]+://')
+
+              echo "${PKG} version is ${PKG_REQUIRED} but ${PKG_INSTALLED} installed:"
+              env -u GITHUB_ACTIONS composer require "${PKG}:${PKG_REQUIRED}" --dry-run --with-all-dependencies --no-ansi |& sed 's/^/    /'
+              echo '    .'
+            done <<< "${PACKAGES}"
+
+            exit 1
+          fi
+
   dependencies-package:
     name: Dependencies checks
     needs:
