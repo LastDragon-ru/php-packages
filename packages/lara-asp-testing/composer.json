@@ -25,7 +25,7 @@
     "ext-dom": "*",
     "ext-xmlreader": "*",
     "ext-mbstring": "*",
-    "doctrine/sql-formatter": "^1.1",
+    "doctrine/sql-formatter": "^1.1.0",
     "fakerphp/faker": "^1.21.0",
     "illuminate/collections": "^12.0.1",
     "illuminate/console": "^12.0.1",
@@ -34,24 +34,24 @@
     "illuminate/testing": "^12.0.1",
     "illuminate/translation": "^12.0.1",
     "lastdragon-ru/phpunit-extensions": "self.version",
-    "nyholm/psr7": "^1.8",
+    "nyholm/psr7": "^1.8.0",
     "mockery/mockery": "^1.6.6",
     "opis/json-schema": "^2.3.0",
-    "phpunit/phpunit": "^11.3.0|^12.0.0",
-    "psr/http-message": "^1.0.0|^2.0.0",
-    "sebastian/comparator": "^6.0.0|^7.0.0",
+    "phpunit/phpunit": "^11.5.50|^12.0.0",
+    "psr/http-message": "^1.1|^2.0",
+    "sebastian/comparator": "^6.3.3|^7.0.0",
     "symfony/filesystem": "^7.1.0",
-    "symfony/finder": "^7.0.0",
-    "symfony/http-foundation": "^7.0.0",
-    "symfony/mime": "^7.0.0",
-    "symfony/polyfill-php85": "^1.33",
+    "symfony/finder": "^7.2.0",
+    "symfony/http-foundation": "^7.3.7",
+    "symfony/mime": "^7.2.0",
+    "symfony/polyfill-php85": "^1.33.0",
     "symfony/psr-http-message-bridge": "^7.0.0"
   },
   "require-dev": {
     "illuminate/http": "^12.0.1",
     "laravel/scout": "^10.12.2",
     "orchestra/testbench": "^10.0.0",
-    "symfony/console": "^7.0.0"
+    "symfony/console": "^7.2.0"
   },
   "autoload": {
     "files": [

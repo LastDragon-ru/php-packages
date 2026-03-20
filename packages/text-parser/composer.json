@@ -18,12 +18,12 @@
   "require": {
     "php": "^8.4|^8.5",
     "ext-mbstring": "*",
-    "symfony/polyfill-php85": "^1.33"
+    "symfony/polyfill-php85": "^1.33.0"
   },
   "require-dev": {
     "lastdragon-ru/phpunit-extensions": "self.version",
     "mockery/mockery": "^1.6.6",
-    "phpunit/phpunit": "^11.3.0|^12.0.0"
+    "phpunit/phpunit": "^11.5.50|^12.0.0"
   },
   "autoload": {
     "psr-4": {

@@ -23,12 +23,12 @@
     "php": "^8.4|^8.5",
     "ext-mbstring": "*",
     "symfony/deprecation-contracts": "^3.0.0",
-    "composer/semver": "^3.2",
+    "composer/semver": "^3.2.0",
     "webonyx/graphql-php": "^15.4.0"
   },
   "require-dev": {
-    "composer/class-map-generator": "^1.0",
-    "phpunit/phpunit": "^11.3.0|^12.0.0",
+    "composer/class-map-generator": "^1.1.0",
+    "phpunit/phpunit": "^11.5.50|^12.0.0",
     "lastdragon-ru/phpunit-extensions": "self.version",
     "lastdragon-ru/phpunit-graphql": "self.version",
     "mockery/mockery": "^1.6.6"

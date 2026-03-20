@@ -26,14 +26,14 @@
     "lastdragon-ru/lara-asp-core": "self.version",
     "lastdragon-ru/lara-asp-documentator": "self.version",
     "lastdragon-ru/path": "self.version",
-    "nikic/php-parser": "^5.4.0",
-    "nette/neon": "^3.4.1",
+    "nikic/php-parser": "^5.7.0",
+    "nette/neon": "^3.4.4",
     "phpstan/phpstan": "^2.1.1",
-    "symfony/polyfill-php85": "^1.33",
+    "symfony/polyfill-php85": "^1.33.0",
     "symfony/var-dumper": "^7.0.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^11.3.0|^12.0.0"
+    "phpunit/phpunit": "^11.5.50|^12.0.0"
   },
   "autoload": {
     "psr-4": {
