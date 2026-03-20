@@ -21,6 +21,9 @@ jobs:
       fail-fast: false
       matrix:
         package: ${{ fromJson(needs.settings.outputs.packages-names) }}
+    environment:
+      name: trusted
+      deployment: false
     steps:
       # Dependencies
       - name: Install git-filter-repo

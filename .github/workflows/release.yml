@@ -36,6 +36,9 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    environment:
+      name: trusted
+      deployment: false
     permissions:
       contents: write
     outputs:
