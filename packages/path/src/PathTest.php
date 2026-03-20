@@ -54,19 +54,20 @@ final class PathTest extends TestCase {
 
     public function testNormalized(): void {
         $path     = 'path/to';
-        $instance = Mockery::mock(Path::class, [$path]);
+        $instance = Mockery::mock(PathTest_Path::class, [$path]);
         $instance->shouldAllowMockingProtectedMethods();
         $instance->makePartial();
         $instance
             ->shouldReceive('normalize')
             ->with(Type::Relative, ['', 'path', 'to'])
-            ->twice()
+            ->times(3)
             ->andReturn('normalized');
 
         $normalized = $instance->normalized();
 
         self::assertSame('normalized', (string) $normalized);
         self::assertNotSame($normalized, $instance->normalized());
+        self::assertFalse($instance->normalized);
     }
 
     #[DataProvider('dataProviderRelative')]

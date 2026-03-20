@@ -8,7 +8,7 @@
     "forum": "https://github.com/LastDragon-ru/php-packages/discussions"
   },
   "require": {
-    "php": "^8.3|^8.4",
+    "php": "^8.4|^8.5",
     "ext-bcmath": "*",
     "ext-dom": "*",
     "ext-filter": "*",
@@ -59,7 +59,6 @@
     "symfony/http-foundation": "^7.0.0",
     "symfony/http-kernel": "^7.0.0",
     "symfony/mime": "^7.0.0",
-    "symfony/polyfill-php84": "^1.31",
     "symfony/polyfill-php85": "^1.33",
     "symfony/property-access": "^7.0.0",
     "symfony/property-info": "^7.1.10",

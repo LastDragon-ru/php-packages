@@ -10,9 +10,9 @@ use Nuwave\Lighthouse\Execution\Arguments\ArgumentSet;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Support\Contracts\Directive;
 
+use function array_first;
 use function assert;
 use function is_string;
-use function reset;
 
 class ArgumentFactory {
     public function __construct(
@@ -23,7 +23,7 @@ class ArgumentFactory {
 
     public function getArgument(InputValueDefinitionNode|string $node, mixed $value): Argument {
         $arguments = $this->getArgumentSet($node, $value);
-        $argument  = reset($arguments->arguments);
+        $argument  = array_first($arguments->arguments);
 
         assert($argument instanceof Argument, 'Arguments cannot be empty');
 

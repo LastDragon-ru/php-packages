@@ -10,6 +10,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\Adapters\SymfonyFileSystem;
+use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Hook;
 use LastDragon_ru\Path\DirectoryPath;
@@ -74,7 +75,7 @@ trait WithProcessor {
         ?File $file = null,
         ?Hook $hook = null,
     ): void {
-        $file ??= Mockery::mock(File::class);
+        $file ??= Mockery::mock(FileImpl::class);
         $hook ??= $task::hook();
         $hook   = is_array($hook) ? array_first($hook) : $hook;
 

@@ -22,14 +22,15 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use function array_combine;
 use function array_diff_key;
 use function array_filter;
+use function array_first;
 use function array_keys;
+use function array_last;
 use function array_map;
 use function array_merge;
 use function array_search;
 use function array_unique;
 use function array_values;
 use function count;
-use function end;
 use function explode;
 use function file_get_contents;
 use function getcwd;
@@ -39,7 +40,6 @@ use function mb_trim;
 use function preg_match;
 use function preg_quote;
 use function range;
-use function reset;
 use function str_starts_with;
 use function strtr;
 use function uksort;
@@ -353,12 +353,12 @@ class Requirements extends Command {
 
         foreach ($ranges as $range) {
             if (count($range) > 2) {
-                $merged[] = [reset($range), end($range)];
+                $merged[] = [array_first($range), array_last($range)];
             } elseif (count($range) === 2) {
-                $merged[] = reset($range);
-                $merged[] = end($range);
+                $merged[] = array_first($range);
+                $merged[] = array_last($range);
             } else {
-                $merged[] = reset($range);
+                $merged[] = array_first($range);
             }
         }
 

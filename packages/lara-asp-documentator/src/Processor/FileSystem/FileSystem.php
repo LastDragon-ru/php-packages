@@ -29,9 +29,6 @@ use function sprintf;
 use function str_starts_with;
 use function strlen;
 
-/**
- * @property-read DirectoryPath $directory
- */
 class FileSystem {
     private Cache   $cache;
     private Content $content;
@@ -66,6 +63,10 @@ class FileSystem {
 
         $this->cache   = new Cache(50);
         $this->content = new Content();
+    }
+
+    public DirectoryPath $directory {
+        get => array_last($this->level) ?? $this->input;
     }
 
     public function exists(FilePath $path): bool {
@@ -274,23 +275,6 @@ class FileSystem {
         }
 
         return $path;
-    }
-
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __isset(string $name): bool {
-        return $this->__get($name) !== null;
-    }
-
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __get(string $name): mixed {
-        return match ($name) {
-            'directory' => array_last($this->level) ?? $this->input,
-            default     => null,
-        };
     }
 
     protected function make(FilePath $path): File {

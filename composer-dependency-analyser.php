@@ -27,7 +27,6 @@ $root = Path::realpath(dirname(__FILE__).'/composer.json') === $path;
 
 if (!$root) {
     $config->disableReportingUnmatchedIgnores();
-    $config->ignoreErrorsOnExtension('ext-mbstring', [ErrorType::UNUSED_DEPENDENCY]); // https://github.com/shipmonk-rnd/composer-dependency-analyser/issues/254
 
     // fixme: Hotfix for https://github.com/shipmonk-rnd/composer-dependency-analyser/issues/253
     $config->ignoreErrorsOnPaths(

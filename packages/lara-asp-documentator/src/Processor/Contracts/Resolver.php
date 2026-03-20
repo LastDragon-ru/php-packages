@@ -14,13 +14,21 @@ use LastDragon_ru\Path\FilePath;
  * + Relative - relative to {@see self::$directory}.
  * + Other - as is.
  *
- * @property-read DirectoryPath $input
- * @property-read DirectoryPath $output
- * @property-read DirectoryPath $directory
- *
  * @phpstan-require-extends ResolverImpl
  */
 interface Resolver {
+    public DirectoryPath $input {
+        get;
+    }
+
+    public DirectoryPath $output {
+        get;
+    }
+
+    public DirectoryPath $directory {
+        get;
+    }
+
     public function get(FilePath $path): File;
 
     public function find(FilePath $path): ?File;

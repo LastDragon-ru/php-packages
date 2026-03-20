@@ -40,7 +40,7 @@ final class ResolverTest extends TestCase {
         $queue      = Mockery::mock(ResolverTest__Invokable::class);
         $delete     = Mockery::mock(ResolverTest__Invokable::class);
         $filepath   = new FilePath('file.txt');
-        $resolved   = Mockery::mock(File::class);
+        $resolved   = Mockery::mock(FileImpl::class);
         $container  = Mockery::mock(Container::class);
         $dispatcher = new ResolverTest__Dispatcher();
         $filesystem = Mockery::mock(FileSystem::class);
@@ -134,7 +134,7 @@ final class ResolverTest extends TestCase {
         $queue      = Mockery::mock(ResolverTest__Invokable::class);
         $delete     = Mockery::mock(ResolverTest__Invokable::class);
         $filepath   = new FilePath('file.txt');
-        $resolved   = Mockery::mock(File::class);
+        $resolved   = Mockery::mock(FileImpl::class);
         $container  = Mockery::mock(Container::class);
         $dispatcher = new ResolverTest__Dispatcher();
         $filesystem = Mockery::mock(FileSystem::class);
@@ -413,7 +413,7 @@ final class ResolverTest extends TestCase {
 
         $delete     = Mockery::mock(ResolverTest__Invokable::class);
         $filepath   = new FilePath('/file.txt');
-        $resolved   = Mockery::mock(File::class);
+        $resolved   = Mockery::mock(FileImpl::class);
         $container  = Mockery::mock(Container::class);
         $dispatcher = new ResolverTest__Dispatcher();
         $filesystem = Mockery::mock(FileSystem::class);
@@ -452,9 +452,9 @@ final class ResolverTest extends TestCase {
 
     public function testQueueIterable(): void {
         $aPath = new FilePath('/a.txt');
-        $aFile = Mockery::mock(File::class);
+        $aFile = Mockery::mock(FileImpl::class);
         $bPath = new FilePath('/b.txt');
-        $bFile = Mockery::mock(File::class);
+        $bFile = Mockery::mock(FileImpl::class);
         $run   = Mockery::mock(ResolverTest__Invokable::class);
         $save  = Mockery::mock(ResolverTest__Invokable::class);
         $queue = Mockery::mock(ResolverTest__Invokable::class);
@@ -818,14 +818,16 @@ final class ResolverTest extends TestCase {
                 return parent::path($path);
             }
 
-            #[Override]
-            public function __get(string $name): mixed {
-                return match ($name) {
-                    'input'     => new DirectoryPath('/input'),
-                    'output'    => new DirectoryPath('/output'),
-                    'directory' => new DirectoryPath('/directory'),
-                    default     => parent::__get($name),
-                };
+            public DirectoryPath $input {
+                get => new DirectoryPath('/input');
+            }
+
+            public DirectoryPath $output {
+                get => new DirectoryPath('/output');
+            }
+
+            public DirectoryPath $directory {
+                get => new DirectoryPath('/directory');
             }
         };
 

@@ -22,8 +22,8 @@ use League\CommonMark\Parser\Cursor;
 use League\CommonMark\Util\LinkParserHelper;
 use League\CommonMark\Util\UrlEncoder;
 
+use function array_last;
 use function count;
-use function end;
 use function filter_var;
 use function mb_ltrim;
 use function mb_strlen;
@@ -148,7 +148,7 @@ class Utils {
         $count = count($lines) - 1;
 
         if ($beforeCount > 0) {
-            $beforeLine = (string) end($beforeLines);
+            $beforeLine = (string) array_last($beforeLines);
             $location   = $location
                 ->withStartLine($location->startLine + $beforeCount)
                 ->withOffset(
@@ -166,7 +166,7 @@ class Utils {
         }
 
         return $location
-            ->withLength(mb_strlen((string) end($lines)));
+            ->withLength(mb_strlen((string) array_last($lines)));
     }
 
     public static function escapeTextInTableCell(Node $container, string $text): string {

@@ -17,11 +17,10 @@
     "forum": "https://github.com/LastDragon-ru/php-packages/discussions"
   },
   "require": {
-    "php": "^8.3|^8.4",
+    "php": "^8.4|^8.5",
     "ext-filter": "*",
     "ext-mbstring": "*",
-    "lastdragon-ru/text-parser": "self.version",
-    "symfony/polyfill-php84": "^1.31"
+    "lastdragon-ru/text-parser": "self.version"
   },
   "require-dev": {
     "lastdragon-ru/phpunit-extensions": "self.version",

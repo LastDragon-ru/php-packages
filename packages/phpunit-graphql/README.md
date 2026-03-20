@@ -10,8 +10,9 @@ PHPUnit assertions for GraphQL to check printed/exported type/queries.
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.4` |   `HEAD ⋯ 10.0.0`   |
-|  | `^8.3` |   `HEAD ⋯ 10.0.0`   |
+|  PHP  | `^8.5` |  `HEAD`   |
+|  | `^8.4` |   `HEAD ⋯ 10.0.0`   |
+|  | `^8.3` |   `10.3.0 ⋯ 10.0.0`   |
 |  PHPUnit  | `^12.0.0` |   `HEAD ⋯ 10.0.0`   |
 |  | `^11.3.0` |   `HEAD ⋯ 10.1.0`   |
 |  | `^11.2.0` |  `10.0.0`   |

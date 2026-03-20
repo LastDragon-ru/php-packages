@@ -10,6 +10,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\ParsedClass;
 use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\ParsedFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver as ResolverImpl;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Contracts\Link;
@@ -123,14 +124,14 @@ final class BaseTest extends TestCase {
         $class
             ->shouldUseProperty('namespacedName')
             ->value(new Name('App\\A'));
-        $source   = Mockery::mock(File::class);
+        $source   = Mockery::mock(FileImpl::class);
         $classes  = static function (ParsedFile $file) use ($class): array {
             return [
                 new ParsedClass(Mockery::mock(PhpDocumentFactory::class), $file, $class),
             ];
         };
         $parsed   = new ParsedFile($file, Mockery::mock(NameContext::class), $classes);
-        $resolver = Mockery::mock(Resolver::class);
+        $resolver = Mockery::mock(ResolverImpl::class);
         $resolver
             ->shouldReceive('cast')
             ->with($source, Parsed::class)

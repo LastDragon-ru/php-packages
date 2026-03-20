@@ -7,14 +7,7 @@ use LastDragon_ru\LaraASP\Documentator\Utils\PhpDoc;
 use LastDragon_ru\LaraASP\Documentator\Utils\PhpDocumentFactory;
 use PhpParser\Node\Stmt\ClassLike;
 
-/**
- * @property-read PhpDoc   $comment
- * @property-read Document $markdown
- */
 class ParsedClass {
-    private ?PhpDoc   $cComment  = null;
-    private ?Document $cMarkdown = null;
-
     public function __construct(
         protected readonly PhpDocumentFactory $factory,
         public readonly ParsedFile $file,
@@ -23,21 +16,13 @@ class ParsedClass {
         // empty
     }
 
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __isset(string $name): bool {
-        return $this->__get($name) !== null;
+    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
+    public private(set) PhpDoc $comment {
+        get => $this->comment ??= new PhpDoc($this->node->getDocComment()?->getText());
     }
 
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __get(string $name): mixed {
-        return match ($name) {
-            'comment'  => $this->cComment  ??= new PhpDoc($this->node->getDocComment()?->getText()),
-            'markdown' => $this->cMarkdown ??= ($this->factory)($this->comment, $this->file->path, $this->file->context),
-            default    => null,
-        };
+    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
+    public private(set) Document $markdown {
+        get => $this->markdown ??= ($this->factory)($this->comment, $this->file->path, $this->file->context);
     }
 }

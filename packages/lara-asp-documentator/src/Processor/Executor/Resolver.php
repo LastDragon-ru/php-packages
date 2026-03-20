@@ -54,6 +54,18 @@ class Resolver implements Contract {
         $this->files = new WeakMap();
     }
 
+    public DirectoryPath $input {
+        get => $this->fs->input;
+    }
+
+    public DirectoryPath $output {
+        get => $this->fs->output;
+    }
+
+    public DirectoryPath $directory {
+        get => $this->fs->directory;
+    }
+
     #[Override]
     public function get(FilePath $path): File {
         $path = $this->path($path);
@@ -159,25 +171,6 @@ class Resolver implements Contract {
         $found = $this->fs->search($path, (array) $include, (array) $exclude, $hidden);
 
         return $found;
-    }
-
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __isset(string $name): bool {
-        return $this->__get($name) !== null;
-    }
-
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __get(string $name): mixed {
-        return match ($name) {
-            'input'     => $this->fs->input,
-            'output'    => $this->fs->output,
-            'directory' => $this->fs->directory,
-            default     => null,
-        };
     }
 
     /**

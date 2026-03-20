@@ -13,9 +13,6 @@ use function count;
 /**
  * Provides "transaction" support for the iterable.
  *
- * @property-read int<0, max> $level
- * @property-read mixed       $name
- *
  * @template TValue
  *
  * @implements Iterator<int, TValue>
@@ -52,6 +49,17 @@ class TransactionalIterable implements Iterator, ArrayAccess {
         $this->source->rewind();
     }
 
+    /**
+     * @var int<0, max>
+     */
+    public int $level {
+        get => count($this->stack);
+    }
+
+    public mixed $name {
+        get => $this->stack[$this->level - 1][1] ?? null;
+    }
+
     public function begin(mixed $name = null): void {
         $offset        = $this->source->key();
         $this->eos   ??= $offset + $this->previous;
@@ -60,7 +68,7 @@ class TransactionalIterable implements Iterator, ArrayAccess {
 
     public function end(mixed $result, mixed $name = null): bool {
         $commited = !($result === null || $result === false)
-            && ($name === null || $name === ($this->stack[count($this->stack) - 1][1] ?? null));
+            && ($name === null || $name === $this->name);
 
         if ($commited) {
             $this->commit();
@@ -143,21 +151,10 @@ class TransactionalIterable implements Iterator, ArrayAccess {
         // Not supported.
     }
 
-    /**
-     * @deprecated 10.0.0 Will be replaced to property hooks soon.
-     */
-    public function __get(mixed $name): mixed {
-        return match ($name) {
-            'level' => count($this->stack),
-            'name'  => $this->stack[count($this->stack) - 1][1] ?? null,
-            default => null,
-        };
-    }
-
     public function isInside(mixed $name): bool {
         $inside = false;
 
-        for ($i = count($this->stack) - 2; $i >= 0; $i--) {
+        for ($i = $this->level - 2; $i >= 0; $i--) {
             if ($this->stack[$i][1] === $name) {
                 $inside = true;
                 break;

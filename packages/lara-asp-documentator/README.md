@@ -10,8 +10,9 @@ This package provides various utilities for documentation generation such as Mar
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.4` |   `HEAD ⋯ 8.0.0`   |
-|  | `^8.3` |   `HEAD ⋯ 5.0.0`   |
+|  PHP  | `^8.5` |  `HEAD`   |
+|  | `^8.4` |   `HEAD ⋯ 8.0.0`   |
+|  | `^8.3` |   `10.3.0 ⋯ 5.0.0`   |
 |  | `^8.2` |   `7.2.0 ⋯ 5.0.0-beta.1`   |
 |  | `^8.1` |   `6.4.2 ⋯ 5.0.0-beta.1`   |
 |  Laravel  | `^12.0.1` |   `HEAD ⋯ 9.0.0`   |

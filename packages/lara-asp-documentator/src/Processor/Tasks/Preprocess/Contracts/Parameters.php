@@ -4,9 +4,11 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contract
 
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializable;
 
-/**
- * @property-read non-empty-string $target
- */
 interface Parameters extends Serializable {
-    // empty
+    /**
+     * @var non-empty-string
+     */
+    public string $target {
+        get;
+    }
 }

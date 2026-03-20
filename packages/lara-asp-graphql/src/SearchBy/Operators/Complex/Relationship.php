@@ -21,11 +21,11 @@ use Nuwave\Lighthouse\Execution\Arguments\Argument;
 use Nuwave\Lighthouse\Execution\Arguments\ArgumentSet;
 use Override;
 
+use function array_first;
 use function is_a;
 use function is_array;
 use function is_int;
 use function is_string;
-use function reset;
 
 class Relationship extends Operator {
     public function __construct(
@@ -112,7 +112,7 @@ class Relationship extends Operator {
         if ($hasCount instanceof Argument) {
             $query    = $builder->getQuery()->newQuery();
             $query    = $this->field->call($handler, $query, new Field(), $hasCount, $context);
-            $where    = reset($query->wheres);
+            $where    = array_first($query->wheres);
             $count    = is_array($where) && isset($where['value']) && is_int($where['value'])
                 ? $where['value']
                 : $count;

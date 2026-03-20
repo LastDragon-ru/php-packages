@@ -14,9 +14,9 @@ use LastDragon_ru\LaraASP\Spa\Package;
 use LogicException;
 use Override;
 
+use function array_last;
 use function array_merge;
 use function count;
-use function end;
 use function is_array;
 use function is_null;
 use function is_scalar;
@@ -167,7 +167,7 @@ abstract class Resource extends JsonResource implements SafeResource {
     protected function mapResourceIsDate(DateTimeInterface $value, array $path): bool {
         return count($path) === 1
             && $this->resource instanceof Model
-            && $this->resource->hasCast(end($path), 'date');
+            && $this->resource->hasCast(array_last($path), 'date');
     }
 
     protected function mapResourceDate(DateTimeInterface $value): string {

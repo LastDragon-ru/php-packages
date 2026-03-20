@@ -27,6 +27,16 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/aa9fc458898c7c1c)
 
+# Upgrade from v10
+
+[include:file]: ../../docs/Shared/Upgrade/FromV10.md
+[//]: # (start: preprocess/3f19382f79c2085d)
+[//]: # (warning: Generated automatically. Do not edit.)
+
+* [ ] PHP 8.3 is not supported anymore. Migrate to the newer version.
+
+[//]: # (end: preprocess/3f19382f79c2085d)
+
 # Upgrade from v9
 
 * [ ] Assertions for PHPUnit extracted into [`lastdragon-ru/phpunit-graphql`](../phpunit-graphql/README.md) package (class names are the same).

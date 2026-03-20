@@ -7,8 +7,8 @@ use Countable;
 use Illuminate\Contracts\Translation\Translator as TranslatorContract;
 use LastDragon_ru\LaraASP\Core\Utils\Cast;
 
+use function array_last;
 use function array_splice;
-use function end;
 use function str_contains;
 
 /**
@@ -77,7 +77,7 @@ abstract class Translator {
     protected function translate(array|string $variants, Closure $callback): string {
         $variants   = (array) $variants;
         $translated = array_splice($variants, -1);
-        $translated = (string) end($translated);
+        $translated = (string) array_last($translated);
 
         if ($variants !== []) {
             foreach ($variants as $variant) {

@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Override;
 
-use function end;
+use function array_last;
 use function explode;
 use function mb_trim;
 
@@ -90,7 +90,7 @@ class ChunkedChangeSafeIterator extends IteratorImpl {
     protected function column(?Model $item): mixed {
         $value  = null;
         $column = explode('.', $this->getColumn());
-        $column = mb_trim(end($column), '`"[]');
+        $column = mb_trim(array_last($column), '`"[]');
 
         if ($item !== null) {
             $value = $item->getAttribute($column);

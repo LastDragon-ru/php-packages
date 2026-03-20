@@ -18,7 +18,7 @@
     "forum": "https://github.com/LastDragon-ru/php-packages/discussions"
   },
   "require": {
-    "php": "^8.3|^8.4",
+    "php": "^8.4|^8.5",
     "ext-mbstring": "*",
     "illuminate/container": "^12.0.1",
     "illuminate/contracts": "^12.0.1",
@@ -29,7 +29,7 @@
     "nikic/php-parser": "^5.4.0",
     "nette/neon": "^3.4.1",
     "phpstan/phpstan": "^2.1.1",
-    "symfony/polyfill-php84": "^1.31",
+    "symfony/polyfill-php85": "^1.33",
     "symfony/var-dumper": "^7.0.0"
   },
   "require-dev": {

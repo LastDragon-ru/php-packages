@@ -39,6 +39,12 @@
         <exclude name="Generic.Files.LineLength.TooLong"><!--
             Too annoying disable it in many files, see https://github.com/squizlabs/PHP_CodeSniffer/issues/3606
         --></exclude>
+        <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"><!--
+            Property hook not supported yet, see https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/734
+        --></exclude>
+        <exclude name="PSR2.Classes.PropertyDeclaration.ScopeMissing"><!--
+            Property hook not supported yet, see https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/734
+        --></exclude>
     </rule>
     <rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
     <rule ref="Generic.Classes.OpeningBraceSameLine"/>

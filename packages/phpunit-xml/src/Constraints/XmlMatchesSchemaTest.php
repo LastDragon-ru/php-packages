@@ -82,10 +82,10 @@ final class XmlMatchesSchemaTest extends TestCase {
             'rng + dom = invalid'  => [
                 <<<'TXT'
                 Failed asserting that DOMDocument Object #0 () matches schema 'schema.rng'.
-                (error) Expecting an element root, got nothing (file: ``, line: `0`, code: `22`)
+                (error) Did not expect element a there (file: `document-invalid.xml`, line: `3`, code: `38`)
                 TXT,
                 'schema.rng',
-                static fn () => $dom(TestData::get()->file('.invalid.xml')),
+                static fn () => $dom(TestData::get()->file('document-invalid.xml')),
             ],
             'xsd + dom = valid'    => [
                 true,

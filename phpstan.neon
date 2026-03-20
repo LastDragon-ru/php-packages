@@ -13,7 +13,7 @@ parameters:
     level: 10
 
     # Settings
-    phpVersion: 80300
+    phpVersion: 80400
     rememberPossiblyImpureFunctionValues: false
     checkMissingOverrideMethodAttribute: true
     checkMissingCallableSignature: true
@@ -43,6 +43,12 @@ parameters:
                 - packages/lara-asp-dev/src/App/*
                 - packages/*/docs/*
     disallowedFunctionCalls:
+        -
+            function: 'reset()'
+            message: 'use array_first() instead'
+        -
+            function: 'end()'
+            message: 'use array_last() instead'
         -
             function: 'strlen()'
             message: 'use mb_strlen() instead'

@@ -6,13 +6,28 @@ use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
 use LastDragon_ru\Path\FilePath;
 
 /**
- * @property-read FilePath          $path
- * @property-read non-empty-string  $name
- * @property-read ?non-empty-string $extension
- * @property-read string            $content
- *
  * @phpstan-require-extends FileImpl
  */
 interface File {
-    // empty
+    public FilePath $path {
+        get;
+    }
+
+    /**
+     * @var non-empty-string
+     */
+    public string $name {
+        get;
+    }
+
+    /**
+     * @var ?non-empty-string
+     */
+    public ?string $extension {
+        get;
+    }
+
+    public string $content {
+        get;
+    }
 }

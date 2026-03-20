@@ -6,8 +6,8 @@ use Override;
 use PHPUnit\Framework\Constraint\Constraint;
 use Psr\Http\Message\ResponseInterface;
 
+use function array_first;
 use function count;
-use function reset;
 
 class Header extends Response {
     /**
@@ -45,7 +45,7 @@ class Header extends Response {
         bool $return = false,
     ): ?bool {
         $header  = $other->getHeader($this->getName());
-        $header  = count($header) === 1 ? reset($header) : $header;
+        $header  = count($header) === 1 ? array_first($header) : $header;
         $matches = $constraint->evaluate($header, '', $return);
 
         return $matches;
