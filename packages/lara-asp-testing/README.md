@@ -131,30 +131,6 @@ properties types before comparison.
 
 # Extensions
 
-## PHPUnit `TestCase`
-
-### [`WithTempDirectory`](./src/Utils/WithTempDirectory.php)
-
-[include:docblock]: ./src/Utils/WithTempDirectory.php
-[//]: # (start: preprocess/ed6e085787b6f171)
-[//]: # (warning: Generated automatically. Do not edit.)
-
-Allows to create a temporary directory. The directory will be removed
-automatically after script shutdown.
-
-[//]: # (end: preprocess/ed6e085787b6f171)
-
-### [`WithTempFile`](./src/Utils/WithTempFile.php)
-
-[include:docblock]: ./src/Utils/WithTempFile.php
-[//]: # (start: preprocess/10c0333c466e5e09)
-[//]: # (warning: Generated automatically. Do not edit.)
-
-Allows to create a temporary file. The file will be removed automatically
-after script shutdown.
-
-[//]: # (end: preprocess/10c0333c466e5e09)
-
 ## Laravel `TestCase`
 
 ### [`WithTranslations`](./src/Utils/WithTranslations.php)
