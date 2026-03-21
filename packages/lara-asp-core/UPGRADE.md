@@ -75,7 +75,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] [`WithRoutes::bootRoutes()`][code-links/141085a29c14a778] requires settings.
 
-* [ ] Use [`PackageProvider`][code-links/b1bdaf40c86b0742] instead of [`💀Provider`][code-links/8b4dc3d615948332].
+* [ ] Use [`PackageProvider`][code-links/b1bdaf40c86b0742] instead of `💀\LastDragon_ru\LaraASP\Core\Provider`.
 
 # Upgrade from v5
 
@@ -92,9 +92,6 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/b1bdaf40c86b0742]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Core\PackageProvider"
-
-[code-links/8b4dc3d615948332]: src/Provider.php
-    "\LastDragon_ru\LaraASP\Core\Provider"
 
 [code-links/141085a29c14a778]: src/Provider/WithRoutes.php#L18-L45
     "\LastDragon_ru\LaraASP\Core\Provider\WithRoutes::bootRoutes()"

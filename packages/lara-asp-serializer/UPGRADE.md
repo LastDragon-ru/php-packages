@@ -66,7 +66,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] Package config now uses objects instead of an array, it is recommended to migrate to the new format. 🤝
 
-* [ ] Use [`PackageProvider`][code-links/f67757c3076438c4] instead of [`💀Provider`][code-links/675ff07d439efcf2].
+* [ ] Use [`PackageProvider`][code-links/f67757c3076438c4] instead of `💀\LastDragon_ru\LaraASP\Serializer\Provider`.
 
 # Upgrade from v5
 
@@ -86,8 +86,5 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/f67757c3076438c4]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Serializer\PackageProvider"
-
-[code-links/675ff07d439efcf2]: src/Provider.php
-    "\LastDragon_ru\LaraASP\Serializer\Provider"
 
 [//]: # (end: code-links)

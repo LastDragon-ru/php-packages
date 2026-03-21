@@ -109,7 +109,7 @@ This section is actual only if you are extending the package. Please review and 
 
 * [ ] `💀\LastDragon_ru\LaraASP\GraphQL\Builder\Traits\WithManipulator` removed, create instance by hand instead (reason #151).
 
-* [ ] Use [`PackageProvider`][code-links/5a85dae192df8d40] instead of [`💀Provider`][code-links/ed0d5cdf6cb5b4d9].
+* [ ] Use [`PackageProvider`][code-links/5a85dae192df8d40] instead of `💀\LastDragon_ru\LaraASP\GraphQL\Provider`.
 
 # Upgrade from v5
 
@@ -383,9 +383,6 @@ This section is actual only if you are extending the package. Please review and 
 
 [code-links/5a85dae192df8d40]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\GraphQL\PackageProvider"
-
-[code-links/ed0d5cdf6cb5b4d9]: src/Provider.php
-    "\LastDragon_ru\LaraASP\GraphQL\Provider"
 
 [code-links/9ad31c571587f0f4]: src/Scalars/JsonStringType.php
     "\LastDragon_ru\LaraASP\GraphQL\Scalars\JsonStringType"
