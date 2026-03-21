@@ -37,6 +37,13 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/3f19382f79c2085d)
 
+* [ ] Following deprecated class were removed:
+  * `💀\LastDragon_ru\LaraASP\Migrator\Concerns\RawSqlHelper`
+  * `💀\LastDragon_ru\LaraASP\Migrator\Migrations\RawDataMigration`
+  * `💀\LastDragon_ru\LaraASP\Migrator\Migrations\RawMigration`
+  * `💀\LastDragon_ru\LaraASP\Migrator\Seeders\RawSeeder`
+  * `💀\LastDragon_ru\LaraASP\Migrator\Seeders\SmartSeeder`
+
 # Upgrade from v7
 
 [include:file]: ../../docs/Shared/Upgrade/FromV7.md
