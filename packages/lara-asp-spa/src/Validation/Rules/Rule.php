@@ -4,7 +4,6 @@ namespace LastDragon_ru\LaraASP\Spa\Validation\Rules;
 
 use Closure;
 use Illuminate\Contracts\Translation\Translator;
-use Illuminate\Contracts\Validation\Rule as RuleContract;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -15,9 +14,8 @@ use ReflectionClass;
 use function assert;
 use function is_string;
 use function preg_replace;
-use function trigger_deprecation;
 
-abstract class Rule implements RuleContract, ValidationRule {
+abstract class Rule implements ValidationRule {
     protected Translator $translator;
 
     public function __construct(Translator $translator) {
@@ -34,49 +32,7 @@ abstract class Rule implements RuleContract, ValidationRule {
     }
 
     protected function isValid(string $attribute, mixed $value): bool {
-        trigger_deprecation(
-            Package::Name,
-            '6.2.0',
-            'Implementing `%s` is deprecated, use `%s` instead.',
-            RuleContract::class,
-            ValidationRule::class,
-        );
-
-        return $this->passes($attribute, $value);
-    }
-    // </editor-fold>
-
-    // <editor-fold desc="Rule">
-    // =========================================================================
-    #[Override]
-    public function passes($attribute, $value): bool {
-        trigger_deprecation(
-            Package::Name,
-            '6.2.0',
-            'Implementing `%s` is deprecated, use `%s` instead.',
-            RuleContract::class,
-            ValidationRule::class,
-        );
-
         return false;
-    }
-
-    /**
-     * @deprecated 6.2.0
-     *
-     * @return array<array-key, mixed>|string
-     */
-    #[Override]
-    public function message(): array|string {
-        trigger_deprecation(
-            Package::Name,
-            '6.2.0',
-            'Implementing `%s` is deprecated, use `%s` instead.',
-            RuleContract::class,
-            ValidationRule::class,
-        );
-
-        return $this->getMessage();
     }
     // </editor-fold>
 
