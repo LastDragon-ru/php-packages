@@ -36,3 +36,5 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 * [ ] PHP 8.3 is not supported anymore. Migrate to the newer version.
 
 [//]: # (end: preprocess/3f19382f79c2085d)
+
+* [ ] PHPUnit v11 is not supported anymore. Migrate to the newer version.
