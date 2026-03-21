@@ -2,7 +2,6 @@
 
 namespace LastDragon_ru\LaraASP\Testing\Utils;
 
-use DOMDocument;
 use Exception;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -17,7 +16,6 @@ use LastDragon_ru\LaraASP\Testing\Exceptions\InvalidArgumentScoutQuery;
 use LastDragon_ru\LaraASP\Testing\Exceptions\InvalidArgumentSplFileInfo;
 use LastDragon_ru\LaraASP\Testing\Exceptions\InvalidArgumentSplFileInfoIsNotAFile;
 use LastDragon_ru\LaraASP\Testing\Exceptions\InvalidArgumentSplFileInfoIsNotReadable;
-use LastDragon_ru\LaraASP\Testing\Exceptions\InvalidArgumentXml;
 use Psr\Http\Message\ResponseInterface;
 use SplFileInfo;
 use stdClass;
@@ -134,28 +132,6 @@ class Args {
         }
 
         return $file;
-    }
-
-    public static function getDomDocument(mixed $xml): DOMDocument {
-        $dom = null;
-
-        if ($xml instanceof DOMDocument) {
-            $dom = $xml;
-        } elseif (is_string($xml)) {
-            $dom = new DOMDocument();
-
-            if (!$dom->loadXML($xml)) {
-                $dom = null;
-            }
-        } else {
-            // empty
-        }
-
-        if (!($dom instanceof DOMDocument)) {
-            throw new InvalidArgumentXml('$xml', $xml);
-        }
-
-        return $dom;
     }
 
     public static function getResponse(mixed $response): ResponseInterface {

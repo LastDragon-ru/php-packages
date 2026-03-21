@@ -205,12 +205,9 @@ Disable models events during make/create.
 
 ## `\Illuminate\Testing\TestResponse`
 
-| Name                                                                        | Description                                                    |
-|-----------------------------------------------------------------------------|----------------------------------------------------------------|
-| [`assertThat()`](./docs/Assertions/AssertPsrResponse.md)                    | Asserts that response satisfies given constraint.              |
-| [`assertContentType()`](./docs/Assertions/AssertPsrResponse.md)             | Asserts that a response has a specified content type.          |
-| [`assertStatusCode()`](./docs/Assertions/AssertPsrResponse.md)              | Asserts that a response has a specified status code.           |
-| [`assertJsonMatchesSchema()`](./docs/Assertions/AssertJsonMatchesSchema.md) | Asserts that a response contains JSON that matches the schema. |
+| Name                                                     | Description                                       |
+|----------------------------------------------------------|---------------------------------------------------|
+| [`assertThat()`](./docs/Assertions/AssertPsrResponse.md) | Asserts that response satisfies given constraint. |
 
 # Assertions
 

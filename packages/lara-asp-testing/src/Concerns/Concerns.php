@@ -6,5 +6,4 @@ trait Concerns {
     use DatabaseQueryComparator;
     use ModelComparator;
     use Override;
-    use StrictAssertEquals;
 }
