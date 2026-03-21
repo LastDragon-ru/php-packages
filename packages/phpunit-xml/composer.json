@@ -27,7 +27,7 @@
     "ext-xmlreader": "*",
     "lastdragon-ru/path": "self.version",
     "lastdragon-ru/phpunit-extensions": "self.version",
-    "phpunit/phpunit": "^12.0.0"
+    "phpunit/phpunit": "^12.5.8"
   },
   "autoload": {
     "psr-4": {
