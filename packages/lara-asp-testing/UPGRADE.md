@@ -39,19 +39,21 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] PHPUnit v11 is not supported anymore. Migrate to the newer version.
 
+* [ ] Previously deprecated assertions/constraints were removed.
+
 # Upgrade from v9
 
 * [ ] Class [`💀WithTempFile`][code-links/1e768fc484194d84] deprecated, the [`TempFile`][code-links/2ed0bfaade389715] should be used instead 🤝
 
 * [ ] Class [`💀WithTempDirectory`][code-links/8ccb455c0defa9b1] deprecated, the [`TempDirectory`][code-links/988d0b3180c21a3f] should be used instead 🤝
 
-* [ ] Trait [`💀FileSystemAssertions`][code-links/f05d4c94687fa6e8] deprecated, the [`Assertions`][code-links/d3222cbf284d2c91] should be used instead 🤝
+* [ ] Trait `💀\LastDragon_ru\LaraASP\Testing\Assertions\FileSystemAssertions` deprecated, the [`Assertions`][code-links/d3222cbf284d2c91] should be used instead 🤝
 
 * [ ] XML Assertions are deprecated, the [`lastdragon-ru/phpunit-xml`](../phpunit-xml/README.md) should be used instead 🤝
 
 * [ ] Extension [`💀\LastDragon_ru\LaraASP\Testing\Requirements\PhpUnit\Extension`][code-links/26cc04e820d354b1] deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension`][code-links/7e51b51dd292df33] instead 🤝
 
-* [ ] Trait [`💀StrictAssertEquals`][code-links/2187ed1b4d4e6c14] deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension`][code-links/4ec6b74a682f8155] instead 🤝
+* [ ] Trait `💀\LastDragon_ru\LaraASP\Testing\Concerns\StrictAssertEquals` deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension`][code-links/4ec6b74a682f8155] instead 🤝
 
 * [ ] Trait [`💀WithTestData`][code-links/c1153ff984856b36] and [`💀\LastDragon_ru\LaraASP\Testing\Utils\TestData`][code-links/84706d7f00aadc5e] deprecated, please use [`\LastDragon_ru\PhpUnit\Utils\TestData`][code-links/ded4ad00d1ea1842] instead 🤝
 
@@ -111,14 +113,8 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 [code-links/5bf3a6e818e8ec48]: src/Assertions/Application/ScheduleAssertions.php
     "\LastDragon_ru\LaraASP\Testing\Assertions\Application\ScheduleAssertions"
 
-[code-links/f05d4c94687fa6e8]: src/Assertions/FileSystemAssertions.php
-    "\LastDragon_ru\LaraASP\Testing\Assertions\FileSystemAssertions"
-
 [code-links/a5e57679c3a947a6]: src/Concerns/Override.php
     "\LastDragon_ru\LaraASP\Testing\Concerns\Override"
-
-[code-links/2187ed1b4d4e6c14]: src/Concerns/StrictAssertEquals.php
-    "\LastDragon_ru\LaraASP\Testing\Concerns\StrictAssertEquals"
 
 [code-links/e6637d2e31bd9516]: src/Database/QueryLog/WithQueryLog.php
     "\LastDragon_ru\LaraASP\Testing\Database\QueryLog\WithQueryLog"

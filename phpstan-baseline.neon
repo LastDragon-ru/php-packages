@@ -1777,12 +1777,6 @@ parameters:
 			path: packages/lara-asp-testing/src/Database/Eloquent/Factories/Factory.php
 
 		-
-			rawMessage: 'Parameter #2 $json of static method LastDragon_ru\LaraASP\Testing\Mixins\Assert::assertJsonMatchesSchema() expects array<string>|bool|float|int|JsonSerializable|SplFileInfo|stdClass|string|null, mixed given.'
-			identifier: argument.type
-			count: 1
-			path: packages/lara-asp-testing/src/Mixins/TestResponseMixin.php
-
-		-
 			rawMessage: 'Parameter #1 $items of method LastDragon_ru\LaraASP\Testing\Providers\BaseDataProvider::replaceExpectedValues() expects array<array<mixed>>, array<T> given.'
 			identifier: argument.type
 			count: 1
