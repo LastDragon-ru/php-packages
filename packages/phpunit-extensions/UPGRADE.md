@@ -39,17 +39,16 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] PHPUnit v11 is not supported anymore. Migrate to the newer version.
 
+* [ ] Extension `💀\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension` removed, the [`Extension`][code-links/4ec6b74a682f8155] should be used instead.
+
 ## Upgrade from v9
 
-* [ ] Extension [`💀\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension`][code-links/50cb69b702caae36] renamed to [`\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension`][code-links/4ec6b74a682f8155] 🤝
+* [ ] Extension `💀\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension` renamed to [`Extension`][code-links/4ec6b74a682f8155] 🤝
 
 [//]: # (start: code-links)
 [//]: # (warning: Generated automatically. Do not edit.)
 
 [code-links/4ec6b74a682f8155]: src/Extensions/StrictScalarComparator/Extension.php
     "\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension"
-
-[code-links/50cb69b702caae36]: src/Extensions/StrictScalarCompare/Extension.php
-    "\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension"
 
 [//]: # (end: code-links)
