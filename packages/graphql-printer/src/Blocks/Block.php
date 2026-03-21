@@ -1,15 +1,15 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks;
+namespace LastDragon_ru\GraphQL\Printer\Blocks;
 
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\TypeDefinitionNode;
 use GraphQL\Language\AST\TypeNode;
 use GraphQL\Type\Definition\Type;
-use LastDragon_ru\GraphQLPrinter\Contracts\Settings;
-use LastDragon_ru\GraphQLPrinter\Contracts\Statistics;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
+use LastDragon_ru\GraphQL\Printer\Contracts\Statistics;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
 
 use function is_object;
 use function mb_strpos;

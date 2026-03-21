@@ -1,17 +1,17 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Document;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\InputObjectTypeDefinitionNode;
 use GraphQL\Language\AST\NodeList;
 use GraphQL\Language\Parser;
 use GraphQL\Type\Definition\Directive;
 use GraphQL\Type\Definition\InputObjectType;
-use LastDragon_ru\GraphQLPrinter\Blocks\Types\InputObjectDefinitionBlock;
-use LastDragon_ru\GraphQLPrinter\Feature;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLAstNode;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLDefinition;
+use LastDragon_ru\GraphQL\Printer\Blocks\Types\InputObjectDefinitionBlock;
+use LastDragon_ru\GraphQL\Printer\Feature;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLDefinition;
 use Override;
 
 /**

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Document;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\BooleanValueNode;
 use GraphQL\Language\AST\EnumValueNode;
@@ -16,15 +16,15 @@ use GraphQL\Language\AST\TypeNode;
 use GraphQL\Language\AST\ValueNode;
 use GraphQL\Language\AST\VariableNode;
 use GraphQL\Type\Definition\Type;
-use LastDragon_ru\GraphQLPrinter\Blocks\Block;
-use LastDragon_ru\GraphQLPrinter\Blocks\Values\ListValue;
-use LastDragon_ru\GraphQLPrinter\Blocks\Values\ObjectValue;
-use LastDragon_ru\GraphQLPrinter\Blocks\Values\StringValue;
-use LastDragon_ru\GraphQLPrinter\Blocks\Values\VariableValue;
-use LastDragon_ru\GraphQLPrinter\Exceptions\Unsupported;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLAstNode;
+use LastDragon_ru\GraphQL\Printer\Blocks\Block;
+use LastDragon_ru\GraphQL\Printer\Blocks\Values\ListValue;
+use LastDragon_ru\GraphQL\Printer\Blocks\Values\ObjectValue;
+use LastDragon_ru\GraphQL\Printer\Blocks\Values\StringValue;
+use LastDragon_ru\GraphQL\Printer\Blocks\Values\VariableValue;
+use LastDragon_ru\GraphQL\Printer\Exceptions\Unsupported;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
 use Override;
 
 use function json_encode;

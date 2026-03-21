@@ -89,7 +89,7 @@
     ],
     "psr-4": {
       "LastDragon_ru\\GlobMatcher\\": "packages/glob-matcher/src/",
-      "LastDragon_ru\\GraphQLPrinter\\": "packages/graphql-printer/src/",
+      "LastDragon_ru\\GraphQL\\Printer\\": "packages/graphql-printer/src/",
       "LastDragon_ru\\LaraASP\\Core\\": "packages/lara-asp-core/src/",
       "LastDragon_ru\\LaraASP\\Dev\\": "packages/lara-asp-dev/src/",
       "LastDragon_ru\\LaraASP\\Documentator\\": "packages/lara-asp-documentator/src/",
@@ -132,7 +132,7 @@
     ],
     "psr-4": {
       "LastDragon_ru\\GlobMatcher\\Docs\\": "packages/glob-matcher/docs",
-      "LastDragon_ru\\GraphQLPrinter\\Docs\\": "packages/graphql-printer/docs",
+      "LastDragon_ru\\GraphQL\\Printer\\Docs\\": "packages/graphql-printer/docs",
       "LastDragon_ru\\LaraASP\\Core\\Docs\\": "packages/lara-asp-core/docs",
       "LastDragon_ru\\LaraASP\\Dev\\Docs\\": "packages/lara-asp-dev/docs",
       "LastDragon_ru\\LaraASP\\Documentator\\Docs\\": "packages/lara-asp-documentator/docs",

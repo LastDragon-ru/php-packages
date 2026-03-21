@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter;
+namespace LastDragon_ru\GraphQL\Printer;
 
 use Closure;
 use GraphQL\Language\AST\Node;
@@ -18,10 +18,10 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\UnionType;
 use GraphQL\Type\Schema;
 use GraphQL\Utils\BuildSchema;
-use LastDragon_ru\GraphQLPrinter\Contracts\Settings;
-use LastDragon_ru\GraphQLPrinter\Package\TestCase;
-use LastDragon_ru\GraphQLPrinter\Settings\DefaultSettings;
-use LastDragon_ru\GraphQLPrinter\Settings\GraphQLSettings;
+use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
+use LastDragon_ru\GraphQL\Printer\Package\TestCase;
+use LastDragon_ru\GraphQL\Printer\Settings\DefaultSettings;
+use LastDragon_ru\GraphQL\Printer\Settings\GraphQLSettings;
 use LastDragon_ru\PhpUnit\GraphQL\Expected;
 use LastDragon_ru\PhpUnit\GraphQL\PrinterSettings;
 use LastDragon_ru\PhpUnit\Utils\TestData;

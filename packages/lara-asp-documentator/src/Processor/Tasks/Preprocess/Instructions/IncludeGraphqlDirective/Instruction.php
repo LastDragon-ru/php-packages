@@ -2,8 +2,8 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeGraphqlDirective;
 
-use LastDragon_ru\GraphQLPrinter\Contracts\Printer;
-use LastDragon_ru\GraphQLPrinter\Settings\ImmutableSettings;
+use LastDragon_ru\GraphQL\Printer\Contracts\Printer;
+use LastDragon_ru\GraphQL\Printer\Settings\ImmutableSettings;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Context;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction as InstructionContract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters as InstructionParameters;

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks;
+namespace LastDragon_ru\GraphQL\Printer\Blocks;
 
 use Attribute;
 use Composer\ClassMapGenerator\ClassMapGenerator;
@@ -14,13 +14,13 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\UnresolvedFieldDefinition;
 use GraphQL\Type\Schema;
-use LastDragon_ru\GraphQLPrinter\Contracts\Settings;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLAstNode;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLDefinition;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLMarker;
-use LastDragon_ru\GraphQLPrinter\Package\TestCase;
+use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLDefinition;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLMarker;
+use LastDragon_ru\GraphQL\Printer\Package\TestCase;
 use LastDragon_ru\PhpUnit\GraphQL\PrinterSettings;
 use Mockery;
 use Override;

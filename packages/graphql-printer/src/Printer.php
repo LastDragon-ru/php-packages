@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter;
+namespace LastDragon_ru\GraphQL\Printer;
 
 use ArrayAccess;
 use GraphQL\Language\AST\DocumentNode;
@@ -15,17 +15,17 @@ use GraphQL\Type\Definition\FieldDefinition;
 use GraphQL\Type\Definition\InputObjectField;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Schema;
-use LastDragon_ru\GraphQLPrinter\Blocks\Block;
-use LastDragon_ru\GraphQLPrinter\Blocks\Printer\PrintableBlock;
-use LastDragon_ru\GraphQLPrinter\Blocks\Printer\PrintableList;
-use LastDragon_ru\GraphQLPrinter\Contracts\DirectiveResolver;
-use LastDragon_ru\GraphQLPrinter\Contracts\Printer as PrinterContract;
-use LastDragon_ru\GraphQLPrinter\Contracts\Result;
-use LastDragon_ru\GraphQLPrinter\Contracts\Settings;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Misc\ResultImpl;
-use LastDragon_ru\GraphQLPrinter\Settings\DefaultSettings;
+use LastDragon_ru\GraphQL\Printer\Blocks\Block;
+use LastDragon_ru\GraphQL\Printer\Blocks\Printer\PrintableBlock;
+use LastDragon_ru\GraphQL\Printer\Blocks\Printer\PrintableList;
+use LastDragon_ru\GraphQL\Printer\Contracts\DirectiveResolver;
+use LastDragon_ru\GraphQL\Printer\Contracts\Printer as PrinterContract;
+use LastDragon_ru\GraphQL\Printer\Contracts\Result;
+use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Misc\ResultImpl;
+use LastDragon_ru\GraphQL\Printer\Settings\DefaultSettings;
 use Override;
 
 use function array_pop;

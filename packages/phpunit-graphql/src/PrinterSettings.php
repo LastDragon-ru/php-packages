@@ -3,9 +3,9 @@
 namespace LastDragon_ru\PhpUnit\GraphQL;
 
 use Closure;
-use LastDragon_ru\GraphQLPrinter\Contracts\DirectiveFilter;
-use LastDragon_ru\GraphQLPrinter\Contracts\TypeFilter;
-use LastDragon_ru\GraphQLPrinter\Settings\ImmutableSettings;
+use LastDragon_ru\GraphQL\Printer\Contracts\DirectiveFilter;
+use LastDragon_ru\GraphQL\Printer\Contracts\TypeFilter;
+use LastDragon_ru\GraphQL\Printer\Settings\ImmutableSettings;
 use Override;
 
 class PrinterSettings extends ImmutableSettings {

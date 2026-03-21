@@ -1,14 +1,14 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Document;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\EnumTypeDefinitionNode;
 use GraphQL\Type\Definition\EnumType;
 use GraphQL\Type\Definition\PhpEnumType;
-use LastDragon_ru\GraphQLPrinter\Blocks\Types\EnumDefinitionBlock;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLAstNode;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLDefinition;
+use LastDragon_ru\GraphQL\Printer\Blocks\Types\EnumDefinitionBlock;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLDefinition;
 use Override;
 
 /**

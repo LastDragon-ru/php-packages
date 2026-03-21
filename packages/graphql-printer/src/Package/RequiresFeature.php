@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Package;
+namespace LastDragon_ru\GraphQL\Printer\Package;
 
 use Attribute;
-use LastDragon_ru\GraphQLPrinter\Feature;
+use LastDragon_ru\GraphQL\Printer\Feature;
 use LastDragon_ru\PhpUnit\Extensions\Requirements\Contracts\Requirement;
 use Override;
 

@@ -1,14 +1,14 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter;
+namespace LastDragon_ru\GraphQL\Printer;
 
 use GraphQL\Type\Schema;
-use LastDragon_ru\GraphQLPrinter\Contracts\Settings;
-use LastDragon_ru\GraphQLPrinter\Filters\IntrospectionFilter;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Misc\IntrospectionContext;
-use LastDragon_ru\GraphQLPrinter\Settings\DefaultSettings;
-use LastDragon_ru\GraphQLPrinter\Settings\ImmutableSettings;
+use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
+use LastDragon_ru\GraphQL\Printer\Filters\IntrospectionFilter;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Misc\IntrospectionContext;
+use LastDragon_ru\GraphQL\Printer\Settings\DefaultSettings;
+use LastDragon_ru\GraphQL\Printer\Settings\ImmutableSettings;
 use Override;
 
 /**

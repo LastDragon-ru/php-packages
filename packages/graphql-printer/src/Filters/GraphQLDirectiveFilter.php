@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Filters;
+namespace LastDragon_ru\GraphQL\Printer\Filters;
 
 use GraphQL\Type\Definition\Directive;
-use LastDragon_ru\GraphQLPrinter\Contracts\DirectiveFilter;
+use LastDragon_ru\GraphQL\Printer\Contracts\DirectiveFilter;
 use Override;
 
 class GraphQLDirectiveFilter implements DirectiveFilter {

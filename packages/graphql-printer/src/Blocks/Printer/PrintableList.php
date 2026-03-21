@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Printer;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Printer;
 
 use ArrayAccess;
-use LastDragon_ru\GraphQLPrinter\Blocks\Block;
-use LastDragon_ru\GraphQLPrinter\Blocks\ListBlock;
-use LastDragon_ru\GraphQLPrinter\Blocks\NamedBlock;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Blocks\Block;
+use LastDragon_ru\GraphQL\Printer\Blocks\ListBlock;
+use LastDragon_ru\GraphQL\Printer\Blocks\NamedBlock;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
 use Override;
 
 /**
