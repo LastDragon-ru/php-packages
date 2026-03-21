@@ -43,11 +43,15 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] Deprecated extension `💀\LastDragon_ru\LaraASP\Testing\Requirements\PhpUnit\Extension` removed, please use [`\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension`][code-links/7e51b51dd292df33] instead
 
+* [ ] Deprecated class `💀\LastDragon_ru\LaraASP\Testing\Utils\WithTempFile` removed, the [`TempFile`][code-links/2ed0bfaade389715] should be used instead.
+
+* [ ] Deprecated class `💀\LastDragon_ru\LaraASP\Testing\Utils\WithTempDirectory` removed, the [`TempDirectory`][code-links/988d0b3180c21a3f] should be used instead.
+
 # Upgrade from v9
 
-* [ ] Class [`💀WithTempFile`][code-links/1e768fc484194d84] deprecated, the [`TempFile`][code-links/2ed0bfaade389715] should be used instead 🤝
+* [ ] Class `💀\LastDragon_ru\LaraASP\Testing\Utils\WithTempFile` deprecated, the [`TempFile`][code-links/2ed0bfaade389715] should be used instead 🤝
 
-* [ ] Class [`💀WithTempDirectory`][code-links/8ccb455c0defa9b1] deprecated, the [`TempDirectory`][code-links/988d0b3180c21a3f] should be used instead 🤝
+* [ ] Class `💀\LastDragon_ru\LaraASP\Testing\Utils\WithTempDirectory` deprecated, the [`TempDirectory`][code-links/988d0b3180c21a3f] should be used instead 🤝
 
 * [ ] Trait `💀\LastDragon_ru\LaraASP\Testing\Assertions\FileSystemAssertions` deprecated, the [`Assertions`][code-links/d3222cbf284d2c91] should be used instead 🤝
 
@@ -123,12 +127,6 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/84706d7f00aadc5e]: src/Utils/TestData.php
     "\LastDragon_ru\LaraASP\Testing\Utils\TestData"
-
-[code-links/8ccb455c0defa9b1]: src/Utils/WithTempDirectory.php
-    "\LastDragon_ru\LaraASP\Testing\Utils\WithTempDirectory"
-
-[code-links/1e768fc484194d84]: src/Utils/WithTempFile.php
-    "\LastDragon_ru\LaraASP\Testing\Utils\WithTempFile"
 
 [code-links/c1153ff984856b36]: src/Utils/WithTestData.php
     "\LastDragon_ru\LaraASP\Testing\Utils\WithTestData"
