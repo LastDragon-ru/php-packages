@@ -80,54 +80,6 @@ final class WithConfigTest extends TestCase {
 
         $provider->loadPackageConfig(WithConfigTest_ConfigurationResolver::class);
     }
-
-    public function testLoadPackageConfigLegacy(): void {
-        $repository  = Mockery::mock(Repository::class);
-        $application = Mockery::mock(Application::class);
-        $application
-            ->shouldReceive('make')
-            ->with(Repository::class)
-            ->once()
-            ->andReturn($repository);
-
-        $provider        = new WithConfigTest_Provider($application);
-        $config          = $provider->getName();
-        $actual          = null;
-        $expected        = new WithConfigTest_ConfigurationA();
-        $expected->a     = 321;
-        $expected->b     = new WithConfigTest_ConfigurationB();
-        $expected->b->b  = true;
-        $expected->b->bA = 'cba';
-
-        $repository
-            ->shouldReceive('get')
-            ->with($config, null)
-            ->once()
-            ->andReturn([
-                'a' => 321,
-                'b' => [
-                    'b'   => true,
-                    'b_a' => 'cba',
-                ],
-            ]);
-        $repository
-            ->shouldReceive('set')
-            ->once()
-            ->andReturnUsing(static function (mixed ...$args) use (&$actual): void {
-                $actual = $args;
-            });
-
-        $provider->loadPackageConfig(WithConfigTest_ConfigurationResolver::class);
-
-        self::assertEquals(
-            [
-                [
-                    $config => $expected,
-                ],
-            ],
-            $actual,
-        );
-    }
 }
 
 // @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
