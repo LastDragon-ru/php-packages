@@ -2,10 +2,7 @@
 
 namespace LastDragon_ru\LaraASP\Spa;
 
-use Illuminate\Contracts\Config\Repository;
-use LastDragon_ru\LaraASP\Spa\Config\Config;
 use LastDragon_ru\LaraASP\Spa\Package\TestCase;
-use LastDragon_ru\LaraASP\Testing\Utils\WithTestData;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
@@ -13,36 +10,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
  */
 #[CoversClass(PackageProvider::class)]
 final class PackageProviderTest extends TestCase {
-    use WithTestData;
-
     public function testConfig(): void {
         self::assertConfigurationExportable(PackageConfig::class);
-    }
-
-    /**
-     * @deprecated 7.0.0 Array-base config is deprecated.
-     */
-    public function testLegacyConfig(): void {
-        // Prepare
-        $app     = $this->app();
-        $config  = $app->make(Repository::class);
-        $legacy  = (array) require self::getTestData()->path('~LegacyConfig.php');
-        $package = Package::Name;
-
-        $config->set($package, $legacy);
-
-        self::assertIsArray($config->get($package));
-
-        (new PackageProvider($app))->register();
-
-        // Test
-        $expected                  = new Config();
-        $expected->routes->enabled = true;
-        $expected->routes->prefix  = 'spa_';
-        $expected->spa             = [
-            'property' => 'value',
-        ];
-
-        self::assertEquals($expected, $config->get($package));
     }
 }

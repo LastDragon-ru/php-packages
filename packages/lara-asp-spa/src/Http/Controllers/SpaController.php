@@ -5,8 +5,9 @@ namespace LastDragon_ru\LaraASP\Spa\Http\Controllers;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller;
 use LastDragon_ru\LaraASP\Core\Application\ConfigResolver;
-use LastDragon_ru\LaraASP\Core\Utils\ConfigMerger;
 use LastDragon_ru\LaraASP\Spa\PackageConfig;
+
+use function array_merge;
 
 class SpaController extends Controller {
     public function __construct(
@@ -36,14 +37,13 @@ class SpaController extends Controller {
     protected function getSettings(): array {
         $config   = $this->config->getInstance();
         $default  = [
-            ConfigMerger::Strict => false,
-            'title'              => $config->get('app.name'),
-            'upload'             => [
+            'title'  => $config->get('app.name'),
+            'upload' => [
                 'max' => UploadedFile::getMaxFilesize(),
             ],
         ];
         $custom   = $this->configuration->getInstance()->spa;
-        $settings = (new ConfigMerger())->merge($default, $custom);
+        $settings = array_merge($default, $custom);
 
         return $settings;
     }

@@ -3,7 +3,6 @@
 namespace LastDragon_ru\LaraASP\Core\Application\Configuration;
 
 use LastDragon_ru\LaraASP\Core\Package\TestCase;
-use LogicException;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
@@ -18,55 +17,6 @@ final class ConfigurationTest extends TestCase {
         $actual      = ConfigurationTest_ConfigurationA::__set_state([
             'a' => 321,
             'b' => new ConfigurationTest_ConfigurationB(),
-        ]);
-
-        self::assertEquals($expected, $actual);
-    }
-
-    public function testOffsetGet(): void {
-        self::expectException(LogicException::class);
-
-        $config = new ConfigurationTest_ConfigurationA();
-
-        $config['a']; // @phpstan-ignore expr.resultUnused (for test)
-    }
-
-    public function testOffsetExists(): void {
-        self::expectException(LogicException::class);
-
-        $config = new ConfigurationTest_ConfigurationA();
-
-        isset($config['a']); // @phpstan-ignore expr.resultUnused (for test)
-    }
-
-    public function testOffsetUnset(): void {
-        self::expectException(LogicException::class);
-
-        $config = new ConfigurationTest_ConfigurationA();
-
-        unset($config['a']);
-    }
-
-    public function testOffsetSet(): void {
-        self::expectException(LogicException::class);
-
-        $config = new ConfigurationTest_ConfigurationA();
-
-        $config['a'] = 123;
-    }
-
-    public function testFromArray(): void {
-        $expected        = new ConfigurationTest_ConfigurationA();
-        $expected->a     = 321;
-        $expected->b     = new ConfigurationTest_ConfigurationB();
-        $expected->b->b  = true;
-        $expected->b->bA = 'cba';
-        $actual          = ConfigurationTest_ConfigurationA::fromArray([
-            'a' => 321,
-            'b' => [
-                'b'   => true,
-                'b_a' => 'cba',
-            ],
         ]);
 
         self::assertEquals($expected, $actual);

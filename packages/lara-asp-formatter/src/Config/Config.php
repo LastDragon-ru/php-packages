@@ -2,7 +2,6 @@
 
 namespace LastDragon_ru\LaraASP\Formatter\Config;
 
-use Exception;
 use IntlDateFormatter;
 use LastDragon_ru\LaraASP\Core\Application\Configuration\Configuration;
 use LastDragon_ru\LaraASP\Formatter\Formats\Duration\DurationFormat;
@@ -19,7 +18,6 @@ use LastDragon_ru\LaraASP\Formatter\Formats\Secret\SecretOptions;
 use LastDragon_ru\LaraASP\Formatter\Formats\String\StringFormat;
 use LastDragon_ru\LaraASP\Formatter\Formatter;
 use NumberFormatter;
-use Override;
 
 class Config extends Configuration {
     public function __construct(
@@ -157,13 +155,5 @@ class Config extends Configuration {
                 ],
             ),
         );
-    }
-
-    /**
-     * @deprecated 7.0.0 Array-based config is deprecated. Please migrate to object-based config.
-     */
-    #[Override]
-    public static function fromArray(array $array): static {
-        throw new Exception('Array-based config is not supported anymore. Please migrate to object-based config.');
     }
 }
