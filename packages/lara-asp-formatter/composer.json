@@ -31,7 +31,7 @@
     "lastdragon-ru/lara-asp-testing": "self.version",
     "lastdragon-ru/phpunit-extensions": "self.version",
     "orchestra/testbench": "^10.0.0",
-    "phpunit/phpunit": "^11.5.50|^12.0.0"
+    "phpunit/phpunit": "^12.0.0"
   },
   "autoload": {
     "psr-4": {
