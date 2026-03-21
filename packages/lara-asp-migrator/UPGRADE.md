@@ -87,7 +87,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] Migrate to the new [`Seeder`][code-links/9c7c8e70a7e5978f] and [`SqlSeeder`][code-links/365049c62f4308a2] classes 🤝
 
-* [ ] Use [`PackageProvider`][code-links/32f50dc36e80e945] instead of [`💀Provider`][code-links/e7bb9f5ec22ad158].
+* [ ] Use [`PackageProvider`][code-links/32f50dc36e80e945] instead of `💀\LastDragon_ru\LaraASP\Migrator\Provider`.
 
 # Upgrade from v5
 
@@ -107,9 +107,6 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/32f50dc36e80e945]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Migrator\PackageProvider"
-
-[code-links/e7bb9f5ec22ad158]: src/Provider.php
-    "\LastDragon_ru\LaraASP\Migrator\Provider"
 
 [code-links/9c7c8e70a7e5978f]: src/Seeders/Seeder.php
     "\LastDragon_ru\LaraASP\Migrator\Seeders\Seeder"

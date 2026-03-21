@@ -64,7 +64,7 @@ This version is the deep refactoring of the [`Formatter`][code-links/9fbde97537a
 
 * [ ] Array-based config is not supported anymore. Please migrate to object-based config.
 
-* [ ] Use [`PackageProvider`][code-links/53319d866f52d561] instead of [`💀Provider`][code-links/2d32d5931e8c93e4].
+* [ ] Use [`PackageProvider`][code-links/53319d866f52d561] instead of `💀\LastDragon_ru\LaraASP\Formatter\Provider`.
 
 # Upgrade from v5
 
@@ -92,8 +92,5 @@ This version is the deep refactoring of the [`Formatter`][code-links/9fbde97537a
 
 [code-links/53319d866f52d561]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Formatter\PackageProvider"
-
-[code-links/2d32d5931e8c93e4]: src/Provider.php
-    "\LastDragon_ru\LaraASP\Formatter\Provider"
 
 [//]: # (end: code-links)

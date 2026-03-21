@@ -90,7 +90,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] `💀\LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\FileDependencyNotFound` replaced by `💀\LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\DependencyNotFound`.
 
-* [ ] Use [`PackageProvider`][code-links/bddbc83c8cbd0c67] instead of [`💀Provider`][code-links/a76f14008cba70b9].
+* [ ] Use [`PackageProvider`][code-links/bddbc83c8cbd0c67] instead of `💀\LastDragon_ru\LaraASP\Documentator\Provider`.
 
 # Upgrade from v5
 
@@ -148,8 +148,5 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/f9077a28b352f84b]: src/Processor/Tasks/Preprocess/Instructions/IncludeExample/Contracts/Runner.php
     "\LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeExample\Contracts\Runner"
-
-[code-links/a76f14008cba70b9]: src/Provider.php
-    "\LastDragon_ru\LaraASP\Documentator\Provider"
 
 [//]: # (end: code-links)

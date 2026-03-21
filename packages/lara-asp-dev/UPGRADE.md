@@ -60,15 +60,12 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/9679e76379216855)
 
-* [ ] Use [`PackageProvider`][code-links/462e33ec6b6fe967] instead of [`💀Provider`][code-links/076fdf36381becef].
+* [ ] Use [`PackageProvider`][code-links/462e33ec6b6fe967] instead of `💀\LastDragon_ru\LaraASP\Dev\Provider`.
 
 [//]: # (start: code-links)
 [//]: # (warning: Generated automatically. Do not edit.)
 
 [code-links/462e33ec6b6fe967]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Dev\PackageProvider"
-
-[code-links/076fdf36381becef]: src/Provider.php
-    "\LastDragon_ru\LaraASP\Dev\Provider"
 
 [//]: # (end: code-links)

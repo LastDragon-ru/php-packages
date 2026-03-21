@@ -69,7 +69,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] Package config now uses objects instead of an array, it is recommended to migrate to the new format. 🤝
 
-* [ ] Use [`PackageProvider`][code-links/fd2e6dfbce2f47cb] instead of [`💀Provider`][code-links/15f480832d63e0d6].
+* [ ] Use [`PackageProvider`][code-links/fd2e6dfbce2f47cb] instead of `💀\LastDragon_ru\LaraASP\Spa\Provider`.
 
 # Upgrade from v5
 
@@ -86,9 +86,6 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/fd2e6dfbce2f47cb]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Spa\PackageProvider"
-
-[code-links/15f480832d63e0d6]: src/Provider.php
-    "\LastDragon_ru\LaraASP\Spa\Provider"
 
 [code-links/32df9255eaeaa037]: ../lara-asp-testing/src/Responses/Laravel/Resources/PaginatedCollection.php
     "\LastDragon_ru\LaraASP\Testing\Responses\Laravel\Resources\PaginatedCollection"

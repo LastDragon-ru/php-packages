@@ -60,7 +60,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/9679e76379216855)
 
-* [ ] Use [`PackageProvider`][code-links/7d48369ba7f64059] instead of [`💀Provider`][code-links/a893f38bdb4f8ccd].
+* [ ] Use [`PackageProvider`][code-links/7d48369ba7f64059] instead of `💀\LastDragon_ru\LaraASP\Eloquent\Provider`.
 
 # Upgrade from v5
 
@@ -77,8 +77,5 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/7d48369ba7f64059]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Eloquent\PackageProvider"
-
-[code-links/a893f38bdb4f8ccd]: src/Provider.php
-    "\LastDragon_ru\LaraASP\Eloquent\Provider"
 
 [//]: # (end: code-links)
