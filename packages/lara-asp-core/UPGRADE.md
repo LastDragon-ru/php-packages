@@ -37,16 +37,18 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/3f19382f79c2085d)
 
+* [ ] Deprecated Path component removed, please migrate to [`lastdragon-ru/path`](../path/README.md) package.
+
 # Upgrade from v9
 
-* [ ] Deprecated `💀\LastDragon_ru\LaraASP\Core\Utils\Path` removed, please use [`💀FilePath`][code-links/5dccbbbbfd89f5f6]/[`💀DirectoryPath`][code-links/6a882555d8c99237] instead.
+* [ ] Deprecated `💀\LastDragon_ru\LaraASP\Core\Utils\Path` removed, please use `💀\LastDragon_ru\LaraASP\Core\Path\FilePath`/`💀\LastDragon_ru\LaraASP\Core\Path\DirectoryPath` instead.
 
 * [ ] Deprecated `💀\LastDragon_ru\LaraASP\Core\Path\Path::isMatch()`, the `preg_match()` can be used directly.
 
 * [ ] The Path component is deprecated, please migrate to [`lastdragon-ru/path`](../path/README.md) package 🤝
-  * [`💀DirectoryPath`][code-links/6a882555d8c99237]
-  * [`💀FilePath`][code-links/5dccbbbbfd89f5f6]
-  * [`💀Path`][code-links/277f4a31cdbb54b4]
+  * `💀\LastDragon_ru\LaraASP\Core\Path\DirectoryPath`
+  * `💀\LastDragon_ru\LaraASP\Core\Path\FilePath`
+  * `💀\LastDragon_ru\LaraASP\Core\Path\Path`
 
 # Upgrade from v7
 
@@ -90,15 +92,6 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/b1bdaf40c86b0742]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Core\PackageProvider"
-
-[code-links/6a882555d8c99237]: src/Path/DirectoryPath.php
-    "\LastDragon_ru\LaraASP\Core\Path\DirectoryPath"
-
-[code-links/5dccbbbbfd89f5f6]: src/Path/FilePath.php
-    "\LastDragon_ru\LaraASP\Core\Path\FilePath"
-
-[code-links/277f4a31cdbb54b4]: src/Path/Path.php
-    "\LastDragon_ru\LaraASP\Core\Path\Path"
 
 [code-links/8b4dc3d615948332]: src/Provider.php
     "\LastDragon_ru\LaraASP\Core\Provider"
