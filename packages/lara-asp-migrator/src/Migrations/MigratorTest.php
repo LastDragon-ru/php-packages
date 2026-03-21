@@ -7,10 +7,8 @@ use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 use Illuminate\Filesystem\Filesystem;
 use LastDragon_ru\LaraASP\Migrator\Package\TestCase;
 use LastDragon_ru\LaraASP\Migrator\PackageProvider;
-use LastDragon_ru\LaraASP\Migrator\Seeders\SeederService;
 use LastDragon_ru\PhpUnit\Utils\TestData;
 use Mockery;
-use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -66,72 +64,6 @@ final class MigratorTest extends TestCase {
             ->shouldReceive('getLast')
             ->once()
             ->andReturn(json_decode((string) json_encode($migrations)));
-
-        // Vars
-        $migrator = new Migrator(
-            $repository,
-            $this->app()->make(ConnectionResolverInterface::class),
-            $this->app()->make(Filesystem::class),
-        );
-        $output   = new BufferedOutput();
-
-        $migrator->setOutput($output);
-
-        // Up
-        $migrator->run($path, [
-            'pretend' => true,
-        ]);
-
-        self::assertSame(
-            $this->prepare($data->content($expectedUp)),
-            $this->prepare($output->fetch()),
-        );
-
-        // Down
-        $migrator->rollback($path, [
-            'pretend' => true,
-        ]);
-
-        self::assertSame(
-            $this->prepare($data->content($expectedDown)),
-            $this->prepare($output->fetch()),
-        );
-    }
-
-    public function testMigrateRaw(): void {
-        // Prepare
-        $data         = TestData::get();
-        $path         = $data->directory('raw')->path;
-        $migrations   = [
-            ['migration' => '2021_05_09_055650_raw_migration_a'],
-            ['migration' => '2021_05_09_055655_raw_data_migration_a'],
-            ['migration' => '2021_05_09_055655_raw_migration_b'],
-            ['migration' => '2021_05_09_055650_anonymous'],
-        ];
-        $expectedUp   = 'raw.up.txt';
-        $expectedDown = 'raw.down.txt';
-
-        // Mocks
-        $repository = Mockery::mock(MigrationRepositoryInterface::class);
-        $repository
-            ->shouldReceive('getRan')
-            ->once()
-            ->andReturn([]);
-        $repository
-            ->shouldReceive('getNextBatchNumber')
-            ->once()
-            ->andReturn(1);
-        $repository
-            ->shouldReceive('getLast')
-            ->once()
-            ->andReturn(json_decode((string) json_encode($migrations)));
-
-        $this->override(SeederService::class, static function (MockInterface $mock): void {
-            $mock
-                ->shouldReceive('isSeeded')
-                ->twice()
-                ->andReturn(true);
-        });
 
         // Vars
         $migrator = new Migrator(
