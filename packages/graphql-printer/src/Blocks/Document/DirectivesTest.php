@@ -4,7 +4,6 @@ namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\DirectiveNode;
 use GraphQL\Language\Parser;
-use GraphQL\Type\Definition\Directive as GraphQLDirective;
 use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
 use LastDragon_ru\GraphQL\Printer\Misc\Collector;
 use LastDragon_ru\GraphQL\Printer\Misc\Context;
@@ -30,11 +29,10 @@ final class DirectivesTest extends TestCase {
         int $level,
         int $used,
         array $directives,
-        ?string $reason = null,
     ): void {
         $collector = new Collector();
         $context   = new Context($settings, null, null);
-        $actual    = (new Directives($context, $directives, $reason))->serialize($collector, $level, $used);
+        $actual    = (new Directives($context, $directives))->serialize($collector, $level, $used);
 
         Parser::directives($actual);
 
@@ -59,7 +57,7 @@ final class DirectivesTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string,array{string, Settings, int, int, list<DirectiveNode>, ?string}>
+     * @return array<string,array{string, Settings, int, int, list<DirectiveNode>}>
      */
     public static function dataProviderSerialize(): array {
         $settings = (new PrinterSettings())
@@ -68,15 +66,14 @@ final class DirectivesTest extends TestCase {
             ->setAlwaysMultilineArguments(false);
 
         return [
-            'empty'                                     => [
+            'empty'                 => [
                 '',
                 $settings,
                 0,
                 0,
                 [],
-                null,
             ],
-            'directives'                                => [
+            'directives'            => [
                 <<<'STRING'
                 @b(b: 123)
                 @a
@@ -88,77 +85,38 @@ final class DirectivesTest extends TestCase {
                     Parser::directive('@b(b: 123)'),
                     Parser::directive('@a'),
                 ],
-                null,
             ],
-            'deprecated (default reason)'               => [
+            'line length'           => [
                 <<<'STRING'
-                @deprecated
-                STRING,
-                $settings,
-                0,
-                0,
-                [],
-                GraphQLDirective::DEFAULT_DEPRECATION_REASON,
-            ],
-            'deprecated (custom reason)'                => [
-                <<<'STRING'
-                @deprecated(reason: "reason")
-                STRING,
-                $settings,
-                0,
-                0,
-                [],
-                'reason',
-            ],
-            'directives and deprecated (custom reason)' => [
-                <<<'STRING'
-                @b(b: 123)
-                @deprecated(reason: "reason")
-                STRING,
-                $settings,
-                0,
-                0,
-                [
-                    Parser::directive('@b(b: 123)'),
-                    Parser::directive('@deprecated(reason: "should be ignored")'),
-                ],
-                'reason',
-            ],
-            'line length'                               => [
-                <<<'STRING'
-                @deprecated(
-                    reason: "very very very long reason"
+                @a(
+                    a: "very very very long text"
                 )
-                @a(a: 123)
-                @b(b: 1234567890)
+                @b(b: 123)
                 STRING,
                 $settings,
                 0,
                 70,
                 [
-                    Parser::directive('@a(a: 123)'),
-                    Parser::directive('@b(b: 1234567890)'),
+                    Parser::directive('@a(a: "very very very long text")'),
+                    Parser::directive('@b(b: 123)'),
                 ],
-                'very very very long reason',
             ],
-            'indent'                                    => [
+            'indent'                => [
                 <<<'STRING'
-                @deprecated(
-                        reason: "very very very long reason"
+                @a(
+                        a: "very very very long text"
                     )
-                    @a(a: 123)
-                    @b(b: 1234567890)
+                    @b(b: 123)
                 STRING,
                 $settings,
                 1,
                 70,
                 [
-                    Parser::directive('@a(a: 123)'),
-                    Parser::directive('@b(b: 1234567890)'),
+                    Parser::directive('@a(a: "very very very long text")'),
+                    Parser::directive('@b(b: 123)'),
                 ],
-                'very very very long reason',
             ],
-            'filter'                                    => [
+            'filter'                => [
                 <<<'STRING'
                 @a(a: 123)
                 STRING,
@@ -172,9 +130,8 @@ final class DirectivesTest extends TestCase {
                     Parser::directive('@b(b: 1234567890)'),
                     Parser::directive('@c'),
                 ],
-                null,
             ],
-            'args always multiline'                     => [
+            'args always multiline' => [
                 <<<'STRING'
                 @a(
                     a: 123
@@ -187,9 +144,8 @@ final class DirectivesTest extends TestCase {
                 [
                     Parser::directive('@a(a: 123)'),
                 ],
-                null,
             ],
-            'one line'                                  => [
+            'one line'              => [
                 <<<'STRING'
                 @b(b: 123) @a
                 STRING,
@@ -201,9 +157,8 @@ final class DirectivesTest extends TestCase {
                     Parser::directive('@b(b: 123)'),
                     Parser::directive('@a'),
                 ],
-                null,
             ],
-            'one line too long'                         => [
+            'one line too long'     => [
                 <<<'STRING'
                 @b(
                     b: 123
@@ -219,9 +174,8 @@ final class DirectivesTest extends TestCase {
                     Parser::directive('@b(b: 123)'),
                     Parser::directive('@a'),
                 ],
-                null,
             ],
-            'normalized'                                => [
+            'normalized'            => [
                 <<<'STRING'
                 @a
                 @b(b: 123)
@@ -234,7 +188,6 @@ final class DirectivesTest extends TestCase {
                     Parser::directive('@b(b: 123)'),
                     Parser::directive('@a'),
                 ],
-                null,
             ],
         ];
     }
