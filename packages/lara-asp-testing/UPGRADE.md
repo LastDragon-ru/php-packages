@@ -41,6 +41,8 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] Previously deprecated assertions/constraints were removed.
 
+* [ ] Deprecated extension `💀\LastDragon_ru\LaraASP\Testing\Requirements\PhpUnit\Extension` removed, please use [`\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension`][code-links/7e51b51dd292df33] instead
+
 # Upgrade from v9
 
 * [ ] Class [`💀WithTempFile`][code-links/1e768fc484194d84] deprecated, the [`TempFile`][code-links/2ed0bfaade389715] should be used instead 🤝
@@ -51,7 +53,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 * [ ] XML Assertions are deprecated, the [`lastdragon-ru/phpunit-xml`](../phpunit-xml/README.md) should be used instead 🤝
 
-* [ ] Extension [`💀\LastDragon_ru\LaraASP\Testing\Requirements\PhpUnit\Extension`][code-links/26cc04e820d354b1] deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension`][code-links/7e51b51dd292df33] instead 🤝
+* [ ] Extension `💀\LastDragon_ru\LaraASP\Testing\Requirements\PhpUnit\Extension` deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\Requirements\Extension`][code-links/7e51b51dd292df33] instead 🤝
 
 * [ ] Trait `💀\LastDragon_ru\LaraASP\Testing\Concerns\StrictAssertEquals` deprecated, please use [`\LastDragon_ru\PhpUnit\Extensions\StrictScalarComparator\Extension`][code-links/4ec6b74a682f8155] instead 🤝
 
@@ -118,9 +120,6 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [code-links/e6637d2e31bd9516]: src/Database/QueryLog/WithQueryLog.php
     "\LastDragon_ru\LaraASP\Testing\Database\QueryLog\WithQueryLog"
-
-[code-links/26cc04e820d354b1]: src/Requirements/PhpUnit/Extension.php
-    "\LastDragon_ru\LaraASP\Testing\Requirements\PhpUnit\Extension"
 
 [code-links/84706d7f00aadc5e]: src/Utils/TestData.php
     "\LastDragon_ru\LaraASP\Testing\Utils\TestData"
