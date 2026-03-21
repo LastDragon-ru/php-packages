@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks;
+namespace LastDragon_ru\GraphQL\Printer\Blocks;
 
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
 use Override;
 
 use function mb_strlen;

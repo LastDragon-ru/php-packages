@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Document;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\ScalarTypeDefinitionNode;
 use GraphQL\Type\Definition\BooleanType;
@@ -10,11 +10,11 @@ use GraphQL\Type\Definition\IDType;
 use GraphQL\Type\Definition\IntType;
 use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Type\Definition\StringType;
-use LastDragon_ru\GraphQLPrinter\Blocks\Types\DefinitionBlock;
-use LastDragon_ru\GraphQLPrinter\Blocks\Types\TypeDefinitionBlock;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLAstNode;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLDefinition;
+use LastDragon_ru\GraphQL\Printer\Blocks\Types\DefinitionBlock;
+use LastDragon_ru\GraphQL\Printer\Blocks\Types\TypeDefinitionBlock;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLDefinition;
 use Override;
 
 /**

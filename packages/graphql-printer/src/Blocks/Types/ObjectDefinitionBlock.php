@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Types;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Types;
 
 use GraphQL\Language\AST\InterfaceTypeDefinitionNode;
 use GraphQL\Language\AST\InterfaceTypeExtensionNode;
@@ -8,10 +8,10 @@ use GraphQL\Language\AST\ObjectTypeDefinitionNode;
 use GraphQL\Language\AST\ObjectTypeExtensionNode;
 use GraphQL\Type\Definition\InterfaceType;
 use GraphQL\Type\Definition\ObjectType;
-use LastDragon_ru\GraphQLPrinter\Blocks\Block;
-use LastDragon_ru\GraphQLPrinter\Blocks\Document\FieldsDefinition;
-use LastDragon_ru\GraphQLPrinter\Blocks\Document\ImplementsInterfaces;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Blocks\Block;
+use LastDragon_ru\GraphQL\Printer\Blocks\Document\FieldsDefinition;
+use LastDragon_ru\GraphQL\Printer\Blocks\Document\ImplementsInterfaces;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
 use Override;
 
 /**

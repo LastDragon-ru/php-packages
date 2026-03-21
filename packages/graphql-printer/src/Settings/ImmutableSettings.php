@@ -1,11 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Settings;
+namespace LastDragon_ru\GraphQL\Printer\Settings;
 
 use Closure;
-use LastDragon_ru\GraphQLPrinter\Contracts\DirectiveFilter;
-use LastDragon_ru\GraphQLPrinter\Contracts\Settings;
-use LastDragon_ru\GraphQLPrinter\Contracts\TypeFilter;
+use LastDragon_ru\GraphQL\Printer\Contracts\DirectiveFilter;
+use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
+use LastDragon_ru\GraphQL\Printer\Contracts\TypeFilter;
 use Override;
 
 abstract class ImmutableSettings implements Settings {

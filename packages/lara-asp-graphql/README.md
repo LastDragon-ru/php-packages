@@ -233,9 +233,9 @@ The package provides bindings for [`Printer`](../graphql-printer/README.md) so y
 ```php
 <?php declare(strict_types = 1);
 
-use LastDragon_ru\GraphQLPrinter\Contracts\DirectiveFilter;
-use LastDragon_ru\GraphQLPrinter\Contracts\Printer;
-use LastDragon_ru\GraphQLPrinter\Settings\DefaultSettings;
+use LastDragon_ru\GraphQL\Printer\Contracts\DirectiveFilter;
+use LastDragon_ru\GraphQL\Printer\Contracts\Printer;
+use LastDragon_ru\GraphQL\Printer\Settings\DefaultSettings;
 use LastDragon_ru\LaraASP\Dev\App\Example;
 use Nuwave\Lighthouse\Schema\SchemaBuilder;
 

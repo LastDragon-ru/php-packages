@@ -1,8 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Misc;
+namespace LastDragon_ru\GraphQL\Printer\Misc;
 
-use LastDragon_ru\GraphQLPrinter\Contracts\Result;
+use LastDragon_ru\GraphQL\Printer\Contracts\Result;
 use Override;
 
 /**

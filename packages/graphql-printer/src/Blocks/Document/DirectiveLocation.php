@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Document;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\NameNode;
-use LastDragon_ru\GraphQLPrinter\Blocks\Block;
-use LastDragon_ru\GraphQLPrinter\Blocks\NamedBlock;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Blocks\Block;
+use LastDragon_ru\GraphQL\Printer\Blocks\NamedBlock;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
 use Override;
 
 /**

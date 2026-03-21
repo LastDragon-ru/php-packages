@@ -1,8 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Exceptions;
+namespace LastDragon_ru\GraphQL\Printer\Exceptions;
 
-use LastDragon_ru\GraphQLPrinter\PackageException;
+use LastDragon_ru\GraphQL\Printer\PackageException;
 use Throwable;
 
 use function sprintf;

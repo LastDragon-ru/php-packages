@@ -11,8 +11,8 @@ Compares default public schema (as the client sees it through introspection).
 
 namespace LastDragon_ru\LaraASP\GraphQL\Testing\Docs\Assertions;
 
-use LastDragon_ru\GraphQLPrinter\Feature;
-use LastDragon_ru\GraphQLPrinter\Package\RequiresFeature;
+use LastDragon_ru\GraphQL\Printer\Feature;
+use LastDragon_ru\GraphQL\Printer\Package\RequiresFeature;
 use LastDragon_ru\LaraASP\Core\PackageProvider as CorePackageProvider;
 use LastDragon_ru\LaraASP\GraphQL\PackageProvider as GraphQLPackageProvider;
 use LastDragon_ru\LaraASP\GraphQL\Testing\Assertions;

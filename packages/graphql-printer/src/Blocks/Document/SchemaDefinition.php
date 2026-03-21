@@ -1,19 +1,19 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Document;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\NamedTypeNode;
 use GraphQL\Language\AST\OperationTypeDefinitionNode;
 use GraphQL\Language\AST\SchemaDefinitionNode;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
-use LastDragon_ru\GraphQLPrinter\Blocks\Block;
-use LastDragon_ru\GraphQLPrinter\Blocks\Types\DefinitionBlock;
-use LastDragon_ru\GraphQLPrinter\Feature;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLAstNode;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLDefinition;
+use LastDragon_ru\GraphQL\Printer\Blocks\Block;
+use LastDragon_ru\GraphQL\Printer\Blocks\Types\DefinitionBlock;
+use LastDragon_ru\GraphQL\Printer\Feature;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLDefinition;
 use Override;
 
 use function array_fill_keys;

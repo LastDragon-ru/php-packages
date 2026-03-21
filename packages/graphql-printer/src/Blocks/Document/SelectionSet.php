@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Document;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\FieldNode;
 use GraphQL\Language\AST\FragmentSpreadNode;
@@ -10,12 +10,12 @@ use GraphQL\Language\AST\SelectionNode;
 use GraphQL\Language\AST\SelectionSetNode;
 use GraphQL\Language\AST\TypeNode;
 use GraphQL\Type\Definition\Type;
-use LastDragon_ru\GraphQLPrinter\Blocks\Block;
-use LastDragon_ru\GraphQLPrinter\Blocks\ListBlock;
-use LastDragon_ru\GraphQLPrinter\Blocks\Types\ExecutableDefinitionBlock;
-use LastDragon_ru\GraphQLPrinter\Exceptions\Unsupported;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Package\GraphQLAstNode;
+use LastDragon_ru\GraphQL\Printer\Blocks\Block;
+use LastDragon_ru\GraphQL\Printer\Blocks\ListBlock;
+use LastDragon_ru\GraphQL\Printer\Blocks\Types\ExecutableDefinitionBlock;
+use LastDragon_ru\GraphQL\Printer\Exceptions\Unsupported;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
 use Override;
 
 /**

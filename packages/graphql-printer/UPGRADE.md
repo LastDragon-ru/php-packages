@@ -37,6 +37,8 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/3f19382f79c2085d)
 
+* [ ] Namespace `\LastDragon_ru\GraphQLPrinter\*` renamed to `\LastDragon_ru\GraphQL\Printer\*`.
+
 # Upgrade from v9
 
 * [ ] Assertions for PHPUnit extracted into [`lastdragon-ru/phpunit-graphql`](../phpunit-graphql/README.md) package (class names are the same).

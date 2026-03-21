@@ -12,11 +12,11 @@ use GraphQL\Type\Definition\FieldDefinition;
 use GraphQL\Type\Definition\InputObjectField;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Schema;
-use LastDragon_ru\GraphQLPrinter\Contracts\Printer as PrinterContract;
-use LastDragon_ru\GraphQLPrinter\Contracts\Result;
-use LastDragon_ru\GraphQLPrinter\Contracts\Settings;
-use LastDragon_ru\GraphQLPrinter\Contracts\Statistics;
-use LastDragon_ru\GraphQLPrinter\Printer;
+use LastDragon_ru\GraphQL\Printer\Contracts\Printer as PrinterContract;
+use LastDragon_ru\GraphQL\Printer\Contracts\Result;
+use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
+use LastDragon_ru\GraphQL\Printer\Contracts\Statistics;
+use LastDragon_ru\GraphQL\Printer\Printer;
 use PHPUnit\Framework\Assert;
 
 use function array_combine;

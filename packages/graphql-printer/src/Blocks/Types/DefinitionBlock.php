@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Types;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Types;
 
 use GraphQL\Language\AST\DirectiveDefinitionNode;
 use GraphQL\Language\AST\DirectiveNode;
@@ -21,13 +21,13 @@ use GraphQL\Type\Definition\InputObjectField;
 use GraphQL\Type\Definition\NamedType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Schema;
-use LastDragon_ru\GraphQLPrinter\Blocks\Block;
-use LastDragon_ru\GraphQLPrinter\Blocks\Document\DirectiveDefinition;
-use LastDragon_ru\GraphQLPrinter\Blocks\Document\Directives;
-use LastDragon_ru\GraphQLPrinter\Blocks\NamedBlock;
-use LastDragon_ru\GraphQLPrinter\Feature;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Blocks\Block;
+use LastDragon_ru\GraphQL\Printer\Blocks\Document\DirectiveDefinition;
+use LastDragon_ru\GraphQL\Printer\Blocks\Document\Directives;
+use LastDragon_ru\GraphQL\Printer\Blocks\NamedBlock;
+use LastDragon_ru\GraphQL\Printer\Feature;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
 use Override;
 
 use function is_iterable;

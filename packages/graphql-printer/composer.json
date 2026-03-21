@@ -35,12 +35,12 @@
   },
   "autoload": {
     "psr-4": {
-      "LastDragon_ru\\GraphQLPrinter\\": "src/"
+      "LastDragon_ru\\GraphQL\\Printer\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "LastDragon_ru\\GraphQLPrinter\\Docs\\": "docs"
+      "LastDragon_ru\\GraphQL\\Printer\\Docs\\": "docs"
     },
     "exclude-from-classmap": [
       "docs/"

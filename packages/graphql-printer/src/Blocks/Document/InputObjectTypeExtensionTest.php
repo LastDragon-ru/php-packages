@@ -1,15 +1,15 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter\Blocks\Document;
+namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
 use GraphQL\Language\AST\InputObjectTypeExtensionNode;
 use GraphQL\Language\Parser;
 use GraphQL\Type\Schema;
 use GraphQL\Utils\BuildSchema;
-use LastDragon_ru\GraphQLPrinter\Contracts\Settings;
-use LastDragon_ru\GraphQLPrinter\Misc\Collector;
-use LastDragon_ru\GraphQLPrinter\Misc\Context;
-use LastDragon_ru\GraphQLPrinter\Package\TestCase;
+use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
+use LastDragon_ru\GraphQL\Printer\Misc\Collector;
+use LastDragon_ru\GraphQL\Printer\Misc\Context;
+use LastDragon_ru\GraphQL\Printer\Package\TestCase;
 use LastDragon_ru\PhpUnit\GraphQL\PrinterSettings;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;

@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GraphQLPrinter;
+namespace LastDragon_ru\GraphQL\Printer;
 
 use Composer\InstalledVersions;
 use Composer\Semver\VersionParser;
-use LastDragon_ru\GraphQLPrinter\Package\TestCase;
+use LastDragon_ru\GraphQL\Printer\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**

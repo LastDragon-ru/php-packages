@@ -4,9 +4,9 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instruct
 
 use ArrayAccess;
 use GraphQL\Language\Parser;
-use LastDragon_ru\GraphQLPrinter\Contracts\DirectiveResolver;
-use LastDragon_ru\GraphQLPrinter\Contracts\Printer as PrinterContract;
-use LastDragon_ru\GraphQLPrinter\Printer;
+use LastDragon_ru\GraphQL\Printer\Contracts\DirectiveResolver;
+use LastDragon_ru\GraphQL\Printer\Contracts\Printer as PrinterContract;
+use LastDragon_ru\GraphQL\Printer\Printer;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Exceptions\DependencyIsMissing;

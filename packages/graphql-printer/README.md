@@ -46,8 +46,8 @@ There are two primary methods: `Printer::print()` and `Printer::export()`. The `
 <?php declare(strict_types = 1);
 
 use GraphQL\Utils\BuildSchema;
-use LastDragon_ru\GraphQLPrinter\Printer;
-use LastDragon_ru\GraphQLPrinter\Settings\DefaultSettings;
+use LastDragon_ru\GraphQL\Printer\Printer;
+use LastDragon_ru\GraphQL\Printer\Settings\DefaultSettings;
 use LastDragon_ru\LaraASP\Dev\App\Example;
 
 $schema   = BuildSchema::build(
@@ -142,10 +142,10 @@ The Printer allows filter out types and directives. This may be useful to exclud
 
 use GraphQL\Language\Parser;
 use GraphQL\Utils\BuildSchema;
-use LastDragon_ru\GraphQLPrinter\Contracts\DirectiveFilter;
-use LastDragon_ru\GraphQLPrinter\Contracts\TypeFilter;
-use LastDragon_ru\GraphQLPrinter\Printer;
-use LastDragon_ru\GraphQLPrinter\Settings\DefaultSettings;
+use LastDragon_ru\GraphQL\Printer\Contracts\DirectiveFilter;
+use LastDragon_ru\GraphQL\Printer\Contracts\TypeFilter;
+use LastDragon_ru\GraphQL\Printer\Printer;
+use LastDragon_ru\GraphQL\Printer\Settings\DefaultSettings;
 use LastDragon_ru\LaraASP\Dev\App\Example;
 
 $typeFilter      = new class() implements TypeFilter {
@@ -235,7 +235,7 @@ Please follow [Upgrade Guide](UPGRADE.md).
 
 * [ ] Use `lastdragon-ru/graphql-printer` instead of `lastdragon-ru/lara-asp-graphql-printer` in `composer.json`
 * [ ] Use [`lastdragon-ru/phpunit-graphql`](../phpunit-graphql/README.md) package if you use PHPUnit assertions.
-* [ ] Use `LastDragon_ru\GraphQLPrinter\*` instead of `LastDragon_ru\LaraASP\GraphQLPrinter\*` in code.
+* [ ] Use `LastDragon_ru\GraphQL\Printer\*` instead of `LastDragon_ru\LaraASP\GraphQLPrinter\*` in code.
 
 [include:file]: ../../docs/Shared/Contributing.md
 [//]: # (start: preprocess/c4ba75080f5a48b7)
