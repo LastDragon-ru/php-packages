@@ -2,12 +2,8 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Logger\Contracts;
 
-use LastDragon_ru\LaraASP\Documentator\Processor\Logger\Defaults\Output as Implementation;
 use LastDragon_ru\LaraASP\Documentator\Processor\Logger\Enums\Verbosity;
 
-/**
- * @phpstan-require-extends Implementation
- */
 interface Output {
     /**
      * The number of characters per line (columns).

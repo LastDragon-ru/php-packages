@@ -2,7 +2,6 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Contracts;
 
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver as ResolverImpl;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 
@@ -13,8 +12,6 @@ use LastDragon_ru\Path\FilePath;
  *
  * + Relative - relative to {@see self::$directory}.
  * + Other - as is.
- *
- * @phpstan-require-extends ResolverImpl
  */
 interface Resolver {
     public DirectoryPath $input {

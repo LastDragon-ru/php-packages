@@ -2,12 +2,8 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Contracts;
 
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
 use LastDragon_ru\Path\FilePath;
 
-/**
- * @phpstan-require-extends FileImpl
- */
 interface File {
     public FilePath $path {
         get;
