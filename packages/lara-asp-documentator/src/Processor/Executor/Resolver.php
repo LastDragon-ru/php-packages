@@ -34,15 +34,15 @@ class Resolver implements Contract {
         protected readonly Dispatcher $dispatcher,
         protected readonly FileSystem $fs,
         /**
-         * @var Closure(File): void
+         * @var Closure(FilePath): void
          */
         protected readonly Closure $run,
         /**
-         * @var Closure(File): void
+         * @var Closure(FilePath): void
          */
         protected readonly Closure $save,
         /**
-         * @var Closure(File): void
+         * @var Closure(FilePath): void
          */
         protected readonly Closure $queue,
         /**
@@ -66,6 +66,10 @@ class Resolver implements Contract {
         get => $this->fs->directory;
     }
 
+    public function file(FilePath $path): File {
+        return $this->fs->get($this->path($path));
+    }
+
     #[Override]
     public function get(FilePath $path): File {
         $path = $this->path($path);
@@ -74,7 +78,7 @@ class Resolver implements Contract {
 
         $file = $this->fs->get($path);
 
-        ($this->run)($file);
+        ($this->run)($file->path);
 
         return $file;
     }
@@ -90,7 +94,7 @@ class Resolver implements Contract {
 
             $file = $this->fs->get($path);
 
-            ($this->run)($file);
+            ($this->run)($file->path);
         } else {
             ($this->dispatcher)(new Dependency($path, DependencyResult::NotFound));
         }
@@ -121,7 +125,7 @@ class Resolver implements Contract {
         try {
             $saved = $this->fs->write($file ?? $path, $content);
 
-            ($this->save)($saved);
+            ($this->save)($saved->path);
         } finally {
             if (($saved ?? $file) !== null) {
                 unset($this->files[$saved ?? $file]);
@@ -137,7 +141,7 @@ class Resolver implements Contract {
             $filepath = $this->path($file);
 
             ($this->dispatcher)(new Dependency($filepath, DependencyResult::Queued));
-            ($this->queue)($this->fs->get($filepath));
+            ($this->queue)($filepath);
         }
     }
 

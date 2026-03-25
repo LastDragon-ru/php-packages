@@ -3,7 +3,6 @@
 namespace LastDragon_ru\LaraASP\Documentator\Package;
 
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
@@ -36,14 +35,14 @@ class WithProcessorResolver extends Resolver {
             $container,
             $dispatcher,
             $fs,
-            function (File $file): void {
-                $this->resolved[] = $file->path;
+            function (FilePath $path): void {
+                $this->resolved[] = $path;
             },
-            function (File $file): void {
-                $this->saved[] = $file->path;
+            function (FilePath $path): void {
+                $this->saved[] = $path;
             },
-            function (File $file): void {
-                $this->queued[] = $file->path;
+            function (FilePath $path): void {
+                $this->queued[] = $path;
             },
             function (DirectoryPath|FilePath $path): void {
                 $this->deleted[] = $path;

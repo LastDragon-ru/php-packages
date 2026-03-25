@@ -3,10 +3,7 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\DependencyUnavailable;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\FilePath;
 use Mockery;
 use Override;
@@ -23,10 +20,7 @@ final class ExecutorTest extends TestCase {
     // =========================================================================
     #[DataProvider('dataProviderOnRun')]
     public function testOnRun(?bool $expected, State $state): void {
-        $filesystem = Mockery::mock(FileSystem::class);
-        $path       = new FilePath('/file.md');
-        $file       = new FileImpl($filesystem, $path);
-
+        $path     = new FilePath('/file.md');
         $executor = Mockery::mock(ExecutorTest__Executor::class);
         $executor->shouldAllowMockingProtectedMethods();
         $executor->makePartial();
@@ -34,7 +28,7 @@ final class ExecutorTest extends TestCase {
         if ($expected !== false) {
             $executor
                 ->shouldReceive('isSkipped')
-                ->with($file)
+                ->with($path)
                 ->once()
                 ->andReturn(false);
         }
@@ -42,7 +36,7 @@ final class ExecutorTest extends TestCase {
         if ($expected === true) {
             $executor
                 ->shouldReceive('file')
-                ->with($file)
+                ->with($path)
                 ->once()
                 ->andReturns();
         } elseif ($expected === false) {
@@ -53,7 +47,7 @@ final class ExecutorTest extends TestCase {
 
         (new ReflectionProperty(Executor::class, 'state'))->setValue($executor, $state);
 
-        $executor->onRun($file);
+        $executor->onRun($path);
     }
 
     /**
@@ -63,10 +57,7 @@ final class ExecutorTest extends TestCase {
      */
     #[DataProvider('dataProviderOnSave')]
     public function testOnSave(?string $expected, State $state, string $current, ?bool $skipped, string $path): void {
-        $fs   = Mockery::mock(FileSystem::class);
-        $path = new FilePath($path);
-        $file = new FileImpl($fs, $path);
-
+        $path     = new FilePath($path);
         $executor = Mockery::mock(ExecutorTest__Executor::class);
         $executor->shouldAllowMockingProtectedMethods();
         $executor->makePartial();
@@ -74,7 +65,7 @@ final class ExecutorTest extends TestCase {
         if ($skipped !== null) {
             $executor
                 ->shouldReceive('isSkipped')
-                ->with($file)
+                ->with($path)
                 ->once()
                 ->andReturn($skipped);
         } else {
@@ -86,7 +77,7 @@ final class ExecutorTest extends TestCase {
         if ($expected !== null) {
             $executor
                 ->shouldReceive($expected)
-                ->with($file)
+                ->with($path)
                 ->once()
                 ->andReturns();
         } else {
@@ -105,7 +96,7 @@ final class ExecutorTest extends TestCase {
             $current    => true,
         ]);
 
-        $executor->onSave($file);
+        $executor->onSave($path);
 
         if ($expected !== null) {
             self::assertSame(
@@ -117,10 +108,7 @@ final class ExecutorTest extends TestCase {
 
     #[DataProvider('dataProviderOnQueue')]
     public function testOnQueue(bool $expected, State $state): void {
-        $filesystem = Mockery::mock(FileSystem::class);
-        $path       = new FilePath('/file.md');
-        $file       = new FileImpl($filesystem, $path);
-
+        $path     = new FilePath('/file.md');
         $executor = Mockery::mock(ExecutorTest__Executor::class);
         $executor->shouldAllowMockingProtectedMethods();
         $executor->makePartial();
@@ -128,12 +116,12 @@ final class ExecutorTest extends TestCase {
         if ($expected) {
             $executor
                 ->shouldReceive('isSkipped')
-                ->with($file)
+                ->with($path)
                 ->once()
                 ->andReturn(false);
             $executor
                 ->shouldReceive('queue')
-                ->with($file)
+                ->with($path)
                 ->once()
                 ->andReturns();
         } else {
@@ -142,7 +130,7 @@ final class ExecutorTest extends TestCase {
 
         (new ReflectionProperty(Executor::class, 'state'))->setValue($executor, $state);
 
-        $executor->onQueue($file);
+        $executor->onQueue($path);
     }
     // </editor-fold>
 
@@ -219,17 +207,17 @@ final class ExecutorTest extends TestCase {
  */
 class ExecutorTest__Executor extends Executor {
     #[Override]
-    public function onRun(File $file): void {
-        parent::onRun($file);
+    public function onRun(FilePath $path): void {
+        parent::onRun($path);
     }
 
     #[Override]
-    public function onSave(File $file): void {
-        parent::onSave($file);
+    public function onSave(FilePath $path): void {
+        parent::onSave($path);
     }
 
     #[Override]
-    public function onQueue(File $file): void {
-        parent::onQueue($file);
+    public function onQueue(FilePath $path): void {
+        parent::onQueue($path);
     }
 }

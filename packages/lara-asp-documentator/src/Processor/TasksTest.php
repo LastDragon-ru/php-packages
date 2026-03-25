@@ -8,8 +8,6 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\FilePath;
 use Mockery;
 use Override;
@@ -23,10 +21,9 @@ use function iterator_to_array;
 #[CoversClass(Tasks::class)]
 final class TasksTest extends TestCase {
     public function testHas(): void {
-        $filesystem = Mockery::mock(FileSystem::class);
-        $tasks      = new Tasks(Mockery::mock(Container::class),);
-        $aFile      = Mockery::mock(FileImpl::class, [$filesystem, new FilePath('/file.md')]);
-        $bFile      = Mockery::mock(FileImpl::class, [$filesystem, new FilePath('/file.task')]);
+        $tasks = new Tasks(Mockery::mock(Container::class),);
+        $aFile = new FilePath('/file.md');
+        $bFile = new FilePath('/file.task');
 
         self::assertFalse($tasks->has($aFile));
         self::assertFalse($tasks->has(Hook::File));
@@ -44,12 +41,11 @@ final class TasksTest extends TestCase {
     }
 
     public function testGet(): void {
-        $filesystem = Mockery::mock(FileSystem::class);
-        $tasks      = new Tasks(Mockery::mock(Container::class),);
-        $taskA      = new TasksTest__FileTask();
-        $taskB      = new TasksTest__HookTask();
-        $taskC      = new TasksTest__Task();
-        $taskD      = new class() implements FileTask {
+        $tasks = new Tasks(Mockery::mock(Container::class),);
+        $taskA = new TasksTest__FileTask();
+        $taskB = new TasksTest__HookTask();
+        $taskC = new TasksTest__Task();
+        $taskD = new class() implements FileTask {
             #[Override]
             public static function glob(): string {
                 return '*.md';
@@ -60,8 +56,8 @@ final class TasksTest extends TestCase {
                 // empty
             }
         };
-        $aFile      = Mockery::mock(FileImpl::class, [$filesystem, new FilePath('/file.md')]);
-        $bFile      = Mockery::mock(FileImpl::class, [$filesystem, new FilePath('/file.task')]);
+        $aFile = new FilePath('/file.md');
+        $bFile = new FilePath('/file.task');
 
         $tasks->add($taskD, 200);
         $tasks->add($taskA, 100);
