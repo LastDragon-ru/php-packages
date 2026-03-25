@@ -13,6 +13,9 @@ class SerializedFile {
 
     public function __construct(
         protected readonly Serializer $serializer,
+        /**
+         * @var File<string>
+         */
         protected readonly File $file,
     ) {
         // empty

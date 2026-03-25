@@ -7,6 +7,8 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Contracts;
  */
 interface Cast {
     /**
+     * @param File<string> $file
+     *
      * @return TValue
      */
     public function __invoke(Resolver $resolver, File $file): mixed;

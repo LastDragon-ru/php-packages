@@ -3,7 +3,6 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
 
 use ArrayAccess;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use Override;

@@ -5,7 +5,6 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
 use Exception;
 use InvalidArgumentException;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Adapter;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\FileSystemDeleteBegin;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\FileSystemDeleteEnd;

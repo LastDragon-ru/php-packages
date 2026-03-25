@@ -149,6 +149,9 @@ class Instruction implements InstructionContract {
         return mb_trim($content);
     }
 
+    /**
+     * @param File<string> $target
+     */
     protected function getLanguage(Context $context, File $target, Parameters $parameters): ?string {
         return $target->extension;
     }

@@ -12,7 +12,8 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\DependencyResult;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File as FileImpl;
+use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileSystemFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
@@ -40,7 +41,7 @@ final class ResolverTest extends TestCase {
         $dispatcher = self::createStub(Dispatcher::class);
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
-        $resolved   = new FileImpl($filesystem, new FilePath('/file.txt'));
+        $resolved   = new FileImpl(new FileSystemFile($filesystem, new FilePath('/file.txt')));
         $resolver   = new Resolver(
             $container,
             $dispatcher,
@@ -59,9 +60,9 @@ final class ResolverTest extends TestCase {
             ->expects(self::once())
             ->method('get')
             ->with(new FilePath('/directory/path/file.txt'))
-            ->willReturn($resolved);
+            ->willReturn($resolved->file);
 
-        self::assertSame($resolved, $resolver->file(new FilePath('file.txt')));
+        self::assertEquals($resolved, $resolver->file(new FilePath('file.txt')));
     }
 
     public function testGet(): void {
@@ -74,7 +75,7 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolved   = new FileImpl($filesystem, $filepath);
+        $resolved   = new FileImpl(new FileSystemFile($filesystem, $filepath));
         $resolver   = new Resolver(
             $container,
             $dispatcher,
@@ -97,9 +98,9 @@ final class ResolverTest extends TestCase {
             ->expects(self::once())
             ->method('get')
             ->with($filepath)
-            ->willReturn($resolved);
+            ->willReturn($resolved->file);
 
-        self::assertSame($resolved, $resolver->get(new FilePath('file.txt')));
+        self::assertEquals($resolved, $resolver->get(new FilePath('file.txt')));
         self::assertEquals(
             [
                 new Dependency($filepath, DependencyResult::Found),
@@ -158,7 +159,7 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolved   = new FileImpl($filesystem, $filepath);
+        $resolved   = new FileImpl(new FileSystemFile($filesystem, $filepath));
         $resolver   = new Resolver(
             $container,
             $dispatcher,
@@ -186,9 +187,9 @@ final class ResolverTest extends TestCase {
             ->expects(self::once())
             ->method('get')
             ->with($filepath)
-            ->willReturn($resolved);
+            ->willReturn($resolved->file);
 
-        self::assertSame($resolved, $resolver->find(new FilePath('file.txt')));
+        self::assertEquals($resolved, $resolver->find(new FilePath('file.txt')));
         self::assertEquals(
             [
                 new Dependency($filepath, DependencyResult::Found),
@@ -286,7 +287,7 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolved   = new FileImpl($filesystem, $filepath);
+        $resolved   = new FileImpl(new FileSystemFile($filesystem, $filepath));
         $content    = 'content';
         $resolver   = new Resolver(
             $container,
@@ -310,7 +311,7 @@ final class ResolverTest extends TestCase {
             ->expects(self::once())
             ->method('write')
             ->with($filepath, $content)
-            ->willReturn($resolved);
+            ->willReturn($resolved->file);
 
         $resolver->save(new FilePath('file.txt'), $content);
 
@@ -370,7 +371,7 @@ final class ResolverTest extends TestCase {
         $dispatcher = new ResolverTest__Dispatcher();
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolved   = new FileImpl($filesystem, $filepath);
+        $resolved   = new FileImpl(new FileSystemFile($filesystem, $filepath));
         $content    = 'content';
         $resolver   = new Resolver(
             $container,
@@ -395,7 +396,7 @@ final class ResolverTest extends TestCase {
             ->expects(self::once())
             ->method('write')
             ->with($filepath, $content)
-            ->willReturn($resolved);
+            ->willReturn($resolved->file);
 
         $value = $resolver->cast($resolved, ResolverTest__Cast::class);
 
@@ -559,7 +560,7 @@ final class ResolverTest extends TestCase {
             ->method('delete')
             ->with($filepath);
 
-        $resolver->delete(new FileImpl($filesystem, $filepath));
+        $resolver->delete(new FileImpl(new FileSystemFile($filesystem, $filepath)));
 
         self::assertEquals(
             [
@@ -725,7 +726,7 @@ final class ResolverTest extends TestCase {
         $dispatcher = self::createStub(Dispatcher::class);
         $filesystem = self::createStub(FileSystem::class);
         $resolver   = new Resolver($container, $dispatcher, $filesystem, $run, $save, $queue, $delete);
-        $file       = new FileImpl($filesystem, new FilePath('/file.txt'));
+        $file       = new FileImpl(new FileSystemFile($filesystem, new FilePath('/file.txt')));
 
         $container
             ->expects(self::once())

@@ -3,7 +3,6 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
 
 use InvalidArgumentException;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File as Contract;
 use LastDragon_ru\Path\FilePath;
 
 use function sprintf;
@@ -11,7 +10,7 @@ use function sprintf;
 /**
  * @internal
  */
-class File implements Contract {
+class File {
     public function __construct(
         private readonly FileSystem $fs,
         public readonly FilePath $path,
@@ -33,14 +32,6 @@ class File implements Contract {
                 ),
             );
         }
-    }
-
-    public string $name {
-        get => $this->path->name;
-    }
-
-    public ?string $extension {
-        get => $this->path->extension;
     }
 
     public string $content {

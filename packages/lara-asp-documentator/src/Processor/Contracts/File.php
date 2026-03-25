@@ -4,6 +4,9 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Contracts;
 
 use LastDragon_ru\Path\FilePath;
 
+/**
+ * @template TContent
+ */
 interface File {
     public FilePath $path {
         get;
@@ -23,7 +26,10 @@ interface File {
         get;
     }
 
-    public string $content {
+    /**
+     * @var TContent
+     */
+    public mixed $content {
         get;
     }
 }

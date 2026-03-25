@@ -54,7 +54,7 @@ final class FileSystemTest extends TestCase {
         $path         = TestData::get()->file('c.txt');
         $file         = $fs->get($path);
         $readonly     = $fs->get($fs->input->file(__FILE__));
-        $relative     = $fs->get($fs->input->resolve(new FilePath($readonly->name)));
+        $relative     = $fs->get($fs->input->resolve(new FilePath($readonly->path->name)));
         $internal     = $fs->get(TestData::get()->file('c.html'));
         $fromFilePath = $fs->get($path);
 

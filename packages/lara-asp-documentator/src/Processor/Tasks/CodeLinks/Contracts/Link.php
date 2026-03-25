@@ -26,12 +26,16 @@ interface Link extends Stringable {
     /**
      * Returns one or more file paths to the source code of the link.
      *
+     * @param File<string> $file
+     *
      * @return list<FilePath>|FilePath|null
      */
     public function getSource(File $file, Package $package): array|FilePath|null;
 
     /**
      * Returns the url for the (first resolved) `$source` file.
+     *
+     * @param File<string> $source
      */
     public function getTarget(Resolver $resolver, File $source): ?LinkTarget;
 }

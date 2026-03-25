@@ -40,24 +40,6 @@ final class FileTest extends TestCase {
         };
     }
 
-    public function testPropertyName(): void {
-        $filesystem = Mockery::mock(FileSystem::class);
-        $fileA      = new File($filesystem, new FilePath('/path/to/file.txt'));
-        $fileB      = new File($filesystem, new FilePath('/path/to/file'));
-
-        self::assertSame('file.txt', $fileA->name);
-        self::assertSame('file', $fileB->name);
-    }
-
-    public function testPropertyExtension(): void {
-        $filesystem = Mockery::mock(FileSystem::class);
-        $fileA      = new File($filesystem, new FilePath('/path/to/file.txt'));
-        $fileB      = new File($filesystem, new FilePath('/path/to/file'));
-
-        self::assertSame('txt', $fileA->extension);
-        self::assertNull($fileB->extension);
-    }
-
     public function testPropertyContent(): void {
         $filesystem = Mockery::mock(FileSystem::class);
         $content    = 'content';

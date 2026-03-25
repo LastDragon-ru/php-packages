@@ -12,15 +12,16 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver as ResolverImpl;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters;
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializer;
 use LastDragon_ru\Path\FilePath;
-use Mockery;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
+
+use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
 
 use function array_map;
 use function json_encode;
@@ -32,6 +33,7 @@ use const PHP_INT_MAX;
  * @internal
  */
 #[CoversClass(Task::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class TaskTest extends TestCase {
     use WithProcessor;
 
@@ -87,9 +89,9 @@ final class TaskTest extends TestCase {
         $task->addInstruction($a::class);
         $task->addInstruction($b);
 
-        $file     = Mockery::mock(FileImpl::class);
+        $file     = self::createMock(File::class);
         $document = $this->app()->make(Markdown::class)->parse(self::MARKDOWN);
-        $resolver = Mockery::mock(ResolverImpl::class);
+        $resolver = self::createMock(ResolverImpl::class);
         $tokens   = $task->parse($resolver, $file, $document);
         $actual   = array_map(
             static function (array $tokens): array {
@@ -159,20 +161,23 @@ final class TaskTest extends TestCase {
             ->addInstruction(TaskTest__TestInstruction::class)
             ->addInstruction(TaskTest__DocumentInstruction::class);
 
+        $filesystem = self::createMock(FileSystem::class);
         $actual     = '';
         $path       = new FilePath('/path/to/file.md');
-        $filesystem = Mockery::mock(FileSystem::class);
-        $file       = Mockery::mock(FileImpl::class, [$filesystem, $path]);
+        $file       = self::createMock(File::class);
+        $file
+            ->expects($this->once())
+            ->method(PropertyHook::get('path'))
+            ->willReturn($path);
+        $file
+            ->expects($this->once())
+            ->method(PropertyHook::get('content'))
+            ->willReturn(self::MARKDOWN);
 
         $filesystem
-            ->shouldReceive('read')
-            ->with($file)
-            ->once()
-            ->andReturn(self::MARKDOWN);
-        $filesystem
-            ->shouldReceive('write')
-            ->once()
-            ->andReturnUsing(static function (mixed $path, string $content) use ($file, &$actual): File {
+            ->expects(self::once())
+            ->method('write')
+            ->willReturnCallback(static function (mixed $path, string $content) use ($file, &$actual): File {
                 $actual = $content;
 
                 return $file;

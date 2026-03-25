@@ -19,5 +19,8 @@ interface FileTask extends Task {
      */
     public static function glob(): array|string;
 
+    /**
+     * @param File<string> $file
+     */
     public function __invoke(Resolver $resolver, File $file): void;
 }

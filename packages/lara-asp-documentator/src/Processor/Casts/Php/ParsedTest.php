@@ -4,11 +4,13 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php;
 
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithProcessor;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\FilePath;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
+use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
 
 use function array_first;
 
@@ -19,6 +21,7 @@ use function array_first;
 #[CoversClass(ParsedClass::class)]
 #[CoversClass(ParsedCollector::class)]
 #[CoversClass(ParsedFile::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class ParsedTest extends TestCase {
     use WithProcessor;
 
@@ -44,12 +47,16 @@ final class ParsedTest extends TestCase {
         $resolver   = $this->getProcessorResolver($filesystem);
         $cast       = $this->app()->make(Parsed::class);
         $path       = new FilePath('/path/to/file.json');
-        $file       = Mockery::mock(File::class, [$filesystem, $path]);
-        $filesystem
-            ->shouldReceive('read')
-            ->with($file)
-            ->once()
-            ->andReturn($content);
+        $file       = self::createMock(File::class);
+
+        $file
+            ->expects($this->once())
+            ->method(PropertyHook::get('path'))
+            ->willReturn($path);
+        $file
+            ->expects($this->once())
+            ->method(PropertyHook::get('content'))
+            ->willReturn($content);
 
         $class = array_first($cast($resolver, $file)->classes);
 

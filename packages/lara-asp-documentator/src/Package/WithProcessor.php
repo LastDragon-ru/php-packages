@@ -10,12 +10,10 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\Adapters\SymfonyFileSystem;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Hook;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
-use Mockery;
 use Override;
 use PHPUnit\Framework\Attributes\After;
 use Symfony\Component\Finder\Finder;
@@ -69,19 +67,25 @@ trait WithProcessor {
         return $filesystem;
     }
 
+    /**
+     * @param File<string>|null $file
+     */
     protected function runProcessorHookTask(
         HookTask $task,
         FileSystem $fs,
         ?File $file = null,
         ?Hook $hook = null,
     ): void {
-        $file ??= Mockery::mock(FileImpl::class);
+        $file ??= self::createStub(File::class);
         $hook ??= $task::hook();
         $hook   = is_array($hook) ? array_first($hook) : $hook;
 
         $task($this->getProcessorResolver($fs), $file, $hook);
     }
 
+    /**
+     * @param File<string> $file
+     */
     protected function runProcessorFileTask(FileTask $task, FileSystem $fs, File $file): void {
         $task($this->getProcessorResolver($fs), $file);
     }

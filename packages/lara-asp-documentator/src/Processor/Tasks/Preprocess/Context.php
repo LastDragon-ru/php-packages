@@ -10,6 +10,9 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
 readonly class Context {
     public function __construct(
         public Resolver $resolver,
+        /**
+         * @var File<string>
+         */
         public File $file,
         public Document $document,
         public ReferenceNode $node,

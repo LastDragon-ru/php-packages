@@ -11,8 +11,6 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\ParsedFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver as ResolverImpl;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Contracts\Link;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\LinkTarget;
 use LastDragon_ru\LaraASP\Documentator\Utils\PhpDocumentFactory;
@@ -28,11 +26,14 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
+use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
 
 /**
  * @internal
  */
 #[CoversClass(Base::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class BaseTest extends TestCase {
     use WithProcessor;
 
@@ -66,26 +67,18 @@ final class BaseTest extends TestCase {
     }
 
     public function testGetTarget(): void {
-        $filesystem = Mockery::mock(FileSystem::class);
+        $filesystem = $this->getFileSystem(new DirectoryPath('/path/to/directory'));
         $resolver   = $this->getProcessorResolver($filesystem);
-        $base       = new DirectoryPath('/path/to/directory');
         $path       = new FilePath('/path/to/directory/file.md');
-        $file       = new FileImpl($filesystem, $path);
-
-        $filesystem->shouldAllowMockingProtectedMethods();
-        $filesystem
-            ->shouldReceive('path')
-            ->once()
-            ->andReturn($base);
-        $filesystem
-            ->shouldReceive('begin')
-            ->once()
-            ->passthru();
-        $filesystem
-            ->shouldReceive('read')
-            ->with($file)
-            ->once()
-            ->andReturn(
+        $file       = self::createMock(File::class);
+        $file
+            ->expects(self::atLeastOnce())
+            ->method(PropertyHook::get('path'))
+            ->willReturn($path);
+        $file
+            ->expects(self::once())
+            ->method(PropertyHook::get('content'))
+            ->willReturn(
                 <<<'PHP'
                 <?php declare(strict_types = 1);
 
@@ -97,8 +90,6 @@ final class BaseTest extends TestCase {
                 }
                 PHP,
             );
-
-        $filesystem->begin($base);
 
         $link = new class('A') extends Base {
             #[Override]
@@ -124,7 +115,7 @@ final class BaseTest extends TestCase {
         $class
             ->shouldUseProperty('namespacedName')
             ->value(new Name('App\\A'));
-        $source   = Mockery::mock(FileImpl::class);
+        $source   = self::createMock(File::class);
         $classes  = static function (ParsedFile $file) use ($class): array {
             return [
                 new ParsedClass(Mockery::mock(PhpDocumentFactory::class), $file, $class),

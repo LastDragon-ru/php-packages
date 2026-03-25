@@ -3,32 +3,36 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Casts;
 
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializable;
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializer;
 use LastDragon_ru\Path\FilePath;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
+use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
 
 /**
  * @internal
  */
+#[DisableReturnValueGenerationForTestDoubles]
 #[CoversClass(SerializedFile::class)]
 final class SerializedFileTest extends TestCase {
     public function testTo(): void {
-        $fs         = Mockery::mock(FileSystem::class);
         $path       = new FilePath('/file.md');
-        $file       = new File($fs, $path);
+        $file       = self::createMock(File::class);
         $content    = 'content';
         $serializer = Mockery::mock(Serializer::class);
         $serialized = new SerializedFile($serializer, $file);
 
-        $fs
-            ->shouldReceive('read')
-            ->with($file)
-            ->twice()
-            ->andReturn($content);
+        $file
+            ->expects($this->once())
+            ->method(PropertyHook::get('extension'))
+            ->willReturn($path->extension);
+        $file
+            ->expects($this->once())
+            ->method(PropertyHook::get('content'))
+            ->willReturn($content);
 
         $serializer
             ->shouldReceive('deserialize')
@@ -58,19 +62,21 @@ final class SerializedFileTest extends TestCase {
     }
 
     public function testToString(): void {
-        $fs         = Mockery::mock(FileSystem::class);
         $path       = new FilePath('/file.md');
-        $file       = new File($fs, $path);
+        $file       = self::createMock(File::class);
         $object     = new SerializedFileTest__SerializableA();
         $content    = 'content';
         $serializer = Mockery::mock(Serializer::class);
         $serialized = new SerializedFile($serializer, $file);
 
-        $fs
-            ->shouldReceive('read')
-            ->with($file)
-            ->once()
-            ->andReturn($content);
+        $file
+            ->expects($this->once())
+            ->method(PropertyHook::get('extension'))
+            ->willReturn($path->extension);
+        $file
+            ->expects($this->once())
+            ->method(PropertyHook::get('content'))
+            ->willReturn($content);
 
         $serializer
             ->shouldReceive('deserialize')
