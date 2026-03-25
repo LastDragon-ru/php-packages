@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
+namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
 use ArrayAccess;
 use LastDragon_ru\Path\DirectoryPath;

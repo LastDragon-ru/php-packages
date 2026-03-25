@@ -23,10 +23,10 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathUnavailable;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use LastDragon_ru\PhpUnit\Utils\TestData;
-use Mockery;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 use UnitEnum;
 
 use function array_map;
@@ -36,6 +36,7 @@ use function iterator_to_array;
  * @internal
  */
 #[CoversClass(FileSystem::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class FileSystemTest extends TestCase {
     use WithProcessor;
 
@@ -47,54 +48,6 @@ final class FileSystemTest extends TestCase {
 
         self::assertTrue($fs->exists($base->file('c.txt')));
         self::assertFalse($fs->exists($base->file('404.txt')));
-    }
-
-    public function testGet(): void {
-        $fs           = $this->getFileSystem(__DIR__);
-        $path         = TestData::get()->file('c.txt');
-        $file         = $fs->get($path);
-        $readonly     = $fs->get($fs->input->file(__FILE__));
-        $relative     = $fs->get($fs->input->resolve(new FilePath($readonly->path->name)));
-        $internal     = $fs->get(TestData::get()->file('c.html'));
-        $fromFilePath = $fs->get($path);
-
-        self::assertSame(
-            (string) (new FilePath(__FILE__))->normalized(),
-            (string) $readonly->path,
-        );
-
-        self::assertSame(
-            (string) (new FilePath(__FILE__))->normalized(),
-            (string) $relative->path,
-        );
-
-        self::assertSame(
-            (string) TestData::get()->file('c.html'),
-            (string) $internal->path,
-        );
-
-        self::assertEquals($file->path, $fromFilePath->path);
-        self::assertSame(
-            (string) TestData::get()->file('c.txt'),
-            (string) $fromFilePath->path,
-        );
-    }
-
-    public function testGetFileExternal(): void {
-        self::expectException(PathUnavailable::class);
-
-        $this
-            ->getFileSystem(__DIR__)
-            ->get(new FilePath('../Processor.php'));
-    }
-
-    public function testGetFileNotFound(): void {
-        self::expectException(PathNotFound::class);
-
-        $fs   = $this->getFileSystem(__DIR__);
-        $file = $fs->input->resolve(new FilePath('not found'));
-
-        $fs->get($file);
     }
 
     public function testSearch(): void {
@@ -200,25 +153,20 @@ final class FileSystemTest extends TestCase {
         $content = 'content';
         $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
-        $adapter = Mockery::mock(Adapter::class);
+        $adapter = self::createMock(Adapter::class);
         $adapter
-            ->shouldReceive('read')
+            ->expects($this->once())
+            ->method('read')
             ->with($path)
-            ->once()
-            ->andReturn($content);
+            ->willReturn($content);
 
         $dispatcher = new FileSystemTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class, [$adapter, $dispatcher, $input, $input]);
-        $filesystem->shouldAllowMockingProtectedMethods();
-        $filesystem->makePartial();
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
-        $file = Mockery::mock(File::class, [$filesystem, $path]);
-
-        self::assertSame($content, $filesystem->read($file));
-        self::assertSame($content, $filesystem->read($file)); // should be cached
+        self::assertSame($content, $filesystem->read($path));
         self::assertEquals(
             [
-                new FileSystemReadBegin($file->path),
+                new FileSystemReadBegin($path),
                 new FileSystemReadEnd(FileSystemReadResult::Success, 7),
             ],
             $dispatcher->events,
@@ -228,28 +176,24 @@ final class FileSystemTest extends TestCase {
     public function testReadError(): void {
         $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
-        $adapter = Mockery::mock(Adapter::class);
+        $adapter = self::createMock(Adapter::class);
         $adapter
-            ->shouldReceive('read')
+            ->expects($this->once())
+            ->method('read')
             ->with($path)
-            ->once()
-            ->andThrow(new Exception());
+            ->willThrowException(new Exception());
 
         $dispatcher = new FileSystemTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class, [$adapter, $dispatcher, $input, $input]);
-        $filesystem->shouldAllowMockingProtectedMethods();
-        $filesystem->makePartial();
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         self::expectException(Exception::class);
 
-        $file = Mockery::mock(File::class, [$filesystem, $path]);
-
         try {
-            $filesystem->read($file);
+            $filesystem->read($path);
         } finally {
             self::assertEquals(
                 [
-                    new FileSystemReadBegin($file->path),
+                    new FileSystemReadBegin($path),
                     new FileSystemReadEnd(FileSystemReadResult::Error, 0),
                 ],
                 $dispatcher->events,
@@ -257,114 +201,88 @@ final class FileSystemTest extends TestCase {
         }
     }
 
-    public function testWriteFile(): void {
-        $content    = 'content';
-        $input      = TestData::get()->directory();
-        $path       = $input->file('file.md');
-        $dispatcher = Mockery::mock(Dispatcher::class);
-        $adapter    = Mockery::mock(Adapter::class);
-        $filesystem = Mockery::mock(FileSystem::class, [$adapter, $dispatcher, $input, $input]);
-        $filesystem->shouldAllowMockingProtectedMethods();
-        $filesystem->makePartial();
-
-        $file = Mockery::mock(File::class, [$filesystem, $path]);
-
-        self::assertSame($file, $filesystem->write($file, $content));
-        self::assertSame($content, $filesystem->read($file));
-    }
-
-    public function testWriteFileNoChanges(): void {
-        $content    = 'content';
-        $input      = TestData::get()->directory();
-        $adapter    = Mockery::mock(Adapter::class);
-        $dispatcher = new FileSystemTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class, [$adapter, $dispatcher, $input, $input]);
-        $filesystem->shouldAllowMockingProtectedMethods();
-        $filesystem->makePartial();
-
-        $path = $input->file('file.md');
-        $file = Mockery::mock(File::class, [$filesystem, $path]);
-
+    public function testWriteNew(): void {
+        $content = 'content';
+        $input   = TestData::get()->directory();
+        $path    = $input->file('file.md');
+        $adapter = self::createMock(Adapter::class);
         $adapter
-            ->shouldReceive('read')
+            ->expects($this->once())
+            ->method('exists')
             ->with($path)
-            ->once()
-            ->andReturn($content);
+            ->willReturn(false);
+        $adapter
+            ->expects($this->once())
+            ->method('write')
+            ->with($path, $content);
+        $adapter
+            ->expects($this->once())
+            ->method('read')
+            ->with($path)
+            ->willReturn($content);
 
-        $filesystem->read($file);
-        $filesystem->write($file, $content);
+        $dispatcher = new FileSystemTest__Dispatcher();
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
+        $filesystem->write($path, $content);
+
+        self::assertSame($content, $filesystem->read($path));
         self::assertEquals(
             [
-                new FileSystemReadBegin($file->path),
+                new FileSystemWriteBegin($path),
+                new FileSystemWriteEnd(FileSystemWriteResult::Success, 7),
+                new FileSystemReadBegin($path),
                 new FileSystemReadEnd(FileSystemReadResult::Success, 7),
             ],
             $dispatcher->events,
         );
     }
 
-    public function testWriteCreate(): void {
+    public function testWriteExisting(): void {
+        $content = 'content';
         $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
-        $content = 'content';
-        $adapter = Mockery::mock(Adapter::class);
+        $adapter = self::createMock(Adapter::class);
         $adapter
-            ->shouldReceive('write')
-            ->with((string) $path, $content)
-            ->once()
-            ->andReturns();
+            ->expects($this->once())
+            ->method('exists')
+            ->with($path)
+            ->willReturn(true);
 
         $dispatcher = new FileSystemTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class, [$adapter, $dispatcher, $input, $input]);
-        $filesystem->shouldAllowMockingProtectedMethods();
-        $filesystem->makePartial();
-        $filesystem
-            ->shouldReceive('exists')
-            ->with($path)
-            ->once()
-            ->andReturn(false);
-        $filesystem
-            ->shouldReceive('get')
-            ->never();
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
-        $file = $filesystem->write($path, $content);
+        $filesystem->write($path, $content);
 
-        self::assertSame($path, $file->path);
-        self::assertSame($content, $filesystem->read($file));
+        self::assertSame($content, $filesystem->read($path));
         self::assertEquals(
             [
-                new FileSystemWriteBegin($file->path),
-                new FileSystemWriteEnd(FileSystemWriteResult::Success, 7),
+                // empty
             ],
             $dispatcher->events,
         );
     }
 
-    public function testWriteCreateFailed(): void {
+    public function testWriteError(): void {
         self::expectException(Exception::class);
 
+        $content = 'content';
         $input   = TestData::get()->directory();
         $path    = $input->file('file.md');
-        $content = 'content';
-        $adapter = Mockery::mock(Adapter::class);
+        $adapter = self::createMock(Adapter::class);
         $adapter
-            ->shouldReceive('write')
-            ->with((string) $path, $content)
-            ->once()
-            ->andThrow(Exception::class);
+            ->expects($this->once())
+            ->method('exists')
+            ->with($path)
+            ->willReturn(false);
+        $adapter
+            ->expects($this->once())
+            ->method('write')
+            ->with($path, $content)
+            ->willThrowException(new Exception());
 
         $dispatcher = new FileSystemTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class, [$adapter, $dispatcher, $input, $input]);
-        $filesystem->shouldAllowMockingProtectedMethods();
-        $filesystem->makePartial();
-        $filesystem
-            ->shouldReceive('exists')
-            ->with($path)
-            ->once()
-            ->andReturn(false);
-        $filesystem
-            ->shouldReceive('get')
-            ->never();
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         try {
             $filesystem->write($path, $content);
@@ -382,46 +300,41 @@ final class FileSystemTest extends TestCase {
     public function testWriteExternal(): void {
         self::expectException(PathUnavailable::class);
 
-        $this
-            ->getFileSystem(__DIR__)
-            ->write(new FilePath('../Processor.php'), 'external');
+        $input      = TestData::get()->directory();
+        $adapter    = self::createStub(Adapter::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
+
+        $filesystem->write(new FilePath('../Processor.php'), 'external');
     }
 
     public function testWriteOutsideOutput(): void {
         self::expectException(PathNotWritable::class);
 
-        $base   = new DirectoryPath(__DIR__);
-        $input  = $base->directory('input');
-        $output = $base->directory('output');
+        $base       = TestData::get()->directory();
+        $input      = $base->directory('input');
+        $output     = $base->directory('output');
+        $adapter    = self::createStub(Adapter::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $output);
 
-        $this
-            ->getFileSystem($input, $output)
-            ->write($input->file('file.txt'), 'external');
+        $filesystem->write($input->file('file.txt'), 'input');
     }
 
     public function testDelete(): void {
         $input      = TestData::get()->directory();
-        $adapter    = Mockery::mock(Adapter::class);
+        $path       = $input->file('file.md');
+        $adapter    = self::createMock(Adapter::class);
         $dispatcher = new FileSystemTest__Dispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
-        $path       = $input->file('file.md');
 
         $adapter
-            ->shouldReceive('exists')
-            ->with($path)
-            ->twice()
-            ->andReturn(true, false);
-        $adapter
-            ->shouldReceive('delete')
-            ->with($path)
-            ->once()
-            ->andReturns();
-
-        self::assertSame($filesystem->get($path), $filesystem->get($path));
+            ->expects($this->once())
+            ->method('delete')
+            ->with($path);
 
         $filesystem->delete($path);
 
-        self::assertFalse($filesystem->exists($path));
         self::assertEquals(
             [
                 new FileSystemDeleteBegin($path),
@@ -431,20 +344,20 @@ final class FileSystemTest extends TestCase {
         );
     }
 
-    public function testDeleteFailed(): void {
+    public function testDeleteError(): void {
         self::expectException(Exception::class);
 
-        $input   = TestData::get()->directory();
-        $path    = $input->file('file.md');
-        $adapter = Mockery::mock(Adapter::class);
-        $adapter
-            ->shouldReceive('delete')
-            ->with($path)
-            ->once()
-            ->andThrow(Exception::class);
-
+        $input      = TestData::get()->directory();
+        $path       = $input->file('file.md');
+        $adapter    = self::createMock(Adapter::class);
         $dispatcher = new FileSystemTest__Dispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
+
+        $adapter
+            ->expects($this->once())
+            ->method('delete')
+            ->with($path)
+            ->willThrowException(new Exception());
 
         try {
             $filesystem->delete($path);
@@ -459,53 +372,63 @@ final class FileSystemTest extends TestCase {
         }
     }
 
+    public function testDeleteExternal(): void {
+        self::expectException(PathUnavailable::class);
+
+        $input      = TestData::get()->directory();
+        $adapter    = self::createStub(Adapter::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
+
+        $filesystem->delete(new FilePath('../Processor.php'));
+    }
+
     public function testDeleteOutsideOutput(): void {
         self::expectException(PathNotWritable::class);
 
-        $base   = new DirectoryPath(__DIR__);
-        $input  = $base->directory('input');
-        $output = $base->directory('output');
+        $base       = TestData::get()->directory();
+        $input      = $base->directory('input');
+        $output     = $base->directory('output');
+        $adapter    = self::createStub(Adapter::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $output);
 
-        $this
-            ->getFileSystem($input, $output)
-            ->delete($input->file('file.txt'));
-    }
-
-    public function testCache(): void {
-        $fs   = $this->getFileSystem(__DIR__);
-        $file = $fs->get($fs->input->file(__FILE__));
-
-        self::assertSame($file, $fs->get($fs->input->file(__FILE__)));
+        $filesystem->delete($input->file('file.txt'));
     }
 
     public function testPropertyDirectory(): void {
-        $fs = $this->getFileSystem(__DIR__);
-        $a  = $fs->input->directory('a');
-        $b  = $fs->input->directory('b');
+        $base       = TestData::get()->directory();
+        $input      = $base->directory('input');
+        $output     = $base->directory('output');
+        $adapter    = self::createStub(Adapter::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = new FileSystem($adapter, $dispatcher, $input, $output);
+        $a          = $filesystem->input->directory('a');
+        $b          = $filesystem->input->directory('b');
 
-        self::assertSame($fs->input, $fs->directory);
+        self::assertSame($filesystem->input, $filesystem->directory);
 
-        $fs->begin($a);
+        $filesystem->begin($a);
 
-        self::assertSame($a, $fs->directory);
+        self::assertSame($a, $filesystem->directory);
 
-        $fs->begin($b);
+        $filesystem->begin($b);
 
-        self::assertSame($b, $fs->directory);
+        self::assertSame($b, $filesystem->directory);
 
-        $fs->commit();
+        $filesystem->commit();
 
-        self::assertSame($a, $fs->directory);
+        self::assertSame($a, $filesystem->directory);
 
-        $fs->commit();
+        $filesystem->commit();
 
-        self::assertSame($fs->input, $fs->directory);
+        self::assertSame($filesystem->input, $filesystem->directory);
     }
 
     #[DataProvider('dataProviderPath')]
     public function testPath(Exception|DirectoryPath|FilePath $expected, DirectoryPath|FilePath $path): void {
-        $dispatcher = Mockery::mock(Dispatcher::class);
-        $adapter    = Mockery::mock(Adapter::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $adapter    = self::createStub(Adapter::class);
         $output     = new DirectoryPath('/output');
         $input      = new DirectoryPath('/input');
         $fs         = new class($adapter, $dispatcher, $input, $output) extends FileSystem {
