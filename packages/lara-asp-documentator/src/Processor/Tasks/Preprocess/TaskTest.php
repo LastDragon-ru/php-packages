@@ -20,7 +20,6 @@ use LastDragon_ru\Path\FilePath;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
-
 use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
 
 use function array_map;
@@ -89,9 +88,9 @@ final class TaskTest extends TestCase {
         $task->addInstruction($a::class);
         $task->addInstruction($b);
 
-        $file     = self::createMock(File::class);
+        $file     = self::createStub(File::class);
         $document = $this->app()->make(Markdown::class)->parse(self::MARKDOWN);
-        $resolver = self::createMock(ResolverImpl::class);
+        $resolver = self::createStub(ResolverImpl::class);
         $tokens   = $task->parse($resolver, $file, $document);
         $actual   = array_map(
             static function (array $tokens): array {
@@ -166,7 +165,7 @@ final class TaskTest extends TestCase {
         $path       = new FilePath('/path/to/file.md');
         $file       = self::createMock(File::class);
         $file
-            ->expects($this->once())
+            ->expects($this->exactly(4))
             ->method(PropertyHook::get('path'))
             ->willReturn($path);
         $file

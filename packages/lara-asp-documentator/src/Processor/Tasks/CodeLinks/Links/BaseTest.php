@@ -115,7 +115,7 @@ final class BaseTest extends TestCase {
         $class
             ->shouldUseProperty('namespacedName')
             ->value(new Name('App\\A'));
-        $source   = self::createMock(File::class);
+        $source   = self::createStub(File::class);
         $classes  = static function (ParsedFile $file) use ($class): array {
             return [
                 new ParsedClass(Mockery::mock(PhpDocumentFactory::class), $file, $class),

@@ -15,8 +15,8 @@ use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
 /**
  * @internal
  */
-#[DisableReturnValueGenerationForTestDoubles]
 #[CoversClass(SerializedFile::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class SerializedFileTest extends TestCase {
     public function testTo(): void {
         $path       = new FilePath('/file.md');
@@ -26,11 +26,11 @@ final class SerializedFileTest extends TestCase {
         $serialized = new SerializedFile($serializer, $file);
 
         $file
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method(PropertyHook::get('extension'))
             ->willReturn($path->extension);
         $file
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method(PropertyHook::get('content'))
             ->willReturn($content);
 
@@ -70,7 +70,7 @@ final class SerializedFileTest extends TestCase {
         $serialized = new SerializedFile($serializer, $file);
 
         $file
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method(PropertyHook::get('extension'))
             ->willReturn($path->extension);
         $file

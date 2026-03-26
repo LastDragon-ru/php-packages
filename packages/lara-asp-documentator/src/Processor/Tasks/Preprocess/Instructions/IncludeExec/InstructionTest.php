@@ -6,6 +6,7 @@ use Illuminate\Process\Factory;
 use Illuminate\Process\PendingProcess;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
@@ -17,7 +18,7 @@ final class InstructionTest extends TestCase {
 
     public function testInvoke(): void {
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = $fs->get($fs->input->file(__FILE__));
+        $file     = new File($fs->input->file(__FILE__), static fn() => '');
         $params   = new Parameters('command to execute');
         $expected = 'result';
         $command  = $params->target;
