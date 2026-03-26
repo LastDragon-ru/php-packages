@@ -3,6 +3,7 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
 use ArrayAccess;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use Override;
@@ -11,15 +12,15 @@ use WeakReference;
 
 /**
  * @internal
- * @implements ArrayAccess<FilePath, File>
+ * @implements ArrayAccess<FilePath, File<string>>
  */
 class Cache implements ArrayAccess {
     /**
-     * @var SplObjectStorage<File, int>
+     * @var SplObjectStorage<File<string>, int>
      */
     private SplObjectStorage $lifetimes;
     /**
-     * @var array<string, WeakReference<File>>
+     * @var array<non-empty-string, WeakReference<File<string>>>
      */
     private array $files = [];
 

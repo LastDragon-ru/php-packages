@@ -2,8 +2,8 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
+use Closure;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File as Contract;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileSystemFile;
 use LastDragon_ru\Path\FilePath;
 
 /**
@@ -15,13 +15,13 @@ use LastDragon_ru\Path\FilePath;
  */
 class File implements Contract {
     public function __construct(
-        public readonly FileSystemFile $file,
+        public readonly FilePath $path,
+        /**
+         * @var Closure(): TContent
+         */
+        private readonly Closure $callback,
     ) {
         // empty
-    }
-
-    public FilePath $path {
-        get => $this->file->path;
     }
 
     public string $name {
@@ -32,7 +32,8 @@ class File implements Contract {
         get => $this->path->extension;
     }
 
+    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
     public mixed $content {
-        get => $this->file->content;
+        get => $this->content ?? ($this->callback)();
     }
 }

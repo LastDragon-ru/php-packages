@@ -12,8 +12,8 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\DependencyResult;
+use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathNotFound;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File as FileImpl;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileSystemFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
@@ -41,7 +41,6 @@ final class ResolverTest extends TestCase {
         $dispatcher = self::createStub(Dispatcher::class);
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
-        $resolved   = new FileImpl(new FileSystemFile($filesystem, new FilePath('/file.txt')));
         $resolver   = new Resolver(
             $container,
             $dispatcher,
@@ -53,16 +52,15 @@ final class ResolverTest extends TestCase {
         );
 
         $filesystem
-            ->expects(self::once())
+            ->expects(self::exactly(2))
             ->method(PropertyHook::get('directory'))
             ->willReturn($directory);
-        $filesystem
-            ->expects(self::once())
-            ->method('get')
-            ->with(new FilePath('/directory/path/file.txt'))
-            ->willReturn($resolved->file);
 
-        self::assertEquals($resolved, $resolver->file(new FilePath('file.txt')));
+        $file = $resolver->file(new FilePath('file.txt'));
+
+        self::assertEquals(new FilePath('/directory/path/file.txt'), $file->path);
+        self::assertSame($file, $resolver->file(new FilePath('file.txt')));
+        self::assertSame($file, $resolver->file(new FilePath('/directory/path/file.txt')));
     }
 
     public function testGet(): void {
@@ -75,91 +73,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolved   = new FileImpl(new FileSystemFile($filesystem, $filepath));
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
-
-        $run
-            ->expects(self::once())
-            ->method('__invoke')
-            ->with($filepath);
-        $filesystem
-            ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
-            ->willReturn($directory);
-        $filesystem
-            ->expects(self::once())
-            ->method('get')
-            ->with($filepath)
-            ->willReturn($resolved->file);
-
-        self::assertEquals($resolved, $resolver->get(new FilePath('file.txt')));
-        self::assertEquals(
-            [
-                new Dependency($filepath, DependencyResult::Found),
-            ],
-            $dispatcher->events,
-        );
-    }
-
-    public function testGetException(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
-        $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = self::createMock(FileSystem::class);
-        $filepath   = new FilePath('/directory/path/file.txt');
-        $exception  = new Exception();
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
-
-        $filesystem
-            ->expects(self::once())
-            ->method('get')
-            ->with($filepath)
-            ->willThrowException($exception);
-
-        self::expectExceptionObject($exception);
-
-        try {
-            $resolver->get($filepath);
-        } finally {
-            self::assertEquals(
-                [
-                    new Dependency($filepath, DependencyResult::Found),
-                ],
-                $dispatcher->events,
-            );
-        }
-    }
-
-    public function testFind(): void {
-        $run        = self::createMock(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
-        $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $directory  = new DirectoryPath('/directory/path/');
-        $filesystem = self::createMock(FileSystem::class);
-        $filepath   = new FilePath('/directory/path/file.txt');
-        $resolved   = new FileImpl(new FileSystemFile($filesystem, $filepath));
         $resolver   = new Resolver(
             $container,
             $dispatcher,
@@ -183,13 +96,95 @@ final class ResolverTest extends TestCase {
             ->method('exists')
             ->with($filepath)
             ->willReturn(true);
+
+        self::assertEquals($filepath, $resolver->get(new FilePath('file.txt'))->path);
+        self::assertEquals(
+            [
+                new Dependency($filepath, DependencyResult::Found),
+            ],
+            $dispatcher->events,
+        );
+    }
+
+    public function testGetNotFound(): void {
+        $run        = self::createStub(ResolverTest__Invokable::class);
+        $save       = self::createStub(ResolverTest__Invokable::class);
+        $queue      = self::createStub(ResolverTest__Invokable::class);
+        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new ResolverTest__Dispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+        $resolver   = new Resolver(
+            $container,
+            $dispatcher,
+            $filesystem,
+            $run(...),
+            $save(...),
+            $queue(...),
+            $delete(...),
+        );
+
         $filesystem
             ->expects(self::once())
-            ->method('get')
+            ->method(PropertyHook::get('directory'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('exists')
             ->with($filepath)
-            ->willReturn($resolved->file);
+            ->willReturn(false);
 
-        self::assertEquals($resolved, $resolver->find(new FilePath('file.txt')));
+        self::expectExceptionObject(new PathNotFound($filepath));
+
+        try {
+            $resolver->get(new FilePath('file.txt'));
+        } finally {
+            self::assertEquals(
+                [
+                    new Dependency($filepath, DependencyResult::Found),
+                ],
+                $dispatcher->events,
+            );
+        }
+    }
+
+    public function testFind(): void {
+        $run        = self::createMock(ResolverTest__Invokable::class);
+        $save       = self::createStub(ResolverTest__Invokable::class);
+        $queue      = self::createStub(ResolverTest__Invokable::class);
+        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new ResolverTest__Dispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+        $resolver   = new Resolver(
+            $container,
+            $dispatcher,
+            $filesystem,
+            $run(...),
+            $save(...),
+            $queue(...),
+            $delete(...),
+        );
+
+        $run
+            ->expects(self::once())
+            ->method('__invoke')
+            ->with($filepath);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('directory'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('exists')
+            ->with($filepath)
+            ->willReturn(true);
+
+        self::assertEquals($filepath, $resolver->find(new FilePath('file.txt'))->path ?? null);
         self::assertEquals(
             [
                 new Dependency($filepath, DependencyResult::Found),
@@ -232,51 +227,6 @@ final class ResolverTest extends TestCase {
         );
     }
 
-    public function testFindException(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
-        $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = self::createMock(FileSystem::class);
-        $filepath   = new FilePath('/directory/path/file.txt');
-        $exception  = new Exception();
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
-
-        $filesystem
-            ->expects(self::once())
-            ->method('exists')
-            ->with($filepath)
-            ->willReturn(true);
-        $filesystem
-            ->expects(self::once())
-            ->method('get')
-            ->with($filepath)
-            ->willThrowException($exception);
-
-        self::expectExceptionObject($exception);
-
-        try {
-            $resolver->find($filepath);
-        } finally {
-            self::assertEquals(
-                [
-                    new Dependency($filepath, DependencyResult::Found),
-                ],
-                $dispatcher->events,
-            );
-        }
-    }
-
     public function testSave(): void {
         $run        = self::createStub(ResolverTest__Invokable::class);
         $save       = self::createMock(ResolverTest__Invokable::class);
@@ -287,7 +237,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolved   = new FileImpl(new FileSystemFile($filesystem, $filepath));
         $content    = 'content';
         $resolver   = new Resolver(
             $container,
@@ -310,8 +259,7 @@ final class ResolverTest extends TestCase {
         $filesystem
             ->expects(self::once())
             ->method('write')
-            ->with($filepath, $content)
-            ->willReturn($resolved->file);
+            ->with($filepath, $content);
 
         $resolver->save(new FilePath('file.txt'), $content);
 
@@ -363,7 +311,7 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSaveCastReset(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
+        $run        = self::createMock(ResolverTest__Invokable::class);
         $save       = self::createMock(ResolverTest__Invokable::class);
         $queue      = self::createStub(ResolverTest__Invokable::class);
         $delete     = self::createStub(ResolverTest__Invokable::class);
@@ -371,7 +319,6 @@ final class ResolverTest extends TestCase {
         $dispatcher = new ResolverTest__Dispatcher();
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolved   = new FileImpl(new FileSystemFile($filesystem, $filepath));
         $content    = 'content';
         $resolver   = new Resolver(
             $container,
@@ -383,6 +330,10 @@ final class ResolverTest extends TestCase {
             $delete(...),
         );
 
+        $run
+            ->expects(self::atLeastOnce())
+            ->method('__invoke')
+            ->with($filepath);
         $save
             ->expects(self::once())
             ->method('__invoke')
@@ -393,19 +344,25 @@ final class ResolverTest extends TestCase {
             ->with(ResolverTest__Cast::class)
             ->willReturn(new ResolverTest__Cast());
         $filesystem
+            ->expects(self::atLeastOnce())
+            ->method('exists')
+            ->with($filepath)
+            ->willReturn(true);
+        $filesystem
             ->expects(self::once())
             ->method('write')
-            ->with($filepath, $content)
-            ->willReturn($resolved->file);
+            ->with($filepath, $content);
 
-        $value = $resolver->cast($resolved, ResolverTest__Cast::class);
+        $value = $resolver->cast($filepath, ResolverTest__Cast::class);
 
         $resolver->save($filepath, $content);
 
-        self::assertNotSame($value, $resolver->cast($resolved, ResolverTest__Cast::class));
+        self::assertNotSame($value, $resolver->cast($filepath, ResolverTest__Cast::class));
         self::assertEquals(
             [
+                new Dependency($filepath, DependencyResult::Found),
                 new Dependency($filepath, DependencyResult::Saved),
+                new Dependency($filepath, DependencyResult::Found),
             ],
             $dispatcher->events,
         );
@@ -560,7 +517,50 @@ final class ResolverTest extends TestCase {
             ->method('delete')
             ->with($filepath);
 
-        $resolver->delete(new FileImpl(new FileSystemFile($filesystem, $filepath)));
+        $resolver->delete(new FileImpl($filepath, static fn () => ''));
+
+        self::assertEquals(
+            [
+                new Dependency($filepath, DependencyResult::Deleted),
+            ],
+            $dispatcher->events,
+        );
+    }
+
+    public function testDeleteFilePath(): void {
+        $run        = self::createStub(ResolverTest__Invokable::class);
+        $save       = self::createStub(ResolverTest__Invokable::class);
+        $queue      = self::createStub(ResolverTest__Invokable::class);
+        $delete     = self::createMock(ResolverTest__Invokable::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new ResolverTest__Dispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+        $resolver   = new Resolver(
+            $container,
+            $dispatcher,
+            $filesystem,
+            $run(...),
+            $save(...),
+            $queue(...),
+            $delete(...),
+        );
+
+        $delete
+            ->expects(self::once())
+            ->method('__invoke')
+            ->with($filepath);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('directory'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('delete')
+            ->with($filepath);
+
+        $resolver->delete(new FilePath('file.txt'));
 
         self::assertEquals(
             [
@@ -726,7 +726,7 @@ final class ResolverTest extends TestCase {
         $dispatcher = self::createStub(Dispatcher::class);
         $filesystem = self::createStub(FileSystem::class);
         $resolver   = new Resolver($container, $dispatcher, $filesystem, $run, $save, $queue, $delete);
-        $file       = new FileImpl(new FileSystemFile($filesystem, new FilePath('/file.txt')));
+        $filepath   = new FileImpl(new FilePath('/file.txt'), static fn () => '');
 
         $container
             ->expects(self::once())
@@ -735,8 +735,8 @@ final class ResolverTest extends TestCase {
             ->willReturn(new ResolverTest__Cast());
 
         self::assertSame(
-            $resolver->cast($file, ResolverTest__Cast::class),
-            $resolver->cast($file, ResolverTest__Cast::class),
+            $resolver->cast($filepath, ResolverTest__Cast::class),
+            $resolver->cast($filepath, ResolverTest__Cast::class),
         );
     }
     //</editor-fold>

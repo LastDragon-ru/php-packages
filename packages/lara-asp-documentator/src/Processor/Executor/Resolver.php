@@ -10,8 +10,8 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\DependencyResult;
+use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathNotFound;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File as FileImpl;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileSystemFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
@@ -27,13 +27,10 @@ class Resolver implements Contract {
      */
     private array $casts;
     /**
-     * @var WeakMap<File<string>, array<class-string<Cast<mixed>>, mixed>>
+     * @var WeakMap<File<*>, array<class-string<Cast<mixed>>, mixed>>
      */
     private WeakMap $files;
-    /**
-     * @var WeakMap<FileSystemFile, File<string>>
-     */
-    private WeakMap $cache;
+    private Cache   $cache;
 
     public function __construct(
         private readonly Container $container,
@@ -58,7 +55,7 @@ class Resolver implements Contract {
     ) {
         $this->casts = [];
         $this->files = new WeakMap();
-        $this->cache = new WeakMap();
+        $this->cache = new Cache(50);
     }
 
     public DirectoryPath $input {
@@ -77,20 +74,31 @@ class Resolver implements Contract {
      * @return File<string>
      */
     public function file(FilePath $path): File {
-        return $this->wrap($this->fs->get($this->path($path)));
+        $path = $this->path($path);
+        $file = $this->cache[$path] ??= new FileImpl($path, function () use ($path): string {
+            return $this->fs->read($path);
+        });
+
+        return $file;
     }
 
     #[Override]
     public function get(FilePath $path): File {
-        $path = $this->path($path);
+        $file   = null;
+        $path   = $this->path($path);
+        $exists = $this->fs->exists($path);
 
         ($this->dispatcher)(new Dependency($path, DependencyResult::Found));
 
-        $file = $this->fs->get($path);
+        if ($exists) {
+            $file = $this->file($path);
 
-        ($this->run)($file->path);
+            ($this->run)($path);
+        } else {
+            throw new PathNotFound($path);
+        }
 
-        return $this->wrap($file);
+        return $file;
     }
 
     #[Override]
@@ -102,10 +110,9 @@ class Resolver implements Contract {
         if ($exists) {
             ($this->dispatcher)(new Dependency($path, DependencyResult::Found));
 
-            $file = $this->fs->get($path);
-            $file = $this->wrap($file);
+            $file = $this->file($path);
 
-            ($this->run)($file->path);
+            ($this->run)($path);
         } else {
             ($this->dispatcher)(new Dependency($path, DependencyResult::NotFound));
         }
@@ -134,16 +141,17 @@ class Resolver implements Contract {
         ($this->dispatcher)(new Dependency($path, DependencyResult::Saved));
 
         try {
-            $saved = $this->fs->write($path, $content);
-            $saved = $this->wrap($saved);
+            $this->fs->write($path, $content);
 
             ($this->save)($path);
         } finally {
-            $this->files = new WeakMap(); // fixme!: Temp
+            if (isset($this->cache[$path])) {
+                unset($this->files[$this->cache[$path]]);
+            }
 
-//            if (($saved ?? $file) !== null) {
-//                unset($this->files[$saved ?? $file]);
-//            }
+            if ($file !== null) {
+                unset($this->files[$file]);
+            }
         }
     }
 
@@ -151,8 +159,8 @@ class Resolver implements Contract {
     public function queue(FilePath|iterable $path): void {
         $iterator = $path instanceof FilePath ? [$path] : $path;
 
-        foreach ($iterator as $file) {
-            $filepath = $this->path($file);
+        foreach ($iterator as $item) {
+            $filepath = $this->path($item);
 
             ($this->dispatcher)(new Dependency($filepath, DependencyResult::Queued));
             ($this->queue)($filepath);
@@ -172,6 +180,7 @@ class Resolver implements Contract {
 
             ($this->dispatcher)(new Dependency($delete, DependencyResult::Deleted));
 
+            $this->cache->delete($delete);
             $this->fs->delete($delete);
 
             ($this->delete)($delete);
@@ -191,6 +200,15 @@ class Resolver implements Contract {
         return $found;
     }
 
+    public function begin(FilePath $path): void {
+        $this->fs->begin($path->directory());
+    }
+
+    public function commit(): void {
+        $this->fs->commit();
+        $this->cache->cleanup();
+    }
+
     /**
      * @template T of DirectoryPath|FilePath
      *
@@ -205,12 +223,5 @@ class Resolver implements Contract {
         };
 
         return $path;
-    }
-
-    /**
-     * @return File<string>
-     */
-    protected function wrap(FileSystemFile $file): File {
-        return $this->cache[$file] ??= new FileImpl($file);
     }
 }

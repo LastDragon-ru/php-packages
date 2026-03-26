@@ -166,7 +166,7 @@ class Executor {
      * @param iterable<int, Task> $tasks
      */
     protected function tasks(iterable $tasks, Hook $hook, FilePath $path): void {
-        $this->fs->begin($path->directory());
+        $this->resolver->begin($path);
 
         $exists = $this->fs->exists($path);
 
@@ -181,7 +181,7 @@ class Executor {
             }
         }
 
-        $this->fs->commit();
+        $this->resolver->commit();
     }
 
     protected function task(Task $task, Hook $hook, FilePath $path): void {
