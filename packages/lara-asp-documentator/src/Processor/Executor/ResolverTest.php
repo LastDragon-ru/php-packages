@@ -37,8 +37,14 @@ final class ResolverTest extends TestCase {
         $dispatcher = self::createStub(Dispatcher::class);
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
         $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
+        $filesystem
+            ->expects(self::once())
+            ->method('exists')
+            ->with($filepath)
+            ->willReturn(true);
         $filesystem
             ->expects(self::exactly(2))
             ->method(PropertyHook::get('directory'))
@@ -49,6 +55,30 @@ final class ResolverTest extends TestCase {
         self::assertEquals(new FilePath('/directory/path/file.txt'), $file->path);
         self::assertSame($file, $resolver->file(new FilePath('file.txt')));
         self::assertSame($file, $resolver->file(new FilePath('/directory/path/file.txt')));
+    }
+
+    public function testFileNotFound(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
+
+        $filesystem
+            ->expects(self::once())
+            ->method('exists')
+            ->with($filepath)
+            ->willReturn(false);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('directory'))
+            ->willReturn($directory);
+
+        self::expectExceptionObject(new PathNotFound($filepath));
+
+        $resolver->file(new FilePath('file.txt'));
     }
 
     public function testGet(): void {
@@ -109,7 +139,7 @@ final class ResolverTest extends TestCase {
         } finally {
             self::assertEquals(
                 [
-                    new Dependency($filepath, DependencyResult::Found),
+                    new Dependency($filepath, DependencyResult::NotFound),
                 ],
                 $dispatcher->events,
             );

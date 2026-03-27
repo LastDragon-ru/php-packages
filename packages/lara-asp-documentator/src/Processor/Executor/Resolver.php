@@ -2,6 +2,7 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
+use Exception;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
@@ -58,28 +59,41 @@ class Resolver implements Contract {
      * @return File<string>
      */
     public function file(FilePath $path): File {
+        // Cached?
         $path = $this->path($path);
-        $file = $this->cache[$path] ??= new FileImpl($path, function () use ($path): string {
+        $file = $this->cache[$path];
+
+        if ($file !== null) {
+            return $file;
+        }
+
+        // Exists?
+        if (!$this->fs->exists($path)) {
+            throw new PathNotFound($path);
+        }
+
+        // Create
+        $file               = new FileImpl($path, function () use ($path): string {
             return $this->fs->read($path);
         });
+        $this->cache[$path] = $file;
 
         return $file;
     }
 
     #[Override]
     public function get(FilePath $path): File {
-        $file   = null;
-        $path   = $this->path($path);
-        $exists = $this->fs->exists($path);
-
-        ($this->dispatcher)(new Dependency($path, DependencyResult::Found));
-
-        if ($exists) {
+        try {
+            $path = $this->path($path);
             $file = $this->file($path);
 
+            ($this->dispatcher)(new Dependency($path, DependencyResult::Found));
+
             $this->on->run($path);
-        } else {
-            throw new PathNotFound($path);
+        } catch (Exception $exception) {
+            ($this->dispatcher)(new Dependency($path, DependencyResult::NotFound));
+
+            throw $exception;
         }
 
         return $file;
@@ -87,18 +101,21 @@ class Resolver implements Contract {
 
     #[Override]
     public function find(FilePath $path): ?File {
-        $file   = null;
-        $path   = $this->path($path);
-        $exists = $this->fs->exists($path);
-
-        if ($exists) {
-            ($this->dispatcher)(new Dependency($path, DependencyResult::Found));
-
+        try {
+            $path = $this->path($path);
             $file = $this->file($path);
 
+            ($this->dispatcher)(new Dependency($path, DependencyResult::Found));
+
             $this->on->run($path);
-        } else {
+        } catch (PathNotFound) {
             ($this->dispatcher)(new Dependency($path, DependencyResult::NotFound));
+
+            $file = null;
+        } catch (Exception $exception) {
+            ($this->dispatcher)(new Dependency($path, DependencyResult::NotFound));
+
+            throw $exception;
         }
 
         return $file;
