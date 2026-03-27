@@ -80,7 +80,7 @@ class Processor {
             $skipped  = new Glob($skip, $hidden);
             $executor = new Executor($this->container, $dispatcher, $this->tasks, $fs, $files, $skipped);
 
-            $executor->run();
+            $executor();
         } catch (Exception $exception) {
             $result = ProcessResult::Error;
 

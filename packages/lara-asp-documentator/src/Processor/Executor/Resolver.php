@@ -2,7 +2,6 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
-use Closure;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
@@ -36,22 +35,7 @@ class Resolver implements Contract {
         private readonly Container $container,
         protected readonly Dispatcher $dispatcher,
         protected readonly FileSystem $fs,
-        /**
-         * @var Closure(FilePath): void
-         */
-        protected readonly Closure $run,
-        /**
-         * @var Closure(FilePath): void
-         */
-        protected readonly Closure $save,
-        /**
-         * @var Closure(FilePath): void
-         */
-        protected readonly Closure $queue,
-        /**
-         * @var Closure(DirectoryPath|FilePath): void
-         */
-        protected readonly Closure $delete,
+        protected readonly Listener $on,
     ) {
         $this->casts = [];
         $this->files = new WeakMap();
@@ -93,7 +77,7 @@ class Resolver implements Contract {
         if ($exists) {
             $file = $this->file($path);
 
-            ($this->run)($path);
+            $this->on->run($path);
         } else {
             throw new PathNotFound($path);
         }
@@ -112,7 +96,7 @@ class Resolver implements Contract {
 
             $file = $this->file($path);
 
-            ($this->run)($path);
+            $this->on->run($path);
         } else {
             ($this->dispatcher)(new Dependency($path, DependencyResult::NotFound));
         }
@@ -142,8 +126,7 @@ class Resolver implements Contract {
 
         try {
             $this->fs->write($path, $content);
-
-            ($this->save)($path);
+            $this->on->save($path);
         } finally {
             if (isset($this->cache[$path])) {
                 unset($this->files[$this->cache[$path]]);
@@ -163,7 +146,8 @@ class Resolver implements Contract {
             $filepath = $this->path($item);
 
             ($this->dispatcher)(new Dependency($filepath, DependencyResult::Queued));
-            ($this->queue)($filepath);
+
+            $this->on->queue($filepath);
         }
     }
 
@@ -182,8 +166,7 @@ class Resolver implements Contract {
 
             $this->cache->delete($delete);
             $this->fs->delete($delete);
-
-            ($this->delete)($delete);
+            $this->on->delete($delete);
         }
     }
 

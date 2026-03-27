@@ -26,6 +26,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Hook;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
+use Override;
 
 use function array_last;
 use function array_values;
@@ -33,7 +34,7 @@ use function array_values;
 /**
  * @internal
  */
-class Executor {
+class Executor implements Listener {
     private State             $state;
     private readonly Iterator $iterator;
     private readonly Resolver $resolver;
@@ -61,18 +62,10 @@ class Executor {
     ) {
         $this->state    = State::Created;
         $this->iterator = new Iterator($files);
-        $this->resolver = new Resolver(
-            $this->container,
-            $this->dispatcher,
-            $this->fs,
-            $this->onRun(...),
-            $this->onSave(...),
-            $this->onQueue(...),
-            $this->onDelete(...),
-        );
+        $this->resolver = new Resolver($this->container, $this->dispatcher, $this->fs, $this);
     }
 
-    public function run(): void {
+    public function __invoke(): void {
         $file        = null;
         $this->state = State::Preparation;
 
@@ -205,11 +198,12 @@ class Executor {
         }
     }
 
-    protected function queue(FilePath $path): void {
+    protected function push(FilePath $path): void {
         $this->iterator->push($path);
     }
 
-    protected function onRun(FilePath $path): void {
+    #[Override]
+    public function run(FilePath $path): void {
         // Possible?
         if ($this->state->is(State::Created)) {
             throw new DependencyUnavailable($path);
@@ -226,7 +220,8 @@ class Executor {
         }
     }
 
-    protected function onSave(FilePath $path): void {
+    #[Override]
+    public function save(FilePath $path): void {
         // Current?
         if ($path->equals(array_last($this->stack))) {
             return;
@@ -244,11 +239,12 @@ class Executor {
         if ($this->state->is(State::Finished)) {
             $this->file($path);
         } else {
-            $this->queue($path);
+            $this->push($path);
         }
     }
 
-    protected function onQueue(FilePath $path): void {
+    #[Override]
+    public function queue(FilePath $path): void {
         // Possible?
         if ($this->state->is(State::Finished)) {
             throw new DependencyUnavailable($path);
@@ -260,11 +256,13 @@ class Executor {
         }
 
         // Queue
-        $this->queue($path);
+        $this->push($path);
     }
 
-    protected function onDelete(DirectoryPath|FilePath $path): void {
-        // empty
+    #[Override]
+    public function delete(DirectoryPath|FilePath $path): void {
+        // todo(documentator/processor): if we have some queued files, then they
+        //      should be removed from the queue
     }
 
     protected function isSkipped(FilePath $path): bool {

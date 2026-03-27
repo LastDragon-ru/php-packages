@@ -5,88 +5,93 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\DependencyUnavailable;
 use LastDragon_ru\Path\FilePath;
-use Mockery;
-use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 use ReflectionProperty;
 
 /**
  * @internal
  */
 #[CoversClass(Executor::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class ExecutorTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
-    #[DataProvider('dataProviderOnRun')]
-    public function testOnRun(?bool $expected, State $state): void {
+    #[DataProvider('dataProviderRun')]
+    public function testRun(?bool $expected, State $state): void {
         $path     = new FilePath('/file.md');
-        $executor = Mockery::mock(ExecutorTest__Executor::class);
-        $executor->shouldAllowMockingProtectedMethods();
-        $executor->makePartial();
-
-        if ($expected !== false) {
-            $executor
-                ->shouldReceive('isSkipped')
-                ->with($path)
-                ->once()
-                ->andReturn(false);
-        }
+        $executor = self::createPartialMock(Executor::class, ['isSkipped', 'file']);
 
         if ($expected === true) {
             $executor
-                ->shouldReceive('file')
+                ->expects(self::once())
+                ->method('isSkipped')
                 ->with($path)
-                ->once()
-                ->andReturns();
+                ->willReturn(false);
+            $executor
+                ->expects(self::once())
+                ->method('file');
         } elseif ($expected === false) {
             self::expectException(DependencyUnavailable::class);
+
+            $executor
+                ->expects(self::never())
+                ->method('isSkipped')
+                ->with($path);
+            $executor
+                ->expects(self::never())
+                ->method('file');
         } else {
-            // empty
+            $executor
+                ->expects(self::once())
+                ->method('isSkipped')
+                ->with($path)
+                ->willReturn(true);
+            $executor
+                ->expects(self::never())
+                ->method('file');
         }
 
         (new ReflectionProperty(Executor::class, 'state'))->setValue($executor, $state);
 
-        $executor->onRun($path);
+        $executor->run($path);
     }
 
     /**
-     * @param 'file'|'queue'|null $expected
-     * @param non-empty-string    $current
-     * @param non-empty-string    $path
+     * @param 'file'|'push'|null $expected
+     * @param non-empty-string   $current
+     * @param non-empty-string   $path
      */
-    #[DataProvider('dataProviderOnSave')]
-    public function testOnSave(?string $expected, State $state, string $current, ?bool $skipped, string $path): void {
+    #[DataProvider('dataProviderSave')]
+    public function testSave(?string $expected, State $state, string $current, ?bool $skipped, string $path): void {
         $path     = new FilePath($path);
-        $executor = Mockery::mock(ExecutorTest__Executor::class);
-        $executor->shouldAllowMockingProtectedMethods();
-        $executor->makePartial();
+        $executor = self::createPartialMock(Executor::class, ['isSkipped', 'file', 'push']);
 
         if ($skipped !== null) {
             $executor
-                ->shouldReceive('isSkipped')
+                ->expects(self::once())
+                ->method('isSkipped')
                 ->with($path)
-                ->once()
-                ->andReturn($skipped);
+                ->willReturn($skipped);
         } else {
             $executor
-                ->shouldReceive('isSkipped')
-                ->never();
+                ->expects(self::never())
+                ->method('isSkipped');
         }
 
         if ($expected !== null) {
             $executor
-                ->shouldReceive($expected)
-                ->with($path)
-                ->once()
-                ->andReturns();
+                ->expects(self::once())
+                ->method($expected)
+                ->with($path);
         } else {
             $executor
-                ->shouldReceive('file')
-                ->never();
+                ->expects(self::never())
+                ->method('file');
             $executor
-                ->shouldReceive('queue')
-                ->never();
+                ->expects(self::never())
+                ->method('push');
         }
 
         (new ReflectionProperty(Executor::class, 'state'))->setValue($executor, $state);
@@ -96,7 +101,7 @@ final class ExecutorTest extends TestCase {
             $current    => true,
         ]);
 
-        $executor->onSave($path);
+        $executor->save($path);
 
         if ($expected !== null) {
             self::assertSame(
@@ -106,31 +111,35 @@ final class ExecutorTest extends TestCase {
         }
     }
 
-    #[DataProvider('dataProviderOnQueue')]
-    public function testOnQueue(bool $expected, State $state): void {
+    #[DataProvider('dataProviderQueue')]
+    public function testQueue(bool $expected, State $state): void {
         $path     = new FilePath('/file.md');
-        $executor = Mockery::mock(ExecutorTest__Executor::class);
-        $executor->shouldAllowMockingProtectedMethods();
-        $executor->makePartial();
+        $executor = self::createPartialMock(Executor::class, ['isSkipped', 'push']);
 
         if ($expected) {
             $executor
-                ->shouldReceive('isSkipped')
+                ->expects(self::once())
+                ->method('isSkipped')
                 ->with($path)
-                ->once()
-                ->andReturn(false);
+                ->willReturn(false);
             $executor
-                ->shouldReceive('queue')
-                ->with($path)
-                ->once()
-                ->andReturns();
+                ->expects(self::once())
+                ->method('push')
+                ->with($path);
         } else {
             self::expectException(DependencyUnavailable::class);
+
+            $executor
+                ->expects(self::never())
+                ->method('isSkipped');
+            $executor
+                ->expects(self::never())
+                ->method('push');
         }
 
         (new ReflectionProperty(Executor::class, 'state'))->setValue($executor, $state);
 
-        $executor->onQueue($path);
+        $executor->queue($path);
     }
     // </editor-fold>
 
@@ -139,7 +148,7 @@ final class ExecutorTest extends TestCase {
     /**
      * @return array<string, array{?bool, State}>
      */
-    public static function dataProviderOnRun(): array {
+    public static function dataProviderRun(): array {
         return [
             State::Preparation->name => [null, State::Preparation],
             State::Iteration->name   => [true, State::Iteration],
@@ -149,9 +158,9 @@ final class ExecutorTest extends TestCase {
     }
 
     /**
-     * @return array<string, array{'file'|'queue'|null, State, non-empty-string, ?bool, non-empty-string}>
+     * @return array<string, array{'file'|'push'|null, State, non-empty-string, ?bool, non-empty-string}>
      */
-    public static function dataProviderOnSave(): array {
+    public static function dataProviderSave(): array {
         return [
             'equal to the current file'                  => [
                 null,
@@ -161,7 +170,7 @@ final class ExecutorTest extends TestCase {
                 '/file.txt',
             ],
             'not equal to the current file'              => [
-                'queue',
+                'push',
                 State::Iteration,
                 '/file.txt',
                 false,
@@ -187,7 +196,7 @@ final class ExecutorTest extends TestCase {
     /**
      * @return array<string, array{bool, State}>
      */
-    public static function dataProviderOnQueue(): array {
+    public static function dataProviderQueue(): array {
         return [
             State::Preparation->name => [true, State::Preparation],
             State::Iteration->name   => [true, State::Iteration],
@@ -196,28 +205,4 @@ final class ExecutorTest extends TestCase {
         ];
     }
     // </editor-fold>
-}
-
-// @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
-// @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
-
-/**
- * @internal
- * @noinspection PhpMultipleClassesDeclarationsInOneFile
- */
-class ExecutorTest__Executor extends Executor {
-    #[Override]
-    public function onRun(FilePath $path): void {
-        parent::onRun($path);
-    }
-
-    #[Override]
-    public function onSave(FilePath $path): void {
-        parent::onSave($path);
-    }
-
-    #[Override]
-    public function onQueue(FilePath $path): void {
-        parent::onQueue($path);
-    }
 }

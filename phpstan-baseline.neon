@@ -31,30 +31,6 @@ parameters:
 			path: packages/lara-asp-core/src/Observer/DispatcherTest.php
 
 		-
-			rawMessage: 'Parameter #4 $run of class LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver constructor expects Closure(LastDragon_ru\Path\FilePath): void, Closure(): mixed given.'
-			identifier: argument.type
-			count: 16
-			path: packages/lara-asp-documentator/src/Processor/Executor/ResolverTest.php
-
-		-
-			rawMessage: 'Parameter #5 $save of class LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver constructor expects Closure(LastDragon_ru\Path\FilePath): void, Closure(): mixed given.'
-			identifier: argument.type
-			count: 16
-			path: packages/lara-asp-documentator/src/Processor/Executor/ResolverTest.php
-
-		-
-			rawMessage: 'Parameter #6 $queue of class LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver constructor expects Closure(LastDragon_ru\Path\FilePath): void, Closure(): mixed given.'
-			identifier: argument.type
-			count: 16
-			path: packages/lara-asp-documentator/src/Processor/Executor/ResolverTest.php
-
-		-
-			rawMessage: 'Parameter #7 $delete of class LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver constructor expects Closure(LastDragon_ru\Path\DirectoryPath|LastDragon_ru\Path\FilePath): void, Closure(): mixed given.'
-			identifier: argument.type
-			count: 16
-			path: packages/lara-asp-documentator/src/Processor/Executor/ResolverTest.php
-
-		-
 			rawMessage: 'Parameter #1 $offset of method LastDragon_ru\LaraASP\Eloquent\Iterators\IteratorImpl<TItem of Illuminate\Database\Eloquent\Model>::setOffset() expects int|string|null, mixed given.'
 			identifier: argument.type
 			count: 1

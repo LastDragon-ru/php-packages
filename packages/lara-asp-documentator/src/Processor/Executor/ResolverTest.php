@@ -4,9 +4,9 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
 use Exception;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
+use LastDragon_ru\LaraASP\Documentator\Package\WithProcessorDispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Event;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
-use UnitEnum;
 
 /**
  * @internal
@@ -33,23 +32,12 @@ final class ResolverTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
     public function testFile(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = self::createStub(Dispatcher::class);
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::exactly(2))
@@ -64,28 +52,17 @@ final class ResolverTest extends TestCase {
     }
 
     public function testGet(): void {
-        $run        = self::createMock(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $run
+        $listener
             ->expects(self::once())
-            ->method('__invoke')
+            ->method('run')
             ->with($filepath);
         $filesystem
             ->expects(self::once())
@@ -107,24 +84,13 @@ final class ResolverTest extends TestCase {
     }
 
     public function testGetNotFound(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
@@ -151,28 +117,17 @@ final class ResolverTest extends TestCase {
     }
 
     public function testFind(): void {
-        $run        = self::createMock(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $run
+        $listener
             ->expects(self::once())
-            ->method('__invoke')
+            ->method('run')
             ->with($filepath);
         $filesystem
             ->expects(self::once())
@@ -194,23 +149,12 @@ final class ResolverTest extends TestCase {
     }
 
     public function testFindNotFound(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
@@ -228,29 +172,18 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSave(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createMock(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $save
+        $listener
             ->expects(self::once())
-            ->method('__invoke')
+            ->method('save')
             ->with($filepath);
         $filesystem
             ->expects(self::once())
@@ -272,25 +205,14 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSaveException(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
         $exception  = new Exception();
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
@@ -311,32 +233,21 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSaveCastReset(): void {
-        $run        = self::createMock(ResolverTest__Invokable::class);
-        $save       = self::createMock(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createMock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $run
+        $listener
             ->expects(self::atLeastOnce())
-            ->method('__invoke')
+            ->method('run')
             ->with($filepath);
-        $save
+        $listener
             ->expects(self::once())
-            ->method('__invoke')
+            ->method('save')
             ->with($filepath);
         $container
             ->expects(self::once())
@@ -369,28 +280,17 @@ final class ResolverTest extends TestCase {
     }
 
     public function testQueue(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createMock(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $queue
+        $listener
             ->expects(self::once())
-            ->method('__invoke')
+            ->method('queue')
             ->with($filepath);
         $filesystem
             ->expects(self::once())
@@ -408,28 +308,17 @@ final class ResolverTest extends TestCase {
     }
 
     public function testQueueIterable(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createMock(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = self::createStub(FileSystem::class);
         $aFilepath  = new FilePath('/directory/path/a.txt');
         $bFilepath  = new FilePath('/directory/path/b.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $queue
+        $listener
             ->expects(self::exactly(2))
-            ->method('__invoke')
+            ->method('queue')
             ->willReturnMap([
                 [$aFilepath],
                 [$bFilepath],
@@ -447,28 +336,17 @@ final class ResolverTest extends TestCase {
     }
 
     public function testDelete(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createMock(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $delete
+        $listener
             ->expects(self::once())
-            ->method('__invoke')
+            ->method('delete')
             ->with($filepath);
         $filesystem
             ->expects(self::once())
@@ -490,27 +368,16 @@ final class ResolverTest extends TestCase {
     }
 
     public function testDeleteFile(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createMock(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $delete
+        $listener
             ->expects(self::once())
-            ->method('__invoke')
+            ->method('delete')
             ->with($filepath);
         $filesystem
             ->expects(self::once())
@@ -528,28 +395,17 @@ final class ResolverTest extends TestCase {
     }
 
     public function testDeleteFilePath(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createMock(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $delete
+        $listener
             ->expects(self::once())
-            ->method('__invoke')
+            ->method('delete')
             ->with($filepath);
         $filesystem
             ->expects(self::once())
@@ -573,26 +429,15 @@ final class ResolverTest extends TestCase {
     public function testDeleteIterable(): void {
         $aPath      = new FilePath('/a.txt');
         $bPath      = new DirectoryPath('/a/aa');
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createMock(ResolverTest__Invokable::class);
+        $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = self::createMock(FileSystem::class);
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $delete
+        $listener
             ->expects(self::exactly(2))
-            ->method('__invoke')
+            ->method('delete')
             ->willReturnMap([
                 [$aPath],
                 [$bPath],
@@ -617,10 +462,7 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSearchNull(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = self::createStub(Dispatcher::class);
         $directory  = new DirectoryPath('/directory/path/');
@@ -628,15 +470,7 @@ final class ResolverTest extends TestCase {
         $include    = ['include'];
         $exclude    = ['exclude'];
         $resolved   = [new FilePath('/directory/path/a.txt'), new FilePath('/directory/path/b.txt')];
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
@@ -652,10 +486,7 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSearchDirectory(): void {
-        $run        = self::createStub(ResolverTest__Invokable::class);
-        $save       = self::createStub(ResolverTest__Invokable::class);
-        $queue      = self::createStub(ResolverTest__Invokable::class);
-        $delete     = self::createStub(ResolverTest__Invokable::class);
+        $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = self::createStub(Dispatcher::class);
         $directory  = new DirectoryPath('/directory/path/');
@@ -663,15 +494,7 @@ final class ResolverTest extends TestCase {
         $include    = ['include'];
         $exclude    = ['exclude'];
         $resolved   = [new FilePath('/directory/path/a.txt'), new FilePath('/directory/path/b.txt')];
-        $resolver   = new Resolver(
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        );
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
@@ -688,14 +511,11 @@ final class ResolverTest extends TestCase {
 
     #[DataProvider('dataProviderPath')]
     public function testPath(DirectoryPath|FilePath $expected, DirectoryPath|FilePath $path): void {
-        $run        = (new ResolverTest__Invokable())(...);
-        $save       = (new ResolverTest__Invokable())(...);
-        $queue      = (new ResolverTest__Invokable())(...);
-        $delete     = (new ResolverTest__Invokable())(...);
+        $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = self::createStub(Dispatcher::class);
         $filesystem = self::createStub(FileSystem::class);
-        $resolver   = new class($container, $dispatcher, $filesystem, $run, $queue, $save, $delete) extends Resolver {
+        $resolver   = new class($container, $dispatcher, $filesystem, $listener) extends Resolver {
             #[Override]
             public function path(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
                 return parent::path($path);
@@ -718,14 +538,11 @@ final class ResolverTest extends TestCase {
     }
 
     public function testCast(): void {
-        $run        = (new ResolverTest__Invokable())(...);
-        $save       = (new ResolverTest__Invokable())(...);
-        $queue      = (new ResolverTest__Invokable())(...);
-        $delete     = (new ResolverTest__Invokable())(...);
+        $listener   = self::createStub(Listener::class);
         $container  = self::createMock(Container::class);
         $dispatcher = self::createStub(Dispatcher::class);
         $filesystem = self::createStub(FileSystem::class);
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $run, $save, $queue, $delete);
+        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
         $filepath   = new FileImpl(new FilePath('/file.txt'), static fn () => '');
 
         $container
@@ -763,16 +580,6 @@ final class ResolverTest extends TestCase {
 /**
  * @internal
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
- */
-class ResolverTest__Invokable {
-    public function __invoke(FilePath|DirectoryPath $path): void {
-        // empty
-    }
-}
-
-/**
- * @internal
- * @noinspection PhpMultipleClassesDeclarationsInOneFile
  *
  * @implements Cast<object>
  */
@@ -786,28 +593,5 @@ class ResolverTest__Cast implements Cast {
                 // empty
             }
         };
-    }
-}
-
-/**
- * @internal
- * @noinspection PhpMultipleClassesDeclarationsInOneFile
- */
-class ResolverTest__Dispatcher extends Dispatcher {
-    /**
-     * @var list<Event>
-     */
-    public array $events = [];
-
-    public function __construct() {
-        parent::__construct(null);
-    }
-
-    #[Override]
-    public function __invoke(Event $event, ?UnitEnum $result = null): ?UnitEnum {
-        $result         = parent::__invoke($event, $result);
-        $this->events[] = $event;
-
-        return $result;
     }
 }

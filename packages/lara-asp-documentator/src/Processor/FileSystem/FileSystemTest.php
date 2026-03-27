@@ -5,8 +5,8 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
 use Exception;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithProcessor;
+use LastDragon_ru\LaraASP\Documentator\Package\WithProcessorDispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Adapter;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Event;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\FileSystemDeleteBegin;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\FileSystemDeleteEnd;
@@ -27,7 +27,6 @@ use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
-use UnitEnum;
 
 use function array_map;
 use function iterator_to_array;
@@ -160,7 +159,7 @@ final class FileSystemTest extends TestCase {
             ->with($path)
             ->willReturn($content);
 
-        $dispatcher = new FileSystemTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         self::assertSame($content, $filesystem->read($path));
@@ -183,7 +182,7 @@ final class FileSystemTest extends TestCase {
             ->with($path)
             ->willThrowException(new Exception());
 
-        $dispatcher = new FileSystemTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         self::expectException(Exception::class);
@@ -221,7 +220,7 @@ final class FileSystemTest extends TestCase {
             ->with($path)
             ->willReturn($content);
 
-        $dispatcher = new FileSystemTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         $filesystem->write($path, $content);
@@ -249,7 +248,7 @@ final class FileSystemTest extends TestCase {
             ->with($path)
             ->willReturn(true);
 
-        $dispatcher = new FileSystemTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         $filesystem->write($path, $content);
@@ -281,7 +280,7 @@ final class FileSystemTest extends TestCase {
             ->with($path, $content)
             ->willThrowException(new Exception());
 
-        $dispatcher = new FileSystemTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         try {
@@ -325,7 +324,7 @@ final class FileSystemTest extends TestCase {
         $input      = TestData::get()->directory();
         $path       = $input->file('file.md');
         $adapter    = self::createMock(Adapter::class);
-        $dispatcher = new FileSystemTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         $adapter
@@ -350,7 +349,7 @@ final class FileSystemTest extends TestCase {
         $input      = TestData::get()->directory();
         $path       = $input->file('file.md');
         $adapter    = self::createMock(Adapter::class);
-        $dispatcher = new FileSystemTest__Dispatcher();
+        $dispatcher = new WithProcessorDispatcher();
         $filesystem = new FileSystem($adapter, $dispatcher, $input, $input);
 
         $adapter
@@ -476,30 +475,4 @@ final class FileSystemTest extends TestCase {
         ];
     }
     // </editor-fold>
-}
-
-// @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
-// @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
-
-/**
- * @internal
- * @noinspection PhpMultipleClassesDeclarationsInOneFile
- */
-class FileSystemTest__Dispatcher extends Dispatcher {
-    /**
-     * @var list<Event>
-     */
-    public array $events = [];
-
-    public function __construct() {
-        parent::__construct(null);
-    }
-
-    #[Override]
-    public function __invoke(Event $event, ?UnitEnum $result = null): ?UnitEnum {
-        $result         = parent::__invoke($event, $result);
-        $this->events[] = $event;
-
-        return $result;
-    }
 }
