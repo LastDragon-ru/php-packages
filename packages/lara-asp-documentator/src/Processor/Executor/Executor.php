@@ -5,6 +5,7 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 use Exception;
 use LastDragon_ru\GlobMatcher\Contracts\Matcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Task;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
@@ -162,13 +163,15 @@ class Executor implements Listener {
         $this->resolver->begin($path);
         $this->fs->begin();
 
-        $exists = $this->fs->exists($path);
+        $file = $this->fs->exists($path) ? $this->resolver->file($path) : null;
 
         foreach ($tasks as $task) {
-            if ($exists) {
-                $this->task($task, $hook, $path);
+            if ($file !== null) {
+                $this->task($task, $hook, $file);
 
-                $exists = $this->fs->exists($path);
+                if (!$this->fs->exists($path)) {
+                    $file = null;
+                }
             } else {
                 ($this->dispatcher)(new TaskBegin($task::class));
                 ($this->dispatcher)(new TaskEnd(TaskResult::Skipped));
@@ -179,9 +182,11 @@ class Executor implements Listener {
         $this->resolver->commit();
     }
 
-    protected function task(Task $task, Hook $hook, FilePath $path): void {
+    /**
+     * @param File<string> $file
+     */
+    protected function task(Task $task, Hook $hook, File $file): void {
         $result = ($this->dispatcher)(new TaskBegin($task::class), TaskResult::Success);
-        $file   = $this->resolver->file($path);
 
         try {
             if ($task instanceof FileTask) {
@@ -189,7 +194,7 @@ class Executor implements Listener {
             } elseif ($task instanceof HookTask) {
                 $task($this->resolver, $file, $hook);
             } else {
-                throw new TaskNotInvokable($task, $hook, $path);
+                throw new TaskNotInvokable($task, $hook, $file->path);
             }
         } catch (Exception $exception) {
             $result = TaskResult::Error;

@@ -7,7 +7,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File as Contract;
 use LastDragon_ru\Path\FilePath;
 
 /**
- * @template TContent = string
+ * @template TContent
  *
  * @implements Contract<TContent>
  *
