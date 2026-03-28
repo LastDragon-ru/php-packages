@@ -27,6 +27,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Hook;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
+use Override;
 
 use function array_last;
 use function array_values;
@@ -34,7 +35,7 @@ use function array_values;
 /**
  * @internal
  */
-class Executor {
+class Executor implements Listener {
     private State             $state;
     private readonly Iterator $iterator;
     private readonly Resolver $resolver;
@@ -62,18 +63,10 @@ class Executor {
     ) {
         $this->state    = State::Created;
         $this->iterator = new Iterator($files);
-        $this->resolver = new Resolver(
-            $this->container,
-            $this->dispatcher,
-            $this->fs,
-            $this->onRun(...),
-            $this->onSave(...),
-            $this->onQueue(...),
-            $this->onDelete(...),
-        );
+        $this->resolver = new Resolver($this->container, $this->dispatcher, $this->fs, $this);
     }
 
-    public function run(): void {
+    public function __invoke(): void {
         $file        = null;
         $this->state = State::Preparation;
 
@@ -81,8 +74,6 @@ class Executor {
             if (!$this->fs->exists($item)) {
                 continue;
             }
-
-            $item = $this->fs->get($item);
 
             if ($file === null) {
                 $this->hook(Hook::Before, $item);
@@ -102,17 +93,17 @@ class Executor {
         }
     }
 
-    protected function hook(Hook $hook, File $file): void {
+    protected function hook(Hook $hook, FilePath $path): void {
         // Tasks?
         if ($hook === Hook::File || !$this->tasks->has($hook)) {
             return;
         }
 
         // Run
-        $result = ($this->dispatcher)(new HookBegin($hook, $file->path), HookResult::Success);
+        $result = ($this->dispatcher)(new HookBegin($hook, $path), HookResult::Success);
 
         try {
-            $this->tasks($this->tasks->get($hook), $hook, $file);
+            $this->tasks($this->tasks->get($hook), $hook, $path);
         } catch (Exception $exception) {
             $result = HookResult::Error;
 
@@ -122,35 +113,33 @@ class Executor {
         }
     }
 
-    protected function file(File $file): void {
+    protected function file(FilePath $path): void {
         // Processed?
-        $path = (string) $file->path;
-
-        if (isset($this->processed[$path])) {
+        if (isset($this->processed[(string) $path])) {
             return;
         }
 
         // Circular?
-        if (isset($this->stack[$path])) {
+        if (isset($this->stack[(string) $path])) {
             // The $file cannot be processed if it is skipped, so we can return
             // it safely in this case.
-            if (!$this->isSkipped($file)) {
-                ($this->dispatcher)(new FileBegin($file->path));
+            if (!$this->isSkipped($path)) {
+                ($this->dispatcher)(new FileBegin($path));
                 ($this->dispatcher)(new FileEnd(FileResult::Error));
 
-                throw new DependencyCircularDependency($file->path, array_values($this->stack));
+                throw new DependencyCircularDependency($path, array_values($this->stack));
             } else {
                 return;
             }
         }
 
         // Process
-        $result             = ($this->dispatcher)(new FileBegin($file->path), FileResult::Success);
-        $this->stack[$path] = $file->path;
+        $result                      = ($this->dispatcher)(new FileBegin($path), FileResult::Success);
+        $this->stack[(string) $path] = $path;
 
         try {
-            if (!$this->isSkipped($file)) {
-                $this->tasks($this->tasks->get($file), Hook::File, $file);
+            if (!$this->isSkipped($path)) {
+                $this->tasks($this->tasks->get($path), Hook::File, $path);
             } else {
                 $result = FileResult::Skipped;
             }
@@ -161,25 +150,28 @@ class Executor {
         } finally {
             ($this->dispatcher)(new FileEnd($result));
 
-            $this->processed[$path] = true;
+            $this->processed[(string) $path] = true;
 
-            unset($this->stack[$path]);
+            unset($this->stack[(string) $path]);
         }
     }
 
     /**
      * @param iterable<int, Task> $tasks
      */
-    protected function tasks(iterable $tasks, Hook $hook, File $file): void {
-        $this->fs->begin($file->path->directory());
+    protected function tasks(iterable $tasks, Hook $hook, FilePath $path): void {
+        $this->resolver->begin($path);
+        $this->fs->begin();
 
-        $exists = $this->fs->exists($file->path);
+        $file = $this->fs->exists($path) ? $this->resolver->file($path) : null;
 
         foreach ($tasks as $task) {
-            if ($exists) {
+            if ($file !== null) {
                 $this->task($task, $hook, $file);
 
-                $exists = $this->fs->exists($file->path);
+                if (!$this->fs->exists($path)) {
+                    $file = null;
+                }
             } else {
                 ($this->dispatcher)(new TaskBegin($task::class));
                 ($this->dispatcher)(new TaskEnd(TaskResult::Skipped));
@@ -187,8 +179,12 @@ class Executor {
         }
 
         $this->fs->commit();
+        $this->resolver->commit();
     }
 
+    /**
+     * @param File<string> $file
+     */
     protected function task(Task $task, Hook $hook, File $file): void {
         $result = ($this->dispatcher)(new TaskBegin($task::class), TaskResult::Success);
 
@@ -209,82 +205,87 @@ class Executor {
         }
     }
 
-    protected function queue(File $file): void {
-        $this->iterator->push($file->path);
+    protected function push(FilePath $path): void {
+        $this->iterator->push($path);
     }
 
-    protected function onRun(File $file): void {
+    #[Override]
+    public function run(FilePath $path): void {
         // Possible?
         if ($this->state->is(State::Created)) {
-            throw new DependencyUnavailable($file->path);
+            throw new DependencyUnavailable($path);
         }
 
         // Skipped?
-        if ($this->isSkipped($file)) {
+        if ($this->isSkipped($path)) {
             return;
         }
 
         // Process
-        if (!$this->state->is(State::Preparation) && !$file->path->equals(array_last($this->stack))) {
-            $this->file($file);
+        if (!$this->state->is(State::Preparation) && !$path->equals(array_last($this->stack))) {
+            $this->file($path);
         }
     }
 
-    protected function onSave(File $file): void {
+    #[Override]
+    public function save(FilePath $path): void {
         // Current?
-        if ($file->path->equals(array_last($this->stack))) {
+        if ($path->equals(array_last($this->stack))) {
             return;
         }
 
         // Skipped?
-        if ($this->isSkipped($file)) {
+        if ($this->isSkipped($path)) {
             return;
         }
 
         // Reset
-        unset($this->processed[$file->path->path]);
+        unset($this->processed[(string) $path]);
 
         // Run/Queue
         if ($this->state->is(State::Finished)) {
-            $this->file($file);
+            $this->file($path);
         } else {
-            $this->queue($file);
+            $this->push($path);
         }
     }
 
-    protected function onQueue(File $file): void {
+    #[Override]
+    public function queue(FilePath $path): void {
         // Possible?
         if ($this->state->is(State::Finished)) {
-            throw new DependencyUnavailable($file->path);
+            throw new DependencyUnavailable($path);
         }
 
         // Skipped?
-        if ($this->isSkipped($file)) {
+        if ($this->isSkipped($path)) {
             return;
         }
 
         // Queue
-        $this->queue($file);
+        $this->push($path);
     }
 
-    protected function onDelete(DirectoryPath|FilePath $path): void {
-        // empty
+    #[Override]
+    public function delete(DirectoryPath|FilePath $path): void {
+        // todo(documentator/processor): if we have some queued files, then they
+        //      should be removed from the queue
     }
 
-    protected function isSkipped(File $file): bool {
+    protected function isSkipped(FilePath $path): bool {
         // Tasks?
-        if (!$this->tasks->has($file)) {
+        if (!$this->tasks->has($path)) {
             return true;
         }
 
         // Outside?
-        if (!$this->fs->input->contains($file->path)) {
+        if (!$this->fs->input->contains($path)) {
             return true;
         }
 
         // Excluded?
-        $path    = $this->fs->input->relative($file->path);
-        $skipped = $path === null || $this->skipped->match($path);
+        $relative = $this->fs->input->relative($path);
+        $skipped  = $relative === null || $this->skipped->match($relative);
 
         if ($skipped) {
             return true;

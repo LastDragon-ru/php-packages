@@ -3,80 +3,76 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
 
 use ArrayAccess;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use Override;
-use WeakMap;
+
+use function array_values;
 
 /**
  * @internal
- * @implements ArrayAccess<File, string>
+ * @implements ArrayAccess<FilePath, string>
  */
 class Content implements ArrayAccess {
     /**
-     * @var WeakMap<File, string>
+     * @var array<non-empty-string, string>
      */
-    private WeakMap $files;
+    private array $files = [];
     /**
-     * @var WeakMap<File, true>
+     * @var array<non-empty-string, FilePath>
      */
-    private WeakMap $changes;
+    private array $paths = [];
 
     public function __construct() {
-        $this->files   = new WeakMap();
-        $this->changes = new WeakMap();
+        // empty
     }
 
-    public function changed(File $file): bool {
-        return isset($this->changes[$file]);
+    public function changed(FilePath $path): bool {
+        return isset($this->files[$path->path]);
     }
 
     /**
-     * @return list<File>
+     * @return list<FilePath>
      */
     public function changes(): array {
-        $changes = [];
-
-        foreach ($this->changes as $file => $unused) {
-            if (isset($this->files[$file])) {
-                $changes[] = $file;
-            }
-        }
-
-        return $changes;
+        return array_values($this->paths);
     }
 
     public function cleanup(): void {
-        // Seems nothing to do?
+        $this->files = [];
+        $this->paths = [];
     }
 
     public function delete(DirectoryPath|FilePath $path): void {
         $delete = [];
 
-        foreach ($this->files as $file => $content) {
-            if ($path->equals($file->path) || ($path instanceof DirectoryPath && $path->contains($file->path))) {
-                $delete[] = $file;
+        if ($path instanceof DirectoryPath) {
+            foreach ($this->paths as $item) {
+                if ($path->contains($item)) {
+                    $delete[] = $item;
+                }
             }
+        } else {
+            $delete[] = $path;
         }
 
-        foreach ($delete as $file) {
-            unset($this[$file]);
+        foreach ($delete as $item) {
+            $this->reset($item);
         }
     }
 
-    public function reset(File $file): void {
-        unset($this->changes[$file]);
+    public function reset(FilePath $path): void {
+        unset($this[$path]);
     }
 
     #[Override]
     public function offsetExists(mixed $offset): bool {
-        return isset($this->files[$offset]);
+        return isset($this->files[$offset->path]);
     }
 
     #[Override]
     public function offsetGet(mixed $offset): mixed {
-        return $this->files[$offset] ?? null;
+        return $this->files[$offset->path] ?? null;
     }
 
     #[Override]
@@ -86,23 +82,14 @@ class Content implements ArrayAccess {
             return;
         }
 
-        // Unchanged?
-        if (isset($this->files[$offset]) && $this->files[$offset] === $value) {
-            return;
-        }
-
-        // Mark
-        if (isset($this->files[$offset])) {
-            $this->changes[$offset] = true;
-        }
-
         // Save
-        $this->files[$offset] = $value;
+        $this->paths[$offset->path] = $offset;
+        $this->files[$offset->path] = $value;
     }
 
     #[Override]
     public function offsetUnset(mixed $offset): void {
-        unset($this->changes[$offset]);
-        unset($this->files[$offset]);
+        unset($this->paths[$offset->path]);
+        unset($this->files[$offset->path]);
     }
 }

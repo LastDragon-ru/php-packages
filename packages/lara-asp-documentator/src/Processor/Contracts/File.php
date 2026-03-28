@@ -2,11 +2,10 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Contracts;
 
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
 use LastDragon_ru\Path\FilePath;
 
 /**
- * @phpstan-require-extends FileImpl
+ * @template TContent
  */
 interface File {
     public FilePath $path {
@@ -27,7 +26,10 @@ interface File {
         get;
     }
 
-    public string $content {
+    /**
+     * @var TContent
+     */
+    public mixed $content {
         get;
     }
 }

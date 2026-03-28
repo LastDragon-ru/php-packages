@@ -2,7 +2,6 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Contracts;
 
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver as ResolverImpl;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 
@@ -13,8 +12,6 @@ use LastDragon_ru\Path\FilePath;
  *
  * + Relative - relative to {@see self::$directory}.
  * + Other - as is.
- *
- * @phpstan-require-extends ResolverImpl
  */
 interface Resolver {
     public DirectoryPath $input {
@@ -29,8 +26,14 @@ interface Resolver {
         get;
     }
 
+    /**
+     * @return File<string>
+     */
     public function get(FilePath $path): File;
 
+    /**
+     * @return ?File<string>
+     */
     public function find(FilePath $path): ?File;
 
     /**
@@ -39,6 +42,7 @@ interface Resolver {
      *
      * @template T
      *
+     * @param File<string>|FilePath $path
      * @param class-string<Cast<T>> $cast
      *
      * @return T
@@ -47,6 +51,8 @@ interface Resolver {
 
     /**
      * If the file exists, it will be overwritten.
+     *
+     * @param File<*>|FilePath $path
      */
     public function save(File|FilePath $path, string $content): void;
 
@@ -58,7 +64,7 @@ interface Resolver {
     public function queue(FilePath|iterable $path): void;
 
     /**
-     * @param DirectoryPath|FilePath|File|iterable<mixed, DirectoryPath|FilePath> $path
+     * @param DirectoryPath|FilePath|File<*>|iterable<mixed, DirectoryPath|FilePath> $path
      */
     public function delete(DirectoryPath|FilePath|File|iterable $path): void;
 

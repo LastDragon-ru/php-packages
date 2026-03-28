@@ -9,6 +9,7 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Environment\Markdown as Markdown
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithMarkdown;
 use LastDragon_ru\LaraASP\Documentator\Package\WithProcessor;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Contracts\LinkFactory;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Exceptions\CodeLinkUnresolved;
 use LastDragon_ru\LaraASP\Documentator\Utils\Text;
@@ -17,6 +18,7 @@ use League\CommonMark\Node\Node;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 use XMLWriter;
 
 use function mb_trim;
@@ -26,6 +28,7 @@ use function str_repeat;
  * @internal
  */
 #[CoversClass(Task::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class TaskTest extends TestCase {
     use WithMarkdown;
     use WithProcessor;
@@ -40,8 +43,8 @@ final class TaskTest extends TestCase {
     public function testInvoke(Closure|string $expected, string $document): void {
         $path = TestData::get()->file($document);
         $fs   = $this->getFileSystem($path->directory());
-        $file = $fs->get($path);
         $task = $this->app()->make(Task::class);
+        $file = new File($path, static fn() => $fs->read($path));
 
         if ($expected instanceof Closure) {
             self::expectExceptionObject($expected());

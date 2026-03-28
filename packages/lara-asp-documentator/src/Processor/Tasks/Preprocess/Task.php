@@ -200,6 +200,8 @@ class Task implements FileTask {
     }
 
     /**
+     * @param File<string> $file
+     *
      * @return array<int, array<string, Token<*>>>
      */
     protected function parse(Resolver $resolver, File $file, Document $document): array {

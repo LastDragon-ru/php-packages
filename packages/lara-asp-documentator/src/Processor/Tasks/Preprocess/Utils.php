@@ -22,6 +22,9 @@ class Utils {
             && $instructions->has($node->getLabel());
     }
 
+    /**
+     * @param Document|File<*> $file
+     */
     public static function getSeed(Context $context, Document|File $file): string {
         $path = $file instanceof Document ? $file->path : $file->path;
         $path = $path !== null ? (string) $context->file->path->relative($path) : '';

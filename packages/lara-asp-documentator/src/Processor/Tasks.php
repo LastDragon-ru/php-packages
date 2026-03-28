@@ -5,12 +5,12 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor;
 use IteratorAggregate;
 use LastDragon_ru\GlobMatcher\GlobMatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Task;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Utils\Instances;
 use LastDragon_ru\LaraASP\Documentator\Processor\Utils\InstancesOrder;
+use LastDragon_ru\Path\FilePath;
 use Override;
 use Traversable;
 use WeakMap;
@@ -35,7 +35,7 @@ class Tasks implements IteratorAggregate {
     private array $globs = [];
 
     /**
-     * @var WeakMap<File|Hook, list<Hook|non-empty-string>>
+     * @var WeakMap<FilePath|Hook, list<Hook|non-empty-string>>
      */
     private WeakMap $tags;
 
@@ -56,14 +56,14 @@ class Tasks implements IteratorAggregate {
         return array_keys($this->globs);
     }
 
-    public function has(File|Hook $object): bool {
+    public function has(FilePath|Hook $object): bool {
         return $this->instances->has(...$this->tags($object));
     }
 
     /**
      * @return iterable<int, Task>
      */
-    public function get(File|Hook $object): iterable {
+    public function get(FilePath|Hook $object): iterable {
         return $this->instances->get(...$this->tags($object));
     }
 
@@ -130,11 +130,11 @@ class Tasks implements IteratorAggregate {
     /**
      * @return list<Hook|non-empty-string>
      */
-    private function tags(Hook|File $object): array {
+    private function tags(FilePath|Hook $object): array {
         if (!isset($this->tags[$object])) {
             $tags = [];
 
-            if ($object instanceof File) {
+            if ($object instanceof FilePath) {
                 $tags[] = Hook::File;
 
                 foreach ($this->globs as $tag => $matcher) {

@@ -4,70 +4,109 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
 use Exception;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
+use LastDragon_ru\LaraASP\Documentator\Package\WithProcessorDispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Event;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\DependencyResult;
-use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\File as FileImpl;
+use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathNotFound;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File as FileImpl;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
-use Mockery;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use UnitEnum;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
+use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
 
 /**
  * @internal
  */
 #[CoversClass(Resolver::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class ResolverTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
-    public function testGet(): void {
-        $run = Mockery::mock(ResolverTest__Invokable::class);
-        $run
-            ->shouldReceive('__invoke')
-            ->once()
-            ->andReturns();
+    public function testFile(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
 
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $filepath   = new FilePath('file.txt');
-        $resolved   = Mockery::mock(FileImpl::class);
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
         $filesystem
-            ->shouldReceive('get')
+            ->expects(self::once())
+            ->method('exists')
             ->with($filepath)
-            ->once()
-            ->andReturn($resolved);
+            ->willReturn(true);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $file     = $resolver->file(new FilePath('file.txt'));
+
+        self::assertEquals(new FilePath('/directory/path/file.txt'), $file->path);
+        self::assertSame($file, $resolver->file(new FilePath('file.txt')));
+        self::assertSame($file, $resolver->file(new FilePath('/directory/path/file.txt')));
+    }
+
+    public function testFileNotFound(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+
+        $filesystem
+            ->expects(self::once())
+            ->method('exists')
             ->with($filepath)
-            ->once()
-            ->andReturn($filepath);
+            ->willReturn(false);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
 
-        self::assertSame($resolved, $resolver->get($filepath));
+        self::expectExceptionObject(new PathNotFound($filepath));
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+
+        $resolver->file(new FilePath('file.txt'));
+    }
+
+    public function testGet(): void {
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+
+        $listener
+            ->expects(self::once())
+            ->method('run')
+            ->with($filepath);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('exists')
+            ->with($filepath)
+            ->willReturn(true);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+
+        self::assertEquals($filepath, $resolver->get(new FilePath('file.txt'))->path);
         self::assertEquals(
             [
                 new Dependency($filepath, DependencyResult::Found),
@@ -76,47 +115,34 @@ final class ResolverTest extends TestCase {
         );
     }
 
-    public function testGetException(): void {
-        $run        = Mockery::mock(ResolverTest__Invokable::class);
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $filepath   = new FilePath('file.txt');
-        $exception  = new Exception();
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
+    public function testGetNotFound(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+
         $filesystem
-            ->shouldReceive('get')
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('exists')
             ->with($filepath)
-            ->once()
-            ->andThrow($exception);
+            ->willReturn(false);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($filepath)
-            ->once()
-            ->andReturn($filepath);
-
-        self::expectExceptionObject($exception);
+        self::expectExceptionObject(new PathNotFound($filepath));
 
         try {
-            $resolver->get($filepath);
+            $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+
+            $resolver->get(new FilePath('file.txt'));
         } finally {
             self::assertEquals(
                 [
-                    new Dependency($filepath, DependencyResult::Found),
+                    new Dependency($filepath, DependencyResult::NotFound),
                 ],
                 $dispatcher->events,
             );
@@ -124,49 +150,30 @@ final class ResolverTest extends TestCase {
     }
 
     public function testFind(): void {
-        $run = Mockery::mock(ResolverTest__Invokable::class);
-        $run
-            ->shouldReceive('__invoke')
-            ->once()
-            ->andReturns();
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
 
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $filepath   = new FilePath('file.txt');
-        $resolved   = Mockery::mock(FileImpl::class);
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
+        $listener
+            ->expects(self::once())
+            ->method('run')
+            ->with($filepath);
         $filesystem
-            ->shouldReceive('exists')
-            ->with($filepath)
-            ->once()
-            ->andReturn(true);
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
         $filesystem
-            ->shouldReceive('get')
+            ->expects(self::once())
+            ->method('exists')
             ->with($filepath)
-            ->once()
-            ->andReturn($resolved);
+            ->willReturn(true);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($filepath)
-            ->once()
-            ->andReturn($filepath);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        self::assertSame($resolved, $resolver->find($filepath));
+        self::assertEquals($filepath, $resolver->find(new FilePath('file.txt'))->path ?? null);
         self::assertEquals(
             [
                 new Dependency($filepath, DependencyResult::Found),
@@ -176,36 +183,24 @@ final class ResolverTest extends TestCase {
     }
 
     public function testFindNotFound(): void {
-        $run        = Mockery::mock(ResolverTest__Invokable::class);
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $filepath   = new FilePath('file.txt');
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
-        $filesystem
-            ->shouldReceive('exists')
-            ->with($filepath)
-            ->once()
-            ->andReturn(false);
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('exists')
             ->with($filepath)
-            ->once()
-            ->andReturn($filepath);
+            ->willReturn(false);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         self::assertNull($resolver->find($filepath));
         self::assertEquals(
@@ -216,99 +211,31 @@ final class ResolverTest extends TestCase {
         );
     }
 
-    public function testFindException(): void {
-        $run        = Mockery::mock(ResolverTest__Invokable::class);
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $filepath   = new FilePath('file.txt');
-        $exception  = new Exception();
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
-        $filesystem
-            ->shouldReceive('exists')
-            ->with($filepath)
-            ->once()
-            ->andReturn(true);
-        $filesystem
-            ->shouldReceive('get')
-            ->with($filepath)
-            ->once()
-            ->andThrow($exception);
-
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($filepath)
-            ->once()
-            ->andReturn($filepath);
-
-        self::expectExceptionObject($exception);
-
-        try {
-            $resolver->find($filepath);
-        } finally {
-            self::assertEquals(
-                [
-                    new Dependency($filepath, DependencyResult::Found),
-                ],
-                $dispatcher->events,
-            );
-        }
-    }
-
     public function testSave(): void {
-        $run  = Mockery::mock(ResolverTest__Invokable::class);
-        $save = Mockery::mock(ResolverTest__Invokable::class);
-        $save
-            ->shouldReceive('__invoke')
-            ->once()
-            ->andReturns();
-
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
-        $filepath   = new FilePath('/file.txt');
-        $resolved   = Mockery::mock(FileImpl::class, [$filesystem, $filepath]);
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
 
+        $listener
+            ->expects(self::once())
+            ->method('save')
+            ->with($filepath);
         $filesystem
-            ->shouldReceive('write')
-            ->with($filepath, $content)
-            ->once()
-            ->andReturn($resolved);
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('write')
+            ->with($filepath, $content);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($filepath)
-            ->once()
-            ->andReturn($filepath);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->save($filepath, $content);
+        $resolver->save(new FilePath('file.txt'), $content);
 
         self::assertEquals(
             [
@@ -319,40 +246,28 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSaveException(): void {
-        $run        = Mockery::mock(ResolverTest__Invokable::class);
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
-        $filepath   = new FilePath('file.txt');
         $exception  = new Exception();
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
-        $filesystem
-            ->shouldReceive('write')
-            ->with($filepath, $content)
-            ->once()
-            ->andThrow($exception);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($filepath)
-            ->once()
-            ->andReturn($filepath);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('write')
+            ->with($filepath, $content)
+            ->willThrowException($exception);
 
         self::expectExceptionObject($exception);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->save($filepath, $content);
 
@@ -365,82 +280,77 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSaveCastReset(): void {
-        $dispatcher = new ResolverTest__Dispatcher();
-        $container  = Mockery::mock(Container::class);
-        $container
-            ->shouldReceive('make')
-            ->once()
-            ->andReturn(
-                new ResolverTest__Cast(),
-            );
-
-        $run        = (new ResolverTest__Invokable())(...);
-        $save       = (new ResolverTest__Invokable())(...);
-        $queue      = (new ResolverTest__Invokable())(...);
-        $delete     = (new ResolverTest__Invokable())(...);
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createMock(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
-        $filepath   = new FilePath('/file.txt');
-        $filesystem = Mockery::mock(FileSystem::class);
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $run, $save, $queue, $delete);
-        $file       = new FileImpl($filesystem, $filepath);
-        $value      = $resolver->cast($file, ResolverTest__Cast::class);
 
+        $listener
+            ->expects(self::atLeastOnce())
+            ->method('run')
+            ->with($filepath);
+        $listener
+            ->expects(self::once())
+            ->method('save')
+            ->with($filepath);
+        $container
+            ->expects(self::once())
+            ->method('make')
+            ->with(ResolverTest__Cast::class)
+            ->willReturn(new ResolverTest__Cast());
         $filesystem
-            ->shouldReceive('write')
-            ->with($filepath, $content)
-            ->once()
-            ->andReturn($file);
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::atLeastOnce())
+            ->method('exists')
+            ->with($filepath)
+            ->willReturn(true);
+        $filesystem
+            ->expects(self::once())
+            ->method('write')
+            ->with($filepath, $content);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $value    = $resolver->cast($filepath, ResolverTest__Cast::class);
 
         $resolver->save($filepath, $content);
 
-        self::assertNotSame($value, $resolver->cast($file, ResolverTest__Cast::class));
+        self::assertNotSame($value, $resolver->cast($filepath, ResolverTest__Cast::class));
         self::assertEquals(
             [
+                new Dependency($filepath, DependencyResult::Found),
                 new Dependency($filepath, DependencyResult::Saved),
+                new Dependency($filepath, DependencyResult::Found),
             ],
             $dispatcher->events,
         );
     }
 
     public function testQueue(): void {
-        $run   = Mockery::mock(ResolverTest__Invokable::class);
-        $save  = Mockery::mock(ResolverTest__Invokable::class);
-        $queue = Mockery::mock(ResolverTest__Invokable::class);
-        $queue
-            ->shouldReceive('__invoke')
-            ->once()
-            ->andReturns();
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
 
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $filepath   = new FilePath('/file.txt');
-        $resolved   = Mockery::mock(FileImpl::class);
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
+        $listener
+            ->expects(self::once())
+            ->method('queue')
+            ->with($filepath);
         $filesystem
-            ->shouldReceive('get')
-            ->with($filepath)
-            ->once()
-            ->andReturn($resolved);
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($filepath)
-            ->once()
-            ->andReturn($filepath);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->queue($filepath);
+        $resolver->queue(new FilePath('file.txt'));
 
         self::assertEquals(
             [
@@ -451,221 +361,167 @@ final class ResolverTest extends TestCase {
     }
 
     public function testQueueIterable(): void {
-        $aPath = new FilePath('/a.txt');
-        $aFile = Mockery::mock(FileImpl::class);
-        $bPath = new FilePath('/b.txt');
-        $bFile = Mockery::mock(FileImpl::class);
-        $run   = Mockery::mock(ResolverTest__Invokable::class);
-        $save  = Mockery::mock(ResolverTest__Invokable::class);
-        $queue = Mockery::mock(ResolverTest__Invokable::class);
-        $queue
-            ->shouldReceive('__invoke')
-            ->with($aFile)
-            ->once()
-            ->andReturns();
-        $queue
-            ->shouldReceive('__invoke')
-            ->with($bFile)
-            ->once()
-            ->andReturns();
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $aFilepath  = new FilePath('/directory/path/a.txt');
+        $bFilepath  = new FilePath('/directory/path/b.txt');
 
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
+        $listener
+            ->expects(self::exactly(2))
+            ->method('queue')
+            ->willReturnMap([
+                [$aFilepath],
+                [$bFilepath],
+            ]);
         $filesystem
-            ->shouldReceive('get')
-            ->with($aPath)
-            ->once()
-            ->andReturn($aFile);
-        $filesystem
-            ->shouldReceive('get')
-            ->with($bPath)
-            ->once()
-            ->andReturn($bFile);
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($aPath)
-            ->once()
-            ->andReturn($aPath);
-        $resolver
-            ->shouldReceive('path')
-            ->with($bPath)
-            ->once()
-            ->andReturn($bPath);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->queue([$aPath, $bPath]);
+        $resolver->queue([$aFilepath, $bFilepath]);
 
         self::assertEquals(
             [
-                new Dependency($aPath, DependencyResult::Queued),
-                new Dependency($bPath, DependencyResult::Queued),
+                new Dependency($aFilepath, DependencyResult::Queued),
+                new Dependency($bFilepath, DependencyResult::Queued),
             ],
             $dispatcher->events,
         );
     }
 
     public function testDelete(): void {
-        $path   = new FilePath('/file.txt');
-        $run    = Mockery::mock(ResolverTest__Invokable::class);
-        $save   = Mockery::mock(ResolverTest__Invokable::class);
-        $queue  = Mockery::mock(ResolverTest__Invokable::class);
-        $delete = Mockery::mock(ResolverTest__Invokable::class);
-        $delete
-            ->shouldReceive('__invoke')
-            ->with($path)
-            ->once()
-            ->andReturns();
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
 
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
+        $listener
+            ->expects(self::once())
+            ->method('delete')
+            ->with($filepath);
         $filesystem
-            ->shouldReceive('delete')
-            ->with($path)
-            ->once()
-            ->andReturns();
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('delete')
+            ->with($filepath);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($path)
-            ->once()
-            ->andReturn($path);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->delete($path);
+        $resolver->delete(new FilePath('file.txt'));
 
         self::assertEquals(
             [
-                new Dependency($path, DependencyResult::Deleted),
+                new Dependency($filepath, DependencyResult::Deleted),
             ],
             $dispatcher->events,
         );
     }
 
     public function testDeleteFile(): void {
-        $path   = new FilePath('/file.txt');
-        $run    = Mockery::mock(ResolverTest__Invokable::class);
-        $save   = Mockery::mock(ResolverTest__Invokable::class);
-        $queue  = Mockery::mock(ResolverTest__Invokable::class);
-        $delete = Mockery::mock(ResolverTest__Invokable::class);
-        $delete
-            ->shouldReceive('__invoke')
-            ->with($path)
-            ->once()
-            ->andReturns();
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
 
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
+        $listener
+            ->expects(self::once())
+            ->method('delete')
+            ->with($filepath);
         $filesystem
-            ->shouldReceive('delete')
-            ->with($path)
-            ->once()
-            ->andReturns();
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('delete')
+            ->with($filepath);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($path)
-            ->once()
-            ->andReturn($path);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->delete(new FileImpl($filesystem, $path));
+        $resolver->delete(new FileImpl($filepath, static fn () => ''));
 
         self::assertEquals(
             [
-                new Dependency($path, DependencyResult::Deleted),
+                new Dependency($filepath, DependencyResult::Deleted),
+            ],
+            $dispatcher->events,
+        );
+    }
+
+    public function testDeleteFilePath(): void {
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+
+        $listener
+            ->expects(self::once())
+            ->method('delete')
+            ->with($filepath);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('delete')
+            ->with($filepath);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+
+        $resolver->delete(new FilePath('file.txt'));
+
+        self::assertEquals(
+            [
+                new Dependency($filepath, DependencyResult::Deleted),
             ],
             $dispatcher->events,
         );
     }
 
     public function testDeleteIterable(): void {
-        $aPath  = new FilePath('/a.txt');
-        $bPath  = new DirectoryPath('/a/aa');
-        $run    = Mockery::mock(ResolverTest__Invokable::class);
-        $save   = Mockery::mock(ResolverTest__Invokable::class);
-        $queue  = Mockery::mock(ResolverTest__Invokable::class);
-        $delete = Mockery::mock(ResolverTest__Invokable::class);
-        $delete
-            ->shouldReceive('__invoke')
-            ->with($aPath)
-            ->once()
-            ->andReturns();
-        $delete
-            ->shouldReceive('__invoke')
-            ->with($bPath)
-            ->once()
-            ->andReturns();
+        $aPath      = new FilePath('/a.txt');
+        $bPath      = new DirectoryPath('/a/aa');
+        $listener   = self::createMock(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
 
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = new ResolverTest__Dispatcher();
-        $filesystem = Mockery::mock(FileSystem::class);
+        $listener
+            ->expects(self::exactly(2))
+            ->method('delete')
+            ->willReturnMap([
+                [$aPath],
+                [$bPath],
+            ]);
         $filesystem
-            ->shouldReceive('delete')
-            ->with($aPath)
-            ->once()
-            ->andReturns();
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
         $filesystem
-            ->shouldReceive('delete')
-            ->with($bPath)
-            ->once()
-            ->andReturns();
+            ->expects(self::exactly(2))
+            ->method('delete')
+            ->willReturnMap([
+                [$aPath],
+                [$bPath],
+            ]);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($aPath)
-            ->once()
-            ->andReturn($aPath);
-        $resolver
-            ->shouldReceive('path')
-            ->with($bPath)
-            ->once()
-            ->andReturn($bPath);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->delete([$aPath, $bPath]);
 
@@ -679,140 +535,64 @@ final class ResolverTest extends TestCase {
     }
 
     public function testSearchNull(): void {
-        $run        = Mockery::mock(ResolverTest__Invokable::class);
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
         $include    = ['include'];
         $exclude    = ['exclude'];
-        $directory  = new DirectoryPath('directory');
-        $resolved   = [new FilePath('file.txt')];
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = Mockery::mock(Dispatcher::class);
-        $filesystem = Mockery::mock(FileSystem::class);
+        $resolved   = [new FilePath('/directory/path/a.txt'), new FilePath('/directory/path/b.txt')];
+
         $filesystem
-            ->shouldReceive('search')
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('search')
             ->with($directory, $include, $exclude, false)
-            ->once()
-            ->andReturn($resolved);
+            ->willReturn($resolved);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with(
-                Mockery::on(static function (mixed $path): bool {
-                    return $path instanceof DirectoryPath
-                        && $path->equals(new DirectoryPath('.'));
-                }),
-            )
-            ->once()
-            ->andReturn($directory);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $actual   = $resolver->search(include: $include, exclude: $exclude);
 
-        self::assertSame($resolved, $resolver->search(include: $include, exclude: $exclude));
+        self::assertSame($resolved, $actual);
     }
 
-    public function testSearchString(): void {
-        $run        = Mockery::mock(ResolverTest__Invokable::class);
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
+    public function testSearchDirectory(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
         $include    = ['include'];
         $exclude    = ['exclude'];
-        $directory  = new DirectoryPath('directory');
-        $resolved   = [new FilePath('file.txt')];
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = Mockery::mock(Dispatcher::class);
-        $filesystem = Mockery::mock(FileSystem::class);
+        $resolved   = [new FilePath('/directory/path/a.txt'), new FilePath('/directory/path/b.txt')];
+
         $filesystem
-            ->shouldReceive('search')
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('search')
             ->with($directory, $include, $exclude, true)
-            ->once()
-            ->andReturn($resolved);
+            ->willReturn($resolved);
 
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with(
-                Mockery::on(static function (mixed $path) use ($directory): bool {
-                    return $path instanceof DirectoryPath
-                        && $path->equals($directory);
-                }),
-            )
-            ->once()
-            ->andReturn($directory);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $actual   = $resolver->search(new DirectoryPath('.'), $include, $exclude, true);
 
-        self::assertNotEmpty($directory->path);
-        self::assertSame($resolved, $resolver->search($directory, $include, $exclude, true));
-    }
-
-    public function testSearchDirectoryPath(): void {
-        $run        = Mockery::mock(ResolverTest__Invokable::class);
-        $save       = Mockery::mock(ResolverTest__Invokable::class);
-        $queue      = Mockery::mock(ResolverTest__Invokable::class);
-        $delete     = Mockery::mock(ResolverTest__Invokable::class);
-        $include    = ['include'];
-        $exclude    = ['exclude'];
-        $directory  = new DirectoryPath('directory');
-        $resolved   = [new FilePath('file.txt')];
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = Mockery::mock(Dispatcher::class);
-        $filesystem = Mockery::mock(FileSystem::class);
-        $filesystem
-            ->shouldReceive('search')
-            ->with($directory, $include, $exclude, false)
-            ->once()
-            ->andReturn($resolved);
-
-        $resolver = Mockery::mock(Resolver::class, [
-            $container,
-            $dispatcher,
-            $filesystem,
-            $run(...),
-            $save(...),
-            $queue(...),
-            $delete(...),
-        ]);
-        $resolver->shouldAllowMockingProtectedMethods();
-        $resolver->makePartial();
-        $resolver
-            ->shouldReceive('path')
-            ->with($directory)
-            ->once()
-            ->andReturn($directory);
-
-        self::assertSame($resolved, $resolver->search($directory, $include, $exclude));
+        self::assertSame($resolved, $actual);
     }
 
     #[DataProvider('dataProviderPath')]
     public function testPath(DirectoryPath|FilePath $expected, DirectoryPath|FilePath $path): void {
-        $run        = (new ResolverTest__Invokable())(...);
-        $save       = (new ResolverTest__Invokable())(...);
-        $queue      = (new ResolverTest__Invokable())(...);
-        $delete     = (new ResolverTest__Invokable())(...);
-        $container  = Mockery::mock(Container::class);
-        $dispatcher = Mockery::mock(Dispatcher::class);
-        $filesystem = Mockery::mock(FileSystem::class);
-        $resolver   = new class($container, $dispatcher, $filesystem, $run, $queue, $save, $delete) extends Resolver {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = self::createStub(FileSystem::class);
+        $resolver   = new class($container, $dispatcher, $filesystem, $listener) extends Resolver {
             #[Override]
             public function path(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
                 return parent::path($path);
@@ -825,38 +605,74 @@ final class ResolverTest extends TestCase {
             public DirectoryPath $output {
                 get => new DirectoryPath('/output');
             }
-
-            public DirectoryPath $directory {
-                get => new DirectoryPath('/directory');
-            }
         };
+
+        $resolver->begin(new FilePath('/directory/file.txt'));
 
         self::assertEquals($expected->normalized(), $resolver->path($path));
     }
 
     public function testCast(): void {
-        $container = Mockery::mock(Container::class);
-        $container
-            ->shouldReceive('make')
-            ->once()
-            ->andReturn(
-                new ResolverTest__Cast(),
-            );
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createMock(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FileImpl(new FilePath('/file.txt'), static fn () => '');
 
-        $run        = (new ResolverTest__Invokable())(...);
-        $save       = (new ResolverTest__Invokable())(...);
-        $queue      = (new ResolverTest__Invokable())(...);
-        $delete     = (new ResolverTest__Invokable())(...);
-        $dispatcher = Mockery::mock(Dispatcher::class);
-        $filesystem = Mockery::mock(FileSystem::class);
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $run, $save, $queue, $delete);
-        $file       = new FileImpl($filesystem, new FilePath('/file.txt'));
+        $container
+            ->expects(self::once())
+            ->method('make')
+            ->with(ResolverTest__Cast::class)
+            ->willReturn(new ResolverTest__Cast());
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         self::assertSame(
-            $resolver->cast($file, ResolverTest__Cast::class),
-            $resolver->cast($file, ResolverTest__Cast::class),
+            $resolver->cast($filepath, ResolverTest__Cast::class),
+            $resolver->cast($filepath, ResolverTest__Cast::class),
         );
     }
+
+    public function testPropertyDirectory(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+
+        $filesystem
+            ->expects(self::atLeastOnce())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $a        = $directory->file('a/file.txt');
+        $b        = $directory->file('b/file.txt');
+
+        self::assertEquals($directory, $resolver->directory);
+
+        $resolver->begin($a);
+
+        self::assertEquals($a->directory(), $resolver->directory);
+
+        $resolver->begin($b);
+
+        self::assertEquals($b->directory(), $resolver->directory);
+
+        $resolver->commit();
+
+        self::assertEquals($a->directory(), $resolver->directory);
+
+        $resolver->commit();
+
+        self::assertEquals($directory, $resolver->directory);
+    }
+
     //</editor-fold>
 
     // <editor-fold desc="DataProviders">
@@ -881,16 +697,6 @@ final class ResolverTest extends TestCase {
 /**
  * @internal
  * @noinspection PhpMultipleClassesDeclarationsInOneFile
- */
-class ResolverTest__Invokable {
-    public function __invoke(mixed $path): void {
-        // empty
-    }
-}
-
-/**
- * @internal
- * @noinspection PhpMultipleClassesDeclarationsInOneFile
  *
  * @implements Cast<object>
  */
@@ -904,28 +710,5 @@ class ResolverTest__Cast implements Cast {
                 // empty
             }
         };
-    }
-}
-
-/**
- * @internal
- * @noinspection PhpMultipleClassesDeclarationsInOneFile
- */
-class ResolverTest__Dispatcher extends Dispatcher {
-    /**
-     * @var list<Event>
-     */
-    public array $events = [];
-
-    public function __construct() {
-        parent::__construct(null);
-    }
-
-    #[Override]
-    public function __invoke(Event $event, ?UnitEnum $result = null): ?UnitEnum {
-        $result         = parent::__invoke($event, $result);
-        $this->events[] = $event;
-
-        return $result;
     }
 }

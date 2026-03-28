@@ -13,5 +13,8 @@ interface HookTask extends Task {
      */
     public static function hook(): array|Hook;
 
+    /**
+     * @param File<string> $file
+     */
     public function __invoke(Resolver $resolver, File $file, Hook $hook): void;
 }

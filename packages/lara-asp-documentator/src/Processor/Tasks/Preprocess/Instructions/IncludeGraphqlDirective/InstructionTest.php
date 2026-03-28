@@ -9,6 +9,7 @@ use LastDragon_ru\GraphQL\Printer\Contracts\Printer as PrinterContract;
 use LastDragon_ru\GraphQL\Printer\Printer;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Exceptions\DependencyIsMissing;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeGraphqlDirective\Exceptions\TargetIsNotDirective;
 use Mockery;
@@ -45,7 +46,7 @@ final class InstructionTest extends TestCase {
         });
 
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = $fs->get($fs->input->file(__FILE__));
+        $file     = new File($fs->input->file(__FILE__), static fn() => '');
         $params   = new Parameters('@test');
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);
@@ -71,7 +72,7 @@ final class InstructionTest extends TestCase {
 
         // Test
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = $fs->get($fs->input->file(__FILE__));
+        $file     = new File($fs->input->file(__FILE__), static fn() => '');
         $params   = new Parameters('@test');
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);
@@ -98,7 +99,7 @@ final class InstructionTest extends TestCase {
         });
 
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = $fs->get($fs->input->file(__FILE__));
+        $file     = new File($fs->input->file(__FILE__), static fn() => '');
         $params   = new Parameters('@test');
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);
@@ -116,7 +117,7 @@ final class InstructionTest extends TestCase {
         });
 
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = $fs->get($fs->input->file(__FILE__));
+        $file     = new File($fs->input->file(__FILE__), static fn() => '');
         $params   = new Parameters('@test');
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);

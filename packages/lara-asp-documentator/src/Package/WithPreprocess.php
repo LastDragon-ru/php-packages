@@ -17,6 +17,9 @@ use Mockery;
 trait WithPreprocess {
     use WithProcessor;
 
+    /**
+     * @param File<string> $file
+     */
     protected function getPreprocessInstructionContext(
         FileSystem $fs,
         File $file,

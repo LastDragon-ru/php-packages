@@ -34,9 +34,12 @@ use function str_contains;
 use const DEBUG_BACKTRACE_IGNORE_ARGS;
 
 final class Example implements Runner {
-    private static ?Application $app    = null;
-    private static ?File        $file   = null;
-    private static ?Dumper      $dumper = null;
+    private static ?Application $app = null;
+    /**
+     * @var File<string>|null
+     */
+    private static ?File   $file   = null;
+    private static ?Dumper $dumper = null;
 
     public function __construct(
         private readonly ApplicationResolver $appResolver,

@@ -1,21 +1,22 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
+namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\Path\FilePath;
-use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 
 /**
  * @internal
  */
 #[CoversClass(Cache::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class CacheTest extends TestCase {
     public function testArrayAccess(): void {
         $cache = new Cache(1);
         $aPath = new FilePath('file.txt');
-        $aFile = Mockery::mock(File::class);
+        $aFile = self::createStub(File::class);
 
         self::assertFalse(isset($cache[$aPath]));
 
@@ -32,17 +33,16 @@ final class CacheTest extends TestCase {
     }
 
     public function testCleanup(): void {
-        $fs    = Mockery::mock(FileSystem::class);
         $cache = new Cache(1);
         $aPath = new FilePath('/a.txt');
-        $aFile = new File($fs, $aPath);
+        $aFile = new File($aPath, static fn () => '');
         $bPath = new FilePath('/b.txt');
-        $bFile = new File($fs, $bPath);
+        $bFile = new File($bPath, static fn () => '');
         $cPath = new FilePath('/c.txt');
 
         $cache[$aPath] = $aFile;
         $cache[$bPath] = $bFile;
-        $cache[$cPath] = new File($fs, $cPath);
+        $cache[$cPath] = new File($cPath, static fn () => '');
 
         $cache->cleanup();
 
@@ -68,15 +68,14 @@ final class CacheTest extends TestCase {
     }
 
     public function testDelete(): void {
-        $fs    = Mockery::mock(FileSystem::class);
         $cache = new Cache(1);
         $aPath = new FilePath('/a/a.txt');
         $bPath = new FilePath('/a/b.txt');
         $cPath = new FilePath('/c.txt');
 
-        $cache[$aPath] = new File($fs, $aPath);
-        $cache[$bPath] = new File($fs, $bPath);
-        $cache[$cPath] = new File($fs, $cPath);
+        $cache[$aPath] = new File($aPath, static fn () => '');
+        $cache[$bPath] = new File($bPath, static fn () => '');
+        $cache[$cPath] = new File($cPath, static fn () => '');
 
         self::assertTrue(isset($cache[$aPath]));
         self::assertTrue(isset($cache[$bPath]));

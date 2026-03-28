@@ -244,7 +244,7 @@
       "./vendor/bin/phpstan analyse"
     ],
     "phpunit": [
-      "./vendor/bin/phpunit"
+      "./vendor/bin/phpunit --display-all-issues"
     ],
     "phpcs": [
       "./vendor-bin/phpcs/vendor/bin/phpcs -s"

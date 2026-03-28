@@ -4,7 +4,6 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
 
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\Path\FilePath;
-use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
@@ -14,102 +13,91 @@ use PHPUnit\Framework\Attributes\CoversClass;
 final class ContentTest extends TestCase {
     public function testChanged(): void {
         $content = new Content();
-        $file    = Mockery::mock(File::class);
+        $path    = new FilePath('file.txt');
 
-        self::assertFalse($content->changed($file));
+        self::assertFalse($content->changed($path));
 
-        $content[$file] = 'abc';
+        $content[$path] = 'abc';
 
-        self::assertFalse($content->changed($file));
+        self::assertTrue($content->changed($path));
+        self::assertTrue($content->changed(new FilePath('file.txt')));
 
-        $content[$file] = 'abc';
+        unset($content[$path]);
 
-        self::assertFalse($content->changed($file));
-
-        $content[$file] = 'cba';
-
-        self::assertTrue($content->changed($file));
-
-        unset($content[$file]);
-
-        self::assertFalse($content->changed($file));
+        self::assertFalse($content->changed($path));
+        self::assertFalse($content->changed(new FilePath('file.txt')));
     }
 
     public function testChanges(): void {
-        $aFile   = Mockery::mock(File::class);
-        $bFile   = Mockery::mock(File::class);
+        $aPath   = new FilePath('a.txt');
+        $bPath   = new FilePath('b.txt');
         $content = new Content();
-
-        $content[$aFile] = 'a';
-        $content[$bFile] = 'b';
 
         self::assertSame([], $content->changes());
 
-        $content[$aFile] = 'aa';
-        $content[$bFile] = 'bb';
+        $content[$aPath] = 'a';
+        $content[$bPath] = 'b';
 
-        self::assertSame([$aFile, $bFile], $content->changes());
-        self::assertSame([$aFile, $bFile], $content->changes());
+        self::assertSame([$aPath, $bPath], $content->changes());
+        self::assertSame([$aPath, $bPath], $content->changes());
     }
 
     public function testDelete(): void {
-        $fs      = Mockery::mock(FileSystem::class);
-        $aFile   = new File($fs, new FilePath('/directory/a.txt'));
-        $bFile   = new File($fs, new FilePath('/directory/b.txt'));
-        $cFile   = new File($fs, new FilePath('/c.txt'));
+        $aPath   = new FilePath('/directory/a.txt');
+        $bPath   = new FilePath('/directory/b.txt');
+        $cPath   = new FilePath('/c.txt');
         $content = new Content();
 
-        $content[$aFile] = 'a';
-        $content[$bFile] = 'b';
-        $content[$cFile] = 'c';
+        $content[$aPath] = 'a';
+        $content[$bPath] = 'b';
+        $content[$cPath] = 'c';
 
-        self::assertTrue(isset($content[$aFile]));
-        self::assertTrue(isset($content[$bFile]));
-        self::assertTrue(isset($content[$cFile]));
+        self::assertTrue(isset($content[$aPath]));
+        self::assertTrue(isset($content[$bPath]));
+        self::assertTrue(isset($content[$cPath]));
 
-        $content->delete($cFile->path);
+        $content->delete($cPath);
 
-        self::assertTrue(isset($content[$aFile]));
-        self::assertTrue(isset($content[$bFile]));
-        self::assertFalse(isset($content[$cFile]));
+        self::assertTrue(isset($content[$aPath]));
+        self::assertTrue(isset($content[$bPath]));
+        self::assertFalse(isset($content[$cPath]));
 
-        $content->delete($aFile->path->directory());
+        $content->delete($aPath->directory());
 
-        self::assertFalse(isset($content[$aFile]));
-        self::assertFalse(isset($content[$bFile]));
-        self::assertFalse(isset($content[$cFile]));
+        self::assertFalse(isset($content[$aPath]));
+        self::assertFalse(isset($content[$bPath]));
+        self::assertFalse(isset($content[$cPath]));
     }
 
     public function testReset(): void {
-        $file    = Mockery::mock(File::class);
+        $path    = new FilePath('b.txt');
         $content = new Content();
 
-        $content[$file] = 'a';
-        $content[$file] = 'b';
+        $content[$path] = 'a';
 
-        self::assertTrue($content->changed($file));
+        self::assertTrue($content->changed($path));
 
-        $content->reset($file);
+        $content->reset($path);
 
-        self::assertFalse($content->changed($file));
-        self::assertTrue(isset($content[$file]));
+        self::assertFalse($content->changed($path));
+        self::assertFalse(isset($content[$path]));
     }
 
     public function testArrayAccess(): void {
         $content = new Content();
-        $file    = Mockery::mock(File::class);
+        $path    = new FilePath('b.txt');
 
-        self::assertFalse(isset($content[$file]));
-        self::assertNull($content[$file]);
+        self::assertFalse(isset($content[$path]));
+        self::assertNull($content[$path]);
 
-        $content[$file] = 'abc';
+        $content[$path] = 'abc';
 
-        self::assertTrue(isset($content[$file]));
-        self::assertSame('abc', $content[$file]);
+        self::assertTrue(isset($content[$path]));
+        self::assertSame('abc', $content[$path]);
 
-        unset($content[$file]);
+        unset($content[$path]);
 
-        self::assertFalse(isset($content[$file]));
-        self::assertNull($content[$file]);
+        self::assertFalse(isset($content[$path]));
+        self::assertNull($content[$path]);
     }
 }
