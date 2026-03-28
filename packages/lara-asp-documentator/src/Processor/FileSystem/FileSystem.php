@@ -21,23 +21,20 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathUnavailable;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 
-use function array_last;
-use function array_pop;
 use function sprintf;
 use function str_starts_with;
 use function strlen;
 
+/**
+ * @internal
+ */
 class FileSystem {
-    /**
-     * @var array<int, DirectoryPath>
-     */
-    private array   $level = [];
     private Content $content;
 
     public function __construct(
         private readonly Adapter $adapter,
         private readonly Dispatcher $dispatcher,
-        public readonly DirectoryPath $input,
+        public protected(set) DirectoryPath $input { get => $this->input; },
         public readonly DirectoryPath $output,
     ) {
         if ($input->relative) {
@@ -59,10 +56,6 @@ class FileSystem {
         }
 
         $this->content = new Content();
-    }
-
-    public DirectoryPath $directory {
-        get => array_last($this->level) ?? $this->input;
     }
 
     public function exists(FilePath $path): bool {
@@ -165,14 +158,11 @@ class FileSystem {
         }
     }
 
-    public function begin(DirectoryPath $path): void {
-        $this->level[] = $this->path($path);
+    public function begin(): void {
+        // empty
     }
 
     public function commit(): void {
-        // Level
-        array_pop($this->level);
-
         // Dump
         foreach ($this->content->changes() as $path) {
             $this->save($path);

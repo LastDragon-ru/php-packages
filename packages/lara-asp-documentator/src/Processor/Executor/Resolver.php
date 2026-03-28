@@ -18,10 +18,17 @@ use LastDragon_ru\Path\FilePath;
 use Override;
 use WeakMap;
 
+use function array_last;
+use function array_pop;
+
 /**
  * @internal
  */
 class Resolver implements Contract {
+    /**
+     * @var list<FilePath>
+     */
+    private array $level = [];
     /**
      * @var array<class-string<Cast<mixed>>, Cast<mixed>>
      */
@@ -34,13 +41,14 @@ class Resolver implements Contract {
 
     public function __construct(
         private readonly Container $container,
-        protected readonly Dispatcher $dispatcher,
-        protected readonly FileSystem $fs,
-        protected readonly Listener $on,
+        private readonly Dispatcher $dispatcher,
+        private readonly FileSystem $fs,
+        private readonly Listener $on,
     ) {
-        $this->casts = [];
-        $this->files = new WeakMap();
-        $this->cache = new Cache(50);
+        $this->casts     = [];
+        $this->files     = new WeakMap();
+        $this->cache     = new Cache(50);
+        $this->directory = $this->input;
     }
 
     public DirectoryPath $input {
@@ -51,8 +59,8 @@ class Resolver implements Contract {
         get => $this->fs->output;
     }
 
-    public DirectoryPath $directory {
-        get => $this->fs->directory;
+    public protected(set) DirectoryPath $directory {
+        get => $this->directory;
     }
 
     /**
@@ -201,11 +209,16 @@ class Resolver implements Contract {
     }
 
     public function begin(FilePath $path): void {
-        $this->fs->begin($path->directory());
+        $path            = $this->path($path);
+        $this->level[]   = $path;
+        $this->directory = $path->directory();
     }
 
     public function commit(): void {
-        $this->fs->commit();
+        array_pop($this->level);
+
+        $this->directory = array_last($this->level)?->directory() ?? $this->input;
+
         $this->cache->cleanup();
     }
 
@@ -217,11 +230,6 @@ class Resolver implements Contract {
      * @return new<T>
      */
     protected function path(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
-        $path = match (true) {
-            $path->relative => $this->directory->resolve($path),
-            default         => $path->normalized(),
-        };
-
-        return $path;
+        return $this->directory->resolve($path);
     }
 }

@@ -160,6 +160,7 @@ class Executor implements Listener {
      */
     protected function tasks(iterable $tasks, Hook $hook, FilePath $path): void {
         $this->resolver->begin($path);
+        $this->fs->begin();
 
         $exists = $this->fs->exists($path);
 
@@ -174,6 +175,7 @@ class Executor implements Listener {
             }
         }
 
+        $this->fs->commit();
         $this->resolver->commit();
     }
 

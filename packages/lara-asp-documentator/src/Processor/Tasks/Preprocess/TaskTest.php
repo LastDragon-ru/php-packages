@@ -16,6 +16,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters;
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializer;
+use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -160,10 +161,9 @@ final class TaskTest extends TestCase {
             ->addInstruction(TaskTest__TestInstruction::class)
             ->addInstruction(TaskTest__DocumentInstruction::class);
 
-        $filesystem = self::createMock(FileSystem::class);
-        $actual     = '';
-        $path       = new FilePath('/path/to/file.md');
-        $file       = self::createMock(File::class);
+        $actual = '';
+        $path   = new FilePath('/path/to/file.md');
+        $file   = self::createMock(File::class);
         $file
             ->expects($this->exactly(4))
             ->method(PropertyHook::get('path'))
@@ -173,6 +173,11 @@ final class TaskTest extends TestCase {
             ->method(PropertyHook::get('content'))
             ->willReturn(self::MARKDOWN);
 
+        $filesystem = self::createMock(FileSystem::class);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn(new DirectoryPath('/input/'));
         $filesystem
             ->expects(self::once())
             ->method('write')

@@ -38,7 +38,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
@@ -46,11 +45,12 @@ final class ResolverTest extends TestCase {
             ->with($filepath)
             ->willReturn(true);
         $filesystem
-            ->expects(self::exactly(2))
-            ->method(PropertyHook::get('directory'))
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
 
-        $file = $resolver->file(new FilePath('file.txt'));
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $file     = $resolver->file(new FilePath('file.txt'));
 
         self::assertEquals(new FilePath('/directory/path/file.txt'), $file->path);
         self::assertSame($file, $resolver->file(new FilePath('file.txt')));
@@ -64,7 +64,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
@@ -73,10 +72,12 @@ final class ResolverTest extends TestCase {
             ->willReturn(false);
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
 
         self::expectExceptionObject(new PathNotFound($filepath));
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->file(new FilePath('file.txt'));
     }
@@ -88,7 +89,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::once())
@@ -96,13 +96,15 @@ final class ResolverTest extends TestCase {
             ->with($filepath);
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
         $filesystem
             ->expects(self::once())
             ->method('exists')
             ->with($filepath)
             ->willReturn(true);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         self::assertEquals($filepath, $resolver->get(new FilePath('file.txt'))->path);
         self::assertEquals(
@@ -120,11 +122,10 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
         $filesystem
             ->expects(self::once())
@@ -135,6 +136,8 @@ final class ResolverTest extends TestCase {
         self::expectExceptionObject(new PathNotFound($filepath));
 
         try {
+            $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+
             $resolver->get(new FilePath('file.txt'));
         } finally {
             self::assertEquals(
@@ -153,7 +156,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::once())
@@ -161,13 +163,15 @@ final class ResolverTest extends TestCase {
             ->with($filepath);
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
         $filesystem
             ->expects(self::once())
             ->method('exists')
             ->with($filepath)
             ->willReturn(true);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         self::assertEquals($filepath, $resolver->find(new FilePath('file.txt'))->path ?? null);
         self::assertEquals(
@@ -182,15 +186,21 @@ final class ResolverTest extends TestCase {
         $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
         $filesystem
             ->expects(self::once())
             ->method('exists')
             ->with($filepath)
             ->willReturn(false);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         self::assertNull($resolver->find($filepath));
         self::assertEquals(
@@ -209,7 +219,6 @@ final class ResolverTest extends TestCase {
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::once())
@@ -217,12 +226,14 @@ final class ResolverTest extends TestCase {
             ->with($filepath);
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
         $filesystem
             ->expects(self::once())
             ->method('write')
             ->with($filepath, $content);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->save(new FilePath('file.txt'), $content);
 
@@ -238,12 +249,16 @@ final class ResolverTest extends TestCase {
         $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
         $exception  = new Exception();
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
         $filesystem
             ->expects(self::once())
             ->method('write')
@@ -251,6 +266,8 @@ final class ResolverTest extends TestCase {
             ->willThrowException($exception);
 
         self::expectExceptionObject($exception);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->save($filepath, $content);
 
@@ -266,10 +283,10 @@ final class ResolverTest extends TestCase {
         $listener   = self::createMock(Listener::class);
         $container  = self::createMock(Container::class);
         $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
         $content    = 'content';
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::atLeastOnce())
@@ -285,6 +302,10 @@ final class ResolverTest extends TestCase {
             ->with(ResolverTest__Cast::class)
             ->willReturn(new ResolverTest__Cast());
         $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
             ->expects(self::atLeastOnce())
             ->method('exists')
             ->with($filepath)
@@ -294,7 +315,8 @@ final class ResolverTest extends TestCase {
             ->method('write')
             ->with($filepath, $content);
 
-        $value = $resolver->cast($filepath, ResolverTest__Cast::class);
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $value    = $resolver->cast($filepath, ResolverTest__Cast::class);
 
         $resolver->save($filepath, $content);
 
@@ -316,7 +338,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::once())
@@ -324,8 +345,10 @@ final class ResolverTest extends TestCase {
             ->with($filepath);
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->queue(new FilePath('file.txt'));
 
@@ -341,10 +364,10 @@ final class ResolverTest extends TestCase {
         $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = new WithProcessorDispatcher();
-        $filesystem = self::createStub(FileSystem::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
         $aFilepath  = new FilePath('/directory/path/a.txt');
         $bFilepath  = new FilePath('/directory/path/b.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::exactly(2))
@@ -353,6 +376,12 @@ final class ResolverTest extends TestCase {
                 [$aFilepath],
                 [$bFilepath],
             ]);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->queue([$aFilepath, $bFilepath]);
 
@@ -372,7 +401,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::once())
@@ -380,12 +408,14 @@ final class ResolverTest extends TestCase {
             ->with($filepath);
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
         $filesystem
             ->expects(self::once())
             ->method('delete')
             ->with($filepath);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->delete(new FilePath('file.txt'));
 
@@ -401,9 +431,9 @@ final class ResolverTest extends TestCase {
         $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::once())
@@ -411,8 +441,14 @@ final class ResolverTest extends TestCase {
             ->with($filepath);
         $filesystem
             ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
             ->method('delete')
             ->with($filepath);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->delete(new FileImpl($filepath, static fn () => ''));
 
@@ -431,7 +467,6 @@ final class ResolverTest extends TestCase {
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FilePath('/directory/path/file.txt');
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::once())
@@ -439,12 +474,14 @@ final class ResolverTest extends TestCase {
             ->with($filepath);
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
         $filesystem
             ->expects(self::once())
             ->method('delete')
             ->with($filepath);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->delete(new FilePath('file.txt'));
 
@@ -462,8 +499,8 @@ final class ResolverTest extends TestCase {
         $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $listener
             ->expects(self::exactly(2))
@@ -473,12 +510,18 @@ final class ResolverTest extends TestCase {
                 [$bPath],
             ]);
         $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
             ->expects(self::exactly(2))
             ->method('delete')
             ->willReturnMap([
                 [$aPath],
                 [$bPath],
             ]);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $resolver->delete([$aPath, $bPath]);
 
@@ -500,11 +543,10 @@ final class ResolverTest extends TestCase {
         $include    = ['include'];
         $exclude    = ['exclude'];
         $resolved   = [new FilePath('/directory/path/a.txt'), new FilePath('/directory/path/b.txt')];
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
         $filesystem
             ->expects(self::once())
@@ -512,7 +554,10 @@ final class ResolverTest extends TestCase {
             ->with($directory, $include, $exclude, false)
             ->willReturn($resolved);
 
-        self::assertSame($resolved, $resolver->search(include: $include, exclude: $exclude));
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $actual   = $resolver->search(include: $include, exclude: $exclude);
+
+        self::assertSame($resolved, $actual);
     }
 
     public function testSearchDirectory(): void {
@@ -524,11 +569,10 @@ final class ResolverTest extends TestCase {
         $include    = ['include'];
         $exclude    = ['exclude'];
         $resolved   = [new FilePath('/directory/path/a.txt'), new FilePath('/directory/path/b.txt')];
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('directory'))
+            ->method(PropertyHook::get('input'))
             ->willReturn($directory);
         $filesystem
             ->expects(self::once())
@@ -536,7 +580,10 @@ final class ResolverTest extends TestCase {
             ->with($directory, $include, $exclude, true)
             ->willReturn($resolved);
 
-        self::assertSame($resolved, $resolver->search(new DirectoryPath('.'), $include, $exclude, true));
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $actual   = $resolver->search(new DirectoryPath('.'), $include, $exclude, true);
+
+        self::assertSame($resolved, $actual);
     }
 
     #[DataProvider('dataProviderPath')]
@@ -558,11 +605,9 @@ final class ResolverTest extends TestCase {
             public DirectoryPath $output {
                 get => new DirectoryPath('/output');
             }
-
-            public DirectoryPath $directory {
-                get => new DirectoryPath('/directory');
-            }
         };
+
+        $resolver->begin(new FilePath('/directory/file.txt'));
 
         self::assertEquals($expected->normalized(), $resolver->path($path));
     }
@@ -571,8 +616,8 @@ final class ResolverTest extends TestCase {
         $listener   = self::createStub(Listener::class);
         $container  = self::createMock(Container::class);
         $dispatcher = self::createStub(Dispatcher::class);
-        $filesystem = self::createStub(FileSystem::class);
-        $resolver   = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
         $filepath   = new FileImpl(new FilePath('/file.txt'), static fn () => '');
 
         $container
@@ -580,12 +625,54 @@ final class ResolverTest extends TestCase {
             ->method('make')
             ->with(ResolverTest__Cast::class)
             ->willReturn(new ResolverTest__Cast());
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
         self::assertSame(
             $resolver->cast($filepath, ResolverTest__Cast::class),
             $resolver->cast($filepath, ResolverTest__Cast::class),
         );
     }
+
+    public function testPropertyDirectory(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+
+        $filesystem
+            ->expects(self::atLeastOnce())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $a        = $directory->file('a/file.txt');
+        $b        = $directory->file('b/file.txt');
+
+        self::assertEquals($directory, $resolver->directory);
+
+        $resolver->begin($a);
+
+        self::assertEquals($a->directory(), $resolver->directory);
+
+        $resolver->begin($b);
+
+        self::assertEquals($b->directory(), $resolver->directory);
+
+        $resolver->commit();
+
+        self::assertEquals($a->directory(), $resolver->directory);
+
+        $resolver->commit();
+
+        self::assertEquals($directory, $resolver->directory);
+    }
+
     //</editor-fold>
 
     // <editor-fold desc="DataProviders">

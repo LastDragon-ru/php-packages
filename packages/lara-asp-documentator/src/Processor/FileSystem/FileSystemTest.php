@@ -395,35 +395,6 @@ final class FileSystemTest extends TestCase {
         $filesystem->delete($input->file('file.txt'));
     }
 
-    public function testPropertyDirectory(): void {
-        $base       = TestData::get()->directory();
-        $input      = $base->directory('input');
-        $output     = $base->directory('output');
-        $adapter    = self::createStub(Adapter::class);
-        $dispatcher = self::createStub(Dispatcher::class);
-        $filesystem = new FileSystem($adapter, $dispatcher, $input, $output);
-        $a          = $filesystem->input->directory('a');
-        $b          = $filesystem->input->directory('b');
-
-        self::assertSame($filesystem->input, $filesystem->directory);
-
-        $filesystem->begin($a);
-
-        self::assertSame($a, $filesystem->directory);
-
-        $filesystem->begin($b);
-
-        self::assertSame($b, $filesystem->directory);
-
-        $filesystem->commit();
-
-        self::assertSame($a, $filesystem->directory);
-
-        $filesystem->commit();
-
-        self::assertSame($filesystem->input, $filesystem->directory);
-    }
-
     #[DataProvider('dataProviderPath')]
     public function testPath(Exception|DirectoryPath|FilePath $expected, DirectoryPath|FilePath $path): void {
         $dispatcher = self::createStub(Dispatcher::class);

@@ -6,11 +6,13 @@ use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithProcessor;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
+use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
+use ReflectionProperty;
 
 use function array_first;
 
@@ -44,10 +46,13 @@ final class ParsedTest extends TestCase {
             }
             PHP;
         $filesystem = Mockery::mock(FileSystem::class);
-        $resolver   = $this->getProcessorResolver($filesystem);
-        $cast       = $this->app()->make(Parsed::class);
-        $path       = new FilePath('/path/to/file.json');
-        $file       = self::createMock(File::class);
+
+        (new ReflectionProperty($filesystem, 'input'))->setValue($filesystem, new DirectoryPath('/input/'));
+
+        $resolver = $this->getProcessorResolver($filesystem);
+        $cast     = $this->app()->make(Parsed::class);
+        $path     = new FilePath('/path/to/file.json');
+        $file     = self::createMock(File::class);
 
         $file
             ->expects($this->once())

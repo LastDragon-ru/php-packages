@@ -73,13 +73,13 @@ final class ProcessorTest extends TestCase {
             }
         };
         $taskB = new ProcessorTest__Task([
-            'a.txt'  => [
+            'a/a.txt'    => [
                 '../b/b/bb.txt',
                 '../c.txt',
                 '../c.html',
                 'excluded.txt',
             ],
-            'bb.txt' => [
+            'b/b/bb.txt' => [
                 '../../b/a/ba.txt',
                 '../../c.txt',
             ],
@@ -364,7 +364,7 @@ final class ProcessorTest extends TestCase {
         $input     = TestData::get()->directory();
         $events    = [];
         $taskA     = new class([
-            'b.html' => [
+            'b/b.html' => [
                 '../a/excluded.txt',
             ],
         ]) extends ProcessorTest__Task {
@@ -540,7 +540,7 @@ final class ProcessorTest extends TestCase {
         $output    = $input->directory('a');
         $events    = [];
         $task      = new ProcessorTest__Task([
-            'ba.txt' => [
+            'b/a/ba.txt' => [
                 '../../a/a.txt',
             ],
         ]);
@@ -640,10 +640,10 @@ final class ProcessorTest extends TestCase {
     public function testRunCircularDependency(): void {
         $input     = TestData::get()->directory();
         $task      = new ProcessorTest__Task([
-            'a.txt'  => ['../b/b.txt'],
-            'b.txt'  => ['../b/a/ba.txt'],
-            'ba.txt' => ['../../c.txt'],
-            'c.txt'  => ['a/a.txt'],
+            'a/a.txt'    => ['../b/b.txt'],
+            'b/b.txt'    => ['../b/a/ba.txt'],
+            'b/a/ba.txt' => ['../../c.txt'],
+            'c.txt'      => ['a/a.txt'],
         ]);
         $processor = new Processor(
             Mockery::mock(Container::class),
@@ -732,7 +732,7 @@ final class ProcessorTest extends TestCase {
         $output    = TestData::get()->directory('b');
         $input     = TestData::get()->directory('a');
         $task      = new ProcessorTest__Task([
-            'aa.txt' => ['../a.txt'],
+            'a/aa.txt' => ['../a.txt'],
         ]);
         $processor = new Processor(
             Mockery::mock(Container::class),
@@ -1095,7 +1095,8 @@ class ProcessorTest__Task implements FileTask {
     #[Override]
     public function __invoke(ResolverContract $resolver, File $file): void {
         $resolved     = [];
-        $dependencies = $this->dependencies[$file->name] ?? $this->dependencies['*'] ?? [];
+        $relative     = ($resolver->input->relative($file->path) ?? $file->path)->path;
+        $dependencies = $this->dependencies[$relative] ?? $this->dependencies['*'] ?? [];
 
         foreach ($dependencies as $dependency) {
             $resolved[$dependency] = $resolver->get(new FilePath($dependency));
