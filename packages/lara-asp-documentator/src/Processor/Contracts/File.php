@@ -32,4 +32,11 @@ interface File {
     public mixed $content {
         get;
     }
+
+    /**
+     * @param TContent $content
+     */
+    public function save(mixed $content): void;
+
+    public function delete(): void;
 }

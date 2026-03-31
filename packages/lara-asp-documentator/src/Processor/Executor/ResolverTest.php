@@ -211,6 +211,31 @@ final class ResolverTest extends TestCase {
         );
     }
 
+    public function testRead(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+        $content    = 'content';
+
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('read')
+            ->with($filepath)
+            ->willReturn($content);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $actual   = $resolver->read(new FilePath('file.txt'));
+
+        self::assertSame($content, $actual);
+    }
+
     public function testSave(): void {
         $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
@@ -394,6 +419,31 @@ final class ResolverTest extends TestCase {
         );
     }
 
+    public function testCreate(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = new WithProcessorDispatcher();
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn(new DirectoryPath('/input/'));
+        $filesystem
+            ->expects(self::exactly(3))
+            ->method(PropertyHook::get('output'))
+            ->willReturn($directory);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $actual   = $resolver->create(new FilePath('file.txt'));
+
+        self::assertEquals($filepath, $actual->path);
+        self::assertSame($actual, $resolver->create($filepath));
+        self::assertSame($actual, $resolver->create(new FilePath('file.txt')));
+    }
+
     public function testDelete(): void {
         $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
@@ -450,7 +500,7 @@ final class ResolverTest extends TestCase {
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->delete(new FileImpl($filepath, static fn () => ''));
+        $resolver->delete(new FileImpl($filepath, $resolver));
 
         self::assertEquals(
             [
@@ -586,16 +636,16 @@ final class ResolverTest extends TestCase {
         self::assertSame($resolved, $actual);
     }
 
-    #[DataProvider('dataProviderPath')]
-    public function testPath(DirectoryPath|FilePath $expected, DirectoryPath|FilePath $path): void {
+    #[DataProvider('dataProviderInput')]
+    public function testInput(DirectoryPath|FilePath $expected, DirectoryPath|FilePath $path): void {
         $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
         $dispatcher = self::createStub(Dispatcher::class);
         $filesystem = self::createStub(FileSystem::class);
         $resolver   = new class($container, $dispatcher, $filesystem, $listener) extends Resolver {
             #[Override]
-            public function path(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
-                return parent::path($path);
+            public function input(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
+                return parent::input($path);
             }
 
             public DirectoryPath $input {
@@ -609,7 +659,33 @@ final class ResolverTest extends TestCase {
 
         $resolver->begin(new FilePath('/directory/file.txt'));
 
-        self::assertEquals($expected->normalized(), $resolver->path($path));
+        self::assertEquals($expected->normalized(), $resolver->input($path));
+    }
+
+    #[DataProvider('dataProviderOutput')]
+    public function testOutput(DirectoryPath|FilePath $expected, DirectoryPath|FilePath $path): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = self::createStub(FileSystem::class);
+        $resolver   = new class($container, $dispatcher, $filesystem, $listener) extends Resolver {
+            #[Override]
+            public function output(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
+                return parent::output($path);
+            }
+
+            public DirectoryPath $input {
+                get => new DirectoryPath('/input');
+            }
+
+            public DirectoryPath $output {
+                get => new DirectoryPath('/output');
+            }
+        };
+
+        $resolver->begin(new FilePath('/directory/file.txt'));
+
+        self::assertEquals($expected->normalized(), $resolver->output($path));
     }
 
     public function testCast(): void {
@@ -618,7 +694,6 @@ final class ResolverTest extends TestCase {
         $dispatcher = self::createStub(Dispatcher::class);
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
-        $filepath   = new FileImpl(new FilePath('/file.txt'), static fn () => '');
 
         $container
             ->expects(self::once())
@@ -631,6 +706,7 @@ final class ResolverTest extends TestCase {
             ->willReturn($directory);
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $filepath = new FileImpl(new FilePath('/file.txt'), $resolver);
 
         self::assertSame(
             $resolver->cast($filepath, ResolverTest__Cast::class),
@@ -680,10 +756,22 @@ final class ResolverTest extends TestCase {
     /**
      * @return array<string, array{DirectoryPath|FilePath, DirectoryPath|FilePath}>
      */
-    public static function dataProviderPath(): array {
+    public static function dataProviderInput(): array {
         return [
             'relative directory' => [new DirectoryPath('/directory/relative'), new DirectoryPath('relative')],
             'relative file'      => [new FilePath('/directory/file.txt'), new FilePath('file.txt')],
+            'absolute directory' => [new DirectoryPath('/absolute'), new DirectoryPath('/absolute')],
+            'absolute file'      => [new FilePath('/file.txt'), new FilePath('/file.txt')],
+        ];
+    }
+
+    /**
+     * @return array<string, array{DirectoryPath|FilePath, DirectoryPath|FilePath}>
+     */
+    public static function dataProviderOutput(): array {
+        return [
+            'relative directory' => [new DirectoryPath('/output/relative'), new DirectoryPath('relative')],
+            'relative file'      => [new FilePath('/output/file.txt'), new FilePath('file.txt')],
             'absolute directory' => [new DirectoryPath('/absolute'), new DirectoryPath('/absolute')],
             'absolute file'      => [new FilePath('/file.txt'), new FilePath('/file.txt')],
         ];

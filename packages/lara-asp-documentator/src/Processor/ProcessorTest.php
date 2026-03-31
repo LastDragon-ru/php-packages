@@ -969,7 +969,7 @@ final class ProcessorTest extends TestCase {
 
             #[Override]
             public function __invoke(ResolverContract $resolver, File $file): void {
-                $resolver->save($file, 'new content');
+                $file->save('new content');
             }
         };
         $taskB = new class() implements FileTask {
@@ -980,7 +980,7 @@ final class ProcessorTest extends TestCase {
 
             #[Override]
             public function __invoke(ResolverContract $resolver, File $file): void {
-                $resolver->delete($file);
+                $file->delete();
             }
         };
         $taskC = new class() implements FileTask {

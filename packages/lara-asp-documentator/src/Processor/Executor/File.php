@@ -2,24 +2,19 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
-use Closure;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File as Contract;
 use LastDragon_ru\Path\FilePath;
+use Override;
 
 /**
- * @template TContent
- *
- * @implements Contract<TContent>
+ * @implements Contract<string>
  *
  * @internal
  */
 class File implements Contract {
     public function __construct(
         public readonly FilePath $path,
-        /**
-         * @var Closure(): TContent
-         */
-        private readonly Closure $callback,
+        private readonly Resolver $resolver,
     ) {
         // empty
     }
@@ -33,7 +28,19 @@ class File implements Contract {
     }
 
     // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
-    public mixed $content {
-        get => $this->content ?? ($this->callback)();
+    public protected(set) mixed $content {
+        get => $this->content ?? $this->resolver->read($this->path);
+    }
+
+    #[Override]
+    public function save(mixed $content): void {
+        $this->resolver->save($this->path, $content);
+
+        $this->content = $content;
+    }
+
+    #[Override]
+    public function delete(): void {
+        $this->resolver->delete($this->path);
     }
 }
