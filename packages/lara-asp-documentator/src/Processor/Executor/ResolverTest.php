@@ -211,6 +211,31 @@ final class ResolverTest extends TestCase {
         );
     }
 
+    public function testRead(): void {
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createStub(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $directory  = new DirectoryPath('/directory/path/');
+        $filesystem = self::createMock(FileSystem::class);
+        $filepath   = new FilePath('/directory/path/file.txt');
+        $content    = 'content';
+
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($directory);
+        $filesystem
+            ->expects(self::once())
+            ->method('read')
+            ->with($filepath)
+            ->willReturn($content);
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $actual   = $resolver->read(new FilePath('file.txt'));
+
+        self::assertSame($content, $actual);
+    }
+
     public function testSave(): void {
         $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
@@ -450,7 +475,7 @@ final class ResolverTest extends TestCase {
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->delete(new FileImpl($filepath, static fn () => ''));
+        $resolver->delete(new FileImpl($filepath, $resolver));
 
         self::assertEquals(
             [
@@ -618,7 +643,6 @@ final class ResolverTest extends TestCase {
         $dispatcher = self::createStub(Dispatcher::class);
         $directory  = new DirectoryPath('/directory/path/');
         $filesystem = self::createMock(FileSystem::class);
-        $filepath   = new FileImpl(new FilePath('/file.txt'), static fn () => '');
 
         $container
             ->expects(self::once())
@@ -631,6 +655,7 @@ final class ResolverTest extends TestCase {
             ->willReturn($directory);
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+        $filepath = new FileImpl(new FilePath('/file.txt'), $resolver);
 
         self::assertSame(
             $resolver->cast($filepath, ResolverTest__Cast::class),

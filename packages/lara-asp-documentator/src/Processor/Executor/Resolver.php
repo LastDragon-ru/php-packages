@@ -81,9 +81,7 @@ class Resolver implements Contract {
         }
 
         // Create
-        $file               = new FileImpl($path, function () use ($path): string {
-            return $this->fs->read($path);
-        });
+        $file               = new FileImpl($path, $this);
         $this->cache[$path] = $file;
 
         return $file;
@@ -140,6 +138,10 @@ class Resolver implements Contract {
         }
 
         return $this->files[$file][$cast];
+    }
+
+    public function read(FilePath $path): string {
+        return $this->fs->read($this->path($path));
     }
 
     #[Override]

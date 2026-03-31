@@ -33,16 +33,17 @@ final class CacheTest extends TestCase {
     }
 
     public function testCleanup(): void {
-        $cache = new Cache(1);
-        $aPath = new FilePath('/a.txt');
-        $aFile = new File($aPath, static fn () => '');
-        $bPath = new FilePath('/b.txt');
-        $bFile = new File($bPath, static fn () => '');
-        $cPath = new FilePath('/c.txt');
+        $resolver = self::createStub(Resolver::class);
+        $cache    = new Cache(1);
+        $aPath    = new FilePath('/a.txt');
+        $aFile    = new File($aPath, $resolver);
+        $bPath    = new FilePath('/b.txt');
+        $bFile    = new File($bPath, $resolver);
+        $cPath    = new FilePath('/c.txt');
 
         $cache[$aPath] = $aFile;
         $cache[$bPath] = $bFile;
-        $cache[$cPath] = new File($cPath, static fn () => '');
+        $cache[$cPath] = new File($cPath, self::createStub(Resolver::class));
 
         $cache->cleanup();
 
@@ -68,14 +69,15 @@ final class CacheTest extends TestCase {
     }
 
     public function testDelete(): void {
-        $cache = new Cache(1);
-        $aPath = new FilePath('/a/a.txt');
-        $bPath = new FilePath('/a/b.txt');
-        $cPath = new FilePath('/c.txt');
+        $resolver = self::createStub(Resolver::class);
+        $cache    = new Cache(1);
+        $aPath    = new FilePath('/a/a.txt');
+        $bPath    = new FilePath('/a/b.txt');
+        $cPath    = new FilePath('/c.txt');
 
-        $cache[$aPath] = new File($aPath, static fn () => '');
-        $cache[$bPath] = new File($bPath, static fn () => '');
-        $cache[$cPath] = new File($cPath, static fn () => '');
+        $cache[$aPath] = new File($aPath, $resolver);
+        $cache[$bPath] = new File($bPath, $resolver);
+        $cache[$cPath] = new File($cPath, $resolver);
 
         self::assertTrue(isset($cache[$aPath]));
         self::assertTrue(isset($cache[$bPath]));

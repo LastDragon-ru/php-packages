@@ -18,7 +18,7 @@ final class InstructionTest extends TestCase {
 
     public function testInvoke(): void {
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = new File($fs->input->file(__FILE__), static fn() => '');
+        $file     = new File($fs->input->file(__FILE__), $this->getProcessorResolver($fs));
         $params   = new Parameters('command to execute');
         $expected = 'result';
         $command  = $params->target;
