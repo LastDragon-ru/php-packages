@@ -38,4 +38,9 @@ class File implements Contract {
 
         $this->content = $content;
     }
+
+    #[Override]
+    public function delete(): void {
+        $this->resolver->delete($this->path);
+    }
 }

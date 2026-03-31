@@ -37,4 +37,6 @@ interface File {
      * @param TContent $content
      */
     public function save(mixed $content): void;
+
+    public function delete(): void;
 }
