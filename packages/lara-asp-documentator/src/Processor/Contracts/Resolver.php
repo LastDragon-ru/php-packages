@@ -8,10 +8,8 @@ use LastDragon_ru\Path\FilePath;
 /**
  * Resolves task dependencies. The dependency will be processed before returning.
  *
- * Paths solution:
- *
- * + Relative - relative to {@see self::$directory}.
- * + Other - as is.
+ * Relative paths will be resolved based on {@see self::$directory}, except
+ * {@see self::create()} that resolves paths based on {@see self::$output}
  */
 interface Resolver {
     public DirectoryPath $input {
@@ -50,18 +48,18 @@ interface Resolver {
     public function cast(File|FilePath $path, string $cast): mixed;
 
     /**
-     * If the file exists, it will be overwritten.
-     *
-     * @param File<*>|FilePath $path
-     */
-    public function save(File|FilePath $path, string $content): void;
-
-    /**
      * The file(s) will be processed after the current file (in undefined order).
      *
      * @param FilePath|iterable<mixed, FilePath> $path
      */
     public function queue(FilePath|iterable $path): void;
+
+    /**
+     * If the file exists, it will be returned.
+     *
+     * @return  File<string>
+     */
+    public function create(FilePath $path): File;
 
     /**
      * @param DirectoryPath|FilePath|File<*>|iterable<mixed, DirectoryPath|FilePath> $path

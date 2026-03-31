@@ -138,7 +138,7 @@ class Task implements FileTask {
         $changes = $this->getChanges($document, $parsed['blocks'], $resolved);
 
         if ($changes !== []) {
-            $resolver->save($file, (string) $document->mutate(new Changeset($changes)));
+            $file->save((string) $document->mutate(new Changeset($changes)));
         }
     }
 

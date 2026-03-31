@@ -68,7 +68,7 @@ class Resolver implements Contract {
      */
     public function file(FilePath $path): File {
         // Cached?
-        $path = $this->path($path);
+        $path = $this->input($path);
         $file = $this->cache[$path];
 
         if ($file !== null) {
@@ -81,16 +81,13 @@ class Resolver implements Contract {
         }
 
         // Create
-        $file               = new FileImpl($path, $this);
-        $this->cache[$path] = $file;
-
-        return $file;
+        return $this->make($path);
     }
 
     #[Override]
     public function get(FilePath $path): File {
         try {
-            $path = $this->path($path);
+            $path = $this->input($path);
             $file = $this->file($path);
 
             ($this->dispatcher)(new Dependency($path, DependencyResult::Found));
@@ -108,7 +105,7 @@ class Resolver implements Contract {
     #[Override]
     public function find(FilePath $path): ?File {
         try {
-            $path = $this->path($path);
+            $path = $this->input($path);
             $file = $this->file($path);
 
             ($this->dispatcher)(new Dependency($path, DependencyResult::Found));
@@ -141,13 +138,11 @@ class Resolver implements Contract {
     }
 
     public function read(FilePath $path): string {
-        return $this->fs->read($this->path($path));
+        return $this->fs->read($this->input($path));
     }
 
-    #[Override]
-    public function save(File|FilePath $path, string $content): void {
-        $file = $path instanceof File ? $path : null;
-        $path = $this->path($path instanceof File ? $path->path : $path);
+    public function save(FilePath $path, string $content): void {
+        $path = $this->input($path);
 
         ($this->dispatcher)(new Dependency($path, DependencyResult::Saved));
 
@@ -158,10 +153,6 @@ class Resolver implements Contract {
             if (isset($this->cache[$path])) {
                 unset($this->files[$this->cache[$path]]);
             }
-
-            if ($file !== null) {
-                unset($this->files[$file]);
-            }
         }
     }
 
@@ -170,12 +161,17 @@ class Resolver implements Contract {
         $iterator = $path instanceof FilePath ? [$path] : $path;
 
         foreach ($iterator as $item) {
-            $filepath = $this->path($item);
+            $filepath = $this->input($item);
 
             ($this->dispatcher)(new Dependency($filepath, DependencyResult::Queued));
 
             $this->on->queue($filepath);
         }
+    }
+
+    #[Override]
+    public function create(FilePath $path): File {
+        return $this->make($this->output($path));
     }
 
     #[Override]
@@ -187,7 +183,7 @@ class Resolver implements Contract {
         };
 
         foreach ($iterator as $delete) {
-            $delete = $this->path($delete);
+            $delete = $this->input($delete);
 
             ($this->dispatcher)(new Dependency($delete, DependencyResult::Deleted));
 
@@ -204,14 +200,14 @@ class Resolver implements Contract {
         array|string $exclude = [],
         bool $hidden = false,
     ): iterable {
-        $path  = $this->path($directory ?? new DirectoryPath('.'));
+        $path  = $this->input($directory ?? new DirectoryPath('.'));
         $found = $this->fs->search($path, (array) $include, (array) $exclude, $hidden);
 
         return $found;
     }
 
     public function begin(FilePath $path): void {
-        $path            = $this->path($path);
+        $path            = $this->input($path);
         $this->level[]   = $path;
         $this->directory = $path->directory();
     }
@@ -231,7 +227,25 @@ class Resolver implements Contract {
      *
      * @return new<T>
      */
-    protected function path(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
+    protected function input(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
         return $this->directory->resolve($path);
+    }
+
+    /**
+     * @template T of DirectoryPath|FilePath
+     *
+     * @param T $path
+     *
+     * @return new<T>
+     */
+    protected function output(DirectoryPath|FilePath $path): DirectoryPath|FilePath {
+        return $this->output->resolve($path);
+    }
+
+    /**
+     * @return File<string>
+     */
+    private function make(FilePath $path): File {
+        return $this->cache[$path] ??= new FileImpl($path, $this);
     }
 }

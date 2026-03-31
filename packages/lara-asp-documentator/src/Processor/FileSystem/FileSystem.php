@@ -35,7 +35,7 @@ class FileSystem {
         private readonly Adapter $adapter,
         private readonly Dispatcher $dispatcher,
         public protected(set) DirectoryPath $input { get => $this->input; },
-        public readonly DirectoryPath $output,
+        public protected(set) DirectoryPath $output { get => $this->output; },
     ) {
         if ($input->relative) {
             throw new InvalidArgumentException(

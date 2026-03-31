@@ -165,27 +165,25 @@ final class TaskTest extends TestCase {
         $path   = new FilePath('/path/to/file.md');
         $file   = self::createMock(File::class);
         $file
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(3))
             ->method(PropertyHook::get('path'))
             ->willReturn($path);
         $file
             ->expects($this->once())
             ->method(PropertyHook::get('content'))
             ->willReturn(self::MARKDOWN);
+        $file
+            ->expects($this->once())
+            ->method('save')
+            ->willReturnCallback(static function (mixed $content) use (&$actual): void {
+                $actual = $content;
+            });
 
         $filesystem = self::createMock(FileSystem::class);
         $filesystem
             ->expects(self::once())
             ->method(PropertyHook::get('input'))
             ->willReturn(new DirectoryPath('/input/'));
-        $filesystem
-            ->expects(self::once())
-            ->method('write')
-            ->willReturnCallback(static function (mixed $path, string $content) use ($file, &$actual): File {
-                $actual = $content;
-
-                return $file;
-            });
 
         $this->runProcessorFileTask($task, $filesystem, $file);
 
