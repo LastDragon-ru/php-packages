@@ -3,6 +3,7 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\Path\FilePath;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
@@ -16,7 +17,7 @@ final class CacheTest extends TestCase {
     public function testArrayAccess(): void {
         $cache = new Cache(1);
         $aPath = new FilePath('file.txt');
-        $aFile = self::createStub(File::class);
+        $aFile = self::createStub(NativeFile::class);
 
         self::assertFalse(isset($cache[$aPath]));
 
@@ -36,14 +37,14 @@ final class CacheTest extends TestCase {
         $resolver = self::createStub(Resolver::class);
         $cache    = new Cache(1);
         $aPath    = new FilePath('/a.txt');
-        $aFile    = new File($resolver, $aPath);
+        $aFile    = new NativeFile($resolver, $aPath);
         $bPath    = new FilePath('/b.txt');
-        $bFile    = new File($resolver, $bPath);
+        $bFile    = new NativeFile($resolver, $bPath);
         $cPath    = new FilePath('/c.txt');
 
         $cache[$aPath] = $aFile;
         $cache[$bPath] = $bFile;
-        $cache[$cPath] = new File(self::createStub(Resolver::class), $cPath);
+        $cache[$cPath] = new NativeFile(self::createStub(Resolver::class), $cPath);
 
         $cache->cleanup();
 
@@ -75,9 +76,9 @@ final class CacheTest extends TestCase {
         $bPath    = new FilePath('/a/b.txt');
         $cPath    = new FilePath('/c.txt');
 
-        $cache[$aPath] = new File($resolver, $aPath);
-        $cache[$bPath] = new File($resolver, $bPath);
-        $cache[$cPath] = new File($resolver, $cPath);
+        $cache[$aPath] = new NativeFile($resolver, $aPath);
+        $cache[$bPath] = new NativeFile($resolver, $bPath);
+        $cache[$cPath] = new NativeFile($resolver, $cPath);
 
         self::assertTrue(isset($cache[$aPath]));
         self::assertTrue(isset($cache[$bPath]));

@@ -13,7 +13,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\DependencyResult;
 use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathNotFound;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File as FileImpl;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
@@ -500,7 +500,7 @@ final class ResolverTest extends TestCase {
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->delete(new FileImpl($resolver, $filepath));
+        $resolver->delete(new NativeFile($resolver, $filepath));
 
         self::assertEquals(
             [
@@ -706,7 +706,7 @@ final class ResolverTest extends TestCase {
             ->willReturn($directory);
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
-        $filepath = new FileImpl($resolver, new FilePath('/file.txt'));
+        $filepath = new NativeFile($resolver, new FilePath('/file.txt'));
 
         self::assertSame(
             $resolver->cast($filepath, ResolverTest__Cast::class),

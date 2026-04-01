@@ -5,7 +5,7 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instruct
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File as FileContract;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeExample\Contracts\Runner;
 use LastDragon_ru\Path\FilePath;
 use LastDragon_ru\PhpUnit\Utils\TestData;
@@ -31,7 +31,7 @@ final class InstructionTest extends TestCase {
     public function testInvoke(string $expected, string $output): void {
         $path    = (new FilePath(__FILE__))->normalized();
         $fs      = $this->getFileSystem($path->directory());
-        $file    = new File($this->getProcessorResolver($fs), $path);
+        $file    = new NativeFile($this->getProcessorResolver($fs), $path);
         $params  = new Parameters(TestData::get()->file('Example.md')->path);
         $target  = $params->target;
         $context = $this->getPreprocessInstructionContext($fs, $file);
@@ -57,7 +57,7 @@ final class InstructionTest extends TestCase {
 
         $path     = TestData::get()->file('Example.md');
         $fs       = $this->getFileSystem($path->directory());
-        $file     = new File($this->getProcessorResolver($fs), $path);
+        $file     = new NativeFile($this->getProcessorResolver($fs), $path);
         $params   = new Parameters($file->path->name);
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $expected = mb_trim((string) file_get_contents((string) $path));

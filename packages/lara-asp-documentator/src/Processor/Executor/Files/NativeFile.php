@@ -1,17 +1,18 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
+namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files;
 
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File as Contract;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver;
 use LastDragon_ru\Path\FilePath;
 use Override;
 
 /**
- * @implements Contract<string>
+ * @implements File<string>
  *
  * @internal
  */
-class File implements Contract {
+class NativeFile implements File {
     public function __construct(
         private readonly Resolver $resolver,
         public readonly FilePath $path,

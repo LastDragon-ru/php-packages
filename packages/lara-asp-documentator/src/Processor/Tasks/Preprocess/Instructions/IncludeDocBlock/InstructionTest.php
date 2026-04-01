@@ -7,7 +7,7 @@ use Exception;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Document;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Context;
 use LastDragon_ru\PhpUnit\Utils\TestData;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -32,7 +32,7 @@ final class InstructionTest extends TestCase {
     public function testInvoke(Closure|string $expected, string $file, Parameters $params): void {
         $path     = TestData::get()->file($file);
         $fs       = $this->getFileSystem($path->directory());
-        $file     = new File($this->getProcessorResolver($fs), $path);
+        $file     = new NativeFile($this->getProcessorResolver($fs), $path);
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);
 

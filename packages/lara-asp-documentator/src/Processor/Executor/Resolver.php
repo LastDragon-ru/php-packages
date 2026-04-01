@@ -11,7 +11,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\DependencyResult;
 use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathNotFound;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File as FileImpl;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
@@ -246,6 +246,6 @@ class Resolver implements Contract {
      * @return File<string>
      */
     private function make(FilePath $path): File {
-        return $this->cache[$path] ??= new FileImpl($this, $path);
+        return $this->cache[$path] ??= new NativeFile($this, $path);
     }
 }

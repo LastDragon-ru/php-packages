@@ -6,7 +6,7 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Markdown;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Extensions\Reference\Node;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Serializer\Contracts\Serializer;
 use LastDragon_ru\PhpUnit\Utils\TestData;
 use League\CommonMark\Node\Query;
@@ -35,7 +35,7 @@ final class InstructionTest extends TestCase {
         // Prepare
         $path        = TestData::get()->file($path);
         $fs          = $this->getFileSystem($path->directory());
-        $file        = new File($this->getProcessorResolver($fs), $path);
+        $file        = new NativeFile($this->getProcessorResolver($fs), $path);
         $document    = $this->app()->make(Markdown::class)->parse($content, $path);
         $instruction = (new Query())->where(Query::type(Node::class))->findOne($document->node);
 
