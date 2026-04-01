@@ -31,7 +31,7 @@ final class InstructionTest extends TestCase {
     public function testInvoke(string $expected, string $output): void {
         $path    = (new FilePath(__FILE__))->normalized();
         $fs      = $this->getFileSystem($path->directory());
-        $file    = new File($path, $this->getProcessorResolver($fs));
+        $file    = new File($this->getProcessorResolver($fs), $path);
         $params  = new Parameters(TestData::get()->file('Example.md')->path);
         $target  = $params->target;
         $context = $this->getPreprocessInstructionContext($fs, $file);
@@ -57,7 +57,7 @@ final class InstructionTest extends TestCase {
 
         $path     = TestData::get()->file('Example.md');
         $fs       = $this->getFileSystem($path->directory());
-        $file     = new File($path, $this->getProcessorResolver($fs));
+        $file     = new File($this->getProcessorResolver($fs), $path);
         $params   = new Parameters($file->path->name);
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $expected = mb_trim((string) file_get_contents((string) $path));

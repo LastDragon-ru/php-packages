@@ -13,8 +13,8 @@ use Override;
  */
 class File implements Contract {
     public function __construct(
-        public readonly FilePath $path,
         private readonly Resolver $resolver,
+        public readonly FilePath $path,
     ) {
         // empty
     }

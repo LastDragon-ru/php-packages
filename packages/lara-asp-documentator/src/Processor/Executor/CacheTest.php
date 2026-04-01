@@ -36,14 +36,14 @@ final class CacheTest extends TestCase {
         $resolver = self::createStub(Resolver::class);
         $cache    = new Cache(1);
         $aPath    = new FilePath('/a.txt');
-        $aFile    = new File($aPath, $resolver);
+        $aFile    = new File($resolver, $aPath);
         $bPath    = new FilePath('/b.txt');
-        $bFile    = new File($bPath, $resolver);
+        $bFile    = new File($resolver, $bPath);
         $cPath    = new FilePath('/c.txt');
 
         $cache[$aPath] = $aFile;
         $cache[$bPath] = $bFile;
-        $cache[$cPath] = new File($cPath, self::createStub(Resolver::class));
+        $cache[$cPath] = new File(self::createStub(Resolver::class), $cPath);
 
         $cache->cleanup();
 
@@ -75,9 +75,9 @@ final class CacheTest extends TestCase {
         $bPath    = new FilePath('/a/b.txt');
         $cPath    = new FilePath('/c.txt');
 
-        $cache[$aPath] = new File($aPath, $resolver);
-        $cache[$bPath] = new File($bPath, $resolver);
-        $cache[$cPath] = new File($cPath, $resolver);
+        $cache[$aPath] = new File($resolver, $aPath);
+        $cache[$bPath] = new File($resolver, $bPath);
+        $cache[$cPath] = new File($resolver, $cPath);
 
         self::assertTrue(isset($cache[$aPath]));
         self::assertTrue(isset($cache[$bPath]));

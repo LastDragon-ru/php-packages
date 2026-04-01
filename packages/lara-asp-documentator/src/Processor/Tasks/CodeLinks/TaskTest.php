@@ -44,7 +44,7 @@ final class TaskTest extends TestCase {
         $path = TestData::get()->file($document);
         $fs   = $this->getFileSystem($path->directory());
         $task = $this->app()->make(Task::class);
-        $file = new File($path, $this->getProcessorResolver($fs));
+        $file = new File($this->getProcessorResolver($fs), $path);
 
         if ($expected instanceof Closure) {
             self::expectExceptionObject($expected());

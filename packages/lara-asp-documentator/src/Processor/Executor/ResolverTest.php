@@ -500,7 +500,7 @@ final class ResolverTest extends TestCase {
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->delete(new FileImpl($filepath, $resolver));
+        $resolver->delete(new FileImpl($resolver, $filepath));
 
         self::assertEquals(
             [
@@ -706,7 +706,7 @@ final class ResolverTest extends TestCase {
             ->willReturn($directory);
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
-        $filepath = new FileImpl(new FilePath('/file.txt'), $resolver);
+        $filepath = new FileImpl($resolver, new FilePath('/file.txt'));
 
         self::assertSame(
             $resolver->cast($filepath, ResolverTest__Cast::class),

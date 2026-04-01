@@ -17,7 +17,7 @@ final class FileTest extends TestCase {
         $resolver = self::createMock(Resolver::class);
         $content  = 'content';
         $path     = new FilePath('/path/to/file.md');
-        $file     = new File($path, $resolver);
+        $file     = new File($resolver, $path);
 
         $resolver
             ->expects(self::once())
@@ -34,7 +34,7 @@ final class FileTest extends TestCase {
         $resolver = self::createMock(Resolver::class);
         $content  = 'content';
         $path     = new FilePath('/path/to/file.md');
-        $file     = new File($path, $resolver);
+        $file     = new File($resolver, $path);
 
         $resolver
             ->expects(self::once())
@@ -49,7 +49,7 @@ final class FileTest extends TestCase {
     public function testDelete(): void {
         $resolver = self::createMock(Resolver::class);
         $path     = new FilePath('/path/to/file.md');
-        $file     = new File($path, $resolver);
+        $file     = new File($resolver, $path);
 
         $resolver
             ->expects(self::once())

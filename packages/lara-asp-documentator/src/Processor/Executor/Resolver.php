@@ -246,6 +246,6 @@ class Resolver implements Contract {
      * @return File<string>
      */
     private function make(FilePath $path): File {
-        return $this->cache[$path] ??= new FileImpl($path, $this);
+        return $this->cache[$path] ??= new FileImpl($this, $path);
     }
 }
