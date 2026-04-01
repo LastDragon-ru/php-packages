@@ -6,6 +6,7 @@ use Exception;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Format;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
@@ -34,6 +35,10 @@ class Resolver implements Contract {
      */
     private array $casts;
     /**
+     * @var array<class-string<Format<*, *>>, Format<*, *>>
+     */
+    private array $formats;
+    /**
      * @var WeakMap<File<*>, array<class-string<Cast<mixed>>, mixed>>
      */
     private WeakMap $files;
@@ -48,6 +53,7 @@ class Resolver implements Contract {
         $this->casts     = [];
         $this->files     = new WeakMap();
         $this->cache     = new Cache(50);
+        $this->formats   = [];
         $this->directory = $this->input;
     }
 
@@ -218,6 +224,18 @@ class Resolver implements Contract {
         $this->directory = array_last($this->level)?->directory() ?? $this->input;
 
         $this->cache->cleanup();
+    }
+
+    /**
+     * @template T of Format
+     *
+     * @param class-string<T> $format
+     *
+     * @return T
+     */
+    public function format(string $format): Format {
+        // @phpstan-ignore return.type (https://github.com/phpstan/phpstan/issues/9521)
+        return $this->formats[$format] ??= $this->container->make($format);
     }
 
     /**

@@ -34,6 +34,16 @@ interface File {
     }
 
     /**
+     * @template O
+     * @template F of Format<TContent, O>
+     *
+     * @param class-string<F> $format
+     *
+     * @return self<O>
+     */
+    public function as(string $format): self;
+
+    /**
      * @param TContent $content
      */
     public function save(mixed $content): void;

@@ -29,6 +29,7 @@ final class NativeFileTest extends TestCase {
         self::assertSame('file.md', $file->name);
         self::assertSame('md', $file->extension);
         self::assertSame($content, $file->content);
+        self::assertSame($content, $file->content);
     }
 
     public function testSave(): void {

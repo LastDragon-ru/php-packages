@@ -8,6 +8,7 @@ use LastDragon_ru\LaraASP\Documentator\Package\WithProcessorDispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Format;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
@@ -749,6 +750,30 @@ final class ResolverTest extends TestCase {
         self::assertEquals($directory, $resolver->directory);
     }
 
+    public function testFormat(): void {
+        $format     = self::createStub(Format::class);
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createMock(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = self::createMock(FileSystem::class);
+
+        $container
+            ->expects(self::once())
+            ->method('make')
+            ->with($format::class)
+            ->willReturn($format);
+        $filesystem
+            ->expects(self::atLeastOnce())
+            ->method(PropertyHook::get('input'))
+            ->willReturn(new DirectoryPath('/directory/path/'));
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+
+        self::assertSame(
+            $resolver->format($format::class),
+            $resolver->format($format::class),
+        );
+    }
     //</editor-fold>
 
     // <editor-fold desc="DataProviders">

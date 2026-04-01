@@ -2,35 +2,26 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files;
 
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver;
 use LastDragon_ru\Path\FilePath;
 use Override;
 
 /**
- * @implements File<string>
- *
  * @internal
+ *
+ * @extends  Base<string>
  */
-class NativeFile implements File {
+class NativeFile extends Base {
     public function __construct(
-        private readonly Resolver $resolver,
+        Resolver $resolver,
         public readonly FilePath $path,
     ) {
-        // empty
-    }
-
-    public string $name {
-        get => $this->path->name;
-    }
-
-    public ?string $extension {
-        get => $this->path->extension;
+        parent::__construct($resolver);
     }
 
     // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
     public protected(set) mixed $content {
-        get => $this->content ?? $this->resolver->read($this->path);
+        get => $this->content ??= $this->resolver->read($this->path);
     }
 
     #[Override]
