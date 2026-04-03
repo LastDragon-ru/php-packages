@@ -42,7 +42,8 @@ interface Resolver {
     public function queue(FilePath|iterable $path): void;
 
     /**
-     * If the file exists, it will be returned.
+     * If the file exists, it will be returned. If not, it will be saved only
+     * after {@see File::save()} call.
      *
      * @return  File<string>
      */

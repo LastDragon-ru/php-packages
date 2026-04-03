@@ -2,22 +2,17 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
 
-use ArrayAccess;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
-use Override;
-
-use function array_values;
 
 /**
  * @internal
- * @implements ArrayAccess<FilePath, string>
  */
-class Content implements ArrayAccess {
+class Content {
     /**
      * @var array<non-empty-string, string>
      */
-    private array $files = [];
+    private array $content = [];
     /**
      * @var array<non-empty-string, FilePath>
      */
@@ -27,20 +22,25 @@ class Content implements ArrayAccess {
         // empty
     }
 
-    public function changed(FilePath $path): bool {
-        return isset($this->files[$path->path]);
-    }
-
     /**
-     * @return list<FilePath>
+     * @var array<array-key, FilePath>
      */
-    public function changes(): array {
-        return array_values($this->paths);
+    public array $changes {
+        get => $this->paths;
     }
 
     public function cleanup(): void {
-        $this->files = [];
-        $this->paths = [];
+        $this->paths   = [];
+        $this->content = [];
+    }
+
+    public function get(FilePath $path): ?string {
+        return $this->content[$path->path] ?? null;
+    }
+
+    public function set(FilePath $path, string $content): void {
+        $this->paths[$path->path]   = $path;
+        $this->content[$path->path] = $content;
     }
 
     public function delete(DirectoryPath|FilePath $path): void {
@@ -49,47 +49,16 @@ class Content implements ArrayAccess {
         if ($path instanceof DirectoryPath) {
             foreach ($this->paths as $item) {
                 if ($path->contains($item)) {
-                    $delete[] = $item;
+                    $delete[] = $item->path;
                 }
             }
         } else {
-            $delete[] = $path;
+            $delete[] = $path->path;
         }
 
         foreach ($delete as $item) {
-            $this->reset($item);
+            unset($this->content[$item]);
+            unset($this->paths[$item]);
         }
-    }
-
-    public function reset(FilePath $path): void {
-        unset($this[$path]);
-    }
-
-    #[Override]
-    public function offsetExists(mixed $offset): bool {
-        return isset($this->files[$offset->path]);
-    }
-
-    #[Override]
-    public function offsetGet(mixed $offset): mixed {
-        return $this->files[$offset->path] ?? null;
-    }
-
-    #[Override]
-    public function offsetSet(mixed $offset, mixed $value): void {
-        // Null? ($content[] = '...')
-        if ($offset === null) {
-            return;
-        }
-
-        // Save
-        $this->paths[$offset->path] = $offset;
-        $this->files[$offset->path] = $value;
-    }
-
-    #[Override]
-    public function offsetUnset(mixed $offset): void {
-        unset($this->paths[$offset->path]);
-        unset($this->files[$offset->path]);
     }
 }
