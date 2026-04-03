@@ -37,9 +37,11 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/3f19382f79c2085d)
 
+* [ ] The `💀\LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast` removed, the [`Format`][code-links/7dce31acb44e597a] must be used instead.
+
 # Upgrade from v9
 
-* [ ] Metadata renamed to cast. The [`Cast`][code-links/6a213cdb7ed49c73] should be used instead of
+* [ ] Metadata renamed to cast. The `💀\LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast` should be used instead of
   * `💀\LastDragon_ru\LaraASP\Documentator\Processor\Contracts\MetadataResolver`
   * `💀\LastDragon_ru\LaraASP\Documentator\Processor\Contracts\MetadataSerializer`
 
@@ -119,8 +121,8 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 [code-links/bddbc83c8cbd0c67]: src/PackageProvider.php
     "\LastDragon_ru\LaraASP\Documentator\PackageProvider"
 
-[code-links/6a213cdb7ed49c73]: src/Processor/Contracts/Cast.php
-    "\LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast"
+[code-links/7dce31acb44e597a]: src/Processor/Contracts/Format.php
+    "\LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Format"
 
 [code-links/73efdc4c56c9ba17]: src/Processor/Contracts/Resolver.php
     "\LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver"
