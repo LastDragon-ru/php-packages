@@ -35,19 +35,6 @@ interface Resolver {
     public function find(FilePath $path): ?File;
 
     /**
-     * Converts the file into something. The result will be cached until the
-     * file is changed.
-     *
-     * @template T
-     *
-     * @param File<string>|FilePath $path
-     * @param class-string<Cast<T>> $cast
-     *
-     * @return T
-     */
-    public function cast(File|FilePath $path, string $cast): mixed;
-
-    /**
      * The file(s) will be processed after the current file (in undefined order).
      *
      * @param FilePath|iterable<mixed, FilePath> $path

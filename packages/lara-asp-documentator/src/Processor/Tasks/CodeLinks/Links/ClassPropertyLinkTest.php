@@ -3,21 +3,19 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Links;
 
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\Parsed;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver;
-use LastDragon_ru\Path\FilePath;
-use Mockery;
+use LastDragon_ru\LaraASP\Documentator\Processor\Formats\Php\PhpFile;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeFinder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Runtime\PropertyHook;
 
-use function array_first;
 use function array_map;
 
 /**
@@ -44,12 +42,7 @@ final class ClassPropertyLinkTest extends TestCase {
     }
 
     public function testGetTargetNode(): void {
-        $path = new FilePath('/file.md');
         $file = self::createMock(File::class);
-        $file
-            ->expects(self::once())
-            ->method(PropertyHook::get('path'))
-            ->willReturn($path);
         $file
             ->expects(self::once())
             ->method(PropertyHook::get('content'))
@@ -70,11 +63,11 @@ final class ClassPropertyLinkTest extends TestCase {
             }
         };
 
-        $resolver = Mockery::mock(Resolver::class);
-        $parsed   = ($this->app()->make(Parsed::class))($resolver, $file);
-        $class    = array_first($parsed->classes);
+        $resolver = self::createStub(Resolver::class);
+        $stmts    = (new PhpFile())->read($resolver, $file)->stmts;
+        $class    = (new NodeFinder())->findFirstInstanceOf($stmts, ClassLike::class);
         $actual   = $class !== null
-            ? $link->getTargetNode($class->node)
+            ? $link->getTargetNode($class)
             : null;
 
         self::assertInstanceOf(Property::class, $actual);
@@ -88,12 +81,7 @@ final class ClassPropertyLinkTest extends TestCase {
     }
 
     public function testGetTargetNodePromoted(): void {
-        $path = new FilePath('/file.md');
         $file = self::createMock(File::class);
-        $file
-            ->expects(self::once())
-            ->method(PropertyHook::get('path'))
-            ->willReturn($path);
         $file
             ->expects(self::once())
             ->method(PropertyHook::get('content'))
@@ -118,11 +106,11 @@ final class ClassPropertyLinkTest extends TestCase {
             }
         };
 
-        $resolver = Mockery::mock(Resolver::class);
-        $parsed   = ($this->app()->make(Parsed::class))($resolver, $file);
-        $class    = array_first($parsed->classes);
+        $resolver = self::createStub(Resolver::class);
+        $stmts    = (new PhpFile())->read($resolver, $file)->stmts;
+        $class    = (new NodeFinder())->findFirstInstanceOf($stmts, ClassLike::class);
         $actual   = $class !== null
-            ? $link->getTargetNode($class->node)
+            ? $link->getTargetNode($class)
             : null;
 
         self::assertInstanceOf(Param::class, $actual);
