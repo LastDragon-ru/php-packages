@@ -80,7 +80,8 @@ class Task implements FileTask {
         // Parse
         $unresolved = [];
         $resolved   = [];
-        $document   = $file->as(MarkdownFile::class)->content;
+        $markdown   = $file->as(MarkdownFile::class);
+        $document   = $markdown->content;
         $parsed     = $this->parse($document);
 
         // Links
@@ -138,7 +139,7 @@ class Task implements FileTask {
         $changes = $this->getChanges($document, $parsed['blocks'], $resolved);
 
         if ($changes !== []) {
-            $file->save((string) $document->mutate(new Changeset($changes)));
+            $markdown->save($document->mutate(new Changeset($changes)));
         }
     }
 

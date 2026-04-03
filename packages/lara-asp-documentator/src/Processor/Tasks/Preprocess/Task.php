@@ -133,7 +133,8 @@ class Task implements FileTask {
     #[Override]
     public function __invoke(Resolver $resolver, File $file): void {
         // Process
-        $document = $file->as(MarkdownFile::class)->content;
+        $markdown = $file->as(MarkdownFile::class);
+        $document = $markdown->content;
         $parsed   = $this->parse($resolver, $file, $document);
         $mutated  = false;
 
@@ -195,7 +196,7 @@ class Task implements FileTask {
 
         // Mutate
         if ($mutated) {
-            $file->save((string) $document);
+            $markdown->save($document);
         }
     }
 
