@@ -161,31 +161,27 @@ final class TaskTest extends TestCase {
             ->addInstruction(TaskTest__TestInstruction::class)
             ->addInstruction(TaskTest__DocumentInstruction::class);
 
-        $actual = '';
-        $path   = new FilePath('/path/to/file.md');
-        $file   = self::createMock(File::class);
-        $file
-            ->expects($this->exactly(3))
-            ->method(PropertyHook::get('path'))
-            ->willReturn($path);
-        $file
-            ->expects($this->once())
-            ->method(PropertyHook::get('content'))
+        $path       = new FilePath('/path/to/file.md');
+        $actual     = '';
+        $filesystem = self::createMock(FileSystem::class);
+        $filesystem
+            ->expects($this->exactly(1))
+            ->method(PropertyHook::get('input'))
+            ->willReturn(new DirectoryPath('/input/'));
+        $filesystem
+            ->expects(self::once())
+            ->method('read')
+            ->with($path)
             ->willReturn(self::MARKDOWN);
-        $file
-            ->expects($this->once())
-            ->method('save')
-            ->willReturnCallback(static function (mixed $content) use (&$actual): void {
+        $filesystem
+            ->expects(self::once())
+            ->method('write')
+            ->with($path, self::isString())
+            ->willReturnCallback(static function (FilePath $path, string $content) use (&$actual): void {
                 $actual = $content;
             });
 
-        $filesystem = self::createMock(FileSystem::class);
-        $filesystem
-            ->expects(self::once())
-            ->method(PropertyHook::get('input'))
-            ->willReturn(new DirectoryPath('/input/'));
-
-        $this->runProcessorFileTask($task, $filesystem, $file);
+        $this->runProcessorFileTask($task, $filesystem, $path);
 
         self::assertSame(
             <<<'MARKDOWN'

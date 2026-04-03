@@ -11,11 +11,11 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Changeset;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutator\Mutagens\Delete;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutator\Mutagens\Replace;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Utils;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Markdown;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\Composer;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
+use LastDragon_ru\LaraASP\Documentator\Processor\Formats\MarkdownFile;
+use LastDragon_ru\LaraASP\Documentator\Processor\Formats\Php\ComposerFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Contracts\LinkFactory;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Exceptions\CodeLinkUnresolved;
 use LastDragon_ru\LaraASP\Documentator\Utils\Text;
@@ -71,7 +71,7 @@ class Task implements FileTask {
     public function __invoke(Resolver $resolver, File $file): void {
         // Composer?
         $composer = $resolver->find($resolver->input->file('composer.json'));
-        $package  = $composer !== null ? $resolver->cast($composer, Composer::class) : null;
+        $package  = $composer?->as(ComposerFile::class)->content;
 
         if (!($package instanceof Package)) {
             return;
@@ -80,7 +80,7 @@ class Task implements FileTask {
         // Parse
         $unresolved = [];
         $resolved   = [];
-        $document   = $resolver->cast($file, Markdown::class);
+        $document   = $file->as(MarkdownFile::class)->content;
         $parsed     = $this->parse($document);
 
         // Links

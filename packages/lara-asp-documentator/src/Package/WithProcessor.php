@@ -9,6 +9,7 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Listener;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver as ResolverImpl;
@@ -78,10 +79,15 @@ trait WithProcessor {
     }
 
     /**
-     * @param File<string> $file
+     * @return File<string>
      */
-    protected function runProcessorFileTask(FileTask $task, FileSystem $fs, File $file): void {
-        $task($this->getProcessorResolver($fs), $file);
+    protected function runProcessorFileTask(FileTask $task, FileSystem $fs, FilePath $path): File {
+        $resolver = $this->getProcessorResolver($fs);
+        $file     = new NativeFile($resolver, $path);
+
+        $task($resolver, $file);
+
+        return $file;
     }
 
     private function getProcessorResolver(FileSystem $fs): Resolver {

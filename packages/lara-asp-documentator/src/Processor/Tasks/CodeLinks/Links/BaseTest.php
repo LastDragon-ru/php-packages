@@ -5,24 +5,15 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Links;
 use LastDragon_ru\LaraASP\Documentator\Composer\Package;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithProcessor;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\Parsed;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\ParsedClass;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\ParsedFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Resolver as ResolverImpl;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
+use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Contracts\Link;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\LinkTarget;
-use LastDragon_ru\LaraASP\Documentator\Utils\PhpDocumentFactory;
-use LastDragon_ru\LaraASP\Testing\Mockery\PropertiesMock;
-use LastDragon_ru\LaraASP\Testing\Mockery\WithProperties;
-use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
-use Mockery;
 use Override;
-use PhpParser\NameContext;
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -67,20 +58,21 @@ final class BaseTest extends TestCase {
     }
 
     public function testGetTarget(): void {
-        $filesystem = $this->getFileSystem(new DirectoryPath('/path/to/directory'));
-        $resolver   = $this->getProcessorResolver($filesystem);
         $path       = new FilePath('/path/to/directory/file.md');
-        $file       = self::createMock(File::class);
-        $file
-            ->expects(self::atLeastOnce())
-            ->method(PropertyHook::get('path'))
-            ->willReturn($path);
-        $file
+        $filesystem = self::createMock(FileSystem::class);
+        $filesystem
             ->expects(self::once())
-            ->method(PropertyHook::get('content'))
+            ->method(PropertyHook::get('input'))
+            ->willReturn($path->directory());
+        $filesystem
+            ->expects(self::once())
+            ->method('read')
+            ->with($path)
             ->willReturn(
                 <<<'PHP'
                 <?php declare(strict_types = 1);
+
+                namespace Test;
 
                 /**
                  * @deprecated for testing
@@ -91,7 +83,9 @@ final class BaseTest extends TestCase {
                 PHP,
             );
 
-        $link = new class('A') extends Base {
+        $resolver = $this->getProcessorResolver($filesystem);
+        $file     = new NativeFile($resolver, $path);
+        $link     = new class('Test\A') extends Base {
             #[Override]
             protected function getTargetNode(ClassLike $class): Node {
                 return $class;
@@ -110,33 +104,43 @@ final class BaseTest extends TestCase {
     }
 
     public function testGetTargetClassNotMatch(): void {
-        $file  = new FilePath('file.php');
-        $class = Mockery::mock(ClassLike::class, new WithProperties(), PropertiesMock::class);
-        $class
-            ->shouldUseProperty('namespacedName')
-            ->value(new Name('App\\A'));
-        $source   = self::createStub(File::class);
-        $classes  = static function (ParsedFile $file) use ($class): array {
-            return [
-                new ParsedClass(Mockery::mock(PhpDocumentFactory::class), $file, $class),
-            ];
+        $path       = new FilePath('/path/to/directory/file.md');
+        $filesystem = static::createMock(FileSystem::class);
+        $filesystem
+            ->expects(self::once())
+            ->method(PropertyHook::get('input'))
+            ->willReturn($path->directory());
+        $filesystem
+            ->expects(self::once())
+            ->method('read')
+            ->with($path)
+            ->willReturn(
+                <<<'PHP'
+                <?php declare(strict_types = 1);
+
+                namespace Test;
+
+                class A {
+                    public const Constant = 123;
+                }
+                PHP,
+            );
+
+        $resolver = $this->getProcessorResolver($filesystem);
+        $file     = new NativeFile($resolver, $path);
+        $link     = new class('A') extends Base {
+            #[Override]
+            protected function getTargetNode(ClassLike $class): Node {
+                return $class;
+            }
+
+            #[Override]
+            public function __toString(): string {
+                return '';
+            }
         };
-        $parsed   = new ParsedFile($file, Mockery::mock(NameContext::class), $classes);
-        $resolver = Mockery::mock(ResolverImpl::class);
-        $resolver
-            ->shouldReceive('cast')
-            ->with($source, Parsed::class)
-            ->once()
-            ->andReturn($parsed);
 
-        $link = Mockery::mock(Base::class, [$this::class]);
-        $link->shouldAllowMockingProtectedMethods();
-        $link->makePartial();
-        $link
-            ->shouldReceive('getTargetNode')
-            ->never();
-
-        self::assertNull($link->getTarget($resolver, $source));
+        self::assertNull($link->getTarget($resolver, $file));
     }
     // </editor-fold>
 
