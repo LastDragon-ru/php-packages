@@ -93,7 +93,7 @@ class FileSystem {
 
     public function read(FilePath $path): string {
         $path    = $this->path($path);
-        $content = $this->content[$path] ?? null;
+        $content = $this->content->get($path);
 
         if ($content === null) {
             $result = ($this->dispatcher)(new FileSystemReadBegin($path), FileSystemReadResult::Success);
@@ -127,10 +127,9 @@ class FileSystem {
         }
 
         // Save
-        $exists               = $this->exists($path);
-        $this->content[$path] = $content;
+        $this->content->set($path, $content);
 
-        if (!$exists) {
+        if (!$this->exists($path)) {
             $this->save($path);
         }
     }
@@ -164,7 +163,7 @@ class FileSystem {
 
     public function commit(): void {
         // Dump
-        foreach ($this->content->changes() as $path) {
+        foreach ($this->content->changes as $path) {
             $this->save($path);
         }
 
@@ -173,16 +172,18 @@ class FileSystem {
     }
 
     protected function save(FilePath $path): void {
-        if (!isset($this->content[$path])) {
+        $content = $this->content->get($path);
+
+        if ($content === null) {
             return;
         }
 
         $result = ($this->dispatcher)(new FileSystemWriteBegin($path), FileSystemWriteResult::Success);
-        $bytes  = strlen($this->content[$path] ?? ''); // @phpstan-ignore disallowed.function (ok)
+        $bytes  = strlen($content); // @phpstan-ignore disallowed.function (ok)
 
         try {
-            $this->adapter->write($path, $this->content[$path]);
-            $this->content->reset($path);
+            $this->adapter->write($path, $content);
+            $this->content->delete($path);
         } catch (Exception $exception) {
             $result = FileSystemWriteResult::Error;
             $bytes  = 0;

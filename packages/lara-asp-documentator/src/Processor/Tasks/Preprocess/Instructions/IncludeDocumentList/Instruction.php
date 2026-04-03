@@ -7,7 +7,7 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Document\Move;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Document\Summary;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Utils;
 use LastDragon_ru\LaraASP\Documentator\PackageViewer;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Markdown;
+use LastDragon_ru\LaraASP\Documentator\Processor\Formats\MarkdownFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Context;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction as InstructionContract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters as InstructionParameters;
@@ -72,7 +72,7 @@ readonly class Instruction implements InstructionContract {
 
             // Add
             $file     = $context->resolver->get($path);
-            $document = $context->resolver->cast($file, Markdown::class);
+            $document = $file->as(MarkdownFile::class)->content;
             $move     = new Move($base->file($file->name));
             $path     = $base->relative($file->path);
             $title    = Utils::getTitle($document) ?? '';

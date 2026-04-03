@@ -9,7 +9,6 @@ use LastDragon_ru\LaraASP\Documentator\Markdown\Environment\Markdown as Markdown
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithMarkdown;
 use LastDragon_ru\LaraASP\Documentator\Package\WithProcessor;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Contracts\LinkFactory;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Exceptions\CodeLinkUnresolved;
 use LastDragon_ru\LaraASP\Documentator\Utils\Text;
@@ -44,7 +43,6 @@ final class TaskTest extends TestCase {
         $path = TestData::get()->file($document);
         $fs   = $this->getFileSystem($path->directory());
         $task = $this->app()->make(Task::class);
-        $file = new File($path, $this->getProcessorResolver($fs));
 
         if ($expected instanceof Closure) {
             self::expectExceptionObject($expected());
@@ -52,7 +50,7 @@ final class TaskTest extends TestCase {
             $expected = TestData::get()->content($expected);
         }
 
-        $this->runProcessorFileTask($task, $fs, $file);
+        $file = $this->runProcessorFileTask($task, $fs, $path);
 
         self::assertEquals($expected, $file->content);
     }

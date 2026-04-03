@@ -5,14 +5,18 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instruct
 use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Document;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Document\Body;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Mutations\Document\Summary;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\Parsed;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Formats\Php\Content;
+use LastDragon_ru\LaraASP\Documentator\Processor\Formats\Php\PhpFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Context;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction as InstructionContract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters as InstructionParameters;
+use LastDragon_ru\LaraASP\Documentator\Utils\PhpDoc;
+use LastDragon_ru\LaraASP\Documentator\Utils\PhpDocumentFactory;
 use LastDragon_ru\Path\FilePath;
 use Override;
-
-use function array_first;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\NodeFinder;
 
 /**
  * Includes the docblock of the first PHP class/interface/trait/enum/etc
@@ -22,7 +26,9 @@ use function array_first;
  * @implements InstructionContract<Parameters>
  */
 class Instruction implements InstructionContract {
-    public function __construct() {
+    public function __construct(
+        protected readonly PhpDocumentFactory $factory,
+    ) {
         // empty
     }
 
@@ -44,7 +50,7 @@ class Instruction implements InstructionContract {
     #[Override]
     public function __invoke(Context $context, InstructionParameters $parameters): Document|string {
         $target   = $context->resolver->get(new FilePath($parameters->target));
-        $document = array_first($context->resolver->cast($target, Parsed::class)->classes)?->markdown;
+        $document = $this->markdown($target->as(PhpFile::class));
         $result   = match (true) {
             $parameters->summary && $parameters->description => $document,
             $parameters->summary                             => $document?->mutate(new Summary()),
@@ -53,5 +59,23 @@ class Instruction implements InstructionContract {
         };
 
         return $result ?? '';
+    }
+
+    /**
+     * @param File<Content> $file
+     */
+    private function markdown(File $file): ?Document {
+        // Class?
+        $class = (new NodeFinder())->findFirstInstanceOf($file->content->stmts, ClassLike::class);
+
+        if ($class === null) {
+            return null;
+        }
+
+        // Extract
+        $comment  = new PhpDoc($class->getDocComment()?->getText());
+        $markdown = ($this->factory)($comment, $file->path, $file->content->context);
+
+        return $markdown;
     }
 }

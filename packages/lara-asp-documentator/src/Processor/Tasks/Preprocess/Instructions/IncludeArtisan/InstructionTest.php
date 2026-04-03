@@ -7,7 +7,7 @@ use LastDragon_ru\LaraASP\Core\Application\ApplicationResolver;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Extensions\Reference\Node;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Context;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeArtisan\Exceptions\ArtisanCommandFailed;
 use Mockery;
@@ -29,7 +29,7 @@ final class InstructionTest extends TestCase {
 
     public function testInvoke(): void {
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = new File($fs->input->file(__FILE__), $this->getProcessorResolver($fs));
+        $file     = new NativeFile($this->getProcessorResolver($fs), $fs->input->file(__FILE__));
         $params   = new Parameters('command to execute');
         $expected = 'result';
         $command  = $params->target;
@@ -74,7 +74,7 @@ final class InstructionTest extends TestCase {
 
     public function testInvokeFailed(): void {
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = new File($fs->input->file(__FILE__), $this->getProcessorResolver($fs));
+        $file     = new NativeFile($this->getProcessorResolver($fs), $fs->input->file(__FILE__));
         $node     = new Node();
         $params   = new Parameters('command to execute');
         $command  = $params->target;
@@ -127,7 +127,7 @@ final class InstructionTest extends TestCase {
 
     public function testGetCommand(): void {
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = new File($fs->input->file(__FILE__), $this->getProcessorResolver($fs));
+        $file     = new NativeFile($this->getProcessorResolver($fs), $fs->input->file(__FILE__));
         $params   = new Parameters('artisan:command $directory {$directory} "{$directory}" $file {$file} "{$file}"');
         $command  = $params->target;
         $context  = $this->getPreprocessInstructionContext($fs, $file);

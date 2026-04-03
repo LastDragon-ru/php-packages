@@ -5,15 +5,13 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 use Exception;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithProcessorDispatcher;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Format;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\DependencyResult;
 use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathNotFound;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File as FileImpl;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
@@ -304,58 +302,6 @@ final class ResolverTest extends TestCase {
         );
     }
 
-    public function testSaveCastReset(): void {
-        $listener   = self::createMock(Listener::class);
-        $container  = self::createMock(Container::class);
-        $dispatcher = new WithProcessorDispatcher();
-        $directory  = new DirectoryPath('/directory/path/');
-        $filesystem = self::createMock(FileSystem::class);
-        $filepath   = new FilePath('/directory/path/file.txt');
-        $content    = 'content';
-
-        $listener
-            ->expects(self::atLeastOnce())
-            ->method('run')
-            ->with($filepath);
-        $listener
-            ->expects(self::once())
-            ->method('save')
-            ->with($filepath);
-        $container
-            ->expects(self::once())
-            ->method('make')
-            ->with(ResolverTest__Cast::class)
-            ->willReturn(new ResolverTest__Cast());
-        $filesystem
-            ->expects(self::once())
-            ->method(PropertyHook::get('input'))
-            ->willReturn($directory);
-        $filesystem
-            ->expects(self::atLeastOnce())
-            ->method('exists')
-            ->with($filepath)
-            ->willReturn(true);
-        $filesystem
-            ->expects(self::once())
-            ->method('write')
-            ->with($filepath, $content);
-
-        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
-        $value    = $resolver->cast($filepath, ResolverTest__Cast::class);
-
-        $resolver->save($filepath, $content);
-
-        self::assertNotSame($value, $resolver->cast($filepath, ResolverTest__Cast::class));
-        self::assertEquals(
-            [
-                new Dependency($filepath, DependencyResult::Found),
-                new Dependency($filepath, DependencyResult::Saved),
-                new Dependency($filepath, DependencyResult::Found),
-            ],
-            $dispatcher->events,
-        );
-    }
-
     public function testQueue(): void {
         $listener   = self::createMock(Listener::class);
         $container  = self::createStub(Container::class);
@@ -500,7 +446,7 @@ final class ResolverTest extends TestCase {
 
         $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
 
-        $resolver->delete(new FileImpl($filepath, $resolver));
+        $resolver->delete(new NativeFile($resolver, $filepath));
 
         self::assertEquals(
             [
@@ -688,32 +634,6 @@ final class ResolverTest extends TestCase {
         self::assertEquals($expected->normalized(), $resolver->output($path));
     }
 
-    public function testCast(): void {
-        $listener   = self::createStub(Listener::class);
-        $container  = self::createMock(Container::class);
-        $dispatcher = self::createStub(Dispatcher::class);
-        $directory  = new DirectoryPath('/directory/path/');
-        $filesystem = self::createMock(FileSystem::class);
-
-        $container
-            ->expects(self::once())
-            ->method('make')
-            ->with(ResolverTest__Cast::class)
-            ->willReturn(new ResolverTest__Cast());
-        $filesystem
-            ->expects(self::once())
-            ->method(PropertyHook::get('input'))
-            ->willReturn($directory);
-
-        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
-        $filepath = new FileImpl(new FilePath('/file.txt'), $resolver);
-
-        self::assertSame(
-            $resolver->cast($filepath, ResolverTest__Cast::class),
-            $resolver->cast($filepath, ResolverTest__Cast::class),
-        );
-    }
-
     public function testPropertyDirectory(): void {
         $listener   = self::createStub(Listener::class);
         $container  = self::createStub(Container::class);
@@ -749,6 +669,30 @@ final class ResolverTest extends TestCase {
         self::assertEquals($directory, $resolver->directory);
     }
 
+    public function testFormat(): void {
+        $format     = self::createStub(Format::class);
+        $listener   = self::createStub(Listener::class);
+        $container  = self::createMock(Container::class);
+        $dispatcher = self::createStub(Dispatcher::class);
+        $filesystem = self::createMock(FileSystem::class);
+
+        $container
+            ->expects(self::once())
+            ->method('make')
+            ->with($format::class)
+            ->willReturn($format);
+        $filesystem
+            ->expects(self::atLeastOnce())
+            ->method(PropertyHook::get('input'))
+            ->willReturn(new DirectoryPath('/directory/path/'));
+
+        $resolver = new Resolver($container, $dispatcher, $filesystem, $listener);
+
+        self::assertSame(
+            $resolver->format($format::class),
+            $resolver->format($format::class),
+        );
+    }
     //</editor-fold>
 
     // <editor-fold desc="DataProviders">
@@ -777,26 +721,4 @@ final class ResolverTest extends TestCase {
         ];
     }
     //</editor-fold>
-}
-
-// @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
-// @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
-
-/**
- * @internal
- * @noinspection PhpMultipleClassesDeclarationsInOneFile
- *
- * @implements Cast<object>
- */
-class ResolverTest__Cast implements Cast {
-    #[Override]
-    public function __invoke(Contract $resolver, File $file): object {
-        return new class($file->path->path) {
-            public function __construct(
-                public string $path,
-            ) {
-                // empty
-            }
-        };
-    }
 }

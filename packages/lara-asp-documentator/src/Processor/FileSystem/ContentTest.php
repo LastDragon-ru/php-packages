@@ -6,98 +6,67 @@ use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\Path\FilePath;
 use PHPUnit\Framework\Attributes\CoversClass;
 
+use function array_values;
+
 /**
  * @internal
  */
 #[CoversClass(Content::class)]
 final class ContentTest extends TestCase {
-    public function testChanged(): void {
-        $content = new Content();
-        $path    = new FilePath('file.txt');
-
-        self::assertFalse($content->changed($path));
-
-        $content[$path] = 'abc';
-
-        self::assertTrue($content->changed($path));
-        self::assertTrue($content->changed(new FilePath('file.txt')));
-
-        unset($content[$path]);
-
-        self::assertFalse($content->changed($path));
-        self::assertFalse($content->changed(new FilePath('file.txt')));
-    }
-
-    public function testChanges(): void {
+    public function testPropertyChanges(): void {
         $aPath   = new FilePath('a.txt');
         $bPath   = new FilePath('b.txt');
         $content = new Content();
 
-        self::assertSame([], $content->changes());
+        self::assertSame([], $content->changes);
 
-        $content[$aPath] = 'a';
-        $content[$bPath] = 'b';
+        $content->set($aPath, 'a');
+        $content->set($bPath, 'b');
 
-        self::assertSame([$aPath, $bPath], $content->changes());
-        self::assertSame([$aPath, $bPath], $content->changes());
+        self::assertSame([$aPath, $bPath], array_values($content->changes));
     }
 
-    public function testDelete(): void {
+    public function testMethods(): void {
         $aPath   = new FilePath('/directory/a.txt');
         $bPath   = new FilePath('/directory/b.txt');
         $cPath   = new FilePath('/c.txt');
         $content = new Content();
 
-        $content[$aPath] = 'a';
-        $content[$bPath] = 'b';
-        $content[$cPath] = 'c';
+        $content->set($aPath, 'a');
+        $content->set($bPath, 'b');
+        $content->set($cPath, 'c');
 
-        self::assertTrue(isset($content[$aPath]));
-        self::assertTrue(isset($content[$bPath]));
-        self::assertTrue(isset($content[$cPath]));
+        self::assertSame('a', $content->get($aPath));
+        self::assertSame('b', $content->get($bPath));
+        self::assertSame('c', $content->get($cPath));
 
         $content->delete($cPath);
 
-        self::assertTrue(isset($content[$aPath]));
-        self::assertTrue(isset($content[$bPath]));
-        self::assertFalse(isset($content[$cPath]));
+        self::assertSame('a', $content->get($aPath));
+        self::assertSame('b', $content->get($bPath));
+        self::assertNull($content->get($cPath));
 
         $content->delete($aPath->directory());
 
-        self::assertFalse(isset($content[$aPath]));
-        self::assertFalse(isset($content[$bPath]));
-        self::assertFalse(isset($content[$cPath]));
+        self::assertNull($content->get($aPath));
+        self::assertNull($content->get($bPath));
+        self::assertNull($content->get($cPath));
     }
 
-    public function testReset(): void {
-        $path    = new FilePath('b.txt');
+    public function testCleanup(): void {
+        $aPath   = new FilePath('/directory/a.txt');
+        $bPath   = new FilePath('/directory/b.txt');
         $content = new Content();
 
-        $content[$path] = 'a';
+        $content->set($aPath, 'a');
+        $content->set($bPath, 'b');
 
-        self::assertTrue($content->changed($path));
+        self::assertSame('a', $content->get($aPath));
+        self::assertSame('b', $content->get($bPath));
 
-        $content->reset($path);
+        $content->cleanup();
 
-        self::assertFalse($content->changed($path));
-        self::assertFalse(isset($content[$path]));
-    }
-
-    public function testArrayAccess(): void {
-        $content = new Content();
-        $path    = new FilePath('b.txt');
-
-        self::assertFalse(isset($content[$path]));
-        self::assertNull($content[$path]);
-
-        $content[$path] = 'abc';
-
-        self::assertTrue(isset($content[$path]));
-        self::assertSame('abc', $content[$path]);
-
-        unset($content[$path]);
-
-        self::assertFalse(isset($content[$path]));
-        self::assertNull($content[$path]);
+        self::assertNull($content->get($aPath));
+        self::assertNull($content->get($bPath));
     }
 }

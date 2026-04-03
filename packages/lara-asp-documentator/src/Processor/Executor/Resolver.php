@@ -3,20 +3,19 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Executor;
 
 use Exception;
-use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Cast;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Format;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver as Contract;
 use LastDragon_ru\LaraASP\Documentator\Processor\Dispatcher;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\Dependency;
 use LastDragon_ru\LaraASP\Documentator\Processor\Events\DependencyResult;
 use LastDragon_ru\LaraASP\Documentator\Processor\Exceptions\PathNotFound;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File as FileImpl;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\FileSystem\FileSystem;
 use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use Override;
-use WeakMap;
 
 use function array_last;
 use function array_pop;
@@ -30,14 +29,10 @@ class Resolver implements Contract {
      */
     private array $level = [];
     /**
-     * @var array<class-string<Cast<mixed>>, Cast<mixed>>
+     * @var array<class-string<Format<*, *>>, Format<*, *>>
      */
-    private array $casts;
-    /**
-     * @var WeakMap<File<*>, array<class-string<Cast<mixed>>, mixed>>
-     */
-    private WeakMap $files;
-    private Cache   $cache;
+    private array $formats;
+    private Cache $cache;
 
     public function __construct(
         private readonly Container $container,
@@ -45,9 +40,8 @@ class Resolver implements Contract {
         private readonly FileSystem $fs,
         private readonly Listener $on,
     ) {
-        $this->casts     = [];
-        $this->files     = new WeakMap();
         $this->cache     = new Cache(50);
+        $this->formats   = [];
         $this->directory = $this->input;
     }
 
@@ -124,19 +118,6 @@ class Resolver implements Contract {
         return $file;
     }
 
-    #[Override]
-    public function cast(File|FilePath $path, string $cast): mixed {
-        $file = $path instanceof File ? $path : $this->get($path);
-
-        if (!isset($this->files[$file][$cast])) {
-            $this->casts[$cast]      ??= $this->container->make($cast);
-            $this->files[$file]      ??= [];
-            $this->files[$file][$cast] = ($this->casts[$cast])($this, $file);
-        }
-
-        return $this->files[$file][$cast];
-    }
-
     public function read(FilePath $path): string {
         return $this->fs->read($this->input($path));
     }
@@ -146,14 +127,8 @@ class Resolver implements Contract {
 
         ($this->dispatcher)(new Dependency($path, DependencyResult::Saved));
 
-        try {
-            $this->fs->write($path, $content);
-            $this->on->save($path);
-        } finally {
-            if (isset($this->cache[$path])) {
-                unset($this->files[$this->cache[$path]]);
-            }
-        }
+        $this->fs->write($path, $content);
+        $this->on->save($path);
     }
 
     #[Override]
@@ -221,6 +196,18 @@ class Resolver implements Contract {
     }
 
     /**
+     * @template T of Format
+     *
+     * @param class-string<T> $format
+     *
+     * @return T
+     */
+    public function format(string $format): Format {
+        // @phpstan-ignore return.type (https://github.com/phpstan/phpstan/issues/9521)
+        return $this->formats[$format] ??= $this->container->make($format);
+    }
+
+    /**
      * @template T of DirectoryPath|FilePath
      *
      * @param T $path
@@ -246,6 +233,6 @@ class Resolver implements Contract {
      * @return File<string>
      */
     private function make(FilePath $path): File {
-        return $this->cache[$path] ??= new FileImpl($path, $this);
+        return $this->cache[$path] ??= new NativeFile($this, $path);
     }
 }

@@ -3,9 +3,9 @@
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Links;
 
 use LastDragon_ru\LaraASP\Documentator\Composer\Package;
-use LastDragon_ru\LaraASP\Documentator\Processor\Casts\Php\Parsed;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
+use LastDragon_ru\LaraASP\Documentator\Processor\Formats\Php\PhpFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\Contracts\Link;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\CodeLinks\LinkTarget;
 use LastDragon_ru\LaraASP\Documentator\Utils\PhpDoc;
@@ -13,8 +13,8 @@ use LastDragon_ru\Path\FilePath;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\NodeFinder;
 
-use function array_find;
 use function mb_ltrim;
 use function mb_strrpos;
 use function mb_substr;
@@ -70,20 +70,23 @@ abstract class Base implements Link {
     public function getTarget(Resolver $resolver, File $source): ?LinkTarget {
         // Class?
         $expected = mb_ltrim($this->class, '\\');
-        $parsed   = $resolver->cast($source, Parsed::class);
-        $class    = array_find(
-            $parsed->classes,
-            static fn ($class) => (string) $class->node->namespacedName === $expected,
+        $phpFile  = $source->as(PhpFile::class);
+        $class    = (new NodeFinder())->findFirst(
+            $phpFile->content->stmts,
+            static function (Node $node) use ($expected): bool {
+                return $node instanceof ClassLike
+                    && (string) $node->namespacedName === $expected;
+            },
         );
 
-        if ($class === null) {
+        if (!($class instanceof ClassLike)) {
             return null;
         }
 
         // Resolve
         $path       = $resolver->directory->relative($source->path);
-        $node       = $this->getTargetNode($class->node);
-        $deprecated = $class->comment->isDeprecated();
+        $node       = $this->getTargetNode($class);
+        $deprecated = (new PhpDoc($class->getDocComment()?->getText()))->isDeprecated();
         $target     = $this->target($path, $node, $deprecated);
 
         // Return

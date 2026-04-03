@@ -5,7 +5,7 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instruct
 use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Document;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Package\WithPreprocess;
-use LastDragon_ru\LaraASP\Documentator\Processor\Executor\File;
+use LastDragon_ru\LaraASP\Documentator\Processor\Executor\Files\NativeFile;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeTemplate\Exceptions\TemplateDataMissed;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeTemplate\Exceptions\TemplateVariablesMissed;
 use LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Instructions\IncludeTemplate\Exceptions\TemplateVariablesUnused;
@@ -34,7 +34,7 @@ final class InstructionTest extends TestCase {
     #[DataProvider('dataProviderInvoke')]
     public function testInvoke(string $expected, string $source, array $data): void {
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = new File($fs->input->file(__FILE__), $this->getProcessorResolver($fs));
+        $file     = new NativeFile($this->getProcessorResolver($fs), $fs->input->file(__FILE__));
         $params   = new Parameters(TestData::get()->file($source)->path, $data);
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);
@@ -52,7 +52,7 @@ final class InstructionTest extends TestCase {
 
     public function testInvokeNoData(): void {
         $fs       = $this->getFileSystem(__DIR__);
-        $file     = new File($fs->input->file(__FILE__), $this->getProcessorResolver($fs));
+        $file     = new NativeFile($this->getProcessorResolver($fs), $fs->input->file(__FILE__));
         $params   = new Parameters((string) $file->path, []);
         $context  = $this->getPreprocessInstructionContext($fs, $file);
         $instance = $this->app()->make(Instruction::class);
@@ -67,7 +67,7 @@ final class InstructionTest extends TestCase {
     public function testInvokeVariablesUnused(): void {
         $path     = TestData::get()->file('Document.md');
         $fs       = $this->getFileSystem($path->directory());
-        $file     = new File($path, $this->getProcessorResolver($fs));
+        $file     = new NativeFile($this->getProcessorResolver($fs), $path);
         $params   = new Parameters((string) $file->path, [
             'a' => 'A',
             'b' => 'B',
@@ -87,7 +87,7 @@ final class InstructionTest extends TestCase {
     public function testInvokeVariablesMissed(): void {
         $path     = TestData::get()->file('Document.md');
         $fs       = $this->getFileSystem($path->directory());
-        $file     = new File($path, $this->getProcessorResolver($fs));
+        $file     = new NativeFile($this->getProcessorResolver($fs), $path);
         $params   = new Parameters((string) $file->path, [
             'a' => 'A',
         ]);
