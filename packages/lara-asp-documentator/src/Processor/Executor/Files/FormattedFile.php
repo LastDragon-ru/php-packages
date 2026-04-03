@@ -16,6 +16,11 @@ use Override;
  * @extends Base<TContent>
  */
 class FormattedFile extends Base {
+    /**
+     * @var TContent
+     */
+    private mixed $value = null;
+
     public function __construct(
         Resolver $resolver,
         /**
@@ -34,17 +39,22 @@ class FormattedFile extends Base {
         get => $this->parent->path;
     }
 
-    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
-    public protected(set) mixed $content {
-        get => $this->content ??= $this->format->read($this->resolver, $this->parent);
+    public mixed $content {
+        get => $this->value ??= $this->format->read($this->resolver, $this->parent);
     }
 
     #[Override]
     public function save(mixed $content): void {
+        // Changed?
+        if ($this->value === $content) {
+            return;
+        }
+
+        // Change
         $this->parent->save($this->format->write($this->resolver, $this, $content));
         $this->parent->reset($this->format);
 
-        $this->content = $content;
+        $this->value = $content;
     }
 
     #[Override]

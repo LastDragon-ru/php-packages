@@ -44,6 +44,7 @@ final class NativeFileTest extends TestCase {
             ->with($path, $content);
 
         $file->save($content);
+        $file->save($content);
 
         self::assertSame($content, $file->content);
     }

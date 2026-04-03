@@ -9,9 +9,11 @@ use Override;
 /**
  * @internal
  *
- * @extends  Base<string>
+ * @extends Base<string>
  */
 class NativeFile extends Base {
+    private ?string $value = null;
+
     public function __construct(
         Resolver $resolver,
         public readonly FilePath $path,
@@ -19,16 +21,21 @@ class NativeFile extends Base {
         parent::__construct($resolver);
     }
 
-    // @phpstan-ignore property.uninitialized (it is lazy, so all fine)
-    public protected(set) mixed $content {
-        get => $this->content ??= $this->resolver->read($this->path);
+    public mixed $content {
+        get => $this->value ??= $this->resolver->read($this->path);
     }
 
     #[Override]
     public function save(mixed $content): void {
+        // Changed?
+        if ($this->value === $content) {
+            return;
+        }
+
+        // Change
         $this->resolver->save($this->path, $content);
 
-        $this->content = $content;
+        $this->value = $content;
     }
 
     #[Override]

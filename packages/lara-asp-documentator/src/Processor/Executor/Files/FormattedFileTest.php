@@ -60,6 +60,7 @@ final class FormattedFileTest extends TestCase {
             ->with($content);
 
         $file->save($formatted);
+        $file->save($formatted);
 
         self::assertSame($formatted, $file->content);
         self::assertSame($formatted, $file->content);
