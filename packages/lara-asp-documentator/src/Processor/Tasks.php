@@ -70,9 +70,9 @@ class Tasks implements IteratorAggregate {
     /**
      * @template T of Task
      *
-     * @param T|class-string<T> $task
+     * @param class-string<T> $task
      */
-    public function add(Task|string $task, ?int $priority = null): void {
+    public function add(string $task, ?int $priority = null): void {
         $tags = [];
 
         if (is_a($task, FileTask::class, true)) {
@@ -100,9 +100,9 @@ class Tasks implements IteratorAggregate {
     /**
      * @template T of Task
      *
-     * @param T|class-string<T> $task
+     * @param class-string<T> $task
      */
-    public function remove(Task|string $task): void {
+    public function remove(string $task): void {
         // Task
         $this->instances->remove($task);
 

@@ -10,8 +10,6 @@ use function array_filter;
 use function array_keys;
 use function array_merge;
 use function array_unique;
-use function is_object;
-use function is_string;
 use function max;
 use function min;
 use function usort;
@@ -31,7 +29,7 @@ class Instances {
     private array $priorities = [];
 
     /**
-     * @var array<class-string<TInstance>, ?TInstance>
+     * @var array<class-string<TInstance>, TInstance>
      */
     private array $resolved = [];
 
@@ -51,11 +49,6 @@ class Instances {
      * @var array<class-string<TInstance>, list<UnitEnum|string>>
      */
     private array $classes = [];
-
-    /**
-     * @var array<class-string<TInstance>, bool>
-     */
-    private array $persistent = [];
 
     public function __construct(
         protected readonly Container $container,
@@ -89,10 +82,10 @@ class Instances {
     }
 
     /**
-     * @param TInstance|class-string<TInstance> $instance
+     * @param class-string<TInstance> $instance
      */
-    public function is(object|string $instance): bool {
-        return isset($this->classes[is_object($instance) ? $instance::class : $instance]);
+    public function is(string $instance): bool {
+        return isset($this->classes[$instance]);
     }
 
     public function has(UnitEnum|string|null ...$tags): bool {
@@ -153,19 +146,16 @@ class Instances {
     }
 
     /**
-     * @param TInstance|class-string<TInstance> $instance
-     * @param list<UnitEnum|string|null>        $tags
+     * @param class-string<TInstance>    $class
+     * @param list<UnitEnum|string|null> $tags
      */
-    public function add(object|string $instance, array $tags = [], ?int $priority = null, bool $merge = false): static {
+    public function add(string $class, array $tags = [], ?int $priority = null, bool $merge = false): static {
         if (!$merge) {
-            $this->remove($instance);
+            $this->remove($class);
         }
 
         $tags                     = array_filter($tags, static fn ($tag): bool => $tag !== null);
-        $class                    = is_string($instance) ? $instance : $instance::class;
         $this->classes[$class]    = array_merge($this->classes[$class] ?? [], $tags);
-        $this->resolved[$class]   = is_object($instance) ? $instance : null;
-        $this->persistent[$class] = is_object($instance);
         $this->priorities[$class] = $priority ?? $this->priorities[$class] ?? $this->priority();
 
         foreach ($tags as $tag) {
@@ -180,11 +170,10 @@ class Instances {
     }
 
     /**
-     * @param TInstance|class-string<TInstance> $instance
+     * @param class-string<TInstance> $class
      */
-    public function remove(object|string $instance): static {
+    public function remove(string $class): static {
         // Tags
-        $class  = is_string($instance) ? $instance : $instance::class;
         $tags   = $this->classes[$class] ?? [];
         $filter = static function (UnitEnum|string $name) use ($class): bool {
             return $name !== $class;
@@ -208,7 +197,6 @@ class Instances {
 
         // Class
         unset($this->priorities[$class]);
-        unset($this->persistent[$class]);
         unset($this->resolved[$class]);
         unset($this->classes[$class]);
 
@@ -217,11 +205,7 @@ class Instances {
     }
 
     public function reset(): static {
-        foreach ($this->resolved as $class => $instance) {
-            if (($this->persistent[$class] ?? false) === false) {
-                $this->resolved[$class] = null;
-            }
-        }
+        $this->resolved = [];
 
         return $this;
     }

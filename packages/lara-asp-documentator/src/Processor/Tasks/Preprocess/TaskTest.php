@@ -87,7 +87,7 @@ final class TaskTest extends TestCase {
         };
 
         $task->addInstruction($a::class);
-        $task->addInstruction($b);
+        $task->addInstruction($b::class);
 
         $file     = self::createStub(File::class);
         $document = $this->app()->make(Markdown::class)->parse(self::MARKDOWN);

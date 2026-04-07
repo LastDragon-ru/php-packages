@@ -2,10 +2,11 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor\Utils;
 
+use Exception;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
-use Mockery;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 use stdClass;
 
 use function iterator_to_array;
@@ -16,10 +17,11 @@ use const PHP_INT_MAX;
  * @internal
  */
 #[CoversClass(Instances::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class InstancesTest extends TestCase {
     public function testTags(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Desc);
+        $container = self::createStub(Container::class);
+        $instances = new Instances($container, InstancesOrder::Desc);
         $aInstance = new class() extends stdClass {
             // empty
         };
@@ -27,15 +29,15 @@ final class InstancesTest extends TestCase {
             // empty
         };
 
-        $instances->add($aInstance, ['aa', 'ab'], 200);
-        $instances->add($bInstance, ['b', InstancesTest__Enum::B], 100);
+        $instances->add($aInstance::class, ['aa', 'ab'], 200);
+        $instances->add($bInstance::class, ['b', InstancesTest__Enum::B], 100);
 
         self::assertEquals(['aa', 'ab', 'b', InstancesTest__Enum::B], $instances->tags());
     }
 
     public function testClasses(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Asc);
+        $container = self::createStub(Container::class);
+        $instances = new Instances($container, InstancesOrder::Asc);
         $aInstance = new class() extends stdClass {
             // empty
         };
@@ -46,8 +48,8 @@ final class InstancesTest extends TestCase {
             // empty
         };
 
-        $instances->add($aInstance, ['a'], 200);
-        $instances->add($bInstance, ['b'], 100);
+        $instances->add($aInstance::class, ['a'], 200);
+        $instances->add($bInstance::class, ['b'], 100);
         $instances->add($cInstance::class, ['c']);
 
         self::assertEquals(
@@ -61,8 +63,8 @@ final class InstancesTest extends TestCase {
     }
 
     public function testIs(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Desc);
+        $container = self::createStub(Container::class);
+        $instances = new Instances($container, InstancesOrder::Desc);
         $aInstance = new class() extends stdClass {
             // empty
         };
@@ -73,18 +75,16 @@ final class InstancesTest extends TestCase {
         self::assertFalse($instances->is($aInstance::class));
         self::assertFalse($instances->is($bInstance::class));
 
-        $instances->add($aInstance, ['a']);
-        $instances->add($bInstance, ['b']);
+        $instances->add($aInstance::class, ['a']);
+        $instances->add($bInstance::class, ['b']);
 
         self::assertTrue($instances->is($aInstance::class));
         self::assertTrue($instances->is($bInstance::class));
-        self::assertTrue($instances->is($aInstance));
-        self::assertTrue($instances->is($bInstance));
     }
 
     public function testHas(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Desc);
+        $container = self::createStub(Container::class);
+        $instances = new Instances($container, InstancesOrder::Desc);
         $aInstance = new class() extends stdClass {
             // empty
         };
@@ -94,8 +94,8 @@ final class InstancesTest extends TestCase {
 
         self::assertFalse($instances->has());
 
-        $instances->add($aInstance, ['aa', 'ab']);
-        $instances->add($bInstance, ['b', InstancesTest__Enum::B]);
+        $instances->add($aInstance::class, ['aa', 'ab']);
+        $instances->add($bInstance::class, ['b', InstancesTest__Enum::B]);
 
         self::assertTrue($instances->has());
 
@@ -109,8 +109,8 @@ final class InstancesTest extends TestCase {
     }
 
     public function testGet(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Asc);
+        $container = self::createMock(Container::class);
+        $instances = new Instances($container, InstancesOrder::Asc);
         $aInstance = new class() extends stdClass {
             // empty
         };
@@ -119,12 +119,19 @@ final class InstancesTest extends TestCase {
         };
 
         $container
-            ->shouldReceive('make')
-            ->with($bInstance::class)
-            ->once()
-            ->andReturn($bInstance);
+            ->expects(self::exactly(2))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($aInstance, $bInstance): object {
+                    return match ($class) {
+                        $aInstance::class => $aInstance,
+                        $bInstance::class => $bInstance,
+                        default           => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $instances->add($aInstance, ['aa', 'ab']);
+        $instances->add($aInstance::class, ['aa', 'ab']);
         $instances->add($bInstance::class, ['b', InstancesTest__Enum::B]);
 
         self::assertSame([$aInstance], iterator_to_array($instances->get('aa'), false));
@@ -137,8 +144,8 @@ final class InstancesTest extends TestCase {
     }
 
     public function testGetReverse(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Desc);
+        $container = self::createMock(Container::class);
+        $instances = new Instances($container, InstancesOrder::Desc);
         $aInstance = new class() extends stdClass {
             // empty
         };
@@ -147,12 +154,19 @@ final class InstancesTest extends TestCase {
         };
 
         $container
-            ->shouldReceive('make')
-            ->with($bInstance::class)
-            ->once()
-            ->andReturn($bInstance);
+            ->expects(self::exactly(2))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($aInstance, $bInstance): object {
+                    return match ($class) {
+                        $aInstance::class => $aInstance,
+                        $bInstance::class => $bInstance,
+                        default           => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $instances->add($aInstance, ['aa', 'ab']);
+        $instances->add($aInstance::class, ['aa', 'ab']);
         $instances->add($bInstance::class, ['b']);
 
         self::assertSame([$bInstance, $aInstance], iterator_to_array($instances->get('b', 'ab'), false));
@@ -161,8 +175,8 @@ final class InstancesTest extends TestCase {
     }
 
     public function testAdd(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Asc);
+        $container = self::createStub(Container::class);
+        $instances = new Instances($container, InstancesOrder::Asc);
         $aInstance = new class() extends stdClass {
             // empty
         };
@@ -179,20 +193,20 @@ final class InstancesTest extends TestCase {
         self::assertEquals([], $instances->tags());
         self::assertEquals([], $instances->classes());
 
-        $instances->add($aInstance, ['aa', 'ab'], 200);
-        $instances->add($aInstance, ['ac'], merge: true);
+        $instances->add($aInstance::class, ['aa', 'ab'], 200);
+        $instances->add($aInstance::class, ['ac'], merge: true);
 
         self::assertEquals(['aa', 'ab', 'ac'], $instances->tags());
         self::assertEquals([$aInstance::class], $instances->classes());
 
-        $instances->add($bInstance, ['b'], 100);
-        $instances->add($bInstance, ['bb', InstancesTest__Enum::B], 100);
+        $instances->add($bInstance::class, ['b'], 100);
+        $instances->add($bInstance::class, ['bb', InstancesTest__Enum::B], 100);
 
         self::assertEquals(['aa', 'ab', 'ac', 'bb', InstancesTest__Enum::B], $instances->tags());
         self::assertEquals([$bInstance::class, $aInstance::class], $instances->classes());
 
-        $instances->add($cInstance, ['c'], PHP_INT_MAX);
-        $instances->add($dInstance, ['d']);
+        $instances->add($cInstance::class, ['c'], PHP_INT_MAX);
+        $instances->add($dInstance::class, ['d']);
 
         self::assertEquals(
             [
@@ -205,9 +219,34 @@ final class InstancesTest extends TestCase {
         );
     }
 
+    public function testAddMerge(): void {
+        $container = self::createMock(Container::class);
+        $instances = new Instances($container, InstancesOrder::Asc);
+        $instance  = new class() extends stdClass {
+            // empty
+        };
+
+        $container
+            ->expects(self::once())
+            ->method('make')
+            ->with($instance::class)
+            ->willReturn($instance);
+
+        $instances->add($instance::class, ['a', 'b'], 200);
+
+        self::assertEquals(['a', 'b'], $instances->tags());
+        self::assertSame($instance, $instances->first('a'));
+
+        $instances->add($instance::class, ['c'], merge: true);
+
+        self::assertEquals(['a', 'b', 'c'], $instances->tags());
+        self::assertSame($instance, $instances->first('a'));
+        self::assertSame($instance, $instances->first('b'));
+    }
+
     public function testRemove(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Desc);
+        $container = self::createStub(Container::class);
+        $instances = new Instances($container, InstancesOrder::Desc);
         $aInstance = new class() extends stdClass {
             // empty
         };
@@ -215,25 +254,25 @@ final class InstancesTest extends TestCase {
             // empty
         };
 
-        $instances->add($aInstance, ['aa', 'ab', InstancesTest__Enum::A]);
-        $instances->add($bInstance, ['b', InstancesTest__Enum::B]);
+        $instances->add($aInstance::class, ['aa', 'ab', InstancesTest__Enum::A]);
+        $instances->add($bInstance::class, ['b', InstancesTest__Enum::B]);
 
         self::assertEquals(['aa', 'ab', 'b', InstancesTest__Enum::A, InstancesTest__Enum::B], $instances->tags());
 
-        $instances->remove($aInstance);
+        $instances->remove($aInstance::class);
 
         self::assertEquals(['b', InstancesTest__Enum::B], $instances->tags());
         self::assertEquals([$bInstance::class], $instances->classes());
 
-        $instances->remove($bInstance);
+        $instances->remove($bInstance::class);
 
         self::assertEquals([], $instances->tags());
         self::assertEquals([], $instances->classes());
     }
 
     public function testReset(): void {
-        $container = Mockery::mock(Container::class);
-        $instances = new InstancesTest__Instances($container, InstancesOrder::Asc);
+        $container = self::createMock(Container::class);
+        $instances = new Instances($container, InstancesOrder::Asc);
         $aInstance = new class() {
             // empty
         };
@@ -241,14 +280,21 @@ final class InstancesTest extends TestCase {
             // empty
         };
 
-        $instances->add($aInstance, ['a']);
+        $instances->add($aInstance::class, ['a']);
         $instances->add($bInstance::class, ['b']);
 
         $container
-            ->shouldReceive('make')
-            ->with($bInstance::class)
-            ->twice()
-            ->andReturn($bInstance);
+            ->expects(self::exactly(4))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($aInstance, $bInstance): object {
+                    return match ($class) {
+                        $aInstance::class => $aInstance,
+                        $bInstance::class => $bInstance,
+                        default           => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
         self::assertEquals(
             [
@@ -272,15 +318,6 @@ final class InstancesTest extends TestCase {
 
 // @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 // @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
-
-/**
- * @internal
- * @noinspection PhpMultipleClassesDeclarationsInOneFile
- * @extends Instances<object>
- */
-class InstancesTest__Instances extends Instances {
-    // empty
-}
 
 /**
  * @internal

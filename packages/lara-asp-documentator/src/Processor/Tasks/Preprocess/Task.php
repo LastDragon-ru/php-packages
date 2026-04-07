@@ -105,9 +105,9 @@ class Task implements FileTask {
      * @template P of Parameters
      * @template I of Instruction<P>
      *
-     * @param I|class-string<I> $instruction
+     * @param class-string<I> $instruction
      */
-    public function addInstruction(Instruction|string $instruction): static {
+    public function addInstruction(string $instruction): static {
         $this->instructions->add($instruction, [$instruction::getName()]);
 
         return $this;
@@ -117,9 +117,9 @@ class Task implements FileTask {
      * @template P of Parameters
      * @template I of Instruction<P>
      *
-     * @param I|class-string<I> $instruction
+     * @param class-string<I> $instruction
      */
-    public function removeInstruction(Instruction|string $instruction): static {
+    public function removeInstruction(string $instruction): static {
         $this->instructions->remove($instruction);
 
         return $this;

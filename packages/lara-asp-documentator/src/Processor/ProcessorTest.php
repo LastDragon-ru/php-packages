@@ -39,9 +39,9 @@ use LastDragon_ru\Path\DirectoryPath;
 use LastDragon_ru\Path\FilePath;
 use LastDragon_ru\PhpUnit\Utils\TempDirectory;
 use LastDragon_ru\PhpUnit\Utils\TestData;
-use Mockery;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 use Symfony\Component\Finder\Finder;
 
 use function array_map;
@@ -55,35 +55,33 @@ use function file_put_contents;
 #[CoversClass(Executor::class)]
 #[CoversClass(Iterator::class)]
 #[CoversClass(Resolver::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class ProcessorTest extends TestCase {
     public function testRun(): void {
-        $input  = TestData::get()->directory();
-        $events = [];
-
-        $mock = Mockery::mock(FileTask::class);
-        $mock
-            ->shouldReceive('glob')
-            ->once()
-            ->andReturns(['*.php']);
-
+        $input = TestData::get()->directory();
         $taskA = new class() extends ProcessorTest__Task {
             #[Override]
             public static function glob(): string {
                 return '*.htm';
             }
         };
-        $taskB = new ProcessorTest__Task([
-            'a/a.txt'    => [
-                '../b/b/bb.txt',
-                '../c.txt',
-                '../c.html',
-                'excluded.txt',
-            ],
-            'b/b/bb.txt' => [
-                '../../b/a/ba.txt',
-                '../../c.txt',
-            ],
-        ]);
+        $taskB = new class() extends ProcessorTest__Task {
+            #[Override]
+            public function dependencies(): array {
+                return [
+                    'a/a.txt'    => [
+                        '../b/b/bb.txt',
+                        '../c.txt',
+                        '../c.html',
+                        'excluded.txt',
+                    ],
+                    'b/b/bb.txt' => [
+                        '../../b/a/ba.txt',
+                        '../../c.txt',
+                    ],
+                ];
+            }
+        };
         $taskC = new class() extends ProcessorTest__Task {
             #[Override]
             public static function glob(): string {
@@ -111,16 +109,29 @@ final class ProcessorTest extends TestCase {
             }
         };
 
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
-        $processor->task($mock);
-        $processor->task($taskA);
-        $processor->task($taskB);
-        $processor->task($taskC);
-        $processor->task($taskD);
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(4))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($taskA, $taskB, $taskC, $taskD): object {
+                    return match ($class) {
+                        $taskA::class => $taskA,
+                        $taskB::class => $taskB,
+                        $taskC::class => $taskC,
+                        $taskD::class => $taskD,
+                        default       => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+        $processor->task($taskA::class);
+        $processor->task($taskB::class);
+        $processor->task($taskC::class);
+        $processor->task($taskD::class);
+
+        $events = [];
         $result = $processor(
             $input,
             $input->parent(),
@@ -137,7 +148,6 @@ final class ProcessorTest extends TestCase {
                     $input,
                     $input->parent(),
                     [
-                        '**/*.php',
                         '**/*.htm',
                         '**/*.txt',
                         '**/*.md',
@@ -268,12 +278,22 @@ final class ProcessorTest extends TestCase {
         $task      = new ProcessorTest__Task();
         $input     = TestData::get()->file('excluded.txt');
         $events    = [];
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         $processor($input, onEvent: static function (Event $event) use (&$events): void {
             $events[] = $event;
@@ -319,14 +339,26 @@ final class ProcessorTest extends TestCase {
         };
         $input     = TestData::get()->file('excluded.txt');
         $events    = [];
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(3))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($taskA, $taskB, $taskC): object {
+                    return match ($class) {
+                        $taskA::class => $taskA,
+                        $taskB::class => $taskB,
+                        $taskC::class => $taskC,
+                        default       => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($taskA);
-        $processor->task($taskB);
-        $processor->task($taskC, -1);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($taskA::class);
+        $processor->task($taskB::class);
+        $processor->task($taskC::class, -1);
 
         $processor($input, onEvent: static function (Event $event) use (&$events): void {
             $events[] = $event;
@@ -363,11 +395,16 @@ final class ProcessorTest extends TestCase {
     public function testRunWildcard(): void {
         $input     = TestData::get()->directory();
         $events    = [];
-        $taskA     = new class([
-            'b/b.html' => [
-                '../a/excluded.txt',
-            ],
-        ]) extends ProcessorTest__Task {
+        $taskA     = new class() extends ProcessorTest__Task {
+            #[Override]
+            public function dependencies(): array {
+                return [
+                    'b/b.html' => [
+                        '../a/excluded.txt',
+                    ],
+                ];
+            }
+
             #[Override]
             public static function glob(): string {
                 return '*.html';
@@ -379,13 +416,24 @@ final class ProcessorTest extends TestCase {
                 return '*';
             }
         };
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(2))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($taskA, $taskB): object {
+                    return match ($class) {
+                        $taskA::class => $taskA,
+                        $taskB::class => $taskB,
+                        default       => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($taskA);
-        $processor->task($taskB);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($taskA::class);
+        $processor->task($taskB::class);
 
         $processor(
             $input,
@@ -539,17 +587,32 @@ final class ProcessorTest extends TestCase {
         $input     = TestData::get()->directory();
         $output    = $input->directory('a');
         $events    = [];
-        $task      = new ProcessorTest__Task([
-            'b/a/ba.txt' => [
-                '../../a/a.txt',
-            ],
-        ]);
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $task      = new class() extends ProcessorTest__Task {
+            #[Override]
+            public function dependencies(): array {
+                return [
+                    'b/a/ba.txt' => [
+                        '../../a/a.txt',
+                    ],
+                ];
+            }
+        };
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         $processor(
             $input,
@@ -623,14 +686,29 @@ final class ProcessorTest extends TestCase {
 
     public function testRunFileNotFound(): void {
         $input     = TestData::get()->directory();
-        $task      = new ProcessorTest__Task(['*' => ['404.html']]);
+        $task      = new class() extends ProcessorTest__Task {
+            #[Override]
+            public function dependencies(): array {
+                return ['*' => ['404.html']];
+            }
+        };
         $path      = $input->file('a/404.html');
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         self::expectExceptionObject(new PathNotFound($path));
 
@@ -639,17 +717,32 @@ final class ProcessorTest extends TestCase {
 
     public function testRunCircularDependency(): void {
         $input     = TestData::get()->directory();
-        $task      = new ProcessorTest__Task([
-            'a/a.txt'    => ['../b/b.txt'],
-            'b/b.txt'    => ['../b/a/ba.txt'],
-            'b/a/ba.txt' => ['../../c.txt'],
-            'c.txt'      => ['a/a.txt'],
-        ]);
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
-        $processor->task($task);
+        $task      = new class() extends ProcessorTest__Task {
+            #[Override]
+            public function dependencies(): array {
+                return [
+                    'a/a.txt'    => ['../b/b.txt'],
+                    'b/b.txt'    => ['../b/a/ba.txt'],
+                    'b/a/ba.txt' => ['../../c.txt'],
+                    'c.txt'      => ['a/a.txt'],
+                ];
+            }
+        };
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
+
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+        $processor->task($task::class);
 
         self::expectException(DependencyCircularDependency::class);
         self::expectExceptionMessage(
@@ -669,15 +762,30 @@ final class ProcessorTest extends TestCase {
 
     public function testRunCircularDependencySelf(): void {
         $input     = TestData::get()->directory('a/a');
-        $task      = new ProcessorTest__Task([
-            'aa.txt' => ['aa.txt'],
-        ]);
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $task      = new class() extends ProcessorTest__Task {
+            #[Override]
+            public function dependencies(): array {
+                return [
+                    'aa.txt' => ['aa.txt'],
+                ];
+            }
+        };
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         $processor($input);
 
@@ -702,16 +810,31 @@ final class ProcessorTest extends TestCase {
 
     public function testRunCircularDependencySelfThrough(): void {
         $input     = TestData::get()->directory('a/a');
-        $task      = new ProcessorTest__Task([
-            'aa.txt'       => ['excluded.txt'],
-            'excluded.txt' => ['aa.txt'],
-        ]);
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $task      = new class() extends ProcessorTest__Task {
+            #[Override]
+            public function dependencies(): array {
+                return [
+                    'aa.txt'       => ['excluded.txt'],
+                    'excluded.txt' => ['aa.txt'],
+                ];
+            }
+        };
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         self::expectException(DependencyCircularDependency::class);
         self::expectExceptionMessage(
@@ -731,15 +854,30 @@ final class ProcessorTest extends TestCase {
         $events    = [];
         $output    = TestData::get()->directory('b');
         $input     = TestData::get()->directory('a');
-        $task      = new ProcessorTest__Task([
-            'a/aa.txt' => ['../a.txt'],
-        ]);
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $task      = new class() extends ProcessorTest__Task {
+            #[Override]
+            public function dependencies(): array {
+                return [
+                    'a/aa.txt' => ['../a.txt'],
+                ];
+            }
+        };
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         $processor(
             $input,
@@ -817,12 +955,22 @@ final class ProcessorTest extends TestCase {
                 $resolver->queue(new FilePath('c.htm'));
             }
         };
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         $processor($input, onEvent: static function (Event $event) use (&$events): void {
             $events[] = $event;
@@ -859,12 +1007,22 @@ final class ProcessorTest extends TestCase {
                 $resolver->get(new FilePath('c.txt'));
             }
         };
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         $processor($input, onEvent: static function (Event $event) use (&$events): void {
             $events[] = $event;
@@ -899,12 +1057,22 @@ final class ProcessorTest extends TestCase {
                 $resolver->queue(new FilePath('c.txt'));
             }
         };
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         self::expectException(DependencyUnavailable::class);
 
@@ -926,12 +1094,22 @@ final class ProcessorTest extends TestCase {
                 throw new Exception();
             }
         };
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(1))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($task): object {
+                    return match ($class) {
+                        $task::class => $task,
+                        default      => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
-        $processor->task($task);
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+
+        $processor->task($task::class);
 
         $result = $processor(
             $input,
@@ -1010,14 +1188,27 @@ final class ProcessorTest extends TestCase {
 
         self::assertNotFalse(file_put_contents($file->path, 'content'));
 
-        $processor = new Processor(
-            Mockery::mock(Container::class),
-            new ProcessorTest__Adapter(),
-        );
-        $processor->task($taskA);
-        $processor->task($taskB);
-        $processor->task($taskC);
-        $processor->task($taskD);
+        $container = self::createMock(Container::class);
+        $container
+            ->expects(self::exactly(4))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($taskA, $taskB, $taskC, $taskD): object {
+                    return match ($class) {
+                        $taskA::class => $taskA,
+                        $taskB::class => $taskB,
+                        $taskC::class => $taskC,
+                        $taskD::class => $taskD,
+                        default       => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
+
+        $processor = new Processor($container, new ProcessorTest__Adapter());
+        $processor->task($taskA::class);
+        $processor->task($taskB::class);
+        $processor->task($taskC::class);
+        $processor->task($taskD::class);
 
         $events = [];
         $result = $processor(
@@ -1078,13 +1269,15 @@ class ProcessorTest__Task implements FileTask {
      */
     public array $processed = [];
 
-    public function __construct(
-        /**
-         * @var array<string, list<non-empty-string>>
-         */
-        private readonly array $dependencies = [],
-    ) {
+    public function __construct() {
         // empty
+    }
+
+    /**
+     * @return array<string, list<non-empty-string>>
+     */
+    public function dependencies(): array {
+        return [];
     }
 
     #[Override]
@@ -1096,7 +1289,8 @@ class ProcessorTest__Task implements FileTask {
     public function __invoke(ResolverContract $resolver, File $file): void {
         $resolved     = [];
         $relative     = ($resolver->input->relative($file->path) ?? $file->path)->path;
-        $dependencies = $this->dependencies[$relative] ?? $this->dependencies['*'] ?? [];
+        $dependencies = $this->dependencies();
+        $dependencies = $dependencies[$relative] ?? $dependencies['*'] ?? [];
 
         foreach ($dependencies as $dependency) {
             $resolved[$dependency] = $resolver->get(new FilePath($dependency));

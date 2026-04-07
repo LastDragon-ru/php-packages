@@ -2,6 +2,7 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Processor;
 
+use Exception;
 use LastDragon_ru\LaraASP\Documentator\Package\TestCase;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Container;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\File;
@@ -9,9 +10,9 @@ use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Resolver;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\FileTask;
 use LastDragon_ru\LaraASP\Documentator\Processor\Contracts\Tasks\HookTask;
 use LastDragon_ru\Path\FilePath;
-use Mockery;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DisableReturnValueGenerationForTestDoubles;
 
 use function iterator_to_array;
 
@@ -19,9 +20,10 @@ use function iterator_to_array;
  * @internal
  */
 #[CoversClass(Tasks::class)]
+#[DisableReturnValueGenerationForTestDoubles]
 final class TasksTest extends TestCase {
     public function testHas(): void {
-        $tasks = new Tasks(Mockery::mock(Container::class),);
+        $tasks = new Tasks(self::createStub(Container::class));
         $aFile = new FilePath('/file.md');
         $bFile = new FilePath('/file.task');
 
@@ -30,7 +32,7 @@ final class TasksTest extends TestCase {
         self::assertFalse($tasks->has($bFile));
         self::assertFalse($tasks->has(Hook::Before));
 
-        $tasks->add(new TasksTest__FileTask());
+        $tasks->add(TasksTest__FileTask::class);
         $tasks->add(TasksTest__HookTask::class);
         $tasks->add(TasksTest__Task::class);
 
@@ -41,11 +43,12 @@ final class TasksTest extends TestCase {
     }
 
     public function testGet(): void {
-        $tasks = new Tasks(Mockery::mock(Container::class),);
-        $taskA = new TasksTest__FileTask();
-        $taskB = new TasksTest__HookTask();
-        $taskC = new TasksTest__Task();
-        $taskD = new class() implements FileTask {
+        $container = self::createMock(Container::class);
+        $tasks     = new Tasks($container);
+        $aTask     = new TasksTest__FileTask();
+        $bTask     = new TasksTest__HookTask();
+        $cTask     = new TasksTest__Task();
+        $dTask     = new class() implements FileTask {
             #[Override]
             public static function glob(): string {
                 return '*.md';
@@ -56,45 +59,60 @@ final class TasksTest extends TestCase {
                 // empty
             }
         };
-        $aFile = new FilePath('/file.md');
-        $bFile = new FilePath('/file.task');
+        $aFile     = new FilePath('/file.md');
+        $bFile     = new FilePath('/file.task');
 
-        $tasks->add($taskD, 200);
-        $tasks->add($taskA, 100);
-        $tasks->add($taskB);
-        $tasks->add($taskC);
+        $tasks->add($dTask::class, 200);
+        $tasks->add($aTask::class, 100);
+        $tasks->add($bTask::class);
+        $tasks->add($cTask::class);
+
+        $container
+            ->expects(self::exactly(4))
+            ->method('make')
+            ->willReturnCallback(
+                static function (string $class) use ($aTask, $bTask, $cTask, $dTask): object {
+                    return match ($class) {
+                        $aTask::class => $aTask,
+                        $bTask::class => $bTask,
+                        $cTask::class => $cTask,
+                        $dTask::class => $dTask,
+                        default       => throw new Exception('Should not be called.'),
+                    };
+                },
+            );
 
         self::assertSame(
             [
-                $taskA,
-                $taskD,
-                $taskB,
+                $aTask,
+                $dTask,
+                $bTask,
             ],
             iterator_to_array($tasks->get($aFile), false),
         );
         self::assertSame(
             [
-                $taskB,
+                $bTask,
             ],
             iterator_to_array($tasks->get(Hook::File), false),
         );
         self::assertSame(
             [
-                $taskB,
-                $taskC,
+                $bTask,
+                $cTask,
             ],
             iterator_to_array($tasks->get($bFile), false),
         );
         self::assertSame(
             [
-                $taskC,
+                $cTask,
             ],
             iterator_to_array($tasks->get(Hook::Before), false),
         );
     }
 
     public function testAdd(): void {
-        $tasks = new Tasks(Mockery::mock(Container::class),);
+        $tasks = new Tasks(self::createStub(Container::class));
 
         $tasks->add(TasksTest__Task::class);
 
@@ -105,9 +123,9 @@ final class TasksTest extends TestCase {
     }
 
     public function testRemove(): void {
-        $tasks = new Tasks(Mockery::mock(Container::class),);
+        $tasks = new Tasks(self::createStub(Container::class));
 
-        $tasks->add(new TasksTest__FileTask());
+        $tasks->add(TasksTest__FileTask::class);
         $tasks->add(TasksTest__HookTask::class);
         $tasks->add(TasksTest__Task::class);
 
@@ -132,9 +150,9 @@ final class TasksTest extends TestCase {
     }
 
     public function testGetIterator(): void {
-        $tasks = new Tasks(Mockery::mock(Container::class),);
+        $tasks = new Tasks(self::createStub(Container::class));
 
-        $tasks->add(new TasksTest__FileTask(), 200);
+        $tasks->add(TasksTest__FileTask::class, 200);
         $tasks->add(TasksTest__HookTask::class, 100);
 
         self::assertSame(
@@ -147,9 +165,9 @@ final class TasksTest extends TestCase {
     }
 
     public function testGlobs(): void {
-        $tasks = new Tasks(Mockery::mock(Container::class),);
+        $tasks = new Tasks(self::createStub(Container::class));
 
-        $tasks->add(new TasksTest__FileTask());
+        $tasks->add(TasksTest__FileTask::class);
         $tasks->add(TasksTest__Task::class);
 
         self::assertSame(
