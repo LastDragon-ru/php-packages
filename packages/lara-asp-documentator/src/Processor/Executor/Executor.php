@@ -268,8 +268,7 @@ class Executor implements Listener {
 
     #[Override]
     public function delete(DirectoryPath|FilePath $path): void {
-        // todo(documentator/processor): if we have some queued files, then they
-        //      should be removed from the queue
+        $this->iterator->delete($path);
     }
 
     protected function isSkipped(FilePath $path): bool {
