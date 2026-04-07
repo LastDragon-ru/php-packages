@@ -48,6 +48,18 @@ class Iterator implements IteratorAggregate {
         $this->queue[$path->path] = $path;
     }
 
+    public function delete(DirectoryPath|FilePath $path): void {
+        if ($path instanceof DirectoryPath) {
+            foreach ($this->queue as $key => $queued) {
+                if ($path->contains($queued)) {
+                    unset($this->queue[$key]);
+                }
+            }
+        } else {
+            unset($this->queue[$path->path]);
+        }
+    }
+
     /**
      * @return iterable<mixed, FilePath>
      */
