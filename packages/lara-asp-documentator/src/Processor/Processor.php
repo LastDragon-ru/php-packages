@@ -38,9 +38,9 @@ class Processor {
      *
      * @template T of Task
      *
-     * @param T|class-string<T> $task
+     * @param class-string<T> $task
      */
-    public function task(Task|string $task, ?int $priority = null): void {
+    public function task(string $task, ?int $priority = null): void {
         $this->tasks->add($task, $priority);
     }
 
