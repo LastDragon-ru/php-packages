@@ -73,6 +73,7 @@ class Tasks implements IteratorAggregate {
      * @param class-string<T> $task
      */
     public function add(string $task, ?int $priority = null): void {
+        // Tags
         $tags = [];
 
         if (is_a($task, FileTask::class, true)) {
@@ -94,7 +95,11 @@ class Tasks implements IteratorAggregate {
             }
         }
 
+        // Task
         $this->instances->add($task, $tags, $priority);
+
+        // Reset cache
+        $this->tags = new WeakMap();
     }
 
     /**

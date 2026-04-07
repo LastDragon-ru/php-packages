@@ -62,6 +62,11 @@ final class TasksTest extends TestCase {
         $aFile     = new FilePath('/file.md');
         $bFile     = new FilePath('/file.task');
 
+        self::assertFalse($tasks->has($aFile));
+        self::assertFalse($tasks->has(Hook::File));
+        self::assertFalse($tasks->has($bFile));
+        self::assertFalse($tasks->has(Hook::Before));
+
         $tasks->add($dTask::class, 200);
         $tasks->add($aTask::class, 100);
         $tasks->add($bTask::class);
