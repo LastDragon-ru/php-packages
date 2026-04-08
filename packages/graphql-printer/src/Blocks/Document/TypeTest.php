@@ -28,9 +28,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 final class TypeTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
-    /**
-     * @param (TypeNode&Node)|(GraphQLType&InputType)|(GraphQLType&OutputType) $type fixme(phpcs): https://github.com/slevomat/coding-standard/issues/1690
-     */
     #[DataProvider('dataProviderSerialize')]
     public function testSerialize(
         string $expected,

@@ -32,9 +32,6 @@ use Override;
 #[GraphQLDefinition(ListOfType::class)]
 #[GraphQLDefinition(NonNull::class)]
 class Type extends Block implements NamedBlock {
-    /**
-     * @param (TypeNode&Node)|(GraphQLType&InputType)|(GraphQLType&OutputType) $definition fixme(phpcs): https://github.com/slevomat/coding-standard/issues/1690
-     */
     public function __construct(
         Context $context,
         private (TypeNode&Node)|(GraphQLType&OutputType)|(GraphQLType&InputType) $definition,

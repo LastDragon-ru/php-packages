@@ -14,13 +14,13 @@ use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
 use Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface;
-use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Attribute\DiscriminatorMap;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Serializer\Mapping\AttributeMetadata;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping;
 use Symfony\Component\Serializer\Mapping\ClassMetadata;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
+use Symfony\Component\TypeInfo\Type;
 
 use function class_exists;
 use function get_debug_type;
@@ -73,7 +73,7 @@ class MetadataFactory implements ClassMetadataFactoryInterface, PropertyTypeExtr
                 if ($property->isPublic() && !$property->isStatic()) {
                     $propertyMetadata = new AttributeMetadata($property->getName());
                     $propertyMetadata->setSerializedName(
-                        $this->getAttribute($property, SerializedName::class)?->getSerializedName(),
+                        $this->getAttribute($property, SerializedName::class)?->serializedName,
                     );
 
                     $classMetadata->addAttributeMetadata($propertyMetadata);
@@ -84,20 +84,15 @@ class MetadataFactory implements ClassMetadataFactoryInterface, PropertyTypeExtr
         return $this->metadata[$name];
     }
 
-    /**
-     * @param array<array-key, mixed> $context
-     *
-     * @return array<array-key, Type>|null
-     */
     #[Override]
-    public function getTypes(string $class, string $property, array $context = []): ?array {
+    public function getType(string $class, string $property, array $context = []): ?Type {
         /**
          * todo(lara-asp-serializer): Should we add types to {@see AttributeMetadata}?
          *      It will allow cache all metadata in one place. Not very actual
          *      now though.
          */
-        return $this->hasMetadataFor($class) && isset($this->getMetadataFor($class)->getAttributesMetadata()[$property])
-            ? $this->getTypeExtractor()->getTypes($class, $property, $context)
+        return isset($this->getMetadataFor($class)->getAttributesMetadata()[$property])
+            ? $this->getTypeExtractor()->getType($class, $property, $context)
             : null;
     }
 
@@ -147,8 +142,9 @@ class MetadataFactory implements ClassMetadataFactoryInterface, PropertyTypeExtr
         foreach ($attributes as $attribute) {
             $instance = $attribute->newInstance();
             $mapping  = new ClassDiscriminatorMapping(
-                $instance->getTypeProperty(),
-                $instance->getMapping(),
+                $instance->typeProperty,
+                $instance->mapping,
+                $instance->defaultType,
             );
 
             break;

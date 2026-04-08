@@ -29,13 +29,15 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 # Upgrade from v10
 
-[include:file]: ../../docs/Shared/Upgrade/FromV10.md
-[//]: # (start: preprocess/3f19382f79c2085d)
+[include:file]: ../../docs/Shared/Upgrade/Lara/FromV10.md
+[//]: # (start: preprocess/af40e93013b9e0a1)
 [//]: # (warning: Generated automatically. Do not edit.)
 
 * [ ] PHP 8.3 is not supported anymore. Migrate to the newer version.
 
-[//]: # (end: preprocess/3f19382f79c2085d)
+* [ ] Laravel v12 is not supported anymore. Migrate to the newer version.
+
+[//]: # (end: preprocess/af40e93013b9e0a1)
 
 # Upgrade from v7
 

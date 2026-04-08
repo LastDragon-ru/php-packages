@@ -9,7 +9,6 @@ use LastDragon_ru\LaraASP\Serializer\Exceptions\PartialUnserializable;
 use LastDragon_ru\LaraASP\Serializer\Metadata\MetadataFactory;
 use Override;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Serializer\Mapping\AttributeMetadata;
 use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
@@ -17,7 +16,6 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 use function array_fill_keys;
 use function array_map;
-use function array_unshift;
 use function class_exists;
 use function is_a;
 use function is_array;
@@ -132,25 +130,6 @@ class SerializableNormalizer extends AbstractObjectNormalizer {
                 $attributes,
             );
             $this->attributes[$class] = array_fill_keys($properties, true);
-
-            /**
-             * Prior to `symfony/serializer:7.3.1` the discriminator property
-             * was not added to `$attributes` if `$classOrObject` doesn't have
-             * it. But it is required. So we are fixing it here.
-             *
-             * todo(lara-asp-serializer): [update] Drop when `symfony/serializer:7.3.1`
-             *      will not be supported anymore.
-             *
-             * @see https://github.com/symfony/symfony/pull/60511
-             */
-            if ($mapping !== null) {
-                $property                     = $mapping->getTypeProperty();
-                $this->discriminators[$class] = $property;
-
-                if (!isset($this->attributes[$class][$property])) {
-                    array_unshift($attributes, $attributesAsString ? $property : new AttributeMetadata($property));
-                }
-            }
 
             /**
              * Since `symfony/serializer:7.3.1` the discriminator property will
