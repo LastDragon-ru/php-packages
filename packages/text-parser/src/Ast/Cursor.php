@@ -9,9 +9,6 @@ use LastDragon_ru\TextParser\Exceptions\OffsetReadonly;
 use Override;
 use Traversable;
 
-use function assert;
-use function is_object;
-
 /**
  * @see NodeParent
  * @see NodeChild
@@ -63,8 +60,6 @@ class Cursor implements IteratorAggregate, ArrayAccess, Countable {
     public function getIterator(): Traversable {
         if ($this->node instanceof NodeParent) {
             foreach ($this->node as $key => $child) {
-                assert(is_object($child), 'https://github.com/phpstan/phpstan/issues/13204');
-
                 yield $key => new static($child, $this, $key);
             }
         } else {
@@ -83,7 +78,7 @@ class Cursor implements IteratorAggregate, ArrayAccess, Countable {
         $child = $this->node instanceof NodeParent
             ? $this->node->offsetGet($offset)
             : null;
-        $child = $child !== null && is_object($child)
+        $child = $child !== null
             ? new static($child, $this, $offset)
             : null;
 
