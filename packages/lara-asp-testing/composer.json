@@ -25,12 +25,12 @@
     "ext-mbstring": "*",
     "doctrine/sql-formatter": "^1.1.0",
     "fakerphp/faker": "^1.21.0",
-    "illuminate/collections": "^12.0.1",
-    "illuminate/console": "^12.0.1",
-    "illuminate/contracts": "^12.0.1",
-    "illuminate/database": "^12.0.1",
-    "illuminate/testing": "^12.0.1",
-    "illuminate/translation": "^12.0.1",
+    "illuminate/collections": "^13.0.0",
+    "illuminate/console": "^13.0.0",
+    "illuminate/contracts": "^13.0.0",
+    "illuminate/database": "^13.0.0",
+    "illuminate/testing": "^13.0.0",
+    "illuminate/translation": "^13.0.0",
     "lastdragon-ru/path": "self.version",
     "lastdragon-ru/phpunit-extensions": "self.version",
     "lastdragon-ru/phpunit-xml": "self.version",
@@ -40,16 +40,16 @@
     "phpunit/phpunit": "^12.5.8",
     "psr/http-message": "^1.1|^2.0",
     "sebastian/comparator": "^7.1.4",
-    "symfony/http-foundation": "^7.3.7",
-    "symfony/mime": "^7.2.0",
+    "symfony/console": "^8.0.4",
+    "symfony/http-foundation": "^8.0.0",
+    "symfony/mime": "^8.0.0",
     "symfony/polyfill-php85": "^1.33.0",
-    "symfony/psr-http-message-bridge": "^7.0.0"
+    "symfony/psr-http-message-bridge": "^8.0.0"
   },
   "require-dev": {
-    "illuminate/http": "^12.0.1",
-    "laravel/scout": "^10.12.2",
-    "orchestra/testbench": "^10.0.0",
-    "symfony/console": "^7.2.0"
+    "illuminate/http": "^13.0.0",
+    "laravel/scout": "^10.24.0",
+    "orchestra/testbench": "^11.0.0"
   },
   "autoload": {
     "files": [

@@ -385,6 +385,12 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/BitwiseXorTest.php
 
 		-
+			rawMessage: 'Parameter #1 $sql of method Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>::whereRaw() expects Illuminate\Contracts\Database\Query\Expression|literal-string, non-falsy-string given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/Contains.php
+
+		-
 			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\ContainsTest::testCall() expects array{query: string, bindings: array<mixed>}, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -1537,6 +1543,12 @@ parameters:
 			path: packages/lara-asp-graphql/src/SortBy/Operators/SortTest.php
 
 		-
+			rawMessage: 'Parameter #1 $sql of method Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>::orderByRaw() expects literal-string, non-falsy-string given.'
+			identifier: argument.type
+			count: 2
+			path: packages/lara-asp-graphql/src/SortBy/Sorters/DatabaseSorter.php
+
+		-
 			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\GraphQL\SortBy\Sorters\DatabaseSorterTest::testSortByColumn() expects array{query: string, bindings: array<mixed>}, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -1685,12 +1697,6 @@ parameters:
 			identifier: property.unusedType
 			count: 1
 			path: packages/lara-asp-graphql/src/Stream/Streams/Database.php
-
-		-
-			rawMessage: 'Parameter #2 $typesMapping of class Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping constructor expects array<string, string>, array given.'
-			identifier: argument.type
-			count: 1
-			path: packages/lara-asp-serializer/src/Metadata/MetadataFactory.php
 
 		-
 			rawMessage: 'Call to method getName() of internal interface Symfony\Component\Serializer\Mapping\AttributeMetadataInterface from outside its root namespace Symfony.'

@@ -8,8 +8,12 @@ use Illuminate\Console\Scheduling\Event;
 use Illuminate\Contracts\Container\Container;
 use LastDragon_ru\LaraASP\Testing\Assertions\Application\ScheduleMatcher;
 use Override;
+use ReflectionAttribute;
+use ReflectionClass;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 use function array_filter;
+use function array_map;
 use function array_unique;
 use function in_array;
 use function is_a;
@@ -38,7 +42,15 @@ readonly class CommandMatcher implements ScheduleMatcher {
                 array_filter(
                     [
                         Application::formatCommandString($this->container->make($task)->getName() ?? ''),
-                        Application::formatCommandString($task::getDefaultName() ?? ''),
+                        ...array_map(
+                            static function (ReflectionAttribute $attribute): string {
+                                return $attribute->newInstance()->name;
+                            },
+                            (new ReflectionClass($task))->getAttributes(
+                                AsCommand::class,
+                                ReflectionAttribute::IS_INSTANCEOF,
+                            ),
+                        ),
                     ],
                     static function (string $command): bool {
                         return $command !== '';

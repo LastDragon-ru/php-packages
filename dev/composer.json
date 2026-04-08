@@ -1,8 +1,8 @@
 {
   "require": {
     "php": "^8.4|^8.5",
-    "laravel/framework": "^12.0",
-    "laravel/tinker": "^2.9",
+    "laravel/framework": "^13.0",
+    "laravel/tinker": "^3.0",
     "lastdragon-ru/path": "self.version",
     "lastdragon-ru/text-parser": "self.version",
     "lastdragon-ru/glob-matcher": "self.version",

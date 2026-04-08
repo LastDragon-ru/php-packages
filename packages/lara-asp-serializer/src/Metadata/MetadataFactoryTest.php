@@ -8,10 +8,15 @@ use LastDragon_ru\LaraASP\Serializer\Attributes\VersionMap;
 use LastDragon_ru\LaraASP\Serializer\Package\TestCase;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Attribute\DiscriminatorMap;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Serializer\Mapping\AttributeMetadata;
+use Symfony\Component\TypeInfo\Type\BuiltinType;
+use Symfony\Component\TypeInfo\Type\CollectionType;
+use Symfony\Component\TypeInfo\Type\GenericType;
+use Symfony\Component\TypeInfo\Type\ObjectType;
+use Symfony\Component\TypeInfo\Type\UnionType;
+use Symfony\Component\TypeInfo\TypeIdentifier;
 
 use function tap;
 
@@ -116,58 +121,42 @@ final class MetadataFactoryTest extends TestCase {
         );
     }
 
-    public function testGetTypes(): void {
+    public function testGetType(): void {
         $factory = new MetadataFactory();
         $class   = MetadataFactoryTest_B::class;
 
         self::assertEquals(
-            [
-                new Type('int'),
-            ],
-            $factory->getTypes($class, 'a'),
+            new BuiltinType(TypeIdentifier::INT),
+            $factory->getType($class, 'a'),
         );
         self::assertNull(
-            $factory->getTypes($class, 'c'),
+            $factory->getType($class, 'c'),
         );
         self::assertNull(
-            $factory->getTypes($class, 'd'),
+            $factory->getType($class, 'd'),
         );
         self::assertEquals(
-            [
-                new Type(
-                    builtinType        : 'array',
-                    collection         : true,
-                    collectionKeyType  : [
-                        new Type('string'),
-                        new Type('int'),
-                    ],
-                    collectionValueType: [
-                        new Type(
-                            builtinType: 'object',
-                            class      : MetadataFactoryTest_A::class,
-                        ),
-                    ],
+            new CollectionType(
+                new GenericType(
+                    new BuiltinType(TypeIdentifier::ARRAY),
+                    new UnionType(
+                        new BuiltinType(TypeIdentifier::STRING),
+                        new BuiltinType(TypeIdentifier::INT),
+                    ),
+                    new ObjectType(MetadataFactoryTest_A::class),
                 ),
-            ],
-            $factory->getTypes($class, 'array'),
+            ),
+            $factory->getType($class, 'array'),
         );
         self::assertEquals(
-            [
-                new Type(
-                    builtinType        : 'array',
-                    collection         : true,
-                    collectionKeyType  : [
-                        new Type('int'),
-                    ],
-                    collectionValueType: [
-                        new Type(
-                            builtinType: 'object',
-                            class      : MetadataFactoryTest_B::class,
-                        ),
-                    ],
+            new CollectionType(
+                new GenericType(
+                    new BuiltinType(TypeIdentifier::ARRAY),
+                    new BuiltinType(TypeIdentifier::INT),
+                    new ObjectType(MetadataFactoryTest_B::class),
                 ),
-            ],
-            $factory->getTypes($class, 'promoted'),
+            ),
+            $factory->getType($class, 'promoted'),
         );
     }
 }

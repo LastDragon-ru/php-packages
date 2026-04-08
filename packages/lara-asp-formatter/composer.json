@@ -22,14 +22,14 @@
     "ext-bcmath": "*",
     "ext-intl": "*",
     "ext-mbstring": "*",
-    "illuminate/macroable": "^12.0.1",
-    "illuminate/support": "^12.0.1",
+    "illuminate/macroable": "^13.0.0",
+    "illuminate/support": "^13.0.0",
     "lastdragon-ru/lara-asp-core": "self.version"
   },
   "require-dev": {
     "lastdragon-ru/lara-asp-testing": "self.version",
     "lastdragon-ru/phpunit-extensions": "self.version",
-    "orchestra/testbench": "^10.0.0",
+    "orchestra/testbench": "^11.0.0",
     "phpunit/phpunit": "^12.5.8"
   },
   "autoload": {

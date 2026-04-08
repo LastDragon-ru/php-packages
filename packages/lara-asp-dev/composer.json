@@ -20,9 +20,9 @@
   "require": {
     "php": "^8.4|^8.5",
     "ext-mbstring": "*",
-    "illuminate/container": "^12.0.1",
-    "illuminate/contracts": "^12.0.1",
-    "illuminate/support": "^12.0.1",
+    "illuminate/container": "^13.0.0",
+    "illuminate/contracts": "^13.0.0",
+    "illuminate/support": "^13.0.0",
     "lastdragon-ru/lara-asp-core": "self.version",
     "lastdragon-ru/lara-asp-documentator": "self.version",
     "lastdragon-ru/path": "self.version",
@@ -30,7 +30,7 @@
     "nette/neon": "^3.4.4",
     "phpstan/phpstan": "^2.1.1",
     "symfony/polyfill-php85": "^1.33.0",
-    "symfony/var-dumper": "^7.0.0"
+    "symfony/var-dumper": "^8.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^12.5.8"

@@ -26,7 +26,7 @@
     "webonyx/graphql-php": "^15.4.0"
   },
   "require-dev": {
-    "composer/class-map-generator": "^1.1.0",
+    "composer/class-map-generator": "^1.7.0",
     "phpunit/phpunit": "^12.5.8",
     "lastdragon-ru/phpunit-extensions": "self.version",
     "lastdragon-ru/phpunit-graphql": "self.version",
