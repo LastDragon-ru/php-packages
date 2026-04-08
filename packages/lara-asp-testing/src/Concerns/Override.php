@@ -2,6 +2,7 @@
 
 namespace LastDragon_ru\LaraASP\Testing\Concerns;
 
+use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithContainer;
 use LogicException;
@@ -63,15 +64,19 @@ trait Override {
     }
 
     /**
-     * @template T
-     * @template TMock of T&MockInterface
+     * @template T of object
+     * @template R of T
      *
-     * @param class-string<T>                                                                                                   $class
-     * @param callable(TMock,static=):void|callable(TMock,static=):TMock|callable(TMock,static=):T|TMock|T|class-string<T>|null $factory
+     * @param class-string<T> $class
+     * @param (
+     *      $factory is Closure(T&MockInterface):void|Closure():void
+     *          ? Closure(T&MockInterface):void|Closure():void
+     *          : Closure(T&MockInterface):R|Closure():R|R|class-string<R>
+     *      )                 $factory
      *
-     * @return TMock|T
+     * @return ($factory is Closure(T&MockInterface):void|Closure():void ? T&MockInterface : R)
      */
-    protected function override(string $class, mixed $factory = null): mixed {
+    protected function override(string $class, object|string|null $factory = null): object {
         // Overridden?
         if (isset($this->overrides[$class])) {
             throw new LogicException(
@@ -83,18 +88,11 @@ trait Override {
         }
 
         // Mock
-        /** @var TMock|T $mock */
-        $mock = (is_callable($factory) && !($factory instanceof $class)) || $factory === null
-            ? Mockery::mock($class)
-            : $factory;
-
-        if (is_callable($factory) && !($factory instanceof $class)) {
-            $mock = $factory($mock, $this) ?? $mock;
-        } elseif (is_string($factory)) {
-            $mock = $this->app()->make($factory);
-        } else {
-            // empty
-        }
+        $mock = match (true) {
+            $factory instanceof Closure => (static fn ($mock) => $factory($mock) ?? $mock)(Mockery::mock($class)),
+            is_string($factory)         => $this->app()->make($factory),
+            default                     => $factory,
+        };
 
         // Override
         $this->overrides[$class] = Mockery::spy(static function () use ($mock): mixed {
