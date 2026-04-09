@@ -27,7 +27,7 @@
   },
   "require-dev": {
     "composer/class-map-generator": "^1.7.0",
-    "phpunit/phpunit": "^12.5.8",
+    "phpunit/phpunit": "^13.0.0",
     "lastdragon-ru/phpunit-extensions": "self.version",
     "lastdragon-ru/phpunit-graphql": "self.version",
     "mockery/mockery": "^1.6.6"

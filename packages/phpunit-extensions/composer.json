@@ -23,8 +23,8 @@
     "ext-mbstring": "*",
     "composer/semver": "^3.2.0",
     "lastdragon-ru/path": "self.version",
-    "phpunit/phpunit": "^12.5.8",
-    "sebastian/comparator": "^7.1.4"
+    "phpunit/phpunit": "^13.0.0",
+    "sebastian/comparator": "^8.0.0"
   },
   "require-dev": {
     "mockery/mockery": "^1.6.6"

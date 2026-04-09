@@ -6,7 +6,7 @@ use Override;
 use PHPStan\Rules\Rule as RuleContract;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\RunClassInSeparateProcess;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 use function sprintf;
 
@@ -15,7 +15,7 @@ use function sprintf;
  * @extends RuleTestCase<Rule>
  */
 #[CoversClass(Rule::class)]
-#[RunClassInSeparateProcess]
+#[RunTestsInSeparateProcesses]
 final class RuleTest extends RuleTestCase {
     #[Override]
     protected function getRule(): RuleContract {

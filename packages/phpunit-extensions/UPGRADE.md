@@ -37,7 +37,7 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/3f19382f79c2085d)
 
-* [ ] PHPUnit v11 is not supported anymore. Migrate to the newer version.
+* [ ] PHPUnit v11 and v12 is not supported anymore. Migrate to the newer version.
 
 * [ ] Extension `💀\LastDragon_ru\PhpUnit\Extensions\StrictScalarCompare\Extension` removed, the [`Extension`][code-links/4ec6b74a682f8155] should be used instead.
 
