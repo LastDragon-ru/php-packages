@@ -21,7 +21,7 @@
   "require": {
     "php": "^8.4|^8.5",
     "lastdragon-ru/graphql-printer": "self.version",
-    "phpunit/phpunit": "^12.5.8",
+    "phpunit/phpunit": "^13.0.0",
     "webonyx/graphql-php": "^15.4.0"
   },
   "require-dev": {

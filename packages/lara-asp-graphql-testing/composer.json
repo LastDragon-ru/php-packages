@@ -29,7 +29,7 @@
     "lastdragon-ru/graphql-printer": "self.version",
     "lastdragon-ru/phpunit-graphql": "self.version",
     "nuwave/lighthouse": "^6.66.0",
-    "phpunit/phpunit": "^12.5.8",
+    "phpunit/phpunit": "^13.0.0",
     "webonyx/graphql-php": "^15.4.0"
   },
   "require-dev": {
