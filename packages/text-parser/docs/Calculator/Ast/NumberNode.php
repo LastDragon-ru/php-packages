@@ -2,9 +2,9 @@
 
 namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
 
-class NumberNode implements ExpressionNodeChild {
+class NumberNode implements Node, ExpressionNodeChild {
     public function __construct(
-        public int $value,
+        public readonly int $value,
     ) {
         // empty
     }

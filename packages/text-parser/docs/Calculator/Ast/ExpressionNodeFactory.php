@@ -2,16 +2,16 @@
 
 namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
 
-use LastDragon_ru\TextParser\Ast\NodeParentFactory;
+use LastDragon_ru\TextParser\Ast\NodeFactory;
 use LogicException;
 use Override;
 
 use function array_last;
 
 /**
- * @extends NodeParentFactory<ExpressionNode, ExpressionNodeChild>
+ * @extends NodeFactory<ExpressionNode, Node&ExpressionNodeChild>
  */
-class ExpressionNodeFactory extends NodeParentFactory {
+class ExpressionNodeFactory extends NodeFactory {
     #[Override]
     protected function onCreate(array $children): ?object {
         // Expression cannot be empty

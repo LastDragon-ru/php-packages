@@ -2,7 +2,7 @@
 
 namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
 
-abstract class OperatorNode implements ExpressionNodeChild {
+abstract class OperatorNode implements Node, ExpressionNodeChild {
     public function __construct() {
         // empty
     }

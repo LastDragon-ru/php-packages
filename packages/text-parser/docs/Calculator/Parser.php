@@ -5,6 +5,7 @@ namespace LastDragon_ru\TextParser\Docs\Calculator;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeChild;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeFactory;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Node;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorAdditionNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode;
@@ -57,7 +58,7 @@ class Parser {
     /**
      * @param TransactionalIterable<Token<Name>> $iterable
      */
-    protected function parseExpressionChild(TransactionalIterable $iterable): ?ExpressionNodeChild {
+    protected function parseExpressionChild(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         return $this->parseSubExpression($iterable)
             ?? $this->parseOperator($iterable)
             ?? $this->parseNumber($iterable)

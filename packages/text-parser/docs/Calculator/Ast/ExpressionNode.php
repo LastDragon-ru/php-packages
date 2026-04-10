@@ -10,9 +10,18 @@ use function is_nan;
 use const NAN;
 
 /**
- * @extends ParentNode<ExpressionNodeChild>
+ * @implements ParentNode<Node&ExpressionNodeChild>
  */
-class ExpressionNode extends ParentNode implements ExpressionNodeChild {
+class ExpressionNode implements Node, ParentNode, ExpressionNodeChild {
+    public function __construct(
+        /**
+         * @var list<Node&ExpressionNodeChild>
+         */
+        public readonly array $children,
+    ) {
+        // empty
+    }
+
     public function calculate(): float|int {
         /**
          * @see https://en.wikipedia.org/wiki/Reverse_Polish_notation
