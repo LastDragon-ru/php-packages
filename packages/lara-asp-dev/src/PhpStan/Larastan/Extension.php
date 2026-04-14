@@ -118,7 +118,7 @@ class Extension {
             'Larastan\\Larastan\\ReturnTypes\\AppMakeDynamicReturnTypeExtension'                    => true,
             'Larastan\\Larastan\\ReturnTypes\\ContainerArrayAccessDynamicMethodReturnTypeExtension' => true,
             'Larastan\\Larastan\\ReturnTypes\\ContainerMakeDynamicReturnTypeExtension'              => true,
-            'Larastan\\Larastan\\Methods\\Extension'                                                => true,
+            'Larastan\\Larastan\\Methods\\ContractsMethodsExtension'                                => true,
         ];
 
         foreach ($extension['services'] as $index => $service) {
