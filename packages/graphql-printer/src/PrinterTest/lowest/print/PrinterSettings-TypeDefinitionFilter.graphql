@@ -1,4 +1,17 @@
 """
+Schema description
+"""
+schema
+@directive(
+    location: "schema"
+)
+{
+    mutation: Mutation
+    query: Query
+    subscription: Subscription
+}
+
+"""
 Directive description
 """
 directive @directive(

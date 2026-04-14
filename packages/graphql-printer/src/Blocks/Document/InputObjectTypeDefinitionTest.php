@@ -7,10 +7,8 @@ use GraphQL\Language\Parser;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\Type;
 use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
-use LastDragon_ru\GraphQL\Printer\Feature;
 use LastDragon_ru\GraphQL\Printer\Misc\Collector;
 use LastDragon_ru\GraphQL\Printer\Misc\Context;
-use LastDragon_ru\GraphQL\Printer\Package\RequiresFeature;
 use LastDragon_ru\GraphQL\Printer\Package\TestCase;
 use LastDragon_ru\PhpUnit\GraphQL\PrinterSettings;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -41,18 +39,6 @@ final class InputObjectTypeDefinitionTest extends TestCase {
         }
 
         self::assertSame($expected, $actual);
-    }
-
-    #[DataProvider('dataProviderSerializeOneOf')]
-    #[RequiresFeature(Feature::OneOfDirective)]
-    public function testSerializeOneOf(
-        string $expected,
-        Settings $settings,
-        int $level,
-        int $used,
-        InputObjectTypeDefinitionNode|InputObjectType $definition,
-    ): void {
-        $this->testSerialize($expected, $settings, $level, $used, $definition);
     }
 
     public function testStatistics(): void {
@@ -102,7 +88,7 @@ final class InputObjectTypeDefinitionTest extends TestCase {
             ->setNormalizeFields(false);
 
         return [
-            'description + directives'          => [
+            'description + directives'                     => [
                 <<<'GRAPHQL'
                 """
                 Description
@@ -127,7 +113,7 @@ final class InputObjectTypeDefinitionTest extends TestCase {
                     ],
                 ]),
             ],
-            'description + directives + fields' => [
+            'description + directives + fields'            => [
                 <<<'GRAPHQL'
                 """
                 Description
@@ -187,7 +173,7 @@ final class InputObjectTypeDefinitionTest extends TestCase {
                     ],
                 ]),
             ],
-            'fields'                            => [
+            'fields'                                       => [
                 <<<'GRAPHQL'
                 input Test {
                     a: String
@@ -205,7 +191,7 @@ final class InputObjectTypeDefinitionTest extends TestCase {
                     ],
                 ]),
             ],
-            'indent'                            => [
+            'indent'                                       => [
                 <<<'GRAPHQL'
                 input Test {
                         a: String
@@ -223,7 +209,7 @@ final class InputObjectTypeDefinitionTest extends TestCase {
                     ],
                 ]),
             ],
-            'filter'                            => [
+            'filter'                                       => [
                 '',
                 $settings
                     ->setTypeDefinitionFilter(static fn () => false),
@@ -234,7 +220,7 @@ final class InputObjectTypeDefinitionTest extends TestCase {
                     'fields' => [],
                 ]),
             ],
-            'ast'                               => [
+            'ast'                                          => [
                 <<<'GRAPHQL'
                 """
                 Description
@@ -256,7 +242,7 @@ final class InputObjectTypeDefinitionTest extends TestCase {
                     '"Description" input Test @a @b { a: String }',
                 ),
             ],
-            'ast + filter'                      => [
+            'ast + filter'                                 => [
                 '',
                 $settings
                     ->setTypeDefinitionFilter(static fn () => false),
@@ -266,17 +252,6 @@ final class InputObjectTypeDefinitionTest extends TestCase {
                     'input Test @a { a: String }',
                 ),
             ],
-        ];
-    }
-
-    /**
-     * @return array<string,array{string, Settings, int, int, InputObjectTypeDefinitionNode|InputObjectType}>
-     */
-    public static function dataProviderSerializeOneOf(): array {
-        $settings = (new PrinterSettings())
-            ->setNormalizeFields(false);
-
-        return [
             'isOneOf = true'                               => [
                 <<<'GRAPHQL'
                 """
@@ -360,7 +335,7 @@ final class InputObjectTypeDefinitionTest extends TestCase {
                     ],
                 ]),
             ],
-            'ast'                                          => [
+            '@oneOf'                                       => [
                 <<<'GRAPHQL'
                 """
                 Description

@@ -8,7 +8,6 @@ use GraphQL\Language\Parser;
 use GraphQL\Type\Definition\Directive;
 use GraphQL\Type\Definition\InputObjectType;
 use LastDragon_ru\GraphQL\Printer\Blocks\Types\InputObjectDefinitionBlock;
-use LastDragon_ru\GraphQL\Printer\Feature;
 use LastDragon_ru\GraphQL\Printer\Misc\Context;
 use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
 use LastDragon_ru\GraphQL\Printer\Package\GraphQLDefinition;
@@ -41,8 +40,7 @@ class InputObjectTypeDefinition extends InputObjectDefinitionBlock {
         $directives = parent::getDefinitionDirectives();
 
         if (
-            !Feature::OneOfDirective->available()
-            || !($definition instanceof InputObjectType)
+            !($definition instanceof InputObjectType)
             || !isset($definition->isOneOf)
             || !$definition->isOneOf
         ) {

@@ -2,17 +2,14 @@
 
 namespace LastDragon_ru\GraphQL\Printer\Blocks\Document;
 
-use Closure;
 use GraphQL\Language\AST\SchemaDefinitionNode;
 use GraphQL\Language\Parser;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
 use GraphQL\Utils\BuildSchema;
 use LastDragon_ru\GraphQL\Printer\Contracts\Settings;
-use LastDragon_ru\GraphQL\Printer\Feature;
 use LastDragon_ru\GraphQL\Printer\Misc\Collector;
 use LastDragon_ru\GraphQL\Printer\Misc\Context;
-use LastDragon_ru\GraphQL\Printer\Package\RequiresFeature;
 use LastDragon_ru\GraphQL\Printer\Package\TestCase;
 use LastDragon_ru\PhpUnit\GraphQL\PrinterSettings;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -39,31 +36,6 @@ final class SchemaDefinitionTest extends TestCase {
         $collector = new Collector();
         $context   = new Context($settings, null, $schema);
         $actual    = (new SchemaDefinition($context, $definition))->serialize($collector, $level, $used);
-
-        if ($expected !== '') {
-            Parser::schemaDefinition($actual);
-        }
-
-        self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @param Closure(): (SchemaDefinitionNode|Schema) $definitionFactory
-     */
-    #[DataProvider('dataProviderSerializeDescription')]
-    #[RequiresFeature(Feature::SchemaDescription)]
-    public function testSerializeDescription(
-        string $expected,
-        Settings $settings,
-        int $level,
-        int $used,
-        Closure $definitionFactory,
-        ?Schema $schema,
-    ): void {
-        $definition = $definitionFactory();
-        $collector  = new Collector();
-        $context    = new Context($settings, null, $schema);
-        $actual     = (new SchemaDefinition($context, $definition))->serialize($collector, $level, $used);
 
         if ($expected !== '') {
             Parser::schemaDefinition($actual);
@@ -133,7 +105,7 @@ final class SchemaDefinitionTest extends TestCase {
             ->setNormalizeFields(false);
 
         return [
-            'standard names'                      => [
+            'standard names'                           => [
                 '',
                 $settings,
                 0,
@@ -145,7 +117,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ]),
                 null,
             ],
-            'standard names with directives'      => [
+            'standard names with directives'           => [
                 <<<'GRAPHQL'
                 schema
                 @a
@@ -177,7 +149,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ]),
                 null,
             ],
-            'non standard names'                  => [
+            'non standard names'                       => [
                 <<<'GRAPHQL'
                 schema {
                     query: MyQuery
@@ -195,7 +167,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ]),
                 null,
             ],
-            'indent'                              => [
+            'indent'                                   => [
                 <<<'GRAPHQL'
                 schema {
                         query: MyQuery
@@ -213,7 +185,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ]),
                 null,
             ],
-            'filter (no schema)'                  => [
+            'filter (no schema)'                       => [
                 <<<'GRAPHQL'
                 schema {
                     query: MyQuery
@@ -232,7 +204,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ]),
                 null,
             ],
-            'filter'                              => [
+            'filter'                                   => [
                 <<<'GRAPHQL'
                 schema {
                     query: MyQuery
@@ -256,7 +228,7 @@ final class SchemaDefinitionTest extends TestCase {
                     GRAPHQL,
                 ),
             ],
-            'ast: standard names'                 => [
+            'ast: standard names'                      => [
                 '',
                 $settings,
                 0,
@@ -272,7 +244,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ),
                 null,
             ],
-            'ast: standard names with directives' => [
+            'ast: standard names with directives'      => [
                 <<<'GRAPHQL'
                 schema
                 @a
@@ -297,7 +269,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ),
                 null,
             ],
-            'ast: non standard names'             => [
+            'ast: non standard names'                  => [
                 <<<'GRAPHQL'
                 schema {
                     query: MyQuery
@@ -319,7 +291,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ),
                 null,
             ],
-            'ast: filter (no schema)'             => [
+            'ast: filter (no schema)'                  => [
                 <<<'GRAPHQL'
                 schema
                 @a
@@ -348,7 +320,7 @@ final class SchemaDefinitionTest extends TestCase {
                 ),
                 null,
             ],
-            'ast: filter'                         => [
+            'ast: filter'                              => [
                 <<<'GRAPHQL'
                 schema
                 @a
@@ -382,18 +354,6 @@ final class SchemaDefinitionTest extends TestCase {
                     GRAPHQL,
                 ),
             ],
-        ];
-    }
-
-    /**
-     * @return array<string,array{string, Settings, int, int, Closure(): (SchemaDefinitionNode|Schema), ?Schema}>
-     */
-    public static function dataProviderSerializeDescription(): array {
-        $settings = (new PrinterSettings())
-            ->setPrintDirectives(false)
-            ->setNormalizeFields(false);
-
-        return [
             'standard names with description'          => [
                 <<<'GRAPHQL'
                 """
@@ -408,7 +368,7 @@ final class SchemaDefinitionTest extends TestCase {
                 $settings,
                 0,
                 0,
-                static fn () => new Schema([
+                new Schema([
                     'query'        => new ObjectType(['name' => 'Query', 'fields' => []]),
                     'mutation'     => new ObjectType(['name' => 'Mutation', 'fields' => []]),
                     'subscription' => new ObjectType(['name' => 'Subscription', 'fields' => []]),
@@ -430,7 +390,7 @@ final class SchemaDefinitionTest extends TestCase {
                 $settings,
                 0,
                 0,
-                static fn () => new Schema([
+                new Schema([
                     'query'        => new ObjectType(['name' => 'MyQuery', 'fields' => []]),
                     'mutation'     => new ObjectType(['name' => 'Mutation', 'fields' => []]),
                     'subscription' => new ObjectType(['name' => 'Subscription', 'fields' => []]),
@@ -452,7 +412,7 @@ final class SchemaDefinitionTest extends TestCase {
                 $settings,
                 0,
                 0,
-                static fn () => Parser::schemaDefinition(
+                Parser::schemaDefinition(
                     <<<'GRAPHQL'
                     """
                     Description
@@ -480,7 +440,7 @@ final class SchemaDefinitionTest extends TestCase {
                 $settings,
                 0,
                 0,
-                static fn () => Parser::schemaDefinition(
+                Parser::schemaDefinition(
                     <<<'GRAPHQL'
                     """
                     Description

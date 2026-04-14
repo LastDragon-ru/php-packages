@@ -73,6 +73,15 @@ scalar Scalar
 
 scalar ScalarUnused
 
+"""
+Schema description
+"""
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
 type Mutation {
   mutate(scalar: Int! = 123, a: InputA): [TypeB!]
 }

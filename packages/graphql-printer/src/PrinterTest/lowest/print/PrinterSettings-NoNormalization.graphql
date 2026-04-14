@@ -1,3 +1,16 @@
+"""
+Schema description
+"""
+schema
+@directive(
+    location: "schema"
+)
+{
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
+}
+
 type Subscription {
     subscribe: TypeC
 }
@@ -49,38 +62,6 @@ input InputA
     @directive(
         location: "extend"
     )
-}
-
-"""
-Directive description
-"""
-directive @directive(
-    location: String
-    hidden: InputHidden
-)
-repeatable on
-    | QUERY
-    | MUTATION
-    | SUBSCRIPTION
-    | FIELD
-    | FRAGMENT_DEFINITION
-    | FRAGMENT_SPREAD
-    | INLINE_FRAGMENT
-    | VARIABLE_DEFINITION
-    | SCHEMA
-    | SCALAR
-    | OBJECT
-    | FIELD_DEFINITION
-    | ARGUMENT_DEFINITION
-    | INTERFACE
-    | UNION
-    | ENUM
-    | ENUM_VALUE
-    | INPUT_OBJECT
-    | INPUT_FIELD_DEFINITION
-
-input InputHidden {
-    a: Int
 }
 
 type Query {
@@ -229,3 +210,35 @@ interface InterfaceA
 {
     a: Int
 }
+
+input InputHidden {
+    a: Int
+}
+
+"""
+Directive description
+"""
+directive @directive(
+    location: String
+    hidden: InputHidden
+)
+repeatable on
+    | QUERY
+    | MUTATION
+    | SUBSCRIPTION
+    | FIELD
+    | FRAGMENT_DEFINITION
+    | FRAGMENT_SPREAD
+    | INLINE_FRAGMENT
+    | VARIABLE_DEFINITION
+    | SCHEMA
+    | SCALAR
+    | OBJECT
+    | FIELD_DEFINITION
+    | ARGUMENT_DEFINITION
+    | INTERFACE
+    | UNION
+    | ENUM
+    | ENUM_VALUE
+    | INPUT_OBJECT
+    | INPUT_FIELD_DEFINITION

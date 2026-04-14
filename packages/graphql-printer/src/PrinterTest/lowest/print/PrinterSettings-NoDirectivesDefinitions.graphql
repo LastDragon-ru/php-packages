@@ -1,4 +1,17 @@
 """
+Schema description
+"""
+schema
+@directive(
+    location: "schema"
+)
+{
+    mutation: Mutation
+    query: Query
+    subscription: Subscription
+}
+
+"""
 Enum description.
 """
 enum Enum
