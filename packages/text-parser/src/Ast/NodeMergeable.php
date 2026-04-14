@@ -4,7 +4,7 @@ namespace LastDragon_ru\TextParser\Ast;
 
 /**
  * If two nodes have the same class and implement this interface,
- * the {@see NodeParentFactory} will merge them together.
+ * the {@see NodeFactory} will merge them together.
  */
 interface NodeMergeable {
     /**
