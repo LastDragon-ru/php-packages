@@ -25,7 +25,6 @@ use LastDragon_ru\GraphQL\Printer\Blocks\Block;
 use LastDragon_ru\GraphQL\Printer\Blocks\Document\DirectiveDefinition;
 use LastDragon_ru\GraphQL\Printer\Blocks\Document\Directives;
 use LastDragon_ru\GraphQL\Printer\Blocks\NamedBlock;
-use LastDragon_ru\GraphQL\Printer\Feature;
 use LastDragon_ru\GraphQL\Printer\Misc\Collector;
 use LastDragon_ru\GraphQL\Printer\Misc\Context;
 use Override;
@@ -278,7 +277,7 @@ abstract class DefinitionBlock extends Block implements NamedBlock {
         $definition  = $this->getDefinition();
         $description = null;
 
-        if ($definition instanceof Schema && Feature::SchemaDescription->available()) {
+        if ($definition instanceof Schema) {
             $description = $definition->description;
         } elseif ($definition instanceof NamedType) {
             $description = $definition->description();

@@ -9,7 +9,6 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
 use LastDragon_ru\GraphQL\Printer\Blocks\Block;
 use LastDragon_ru\GraphQL\Printer\Blocks\Types\DefinitionBlock;
-use LastDragon_ru\GraphQL\Printer\Feature;
 use LastDragon_ru\GraphQL\Printer\Misc\Collector;
 use LastDragon_ru\GraphQL\Printer\Misc\Context;
 use LastDragon_ru\GraphQL\Printer\Package\GraphQLAstNode;
@@ -66,7 +65,7 @@ class SchemaDefinition extends DefinitionBlock {
 
     private function isUseDefaultRootOperationTypeNames(): bool {
         // Description?
-        if (Feature::SchemaDescription->available() && $this->getDefinition()->description !== null) {
+        if ($this->getDefinition()->description !== null) {
             return false;
         }
 

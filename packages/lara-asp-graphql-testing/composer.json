@@ -30,7 +30,7 @@
     "lastdragon-ru/phpunit-graphql": "self.version",
     "nuwave/lighthouse": "^6.66.0",
     "phpunit/phpunit": "^13.0.0",
-    "webonyx/graphql-php": "^15.4.0"
+    "webonyx/graphql-php": "^15.31.5"
   },
   "require-dev": {
     "illuminate/database": "^13.0.0",

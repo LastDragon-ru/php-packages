@@ -23,7 +23,7 @@
     "php": "^8.4|^8.5",
     "ext-mbstring": "*",
     "composer/semver": "^3.2.0",
-    "webonyx/graphql-php": "^15.4.0"
+    "webonyx/graphql-php": "^15.31.5"
   },
   "require-dev": {
     "composer/class-map-generator": "^1.7.0",

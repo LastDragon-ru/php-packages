@@ -111,9 +111,7 @@ final class PrinterTest extends TestCase {
      */
     public static function dataProviderPrintSchema(): array {
         $data             = TestData::get();
-        $directory        = Feature::SchemaDescription->available()
-            ? Feature::SchemaDescription->since().'+'
-            : 'lowest';
+        $directory        = 'lowest';
         $schemaFactory    = static function () use ($data, $directory): Schema {
             return BuildSchema::build($data->content("{$directory}/schema.graphql"));
         };
@@ -781,9 +779,7 @@ final class PrinterTest extends TestCase {
      */
     public static function dataProviderExport(): array {
         $data          = TestData::get();
-        $directory     = Feature::SchemaDescription->available()
-            ? Feature::SchemaDescription->since().'+'
-            : 'lowest';
+        $directory     = 'lowest';
         $schemaFactory = static function () use ($data, $directory): Schema {
             return BuildSchema::build($data->content("{$directory}/schema.graphql"));
         };
