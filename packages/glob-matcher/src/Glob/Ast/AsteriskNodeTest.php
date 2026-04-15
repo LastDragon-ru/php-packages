@@ -4,7 +4,6 @@ namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
 use LastDragon_ru\GlobMatcher\Glob\Options;
 use LastDragon_ru\GlobMatcher\Package\TestCase;
-use LastDragon_ru\TextParser\Ast\Cursor;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -50,12 +49,15 @@ final class AsteriskNodeTest extends TestCase {
                 '[^/]*?',
                 new Cursor(
                     new AsteriskNode(),
-                    new Cursor( // @phpstan-ignore argument.type
+                    new Cursor(
                         new NameNode([
                             new StringNode('string'),
+                            new StringNode('string'),
                         ]),
+                        null,
+                        0,
                     ),
-                    -1,
+                    0,
                 ),
                 new Options(),
             ],

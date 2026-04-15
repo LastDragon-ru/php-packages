@@ -3,21 +3,32 @@
 namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
 use LastDragon_ru\GlobMatcher\Glob\Options;
-use LastDragon_ru\TextParser\Ast\Cursor;
 use Override;
 
 use function count;
 use function str_starts_with;
 
 /**
- * @extends ParentNode<NameNodeChild>
+ * @implements NodeParent<Node&NameNodeChild>
  */
-class NameNode extends ParentNode implements GlobNodeChild {
+class NameNode implements Node, NodeParent, GlobNodeChild {
+    public function __construct(
+        /**
+         * @var list<Node&NameNodeChild>
+         */
+        public array $children,
+    ) {
+        // empty
+    }
+
     #[Override]
     public static function toRegex(Options $options, Cursor $cursor): string {
         // `.` and `..` must always be matched explicitly
-        if (count($cursor) === 1 && $cursor[0] !== null && self::isDot($cursor[0]->node)) {
-            return $cursor[0]->node::toRegex($options, $cursor[0]);
+        $children   = $cursor->children;
+        $firstChild = $children->get(0);
+
+        if (count($children) === 1 && $firstChild !== null && self::isDot($firstChild->node)) {
+            return $firstChild->node::toRegex($options, $firstChild);
         }
 
         // Regex
@@ -25,7 +36,7 @@ class NameNode extends ParentNode implements GlobNodeChild {
 
         // By default, the `.` at the start of a path or immediately
         // following a slash must be matched explicitly.
-        if ($options->hidden || ($cursor[0] !== null && self::isExplicitDot($cursor[0]->node))) {
+        if ($options->hidden || ($firstChild !== null && self::isExplicitDot($firstChild->node))) {
             $regex = "(?!\\.{1,2}(?:/|$))(?:{$regex})";
         } else {
             $regex = "(?!\\.)(?:{$regex})";

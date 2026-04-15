@@ -3,7 +3,6 @@
 namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
 use LastDragon_ru\GlobMatcher\Glob\Options;
-use LastDragon_ru\TextParser\Ast\Cursor;
 use Override;
 
 use function preg_quote;

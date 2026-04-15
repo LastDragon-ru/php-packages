@@ -7,13 +7,19 @@ parameters:
 			path: dev/public/index.php
 
 		-
-			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\TextParser\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\CharacterNodeChild>, LastDragon_ru\TextParser\Ast\Cursor<LastDragon_ru\GlobMatcher\Glob\Ast\CharacterNodeChild> given.'
+			rawMessage: 'Instanceof between static(LastDragon_ru\GlobMatcher\Glob\Ast\CharacterNode) and LastDragon_ru\GlobMatcher\Glob\Ast\StringNode will always evaluate to false.'
+			identifier: instanceof.alwaysFalse
+			count: 1
+			path: packages/glob-matcher/src/Glob/Ast/CharacterNode.php
+
+		-
+			rawMessage: 'Parameter #1 $string of static method LastDragon_ru\GlobMatcher\Glob\Ast\CharacterNode::escape() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/glob-matcher/src/Glob/Ast/CharacterNode.php
 
 		-
-			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\TextParser\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node>, LastDragon_ru\TextParser\Ast\Cursor<covariant static(LastDragon_ru\GlobMatcher\Glob\Ast\PatternListNode)>|LastDragon_ru\TextParser\Ast\Cursor<LastDragon_ru\GlobMatcher\Glob\Ast\Node> given.'
+			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\GlobMatcher\Glob\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node>, LastDragon_ru\TextParser\Cursor\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node, LastDragon_ru\GlobMatcher\Glob\Ast\Node> given.'
 			identifier: argument.type
 			count: 1
 			path: packages/glob-matcher/src/Glob/Ast/PatternListNode.php

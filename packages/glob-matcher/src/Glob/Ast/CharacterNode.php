@@ -4,7 +4,6 @@ namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
 use LastDragon_ru\GlobMatcher\Glob\Options;
 use LastDragon_ru\GlobMatcher\Package;
-use LastDragon_ru\TextParser\Ast\Cursor;
 use LastDragon_ru\TextParser\Iterables\StringifyIterable;
 use LastDragon_ru\TextParser\Iterables\TokenEscapeIterable;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
@@ -14,24 +13,24 @@ use Override;
 use function mb_strpos;
 
 /**
- * @extends ParentNode<CharacterNodeChild>
+ * @implements NodeParent<Node&CharacterNodeChild>
  */
-class CharacterNode extends ParentNode implements NameNodeChild {
-    /**
-     * @param list<CharacterNodeChild> $children
-     */
+class CharacterNode implements Node, NodeParent, NameNodeChild {
     public function __construct(
         public bool $negated,
-        array $children,
+        /**
+         * @var list<Node&CharacterNodeChild>
+         */
+        public array $children,
     ) {
-        parent::__construct($children);
+        // empty
     }
 
     #[Override]
     public static function toRegex(Options $options, Cursor $cursor): string {
         $regex = '';
 
-        foreach ($cursor as $child) {
+        foreach ($cursor->children as $child) {
             $regex .= match (true) {
                 $child->node instanceof StringNode => self::escape($child->node->string),
                 default                            => $child->node::toRegex($options, $child),

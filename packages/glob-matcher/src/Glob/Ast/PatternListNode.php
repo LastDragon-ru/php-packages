@@ -3,29 +3,28 @@
 namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
 use LastDragon_ru\GlobMatcher\Glob\Options;
-use LastDragon_ru\TextParser\Ast\Cursor;
 use Override;
 
 use function count;
 
 /**
- * @extends ParentNode<PatternListNodeChild>
+ * @implements NodeParent<Node&PatternListNodeChild>
  */
-class PatternListNode extends ParentNode implements NameNodeChild {
-    /**
-     * @param list<PatternListNodeChild> $children
-     */
+class PatternListNode implements Node, NodeParent, NameNodeChild {
     public function __construct(
         public PatternListQuantifier $quantifier,
-        array $children,
+        /**
+         * @var list<Node&PatternListNodeChild>
+         */
+        public array $children,
     ) {
-        parent::__construct($children);
+        // empty
     }
 
     #[Override]
     public static function toRegex(Options $options, Cursor $cursor): string {
         // Empty?
-        if (count($cursor) === 0) {
+        if (count($cursor->children) === 0) {
             return '';
         }
 
@@ -46,7 +45,7 @@ class PatternListNode extends ParentNode implements NameNodeChild {
     }
 
     /**
-     * @param Cursor<covariant static> $cursor
+     * @param Cursor<covariant Node> $cursor
      */
     protected static function toRegexBuildNot(Options $options, Cursor $cursor, string $regex): string {
         // Regex negative lookahead differs from glob `!(...)`, for this reason

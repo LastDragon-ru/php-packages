@@ -3,13 +3,21 @@
 namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
 use LastDragon_ru\GlobMatcher\Glob\Options;
-use LastDragon_ru\TextParser\Ast\Cursor;
 use Override;
 
 /**
- * @extends ParentNode<GlobNodeChild>
+ * @implements NodeParent<Node&GlobNodeChild>
  */
-class GlobNode extends ParentNode {
+class GlobNode implements Node, NodeParent {
+    public function __construct(
+        /**
+         * @var list<Node&GlobNodeChild>
+         */
+        public array $children,
+    ) {
+        // empty
+    }
+
     #[Override]
     public static function toRegex(Options $options, Cursor $cursor): string {
         return Utils::toRegex($options, $cursor);

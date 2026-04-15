@@ -15,6 +15,7 @@ use LastDragon_ru\GlobMatcher\Glob\Ast\GlobNodeChild;
 use LastDragon_ru\GlobMatcher\Glob\Ast\GlobstarNode;
 use LastDragon_ru\GlobMatcher\Glob\Ast\NameNode;
 use LastDragon_ru\GlobMatcher\Glob\Ast\NameNodeChild;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
 use LastDragon_ru\GlobMatcher\Glob\Ast\PatternListNode;
 use LastDragon_ru\GlobMatcher\Glob\Ast\PatternListQuantifier;
 use LastDragon_ru\GlobMatcher\Glob\Ast\QuestionNode;
@@ -76,7 +77,7 @@ class Parser {
     /**
      * @param TransactionalIterable<Token<Name>> $iterable
      */
-    protected function parseGlobChild(TransactionalIterable $iterable): ?GlobNodeChild {
+    protected function parseGlobChild(TransactionalIterable $iterable): (Node&GlobNodeChild)|null {
         return $this->parseGlobstar($iterable)
             ?? $this->parseSegment($iterable);
     }
@@ -147,7 +148,7 @@ class Parser {
     /**
      * @param TransactionalIterable<Token<Name>> $iterable
      */
-    protected function parseNameChild(TransactionalIterable $iterable): ?NameNodeChild {
+    protected function parseNameChild(TransactionalIterable $iterable): (Node&NameNodeChild)|null {
         return $this->parsePatternList($iterable)
             ?? $this->parseCharacter($iterable)
             ?? $this->parseAsterisk($iterable)
@@ -303,7 +304,7 @@ class Parser {
     }
 
     /**
-     * @template T of CharacterNodeChild
+     * @template T of Node&CharacterNodeChild
      *
      * @param TransactionalIterable<Token<Name>> $iterable
      * @param Closure(string): ?T                 $factory
@@ -314,7 +315,7 @@ class Parser {
         TransactionalIterable $iterable,
         Name $name,
         Closure $factory,
-    ): ?CharacterNodeChild {
+    ): (Node&CharacterNodeChild)|null {
         // Match?
         if (!($iterable[0]?->is(Name::LeftSquareBracket) === true && $iterable[1]?->is($name) === true)) {
             return null;

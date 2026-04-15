@@ -2,11 +2,6 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
-use LastDragon_ru\TextParser\Ast\NodeChild;
-
-/**
- * @extends NodeChild<GlobNode>
- */
-interface GlobNodeChild extends Node, NodeChild {
+interface GlobNodeChild {
     // empty
 }
