@@ -148,16 +148,16 @@ The `(string) $glob->regex` is:
 The `$glob->node` is:
 
 ```plain
-LastDragon_ru\GlobMatcher\Glob\Ast\GlobNode {
+LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobNode {
   +children: [
-    LastDragon_ru\GlobMatcher\Glob\Ast\SegmentNode {},
-    LastDragon_ru\GlobMatcher\Glob\Ast\GlobstarNode {
+    LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\SegmentNode {},
+    LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobstarNode {
       +count: 2
     },
-    LastDragon_ru\GlobMatcher\Glob\Ast\NameNode {
+    LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\NameNode {
       +children: [
-        LastDragon_ru\GlobMatcher\Glob\Ast\QuestionNode {},
-        LastDragon_ru\GlobMatcher\Glob\Ast\StringNode {
+        LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\QuestionNode {},
+        LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\StringNode {
           +string: ".txt"
         },
       ]

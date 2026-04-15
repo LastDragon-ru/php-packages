@@ -5,7 +5,7 @@ namespace LastDragon_ru\GlobMatcher\Glob;
 use InvalidArgumentException;
 use LastDragon_ru\GlobMatcher\Contracts\Matcher;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
-use LastDragon_ru\GlobMatcher\Glob\Ast\GlobNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobNode;
 use LastDragon_ru\GlobMatcher\Glob\Parser\Parser;
 use LastDragon_ru\GlobMatcher\Regex;
 use Override;

@@ -1,0 +1,54 @@
+<?php declare(strict_types = 1);
+
+namespace LastDragon_ru\GlobMatcher\Glob\Ast\Nodes;
+
+use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
+use LastDragon_ru\GlobMatcher\Glob\Options;
+use LastDragon_ru\TextParser\Ast\NodeMergeable;
+use Override;
+
+class AsteriskNode implements Node, NameNodeChild, NodeMergeable {
+    public function __construct(
+        /**
+         * @var positive-int
+         */
+        public int $count = 1,
+    ) {
+        // empty
+    }
+
+    #[Override]
+    public static function toRegex(Options $options, Cursor $cursor): string {
+        return '[^/]*?'.(self::isLast($cursor) ? '/?' : '');
+    }
+
+    #[Override]
+    public static function merge(NodeMergeable $previous, NodeMergeable $current): NodeMergeable {
+        if ($previous::class === $current::class) {
+            $previous->count = $previous->count + $current->count;
+            $current         = $previous;
+        }
+
+        return $current;
+    }
+
+    /**
+     * @param Cursor<covariant static> $cursor
+     */
+    private static function isLast(Cursor $cursor): bool {
+        $last   = true;
+        $parent = $cursor;
+
+        while ($parent !== null) {
+            if ($parent->next !== null) {
+                $last = false;
+                break;
+            }
+
+            $parent = $parent->parent;
+        }
+
+        return $last;
+    }
+}

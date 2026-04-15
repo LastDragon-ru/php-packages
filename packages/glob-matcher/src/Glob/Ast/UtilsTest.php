@@ -2,6 +2,8 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\NameNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\StringNode;
 use LastDragon_ru\GlobMatcher\Glob\Options;
 use LastDragon_ru\GlobMatcher\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
