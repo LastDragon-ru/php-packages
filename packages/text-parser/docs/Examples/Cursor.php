@@ -3,7 +3,7 @@
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
-use LastDragon_ru\TextParser\Ast\Cursor;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Parser;
 
@@ -17,17 +17,15 @@ assert($ast instanceof ExpressionNode);
 // Create the cursor
 $cursor = new Cursor($ast);
 
-// Children can be iterated directly
-foreach ($cursor as $child) {
-    if ($child->node instanceof ExpressionNode) {
-        Example::dump($child->node);
-        break;
-    }
+// Children can be iterated via $children axis
+foreach ($cursor->children as $child) {
+    Example::dump($child->node);
+    break;
 }
 
 // Also possible to get n-th child
-Example::dump($cursor[2]);
+Example::dump($cursor->children->get(2));
 
 // And next/previous
-Example::dump($cursor[2]->next->node ?? null);
-Example::dump($cursor[2]->previous->node ?? null);
+Example::dump($cursor->children->get(2)->next->node ?? null);
+Example::dump($cursor->children->get(2)->previous->node ?? null);

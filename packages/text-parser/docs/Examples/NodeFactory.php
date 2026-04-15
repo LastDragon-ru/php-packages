@@ -3,33 +3,36 @@
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
-use LastDragon_ru\TextParser\Ast\NodeChild;
-use LastDragon_ru\TextParser\Ast\NodeParentFactory;
-use LastDragon_ru\TextParser\Ast\NodeParentImpl;
+use LastDragon_ru\TextParser\Ast\NodeFactory;
 use LastDragon_ru\TextParser\Ast\NodeString;
 use Override;
 
 // phpcs:disable PSR1.Files.SideEffects
 // phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 
-/**
- * @implements NodeChild<ParentNode>
- */
-class ChildNode extends NodeString implements NodeChild {
+interface Node {
     // empty
 }
 
-/**
- * @extends NodeParentImpl<ChildNode>
- */
-class ParentNode extends NodeParentImpl {
+class ChildNode extends NodeString implements Node {
     // empty
 }
 
+class ParentNode implements Node {
+    public function __construct(
+        /**
+         * @var list<Node>
+         */
+        public array $children,
+    ) {
+        // empty
+    }
+}
+
 /**
- * @extends NodeParentFactory<ParentNode, ChildNode>
+ * @extends NodeFactory<ParentNode, ChildNode>
  */
-class ParentNodeFactory extends NodeParentFactory {
+class Factory extends NodeFactory {
     #[Override]
     protected function onCreate(array $children): ?object {
         return $children !== [] ? new ParentNode($children) : null;
@@ -41,7 +44,7 @@ class ParentNodeFactory extends NodeParentFactory {
     }
 }
 
-$factory = new ParentNodeFactory();
+$factory = new Factory();
 
 $factory->push(new ChildNode('a'));
 $factory->push(new ChildNode('b'));

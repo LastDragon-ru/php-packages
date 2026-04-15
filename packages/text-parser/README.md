@@ -81,6 +81,7 @@ namespace LastDragon_ru\TextParser\Docs\Calculator;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeChild;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeFactory;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Node;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorAdditionNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode;
@@ -133,7 +134,7 @@ class Parser {
     /**
      * @param TransactionalIterable<Token<Name>> $iterable
      */
-    protected function parseExpressionChild(TransactionalIterable $iterable): ?ExpressionNodeChild {
+    protected function parseExpressionChild(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         return $this->parseSubExpression($iterable)
             ?? $this->parseOperator($iterable)
             ?? $this->parseNumber($iterable)
@@ -555,12 +556,12 @@ LastDragon_ru\TextParser\Tokenizer\Token {
 
 [//]: # (end: preprocess/b06c2cb28b3533e3)
 
-All other methods just create AST nodes and check that the expression is correct. You may notice the [`ExpressionNodeFactory`][code-links/4564b80f054a86d3] class, which is a subclass of [`NodeParentFactory`][code-links/c6d0471cd80ce86b]. In our case, the [`ExpressionNodeFactory`][code-links/4564b80f054a86d3] helps to simplify the code, and it also checks that an operator between numbers/expressions (one of our requirements).
+All other methods just create AST nodes and check that the expression is correct. You may notice the [`ExpressionNodeFactory`][code-links/4564b80f054a86d3] class, which is a subclass of [`NodeFactory`][code-links/9f54b060f507219d]. In our case, the [`ExpressionNodeFactory`][code-links/4564b80f054a86d3] helps to simplify the code, and it also checks that an operator between numbers/expressions (one of our requirements).
 
-In the general case, the main reason of [`NodeParentFactory`][code-links/c6d0471cd80ce86b] is merging sequence of child nodes (of the same class) into one node. The [`Tokenizer`][code-links/680ddd300ebebd55] may generate a lot of "string" tokens (especially if escaping is supported), but we usually want only one (`abc`) node in AST instead of multiple (`a`, `b`, and `c`) nodes. If you use static analysis tools like PHPStan, the class will guaranties the type safety too.
+In the general case, the main reason of '\LastDragon_ru\TextParser\Ast\NodeFactory' is merging sequence of child nodes (of the same class) into one node. The [`Tokenizer`][code-links/680ddd300ebebd55] may generate a lot of "string" tokens (especially if escaping is supported), but we usually want only one (`abc`) node in AST instead of multiple (`a`, `b`, and `c`) nodes. If you use static analysis tools like PHPStan, the class will guaranties the type safety too.
 
-[include:example]: ./docs/Examples/NodeParentFactory.php
-[//]: # (start: preprocess/74b6424176e7a142)
+[include:example]: ./docs/Examples/NodeFactory.php
+[//]: # (start: preprocess/afca766e69136c71)
 [//]: # (warning: Generated automatically. Do not edit.)
 
 ```php
@@ -569,33 +570,36 @@ In the general case, the main reason of [`NodeParentFactory`][code-links/c6d0471
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
-use LastDragon_ru\TextParser\Ast\NodeChild;
-use LastDragon_ru\TextParser\Ast\NodeParentFactory;
-use LastDragon_ru\TextParser\Ast\NodeParentImpl;
+use LastDragon_ru\TextParser\Ast\NodeFactory;
 use LastDragon_ru\TextParser\Ast\NodeString;
 use Override;
 
 // phpcs:disable PSR1.Files.SideEffects
 // phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 
-/**
- * @implements NodeChild<ParentNode>
- */
-class ChildNode extends NodeString implements NodeChild {
+interface Node {
     // empty
 }
 
-/**
- * @extends NodeParentImpl<ChildNode>
- */
-class ParentNode extends NodeParentImpl {
+class ChildNode extends NodeString implements Node {
     // empty
 }
 
+class ParentNode implements Node {
+    public function __construct(
+        /**
+         * @var list<Node>
+         */
+        public array $children,
+    ) {
+        // empty
+    }
+}
+
 /**
- * @extends NodeParentFactory<ParentNode, ChildNode>
+ * @extends NodeFactory<ParentNode, ChildNode>
  */
-class ParentNodeFactory extends NodeParentFactory {
+class Factory extends NodeFactory {
     #[Override]
     protected function onCreate(array $children): ?object {
         return $children !== [] ? new ParentNode($children) : null;
@@ -607,7 +611,7 @@ class ParentNodeFactory extends NodeParentFactory {
     }
 }
 
-$factory = new ParentNodeFactory();
+$factory = new Factory();
 
 $factory->push(new ChildNode('a'));
 $factory->push(new ChildNode('b'));
@@ -635,11 +639,11 @@ The `$factory->create()` is:
 null
 ```
 
-[//]: # (end: preprocess/74b6424176e7a142)
+[//]: # (end: preprocess/afca766e69136c71)
 
 # AST
 
-As you can see, our AST for mathematical expressions doesn't have references to parent/next/previous nodes. It makes the parser simple, and reduce memory usage. The [`Cursor`][code-links/c6b0ac8163d25254] class can be used to navigate the AST in all directions. Please note that your nodes must implement [`NodeParent`][code-links/03bf4306de68ce04] and [`NodeChild`][code-links/75d9e2fb8399ea2e] if you want to use the cursor.
+As you can see, our AST for mathematical expressions doesn't have references to parent/next/previous nodes. It makes the parser simple, and reduce memory usage. The [`Cursor`][code-links/9281635e2ef16472] class can be used to navigate the AST in all directions.
 
 [include:example]: ./docs/Examples/Cursor.php
 [//]: # (start: preprocess/613e86b97662c891)
@@ -651,7 +655,7 @@ As you can see, our AST for mathematical expressions doesn't have references to 
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
-use LastDragon_ru\TextParser\Ast\Cursor;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Parser;
 
@@ -665,42 +669,32 @@ assert($ast instanceof ExpressionNode);
 // Create the cursor
 $cursor = new Cursor($ast);
 
-// Children can be iterated directly
-foreach ($cursor as $child) {
-    if ($child->node instanceof ExpressionNode) {
-        Example::dump($child->node);
-        break;
-    }
+// Children can be iterated via $children axis
+foreach ($cursor->children as $child) {
+    Example::dump($child->node);
+    break;
 }
 
 // Also possible to get n-th child
-Example::dump($cursor[2]);
+Example::dump($cursor->children->get(2));
 
 // And next/previous
-Example::dump($cursor[2]->next->node ?? null);
-Example::dump($cursor[2]->previous->node ?? null);
+Example::dump($cursor->children->get(2)->next->node ?? null);
+Example::dump($cursor->children->get(2)->previous->node ?? null);
 ```
 
 <details><summary>Example output</summary>
 
 ```plain
-LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode {
-  +children: [
-    LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
-      +value: 1
-    },
-    LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorAdditionNode {},
-    LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
-      +value: 2
-    },
-  ]
+LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+  +value: 2
 }
 ```
 
-The `$cursor[2]` is:
+The `$cursor->children->get(2)` is:
 
 ```plain
-LastDragon_ru\TextParser\Ast\Cursor {
+LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor {
   +node: LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode {#1
     +children: [
       LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
@@ -712,7 +706,7 @@ LastDragon_ru\TextParser\Ast\Cursor {
       },
     ]
   }
-  +parent: LastDragon_ru\TextParser\Ast\Cursor {
+  +parent: LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor {
     +node: LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode {
       +children: [
         LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
@@ -727,10 +721,10 @@ LastDragon_ru\TextParser\Ast\Cursor {
       ]
     }
     +parent: null
-    +index: null
+    +offset: null
     +next: Symfony\Component\VarDumper\Caster\VirtualStub {#2
       +type: 1
-      +class: "~ ?LastDragon_ru\TextParser\Ast\Cursor"
+      +class: "~ ?LastDragon_ru\TextParser\Cursor\Cursor"
       +value: "Virtual property"
       +cut: 0
       +handle: 0
@@ -742,7 +736,19 @@ LastDragon_ru\TextParser\Ast\Cursor {
     }
     +previous: Symfony\Component\VarDumper\Caster\VirtualStub {#3
       +type: 1
-      +class: "~ ?LastDragon_ru\TextParser\Ast\Cursor"
+      +class: "~ ?LastDragon_ru\TextParser\Cursor\Cursor"
+      +value: "Virtual property"
+      +cut: 0
+      +handle: 0
+      +refCount: 0
+      +position: 0
+      +attr: [
+        "virtual" => true,
+      ]
+    }
+    +children: Symfony\Component\VarDumper\Caster\VirtualStub {#4
+      +type: 1
+      +class: "~ LastDragon_ru\TextParser\Cursor\Axis&LastDragon_ru\TextParser\Cursor\Offsettable"
       +value: "Virtual property"
       +cut: 0
       +handle: 0
@@ -753,19 +759,20 @@ LastDragon_ru\TextParser\Ast\Cursor {
       ]
     }
   }
-  +index: 2
+  +offset: 2
   +next: Symfony\Component\VarDumper\Caster\VirtualStub {#2}
   +previous: Symfony\Component\VarDumper\Caster\VirtualStub {#3}
+  +children: Symfony\Component\VarDumper\Caster\VirtualStub {#4}
 }
 ```
 
-The `$cursor[2]->next->node ?? null` is:
+The `$cursor->children->get(2)->next->node ?? null` is:
 
 ```plain
 LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode {}
 ```
 
-The `$cursor[2]->previous->node ?? null` is:
+The `$cursor->children->get(2)->previous->node ?? null` is:
 
 ```plain
 LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorSubtractionNode {}
@@ -886,17 +893,11 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 [//]: # (start: code-links)
 [//]: # (warning: Generated automatically. Do not edit.)
 
-[code-links/c6b0ac8163d25254]: src/Ast/Cursor.php
-    "\LastDragon_ru\TextParser\Ast\Cursor"
+[code-links/9f54b060f507219d]: src/Ast/NodeFactory.php
+    "\LastDragon_ru\TextParser\Ast\NodeFactory"
 
-[code-links/75d9e2fb8399ea2e]: src/Ast/NodeChild.php
-    "\LastDragon_ru\TextParser\Ast\NodeChild"
-
-[code-links/03bf4306de68ce04]: src/Ast/NodeParent.php
-    "\LastDragon_ru\TextParser\Ast\NodeParent"
-
-[code-links/c6d0471cd80ce86b]: src/Ast/NodeParentFactory.php
-    "\LastDragon_ru\TextParser\Ast\NodeParentFactory"
+[code-links/9281635e2ef16472]: src/Cursor/Cursor.php
+    "\LastDragon_ru\TextParser\Cursor\Cursor"
 
 [code-links/c6b92ea7e293ac9d]: docs/Calculator/Ast/ExpressionNode.php
     "\LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode"
@@ -904,10 +905,10 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 [code-links/4564b80f054a86d3]: docs/Calculator/Ast/ExpressionNodeFactory.php
     "\LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeFactory"
 
-[code-links/b84ae5a44e02f512]: docs/Calculator/Parser.php#L30-L41
+[code-links/b84ae5a44e02f512]: docs/Calculator/Parser.php#L31-L42
     "\LastDragon_ru\TextParser\Docs\Calculator\Parser::parse()"
 
-[code-links/9110a629f7b2dbe5]: docs/Calculator/Parser.php#L43-L55
+[code-links/9110a629f7b2dbe5]: docs/Calculator/Parser.php#L44-L56
     "\LastDragon_ru\TextParser\Docs\Calculator\Parser::parseExpression()"
 
 [code-links/080b62df2cf20def]: src/Iterables/TransactionalIterable.php

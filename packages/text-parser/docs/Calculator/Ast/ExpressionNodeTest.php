@@ -18,7 +18,7 @@ final class ExpressionNodeTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
     /**
-     * @param list<ExpressionNodeChild> $children
+     * @param list<Node&ExpressionNodeChild> $children
      */
     #[DataProvider('dataProviderCalculate')]
     public function testCalculate(float|int $expected, array $children): void {
@@ -35,7 +35,7 @@ final class ExpressionNodeTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{float|int, list<ExpressionNodeChild>}>
+     * @return array<string, array{float|int, list<Node&ExpressionNodeChild>}>
      */
     public static function dataProviderCalculate(): array {
         return [
