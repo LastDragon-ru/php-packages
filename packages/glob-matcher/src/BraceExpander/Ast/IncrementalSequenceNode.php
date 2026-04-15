@@ -2,6 +2,6 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast;
 
-abstract class IncrementalSequenceNode implements BraceExpansionNodeChild, SequenceNodeChild {
+abstract class IncrementalSequenceNode implements Node, BraceExpansionNodeChild, SequenceNodeChild {
     // empty
 }

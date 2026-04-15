@@ -2,11 +2,10 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast;
 
-use LastDragon_ru\TextParser\Ast\Cursor;
 use LastDragon_ru\TextParser\Ast\NodeString;
 use Override;
 
-class StringNode extends NodeString implements BraceExpansionNodeChild {
+class StringNode extends NodeString implements Node, BraceExpansionNodeChild {
     #[Override]
     public static function toIterable(Cursor $cursor): iterable {
         return [$cursor->node->string];

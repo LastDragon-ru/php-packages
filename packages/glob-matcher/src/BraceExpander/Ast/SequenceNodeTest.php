@@ -3,7 +3,6 @@
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast;
 
 use LastDragon_ru\GlobMatcher\Package\TestCase;
-use LastDragon_ru\TextParser\Ast\Cursor;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -16,13 +15,13 @@ use function iterator_to_array;
 final class SequenceNodeTest extends TestCase {
     public function testToIterable(): void {
         $node = new SequenceNode([
-            new class () implements SequenceNodeChild {
+            new class () implements Node, SequenceNodeChild {
                 #[Override]
                 public static function toIterable(Cursor $cursor): iterable {
                     return ['aa', 'ab'];
                 }
             },
-            new class () implements SequenceNodeChild {
+            new class () implements Node, SequenceNodeChild {
                 #[Override]
                 public static function toIterable(Cursor $cursor): iterable {
                     return ['ba', 'bb', 'bc'];

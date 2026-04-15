@@ -2,11 +2,6 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast;
 
-use LastDragon_ru\TextParser\Ast\NodeChild;
-
-/**
- * @extends NodeChild<BraceExpansionNode>
- */
-interface BraceExpansionNodeChild extends Node, NodeChild {
+interface BraceExpansionNodeChild {
     // empty
 }

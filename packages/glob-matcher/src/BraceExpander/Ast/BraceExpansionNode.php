@@ -2,13 +2,21 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast;
 
-use LastDragon_ru\TextParser\Ast\Cursor;
 use Override;
 
 /**
- * @extends ParentNode<BraceExpansionNodeChild>
+ * @implements NodeParent<Node&BraceExpansionNodeChild>
  */
-class BraceExpansionNode extends ParentNode implements SequenceNodeChild {
+class BraceExpansionNode implements Node, NodeParent, SequenceNodeChild {
+    public function __construct(
+        /**
+         * @var list<Node&BraceExpansionNodeChild>
+         */
+        public array $children,
+    ) {
+        // empty
+    }
+
     #[Override]
     public static function toIterable(Cursor $cursor): iterable {
         yield from self::iterate($cursor, 0, '');
@@ -16,15 +24,18 @@ class BraceExpansionNode extends ParentNode implements SequenceNodeChild {
 
     /**
      * @param Cursor<covariant static> $cursor
+     * @param int<0, max>              $offset
      *
      * @return iterable<mixed, string>
      */
-    private static function iterate(Cursor $cursor, int $index, string $prefix): iterable {
-        if (isset($cursor[$index])) {
-            $iterable = $cursor[$index]->node::toIterable($cursor[$index]);
+    private static function iterate(Cursor $cursor, int $offset, string $prefix): iterable {
+        $child = $cursor->children->get($offset);
+
+        if ($child !== null) {
+            $iterable = $child->node::toIterable($child);
 
             foreach ($iterable as $string) {
-                yield from self::iterate($cursor, $index + 1, $prefix.$string);
+                yield from self::iterate($cursor, $offset + 1, $prefix.$string);
             }
         } else {
             yield $prefix;

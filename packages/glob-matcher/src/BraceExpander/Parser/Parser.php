@@ -7,6 +7,7 @@ use LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNodeChild;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\CharacterSequenceNode;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\IncrementalSequenceNode;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\IntegerSequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Node;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\SequenceNode;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode;
 use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Factories\BraceExpansionNodeFactory;
@@ -57,7 +58,7 @@ class Parser {
     /**
      * @param TransactionalIterable<Token<Name>> $iterable
      */
-    protected function parseBraceExpansionChild(TransactionalIterable $iterable): ?BraceExpansionNodeChild {
+    protected function parseBraceExpansionChild(TransactionalIterable $iterable): (Node&BraceExpansionNodeChild)|null {
         return $this->parseIncrementalSequence($iterable)
             ?? $this->parseSequence($iterable)
             ?? $this->parseString($iterable);

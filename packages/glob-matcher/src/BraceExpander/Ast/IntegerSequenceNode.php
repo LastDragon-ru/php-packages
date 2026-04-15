@@ -3,7 +3,6 @@
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast;
 
 use LastDragon_ru\GlobMatcher\Package;
-use LastDragon_ru\TextParser\Ast\Cursor;
 use Override;
 
 use function abs;

@@ -2,16 +2,24 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast;
 
-use LastDragon_ru\TextParser\Ast\Cursor;
 use Override;
 
 /**
- * @extends ParentNode<SequenceNodeChild>
+ * @implements NodeParent<Node&SequenceNodeChild>
  */
-class SequenceNode extends ParentNode implements BraceExpansionNodeChild, SequenceNodeChild {
+class SequenceNode implements Node, NodeParent, BraceExpansionNodeChild, SequenceNodeChild {
+    public function __construct(
+        /**
+         * @var list<Node&SequenceNodeChild>
+         */
+        public array $children,
+    ) {
+        // empty
+    }
+
     #[Override]
     public static function toIterable(Cursor $cursor): iterable {
-        foreach ($cursor as $child) {
+        foreach ($cursor->children as $child) {
             yield from $child->node::toIterable($child);
         }
     }
