@@ -258,36 +258,36 @@ The `iterator_to_array($expander)` is:
 The `$expander->node` is:
 
 ```plain
-LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode {
+LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
   +children: [
-    LastDragon_ru\GlobMatcher\BraceExpander\Ast\SequenceNode {
+    LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode {
       +children: [
-        LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode {
+        LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
           +children: [
-            LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode {
+            LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode {
               +string: "a"
             },
           ]
         },
-        LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode {
+        LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
           +children: [
-            LastDragon_ru\GlobMatcher\BraceExpander\Ast\IntegerSequenceNode {
+            LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\IntegerSequenceNode {
               +start: "0"
               +end: "10"
               +increment: 2
             },
           ]
         },
-        LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode {
+        LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
           +children: [
-            LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode {
+            LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode {
               +string: "c"
             },
           ]
         },
       ]
     },
-    LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode {
+    LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode {
       +string: ".txt"
     },
   ]

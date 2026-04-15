@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\GlobMatcher\BraceExpander\Parser\Factories;
+namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast\Factories;
 
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\SequenceNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode;
 use LastDragon_ru\GlobMatcher\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 

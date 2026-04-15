@@ -2,16 +2,16 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Parser;
 
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNodeChild;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\CharacterSequenceNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\IncrementalSequenceNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\IntegerSequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Factories\BraceExpansionNodeFactory;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Factories\SequenceNodeFactory;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Node;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\SequenceNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Factories\BraceExpansionNodeFactory;
-use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Factories\SequenceNodeFactory;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNodeChild;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\CharacterSequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\IncrementalSequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\IntegerSequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode;
 use LastDragon_ru\GlobMatcher\Package;
 use LastDragon_ru\TextParser\Iterables\TransactionalIterable;
 use LastDragon_ru\TextParser\Tokenizer\Token;

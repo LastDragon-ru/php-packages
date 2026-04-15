@@ -2,11 +2,11 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Parser;
 
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\CharacterSequenceNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\IntegerSequenceNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\SequenceNode;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\CharacterSequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\IntegerSequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode;
 use LastDragon_ru\GlobMatcher\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
