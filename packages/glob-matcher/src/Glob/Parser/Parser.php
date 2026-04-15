@@ -3,29 +3,30 @@
 namespace LastDragon_ru\GlobMatcher\Glob\Parser;
 
 use Closure;
-use LastDragon_ru\GlobMatcher\Glob\Ast\AsteriskNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\CharacterClass;
-use LastDragon_ru\GlobMatcher\Glob\Ast\CharacterClassNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\CharacterCollatingSymbolNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\CharacterEquivalenceClassNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\CharacterNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\CharacterNodeChild;
-use LastDragon_ru\GlobMatcher\Glob\Ast\GlobNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\GlobNodeChild;
-use LastDragon_ru\GlobMatcher\Glob\Ast\GlobstarNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\NameNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\NameNodeChild;
-use LastDragon_ru\GlobMatcher\Glob\Ast\PatternListNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\PatternListQuantifier;
-use LastDragon_ru\GlobMatcher\Glob\Ast\QuestionNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\SegmentNode;
-use LastDragon_ru\GlobMatcher\Glob\Ast\StringNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Factories\CharacterNodeFactory;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Factories\GlobNodeFactory;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Factories\NameNodeFactory;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Factories\PatternListNodeFactory;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Factories\PatternNodeFactory;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\AsteriskNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterClass;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterClassNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterCollatingSymbolNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterEquivalenceClassNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterNodeChild;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobNodeChild;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobstarNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\NameNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\NameNodeChild;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\PatternListNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\PatternListQuantifier;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\QuestionNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\SegmentNode;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\StringNode;
 use LastDragon_ru\GlobMatcher\Glob\Options;
-use LastDragon_ru\GlobMatcher\Glob\Parser\Factories\CharacterNodeFactory;
-use LastDragon_ru\GlobMatcher\Glob\Parser\Factories\GlobNodeFactory;
-use LastDragon_ru\GlobMatcher\Glob\Parser\Factories\NameNodeFactory;
-use LastDragon_ru\GlobMatcher\Glob\Parser\Factories\PatternListNodeFactory;
-use LastDragon_ru\GlobMatcher\Glob\Parser\Factories\PatternNodeFactory;
 use LastDragon_ru\TextParser\Iterables\TransactionalIterable;
 use LastDragon_ru\TextParser\Tokenizer\Token;
 
@@ -76,7 +77,7 @@ class Parser {
     /**
      * @param TransactionalIterable<Token<Name>> $iterable
      */
-    protected function parseGlobChild(TransactionalIterable $iterable): ?GlobNodeChild {
+    protected function parseGlobChild(TransactionalIterable $iterable): (Node&GlobNodeChild)|null {
         return $this->parseGlobstar($iterable)
             ?? $this->parseSegment($iterable);
     }
@@ -147,7 +148,7 @@ class Parser {
     /**
      * @param TransactionalIterable<Token<Name>> $iterable
      */
-    protected function parseNameChild(TransactionalIterable $iterable): ?NameNodeChild {
+    protected function parseNameChild(TransactionalIterable $iterable): (Node&NameNodeChild)|null {
         return $this->parsePatternList($iterable)
             ?? $this->parseCharacter($iterable)
             ?? $this->parseAsterisk($iterable)
@@ -303,7 +304,7 @@ class Parser {
     }
 
     /**
-     * @template T of CharacterNodeChild
+     * @template T of Node&CharacterNodeChild
      *
      * @param TransactionalIterable<Token<Name>> $iterable
      * @param Closure(string): ?T                 $factory
@@ -314,7 +315,7 @@ class Parser {
         TransactionalIterable $iterable,
         Name $name,
         Closure $factory,
-    ): ?CharacterNodeChild {
+    ): (Node&CharacterNodeChild)|null {
         // Match?
         if (!($iterable[0]?->is(Name::LeftSquareBracket) === true && $iterable[1]?->is($name) === true)) {
             return null;

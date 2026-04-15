@@ -148,16 +148,16 @@ The `(string) $glob->regex` is:
 The `$glob->node` is:
 
 ```plain
-LastDragon_ru\GlobMatcher\Glob\Ast\GlobNode {
+LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobNode {
   +children: [
-    LastDragon_ru\GlobMatcher\Glob\Ast\SegmentNode {},
-    LastDragon_ru\GlobMatcher\Glob\Ast\GlobstarNode {
+    LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\SegmentNode {},
+    LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobstarNode {
       +count: 2
     },
-    LastDragon_ru\GlobMatcher\Glob\Ast\NameNode {
+    LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\NameNode {
       +children: [
-        LastDragon_ru\GlobMatcher\Glob\Ast\QuestionNode {},
-        LastDragon_ru\GlobMatcher\Glob\Ast\StringNode {
+        LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\QuestionNode {},
+        LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\StringNode {
           +string: ".txt"
         },
       ]
@@ -258,36 +258,36 @@ The `iterator_to_array($expander)` is:
 The `$expander->node` is:
 
 ```plain
-LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode {
+LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
   +children: [
-    LastDragon_ru\GlobMatcher\BraceExpander\Ast\SequenceNode {
+    LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode {
       +children: [
-        LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode {
+        LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
           +children: [
-            LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode {
+            LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode {
               +string: "a"
             },
           ]
         },
-        LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode {
+        LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
           +children: [
-            LastDragon_ru\GlobMatcher\BraceExpander\Ast\IntegerSequenceNode {
+            LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\IntegerSequenceNode {
               +start: "0"
               +end: "10"
               +increment: 2
             },
           ]
         },
-        LastDragon_ru\GlobMatcher\BraceExpander\Ast\BraceExpansionNode {
+        LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
           +children: [
-            LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode {
+            LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode {
               +string: "c"
             },
           ]
         },
       ]
     },
-    LastDragon_ru\GlobMatcher\BraceExpander\Ast\StringNode {
+    LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode {
       +string: ".txt"
     },
   ]

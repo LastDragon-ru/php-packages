@@ -3,13 +3,8 @@
 namespace LastDragon_ru\GlobMatcher\Glob\Ast;
 
 use LastDragon_ru\GlobMatcher\Glob\Options;
-use LastDragon_ru\TextParser\Ast\Cursor;
-use LastDragon_ru\TextParser\Ast\NodeChild;
 
-/**
- * @extends NodeChild<self>
- */
-interface Node extends NodeChild {
+interface Node {
     /**
      * @param Cursor<covariant static> $cursor
      */

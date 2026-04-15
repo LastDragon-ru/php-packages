@@ -7,16 +7,22 @@ parameters:
 			path: dev/public/index.php
 
 		-
-			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\TextParser\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\CharacterNodeChild>, LastDragon_ru\TextParser\Ast\Cursor<LastDragon_ru\GlobMatcher\Glob\Ast\CharacterNodeChild> given.'
-			identifier: argument.type
+			rawMessage: 'Instanceof between static(LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterNode) and LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\StringNode will always evaluate to false.'
+			identifier: instanceof.alwaysFalse
 			count: 1
-			path: packages/glob-matcher/src/Glob/Ast/CharacterNode.php
+			path: packages/glob-matcher/src/Glob/Ast/Nodes/CharacterNode.php
 
 		-
-			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\TextParser\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node>, LastDragon_ru\TextParser\Ast\Cursor<covariant static(LastDragon_ru\GlobMatcher\Glob\Ast\PatternListNode)>|LastDragon_ru\TextParser\Ast\Cursor<LastDragon_ru\GlobMatcher\Glob\Ast\Node> given.'
+			rawMessage: 'Parameter #1 $string of static method LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterNode::escape() expects string, mixed given.'
 			identifier: argument.type
 			count: 1
-			path: packages/glob-matcher/src/Glob/Ast/PatternListNode.php
+			path: packages/glob-matcher/src/Glob/Ast/Nodes/CharacterNode.php
+
+		-
+			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\GlobMatcher\Glob\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node>, LastDragon_ru\TextParser\Cursor\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node, LastDragon_ru\GlobMatcher\Glob\Ast\Node> given.'
+			identifier: argument.type
+			count: 1
+			path: packages/glob-matcher/src/Glob/Ast/Nodes/PatternListNode.php
 
 		-
 			rawMessage: 'Call to an undefined method Mockery\LegacyMockInterface::once().'

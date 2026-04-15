@@ -2,13 +2,7 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast;
 
-use LastDragon_ru\TextParser\Ast\Cursor;
-use LastDragon_ru\TextParser\Ast\NodeChild;
-
-/**
- * @extends NodeChild<self>
- */
-interface Node extends NodeChild {
+interface Node {
     /**
      * @param Cursor<covariant static> $cursor
      *
