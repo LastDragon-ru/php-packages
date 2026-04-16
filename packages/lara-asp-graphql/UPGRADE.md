@@ -45,6 +45,8 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/af40e93013b9e0a1)
 
+* [ ] Laravel Scout v10 is not supported anymore. Migrate to the newer version.
+
 # Upgrade from v9
 
 * [ ] Assertions for PHPUnit extracted into [`lastdragon-ru/lara-asp-graphql-testing`](../lara-asp-graphql-testing/README.md) package (class names changed a bit). Please also note that `\SplFileInfo` cannot be used with them anymore.
