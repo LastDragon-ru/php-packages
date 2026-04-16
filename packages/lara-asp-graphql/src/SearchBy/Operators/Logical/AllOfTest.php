@@ -283,8 +283,16 @@ final class AllOfTest extends TestCase {
                 'field'    => [
                     [
                         'wheres'   => [
-                            'path.to.field.a' => 'aaa',
-                            'path.to.field.b' => 'bbb',
+                            [
+                                'field'    => 'path.to.field.a',
+                                'operator' => '=',
+                                'value'    => 'aaa',
+                            ],
+                            [
+                                'field'    => 'path.to.field.b',
+                                'operator' => '=',
+                                'value'    => 'bbb',
+                            ],
                         ],
                         'whereIns' => [
                             'path.to.field.b' => [1, 2, 3],
@@ -298,8 +306,16 @@ final class AllOfTest extends TestCase {
                 'resolver' => [
                     [
                         'wheres'   => [
-                            'path__to__field__a' => 'aaa',
-                            'path__to__field__b' => 'bbb',
+                            [
+                                'field'    => 'path__to__field__a',
+                                'operator' => '=',
+                                'value'    => 'aaa',
+                            ],
+                            [
+                                'field'    => 'path__to__field__b',
+                                'operator' => '=',
+                                'value'    => 'bbb',
+                            ],
                         ],
                         'whereIns' => [
                             'path__to__field__b' => [1, 2, 3],

@@ -149,7 +149,11 @@ final class EqualTest extends TestCase {
                 'field'    => [
                     [
                         'wheres' => [
-                            'path.to.field' => 'abc',
+                            [
+                                'field'    => 'path.to.field',
+                                'operator' => '=',
+                                'value'    => 'abc',
+                            ],
                         ],
                     ],
                     new Field('path', 'to', 'field', 'operator name should be ignored'),
@@ -162,7 +166,11 @@ final class EqualTest extends TestCase {
                 'resolver' => [
                     [
                         'wheres' => [
-                            'path__to__field' => 'abc',
+                            [
+                                'field'    => 'path__to__field',
+                                'operator' => '=',
+                                'value'    => 'abc',
+                            ],
                         ],
                     ],
                     new Field('path', 'to', 'field', 'operator name should be ignored'),

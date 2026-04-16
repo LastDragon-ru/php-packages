@@ -38,10 +38,12 @@ class Equal extends Operator {
         $field = $this->resolver->getField($builder, $field->getParent());
         $value = $argument->toPlain();
 
-        if ($builder instanceof EloquentBuilder || $builder instanceof QueryBuilder) {
+        if (
+            $builder instanceof EloquentBuilder
+            || $builder instanceof QueryBuilder
+            || $builder instanceof ScoutBuilder
+        ) {
             $builder->where($field, '=', $value);
-        } elseif ($builder instanceof ScoutBuilder) {
-            $builder->where($field, $value);
         } else {
             throw new OperatorUnsupportedBuilder($this, $builder);
         }

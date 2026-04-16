@@ -28,7 +28,11 @@ final class AssertScoutQueryEqualsTest extends TestCase {
             [
                 'query'    => '*',
                 'wheres'   => [
-                    'a' => 'value',
+                    [
+                        'field'    => 'a',
+                        'operator' => '=',
+                        'value'    => 'value',
+                    ],
                 ],
                 'whereIns' => [
                     'b' => ['a', 'b', 'c'],

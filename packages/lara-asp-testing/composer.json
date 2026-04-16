@@ -48,7 +48,7 @@
   },
   "require-dev": {
     "illuminate/http": "^13.0.0",
-    "laravel/scout": "^10.24.0",
+    "laravel/scout": "^11.0.0",
     "orchestra/testbench": "^11.0.0"
   },
   "autoload": {
