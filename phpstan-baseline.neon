@@ -553,7 +553,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
 
 		-
+			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCallScoutBuilder() expects array<string, mixed>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
+
+		-
 			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest): (Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Query\Builder), mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
+
+		-
+			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest): Laravel\Scout\Builder<Illuminate\Database\Eloquent\Model>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
@@ -565,7 +577,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
 
 		-
+			rawMessage: 'Parameter #3 $field of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCallScoutBuilder() expects LastDragon_ru\LaraASP\GraphQL\Builder\Field, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
+
+		-
 			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
+
+		-
+			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
@@ -577,7 +601,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
 
 		-
+			rawMessage: 'Parameter #5 $contextFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCallScoutBuilder() expects (Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest): LastDragon_ru\LaraASP\GraphQL\Builder\Context)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
+
+		-
 			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCall() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
+
+		-
+			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanOrEqualTest::testCallScoutBuilder() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanOrEqualTest.php
@@ -589,7 +625,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
 
 		-
+			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCallScoutBuilder() expects array<string, mixed>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
+
+		-
 			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest): (Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Query\Builder), mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
+
+		-
+			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest): Laravel\Scout\Builder<Illuminate\Database\Eloquent\Model>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
@@ -601,7 +649,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
 
 		-
+			rawMessage: 'Parameter #3 $field of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCallScoutBuilder() expects LastDragon_ru\LaraASP\GraphQL\Builder\Field, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
+
+		-
 			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
+
+		-
+			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
@@ -613,7 +673,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
 
 		-
+			rawMessage: 'Parameter #5 $contextFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCallScoutBuilder() expects (Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest): LastDragon_ru\LaraASP\GraphQL\Builder\Context)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
+
+		-
 			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCall() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
+
+		-
+			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\GreaterThanTest::testCallScoutBuilder() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/GreaterThanTest.php
@@ -769,7 +841,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
 
 		-
+			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCallScoutBuilder() expects array<string, mixed>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
+
+		-
 			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest): (Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Query\Builder), mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
+
+		-
+			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest): Laravel\Scout\Builder<Illuminate\Database\Eloquent\Model>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
@@ -781,7 +865,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
 
 		-
+			rawMessage: 'Parameter #3 $field of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCallScoutBuilder() expects LastDragon_ru\LaraASP\GraphQL\Builder\Field, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
+
+		-
 			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
+
+		-
+			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
@@ -793,7 +889,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
 
 		-
+			rawMessage: 'Parameter #5 $contextFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCallScoutBuilder() expects (Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest): LastDragon_ru\LaraASP\GraphQL\Builder\Context)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
+
+		-
 			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCall() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
+
+		-
+			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanOrEqualTest::testCallScoutBuilder() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanOrEqualTest.php
@@ -805,7 +913,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
 
 		-
+			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCallScoutBuilder() expects array<string, mixed>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
+
+		-
 			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest): (Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Query\Builder), mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
+
+		-
+			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest): Laravel\Scout\Builder<Illuminate\Database\Eloquent\Model>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
@@ -817,7 +937,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
 
 		-
+			rawMessage: 'Parameter #3 $field of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCallScoutBuilder() expects LastDragon_ru\LaraASP\GraphQL\Builder\Field, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
+
+		-
 			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
+
+		-
+			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
@@ -829,7 +961,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
 
 		-
+			rawMessage: 'Parameter #5 $contextFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCallScoutBuilder() expects (Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest): LastDragon_ru\LaraASP\GraphQL\Builder\Context)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
+
+		-
 			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCall() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
+
+		-
+			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\LessThanTest::testCallScoutBuilder() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/LessThanTest.php
@@ -991,7 +1135,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
 
 		-
+			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCallScoutBuilder() expects array<string, mixed>, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
+
+		-
 			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest): (Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Query\Builder), mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
+
+		-
+			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest): Laravel\Scout\Builder<Illuminate\Database\Eloquent\Model>, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
@@ -1003,7 +1159,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
 
 		-
+			rawMessage: 'Parameter #3 $field of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCallScoutBuilder() expects LastDragon_ru\LaraASP\GraphQL\Builder\Field, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
+
+		-
 			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
+
+		-
+			rawMessage: 'Parameter #4 $argumentFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCallScoutBuilder() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest): Nuwave\Lighthouse\Execution\Arguments\Argument, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
@@ -1015,7 +1183,19 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
 
 		-
+			rawMessage: 'Parameter #5 $contextFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCallScoutBuilder() expects (Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest): LastDragon_ru\LaraASP\GraphQL\Builder\Context)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
+
+		-
 			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCall() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php
+
+		-
+			rawMessage: 'Parameter #6 $resolver of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Comparison\NotEqualTest::testCallScoutBuilder() expects (Closure(object, LastDragon_ru\LaraASP\GraphQL\Builder\Field): string)|null, mixed given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/NotEqualTest.php

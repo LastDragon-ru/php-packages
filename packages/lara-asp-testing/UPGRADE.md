@@ -39,6 +39,8 @@ Please also see [changelog](https://github.com/LastDragon-ru/php-packages/releas
 
 [//]: # (end: preprocess/af40e93013b9e0a1)
 
+* [ ] Laravel Scout v10 is not supported anymore. Migrate to the newer version.
+
 * [ ] PHPUnit v11 and v12 is not supported anymore. Migrate to the newer version.
 
 * [ ] Previously deprecated assertions/constraints were removed.

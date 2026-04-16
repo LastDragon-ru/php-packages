@@ -790,8 +790,16 @@ final class DirectiveTest extends TestCase {
                 'default field resolver'      => [
                     [
                         'wheres'   => [
-                            'a'   => 1,
-                            'c.a' => 2,
+                            [
+                                'field'    => 'a',
+                                'operator' => '=',
+                                'value'    => 1,
+                            ],
+                            [
+                                'field'    => 'c.a',
+                                'operator' => '=',
+                                'value'    => 2,
+                            ],
                         ],
                         'whereIns' => [
                             'renamed.field' => ['a', 'b', 'c'],
@@ -831,8 +839,16 @@ final class DirectiveTest extends TestCase {
                 'resolver'                    => [
                     [
                         'wheres'   => [
-                            'a'    => 1,
-                            'c__a' => 2,
+                            [
+                                'field'    => 'a',
+                                'operator' => '=',
+                                'value'    => 1,
+                            ],
+                            [
+                                'field'    => 'c__a',
+                                'operator' => '=',
+                                'value'    => 2,
+                            ],
                         ],
                         'whereIns' => [
                             'renamed.field' => ['a', 'b', 'c'],

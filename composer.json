@@ -74,7 +74,7 @@
     "bamarni/composer-bin-plugin": "^1.8.0",
     "composer/class-map-generator": "^1.7.0",
     "illuminate/config": "^13.0.0",
-    "laravel/scout": "^10.24.0",
+    "laravel/scout": "^11.0.0",
     "larastan/larastan": "^3.9.4",
     "orchestra/testbench": "^11.0.0",
     "phpstan/phpstan": "2.1.46",
