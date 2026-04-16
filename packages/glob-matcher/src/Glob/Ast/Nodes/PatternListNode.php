@@ -14,7 +14,7 @@ use function count;
 /**
  * @implements NodeParent<Node&PatternListNodeChild>
  */
-class PatternListNode implements Node, NodeParent, NameNodeChild {
+readonly class PatternListNode implements Node, NodeParent, NameNodeChild {
     public function __construct(
         public PatternListQuantifier $quantifier,
         /**

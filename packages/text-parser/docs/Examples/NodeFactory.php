@@ -14,7 +14,7 @@ interface Node {
     // empty
 }
 
-class ChildNode extends NodeString implements Node {
+readonly class ChildNode extends NodeString implements Node {
     // empty
 }
 

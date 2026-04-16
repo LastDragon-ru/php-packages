@@ -12,12 +12,12 @@ use const NAN;
 /**
  * @implements ParentNode<Node&ExpressionNodeChild>
  */
-class ExpressionNode implements Node, ParentNode, ExpressionNodeChild {
+readonly class ExpressionNode implements Node, ParentNode, ExpressionNodeChild {
     public function __construct(
         /**
          * @var list<Node&ExpressionNodeChild>
          */
-        public readonly array $children,
+        public array $children,
     ) {
         // empty
     }

@@ -7,7 +7,7 @@ use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Node;
 use LastDragon_ru\TextParser\Ast\NodeString;
 use Override;
 
-class StringNode extends NodeString implements Node, BraceExpansionNodeChild {
+readonly class StringNode extends NodeString implements Node, BraceExpansionNodeChild {
     #[Override]
     public static function toIterable(Cursor $cursor): iterable {
         return [$cursor->node->string];

@@ -8,8 +8,8 @@ use LastDragon_ru\GlobMatcher\Glob\Options;
 use LastDragon_ru\TextParser\Ast\NodeMergeable;
 use Override;
 
-class AsteriskNode implements Node, NameNodeChild, NodeMergeable {
-    public function __construct(
+readonly class AsteriskNode implements Node, NameNodeChild, NodeMergeable {
+    final public function __construct(
         /**
          * @var positive-int
          */
@@ -26,11 +26,10 @@ class AsteriskNode implements Node, NameNodeChild, NodeMergeable {
     #[Override]
     public static function merge(NodeMergeable $previous, NodeMergeable $current): NodeMergeable {
         if ($previous::class === $current::class) {
-            $previous->count = $previous->count + $current->count;
-            $current         = $previous;
+            $current = new static($previous->count + $current->count);
         }
 
-        return $current;
+        return $current; // @phpstan-ignore return.type (fixme)
     }
 
     /**

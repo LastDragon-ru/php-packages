@@ -12,7 +12,7 @@ use Override;
 /**
  * @implements NodeParent<Node&NameNodeChild>
  */
-class PatternNode implements Node, NodeParent, PatternListNodeChild {
+readonly class PatternNode implements Node, NodeParent, PatternListNodeChild {
     public function __construct(
         /**
          * @var list<Node&NameNodeChild>

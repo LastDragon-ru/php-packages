@@ -7,7 +7,7 @@ use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
 use LastDragon_ru\GlobMatcher\Glob\Options;
 use Override;
 
-class CharacterEquivalenceClassNode implements Node, CharacterNodeChild {
+readonly class CharacterEquivalenceClassNode implements Node, CharacterNodeChild {
     public function __construct(
         public string $class,
     ) {

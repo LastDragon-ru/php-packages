@@ -9,7 +9,7 @@ use Override;
 
 use function preg_quote;
 
-class SegmentNode implements Node, GlobNodeChild {
+readonly class SegmentNode implements Node, GlobNodeChild {
     public function __construct() {
         // empty
     }
