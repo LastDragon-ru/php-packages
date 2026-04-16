@@ -53,6 +53,18 @@ on
     | INPUT_FIELD_DEFINITION
     | SCALAR
 
+directive @searchByOperatorGreaterThan
+on
+    | ENUM
+    | INPUT_FIELD_DEFINITION
+    | SCALAR
+
+directive @searchByOperatorGreaterThanOrEqual
+on
+    | ENUM
+    | INPUT_FIELD_DEFINITION
+    | SCALAR
+
 directive @searchByOperatorIn
 on
     | ENUM
@@ -66,6 +78,12 @@ on
     | SCALAR
 
 directive @searchByOperatorLessThanOrEqual
+on
+    | ENUM
+    | INPUT_FIELD_DEFINITION
+    | SCALAR
+
+directive @searchByOperatorNotEqual
 on
     | ENUM
     | INPUT_FIELD_DEFINITION
@@ -550,6 +568,12 @@ input SearchByScoutEnumEnumA {
     @searchByOperatorIn
 
     """
+    Not Equal (`!=`).
+    """
+    notEqual: EnumA
+    @searchByOperatorNotEqual
+
+    """
     Outside a set of values.
     """
     notIn: [EnumA!]
@@ -571,6 +595,12 @@ input SearchByScoutEnumEnumAOrNull {
     """
     in: [EnumA!]
     @searchByOperatorIn
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: EnumA
+    @searchByOperatorNotEqual
 
     """
     Outside a set of values.
@@ -724,6 +754,12 @@ input SearchByScoutScalarBoolean {
     """
     equal: Boolean
     @searchByOperatorEqual
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: Boolean
+    @searchByOperatorNotEqual
 }
 
 """
@@ -735,6 +771,12 @@ input SearchByScoutScalarBooleanOrNull {
     """
     equal: Boolean
     @searchByOperatorEqual
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: Boolean
+    @searchByOperatorNotEqual
 }
 
 """
@@ -770,10 +812,40 @@ input SearchByScoutScalarFloat {
     @searchByOperatorEqual
 
     """
+    Greater than (`>`).
+    """
+    greaterThan: Float
+    @searchByOperatorGreaterThan
+
+    """
+    Greater than or equal to (`>=`).
+    """
+    greaterThanOrEqual: Float
+    @searchByOperatorGreaterThanOrEqual
+
+    """
     Within a set of values.
     """
     in: [Float!]
     @searchByOperatorIn
+
+    """
+    Less than (`<`).
+    """
+    lessThan: Float
+    @searchByOperatorLessThan
+
+    """
+    Less than or equal to (`<=`).
+    """
+    lessThanOrEqual: Float
+    @searchByOperatorLessThanOrEqual
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: Float
+    @searchByOperatorNotEqual
 
     """
     Outside a set of values.
@@ -793,10 +865,40 @@ input SearchByScoutScalarFloatOrNull {
     @searchByOperatorEqual
 
     """
+    Greater than (`>`).
+    """
+    greaterThan: Float
+    @searchByOperatorGreaterThan
+
+    """
+    Greater than or equal to (`>=`).
+    """
+    greaterThanOrEqual: Float
+    @searchByOperatorGreaterThanOrEqual
+
+    """
     Within a set of values.
     """
     in: [Float!]
     @searchByOperatorIn
+
+    """
+    Less than (`<`).
+    """
+    lessThan: Float
+    @searchByOperatorLessThan
+
+    """
+    Less than or equal to (`<=`).
+    """
+    lessThanOrEqual: Float
+    @searchByOperatorLessThanOrEqual
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: Float
+    @searchByOperatorNotEqual
 
     """
     Outside a set of values.
@@ -822,6 +924,12 @@ input SearchByScoutScalarID {
     @searchByOperatorIn
 
     """
+    Not Equal (`!=`).
+    """
+    notEqual: ID
+    @searchByOperatorNotEqual
+
+    """
     Outside a set of values.
     """
     notIn: [ID!]
@@ -845,6 +953,12 @@ input SearchByScoutScalarIDOrNull {
     @searchByOperatorIn
 
     """
+    Not Equal (`!=`).
+    """
+    notEqual: ID
+    @searchByOperatorNotEqual
+
+    """
     Outside a set of values.
     """
     notIn: [ID!]
@@ -862,10 +976,40 @@ input SearchByScoutScalarInt {
     @searchByOperatorEqual
 
     """
+    Greater than (`>`).
+    """
+    greaterThan: Int
+    @searchByOperatorGreaterThan
+
+    """
+    Greater than or equal to (`>=`).
+    """
+    greaterThanOrEqual: Int
+    @searchByOperatorGreaterThanOrEqual
+
+    """
     Within a set of values.
     """
     in: [Int!]
     @searchByOperatorIn
+
+    """
+    Less than (`<`).
+    """
+    lessThan: Int
+    @searchByOperatorLessThan
+
+    """
+    Less than or equal to (`<=`).
+    """
+    lessThanOrEqual: Int
+    @searchByOperatorLessThanOrEqual
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: Int
+    @searchByOperatorNotEqual
 
     """
     Outside a set of values.
@@ -885,10 +1029,40 @@ input SearchByScoutScalarIntOrNull {
     @searchByOperatorEqual
 
     """
+    Greater than (`>`).
+    """
+    greaterThan: Int
+    @searchByOperatorGreaterThan
+
+    """
+    Greater than or equal to (`>=`).
+    """
+    greaterThanOrEqual: Int
+    @searchByOperatorGreaterThanOrEqual
+
+    """
     Within a set of values.
     """
     in: [Int!]
     @searchByOperatorIn
+
+    """
+    Less than (`<`).
+    """
+    lessThan: Int
+    @searchByOperatorLessThan
+
+    """
+    Less than or equal to (`<=`).
+    """
+    lessThanOrEqual: Int
+    @searchByOperatorLessThanOrEqual
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: Int
+    @searchByOperatorNotEqual
 
     """
     Outside a set of values.
@@ -906,6 +1080,24 @@ input SearchByScoutScalarScalarCustomOrNull {
     """
     equal: ScalarCustom
     @searchByOperatorEqual
+
+    """
+    Less than (`<`).
+    """
+    lessThan: ScalarCustom
+    @searchByOperatorLessThan
+
+    """
+    Less than or equal to (`<=`).
+    """
+    lessThanOrEqual: ScalarCustom
+    @searchByOperatorLessThanOrEqual
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: ScalarCustom
+    @searchByOperatorNotEqual
 }
 
 """
@@ -923,6 +1115,12 @@ input SearchByScoutScalarString {
     """
     in: [String!]
     @searchByOperatorIn
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: String
+    @searchByOperatorNotEqual
 
     """
     Outside a set of values.
@@ -946,6 +1144,12 @@ input SearchByScoutScalarStringOrNull {
     """
     in: [String!]
     @searchByOperatorIn
+
+    """
+    Not Equal (`!=`).
+    """
+    notEqual: String
+    @searchByOperatorNotEqual
 
     """
     Outside a set of values.
