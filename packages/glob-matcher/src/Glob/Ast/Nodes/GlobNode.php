@@ -12,7 +12,7 @@ use Override;
 /**
  * @implements NodeParent<Node&GlobNodeChild>
  */
-class GlobNode implements Node, NodeParent {
+readonly class GlobNode implements Node, NodeParent {
     public function __construct(
         /**
          * @var list<Node&GlobNodeChild>

@@ -15,7 +15,7 @@ use function str_starts_with;
 /**
  * @implements NodeParent<Node&NameNodeChild>
  */
-class NameNode implements Node, NodeParent, GlobNodeChild {
+readonly class NameNode implements Node, NodeParent, GlobNodeChild {
     public function __construct(
         /**
          * @var list<Node&NameNodeChild>

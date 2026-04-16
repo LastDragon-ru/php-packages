@@ -10,7 +10,7 @@ use Override;
 /**
  * @implements NodeParent<Node&BraceExpansionNodeChild>
  */
-class BraceExpansionNode implements Node, NodeParent, SequenceNodeChild {
+readonly class BraceExpansionNode implements Node, NodeParent, SequenceNodeChild {
     public function __construct(
         /**
          * @var list<Node&BraceExpansionNodeChild>

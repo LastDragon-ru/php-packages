@@ -7,7 +7,7 @@ use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
 use LastDragon_ru\GlobMatcher\Glob\Options;
 use Override;
 
-class CharacterCollatingSymbolNode implements Node, CharacterNodeChild {
+readonly class CharacterCollatingSymbolNode implements Node, CharacterNodeChild {
     public function __construct(
         public string $symbol,
     ) {

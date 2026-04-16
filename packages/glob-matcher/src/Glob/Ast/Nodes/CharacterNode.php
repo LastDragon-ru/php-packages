@@ -18,7 +18,7 @@ use function mb_strpos;
 /**
  * @implements NodeParent<Node&CharacterNodeChild>
  */
-class CharacterNode implements Node, NodeParent, NameNodeChild {
+readonly class CharacterNode implements Node, NodeParent, NameNodeChild {
     public function __construct(
         public bool $negated,
         /**

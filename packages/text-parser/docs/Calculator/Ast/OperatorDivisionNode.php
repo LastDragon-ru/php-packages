@@ -7,7 +7,7 @@ use Override;
 
 use const NAN;
 
-class OperatorDivisionNode extends OperatorNode {
+readonly class OperatorDivisionNode extends OperatorNode {
     #[Override]
     public function priority(): int {
         return 1;

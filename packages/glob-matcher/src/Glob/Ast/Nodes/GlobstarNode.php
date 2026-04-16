@@ -10,8 +10,8 @@ use Override;
 
 use function str_replace;
 
-class GlobstarNode implements Node, GlobNodeChild, NodeMergeable {
-    public function __construct(
+readonly class GlobstarNode implements Node, GlobNodeChild, NodeMergeable {
+    final public function __construct(
         /**
          * @var positive-int
          */
@@ -33,10 +33,9 @@ class GlobstarNode implements Node, GlobNodeChild, NodeMergeable {
     #[Override]
     public static function merge(NodeMergeable $previous, NodeMergeable $current): NodeMergeable {
         if ($previous::class === $current::class) {
-            $previous->count = $previous->count + $current->count;
-            $current         = $previous;
+            $current = new static($previous->count + $current->count);
         }
 
-        return $current;
+        return $current; // @phpstan-ignore return.type (fixme)
     }
 }

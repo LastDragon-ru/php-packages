@@ -18,7 +18,7 @@ use const FILTER_NULL_ON_FAILURE;
 use const FILTER_VALIDATE_INT;
 use const STR_PAD_LEFT;
 
-class IntegerSequenceNode extends IncrementalSequenceNode {
+readonly class IntegerSequenceNode extends IncrementalSequenceNode {
     public function __construct(
         /**
          * @var numeric-string

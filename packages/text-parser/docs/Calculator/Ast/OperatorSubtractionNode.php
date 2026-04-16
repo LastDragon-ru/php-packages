@@ -4,7 +4,7 @@ namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
 
 use Override;
 
-class OperatorSubtractionNode extends OperatorNode {
+readonly class OperatorSubtractionNode extends OperatorNode {
     #[Override]
     public function priority(): int {
         return 0;

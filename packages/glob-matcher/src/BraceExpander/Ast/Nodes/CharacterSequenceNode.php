@@ -10,7 +10,7 @@ use function abs;
 use function mb_chr;
 use function mb_ord;
 
-class CharacterSequenceNode extends IncrementalSequenceNode {
+readonly class CharacterSequenceNode extends IncrementalSequenceNode {
     public function __construct(
         /**
          * @var non-empty-string

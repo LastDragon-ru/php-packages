@@ -10,7 +10,7 @@ use Override;
 
 use function preg_quote;
 
-class StringNode extends NodeString implements Node, NameNodeChild, CharacterNodeChild {
+readonly class StringNode extends NodeString implements Node, NameNodeChild, CharacterNodeChild {
     #[Override]
     public static function toRegex(Options $options, Cursor $cursor): string {
         return preg_quote($cursor->node->string);

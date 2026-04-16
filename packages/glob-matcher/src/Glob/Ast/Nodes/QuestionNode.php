@@ -7,7 +7,7 @@ use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
 use LastDragon_ru\GlobMatcher\Glob\Options;
 use Override;
 
-class QuestionNode implements Node, NameNodeChild {
+readonly class QuestionNode implements Node, NameNodeChild {
     public function __construct() {
         // empty
     }
