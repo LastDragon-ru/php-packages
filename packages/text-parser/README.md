@@ -12,7 +12,7 @@ There are several tools to generate full-featured parsers even for PHP[^1]. They
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.5` |  `HEAD`   |
+|  PHP  | `^8.5` |  `HEAD`  ,  `11.0.0`   |
 |  | `^8.4` |   `HEAD ⋯ 9.2.0`   |
 |  | `^8.3` |   `10.3.0 ⋯ 9.2.0`   |
 
@@ -581,7 +581,7 @@ interface Node {
     // empty
 }
 
-class ChildNode extends NodeString implements Node {
+readonly class ChildNode extends NodeString implements Node {
     // empty
 }
 
@@ -601,13 +601,8 @@ class ParentNode implements Node {
  */
 class Factory extends NodeFactory {
     #[Override]
-    protected function onCreate(array $children): ?object {
-        return $children !== [] ? new ParentNode($children) : null;
-    }
-
-    #[Override]
-    protected function onPush(array $children, ?object $node): bool {
-        return true;
+    protected function make(): ?object {
+        return $this->children !== [] ? new ParentNode($this->children) : null;
     }
 }
 

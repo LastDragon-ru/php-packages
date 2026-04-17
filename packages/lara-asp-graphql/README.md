@@ -10,7 +10,7 @@ This package provides highly powerful [`@searchBy`](docs/Directives/@searchBy.md
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.5` |  `HEAD`   |
+|  PHP  | `^8.5` |  `HEAD`  ,  `11.0.0`   |
 |  | `^8.4` |   `HEAD ⋯ 8.0.0`   |
 |  | `^8.3` |   `10.3.0 ⋯ 5.0.0`   |
 |  | `^8.2` |   `7.2.0 ⋯ 2.0.0`   |
@@ -18,7 +18,7 @@ This package provides highly powerful [`@searchBy`](docs/Directives/@searchBy.md
 |  | `^8.0` |   `4.6.0 ⋯ 2.0.0`   |
 |  | `^8.0.0` |   `1.1.2 ⋯ 0.12.0`   |
 |  | `>=8.0.0` |   `0.11.0 ⋯ 0.5.0`   |
-|  Laravel  | `^13.0.0` |  `HEAD`   |
+|  Laravel  | `^13.0.0` |  `HEAD`  ,  `11.0.0`   |
 |  | `^12.0.1` |   `10.3.0 ⋯ 9.0.0`   |
 |  | `^11.0.8` |   `8.1.1 ⋯ 8.0.0`   |
 |  | `^11.0.0` |   `7.2.0 ⋯ 6.2.0`   |
@@ -27,7 +27,7 @@ This package provides highly powerful [`@searchBy`](docs/Directives/@searchBy.md
 |  | `^9.21.0` |   `5.6.0 ⋯ 5.0.0-beta.1`   |
 |  | `^9.0.0` |   `5.0.0-beta.0 ⋯ 0.12.0`   |
 |  | `^8.22.1` |   `3.0.0 ⋯ 0.5.0`   |
-|  Lighthouse  | `^6.66.0` |  `HEAD`   |
+|  Lighthouse  | `^6.66.0` |  `HEAD`  ,  `11.0.0`   |
 |  | `^6.54.0` |   `10.3.0 ⋯ 9.0.0`   |
 |  | `^6.36.0` |   `8.1.1 ⋯ 8.0.0`   |
 |  | `^6.5.0` |   `7.2.0 ⋯ 5.0.0-beta.0`   |

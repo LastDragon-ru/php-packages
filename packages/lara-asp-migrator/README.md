@@ -14,7 +14,7 @@ This package improves standard Laravel migrations to add support for raw SQL fil
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.5` |  `HEAD`   |
+|  PHP  | `^8.5` |  `HEAD`  ,  `11.0.0`   |
 |  | `^8.4` |   `HEAD ⋯ 8.0.0`   |
 |  | `^8.3` |   `10.3.0 ⋯ 5.0.0`   |
 |  | `^8.2` |   `7.2.0 ⋯ 2.0.0`   |
@@ -23,7 +23,7 @@ This package improves standard Laravel migrations to add support for raw SQL fil
 |  | `^8.0.0` |   `1.1.2 ⋯ 0.12.0`   |
 |  | `>=8.0.0` |   `0.11.0 ⋯ 0.4.0`   |
 |  | `>=7.4.0` |   `0.3.0 ⋯ 0.1.0`   |
-|  Laravel  | `^13.0.0` |  `HEAD`   |
+|  Laravel  | `^13.0.0` |  `HEAD`  ,  `11.0.0`   |
 |  | `^12.0.1` |   `10.3.0 ⋯ 9.0.0`   |
 |  | `^11.0.8` |   `8.1.1 ⋯ 8.0.0`   |
 |  | `^11.0.0` |   `7.2.0 ⋯ 6.2.0`   |

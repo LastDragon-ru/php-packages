@@ -10,13 +10,13 @@ The package allows you to print GraphQL Schema and Queries in a highly customize
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.5` |  `HEAD`   |
+|  PHP  | `^8.5` |  `HEAD`  ,  `11.0.0`   |
 |  | `^8.4` |   `HEAD ⋯ 8.0.0`   |
 |  | `^8.3` |   `10.3.0 ⋯ 5.0.0`   |
 |  | `^8.2` |   `7.2.0 ⋯ 3.0.0`   |
 |  | `^8.1` |   `6.4.2 ⋯ 3.0.0`   |
 |  | `^8.0` |   `4.6.0 ⋯ 3.0.0`   |
-|  `webonyx/graphql-php`  | `^15.31.5` |  `HEAD`   |
+|  `webonyx/graphql-php`  | `^15.31.5` |  `HEAD`  ,  `11.0.0`   |
 |  | `^15.4.0` |   `10.3.0 ⋯ 4.2.1`   |
 |  | `^15.2.4` |   `4.2.0 ⋯ 4.0.0`   |
 |  | `^14.11.9` |  `3.0.0`   |

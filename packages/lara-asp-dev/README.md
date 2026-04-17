@@ -10,7 +10,7 @@ Various internal tools and helpers to develop the package itself.
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.5` |  `HEAD`   |
+|  PHP  | `^8.5` |  `HEAD`  ,  `11.0.0`   |
 |  | `^8.4` |   `HEAD ⋯ 8.0.0`   |
 |  | `^8.3` |   `10.3.0 ⋯ 6.2.0`   |
 |  | `^8.2` |   `7.2.0 ⋯ 6.2.0`   |
