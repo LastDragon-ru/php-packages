@@ -2,9 +2,7 @@
 
 namespace LastDragon_ru\TextParser\Ast;
 
-use Override;
-
-readonly class NodeString implements NodeMergeable {
+readonly class NodeString {
     final public function __construct(
         /**
          * @var non-empty-string
@@ -12,14 +10,5 @@ readonly class NodeString implements NodeMergeable {
         public string $string,
     ) {
         // empty
-    }
-
-    #[Override]
-    public static function merge(NodeMergeable $previous, NodeMergeable $current): NodeMergeable {
-        if ($previous::class === $current::class) {
-            $current = new static($previous->string.$current->string);
-        }
-
-        return $current; // @phpstan-ignore return.type (fixme)
     }
 }

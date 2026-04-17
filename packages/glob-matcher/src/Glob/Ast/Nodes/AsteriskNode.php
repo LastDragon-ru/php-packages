@@ -5,10 +5,9 @@ namespace LastDragon_ru\GlobMatcher\Glob\Ast\Nodes;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
 use LastDragon_ru\GlobMatcher\Glob\Options;
-use LastDragon_ru\TextParser\Ast\NodeMergeable;
 use Override;
 
-readonly class AsteriskNode implements Node, NameNodeChild, NodeMergeable {
+readonly class AsteriskNode implements Node, NameNodeChild {
     final public function __construct(
         /**
          * @var positive-int
@@ -21,15 +20,6 @@ readonly class AsteriskNode implements Node, NameNodeChild, NodeMergeable {
     #[Override]
     public static function toRegex(Options $options, Cursor $cursor): string {
         return '[^/]*?'.(self::isLast($cursor) ? '/?' : '');
-    }
-
-    #[Override]
-    public static function merge(NodeMergeable $previous, NodeMergeable $current): NodeMergeable {
-        if ($previous::class === $current::class) {
-            $current = new static($previous->count + $current->count);
-        }
-
-        return $current; // @phpstan-ignore return.type (fixme)
     }
 
     /**

@@ -15,12 +15,7 @@ use function count;
  */
 class SequenceNodeFactory extends NodeFactory {
     #[Override]
-    protected function onCreate(array $children): ?object {
-        return count($children) > 1 ? new SequenceNode($children) : null;
-    }
-
-    #[Override]
-    protected function onPush(array $children, ?object $node): bool {
-        return true;
+    protected function make(): ?object {
+        return count($this->children) > 1 ? new SequenceNode($this->children) : null;
     }
 }

@@ -34,13 +34,8 @@ class ParentNode implements Node {
  */
 class Factory extends NodeFactory {
     #[Override]
-    protected function onCreate(array $children): ?object {
-        return $children !== [] ? new ParentNode($children) : null;
-    }
-
-    #[Override]
-    protected function onPush(array $children, ?object $node): bool {
-        return true;
+    protected function make(): ?object {
+        return $this->children !== [] ? new ParentNode($this->children) : null;
     }
 }
 

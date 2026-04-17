@@ -233,7 +233,7 @@ class Parser {
 
         while ($iterable->valid()) {
             // End?
-            if ($iterable[0]?->is(Name::RightSquareBracket) === true && !$factory->isEmpty()) {
+            if ($iterable[0]?->is(Name::RightSquareBracket) === true && !$factory->empty) {
                 $node = $factory->create();
 
                 $iterable->next();

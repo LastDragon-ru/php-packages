@@ -22,10 +22,6 @@ final class AsteriskNodeTest extends TestCase {
     public function testToRegex(string $expected, Cursor $cursor, Options $options): void {
         self::assertSame($expected, AsteriskNode::toRegex($options, $cursor));
     }
-
-    public function testMerge(): void {
-        self::assertEquals(new AsteriskNode(3), AsteriskNode::merge(new AsteriskNode(1), new AsteriskNode(2)));
-    }
     // </editor-fold>
 
     // <editor-fold desc="DataProvider">

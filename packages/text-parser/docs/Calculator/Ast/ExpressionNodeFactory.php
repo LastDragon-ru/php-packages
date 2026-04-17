@@ -13,20 +13,20 @@ use function array_last;
  */
 class ExpressionNodeFactory extends NodeFactory {
     #[Override]
-    protected function onCreate(array $children): ?object {
+    protected function make(): ?object {
         // Expression cannot be empty
-        return $children !== [] ? new ExpressionNode($children) : null;
+        return $this->children !== [] ? new ExpressionNode($this->children) : null;
     }
 
     #[Override]
-    protected function onPush(array $children, ?object $node): bool {
+    protected function valid(object $node): bool {
         // Operator is always allowed
         if ($node instanceof OperatorNode) {
             return true;
         }
 
         // Other nodes must be separated by any Operator
-        $previous = array_last($children);
+        $previous = array_last($this->children);
         $valid    = $previous === null || $previous instanceof OperatorNode;
 
         if (!$valid) {
