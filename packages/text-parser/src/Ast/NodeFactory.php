@@ -2,12 +2,10 @@
 
 namespace LastDragon_ru\TextParser\Ast;
 
-use function array_key_last;
 use function array_last;
+use function array_pop;
 
 /**
- * @see NodeMergeable
- *
  * @template TParent of object
  * @template TChild of object
  */
@@ -15,71 +13,81 @@ abstract class NodeFactory {
     /**
      * @var list<covariant TChild>
      */
-    private array $children = [];
+    protected array $children = [];
 
     public function __construct() {
         // empty
     }
 
-    public function isEmpty(): bool {
-        return $this->children === [];
+    public bool $empty {
+        get => $this->children === [];
     }
 
     /**
      * @return ?TParent
      */
     public function create(): ?object {
-        $node           = $this->onCreate($this->children);
+        $node           = $this->make();
         $this->children = [];
 
         return $node;
     }
 
     /**
-     * @param list<TChild> $children
-     *
      * @return ?TParent
      */
-    abstract protected function onCreate(array $children): ?object;
+    abstract protected function make(): ?object;
 
     /**
      * @param ?TChild $node
      */
     public function push(?object $node): bool {
-        // Null? Skip
-        if ($node === null) {
+        // Null/Invalid? Skip
+        if ($node === null || !$this->valid($node)) {
             return false;
         }
 
-        // Same?
-        $key      = null;
+        // Merge?
         $previous = array_last($this->children);
 
-        if ($previous instanceof NodeMergeable && $previous instanceof $node && $node instanceof $previous) {
-            $key  = array_key_last($this->children);
-            $node = $node::merge($previous, $node);
-        }
+        if ($previous instanceof $node && $node instanceof $previous) {
+            $new = $this->merge($node, $previous);
 
-        // Allowed?
-        if (!$this->onPush($this->children, $node)) {
-            return false;
+            if ($new !== $node) {
+                array_pop($this->children);
+
+                $node = $new;
+            }
         }
 
         // Push
-        if ($key !== null && isset($this->children[$key])) {
-            $this->children[$key] = $node;
-        } else {
-            $this->children[] = $node;
-        }
+        $this->children[] = $node;
 
         // Return
         return true;
     }
 
     /**
-     * @param list<TChild> $children
-     * @param ?TChild      $node
-     *
+     * @param TChild $node
      */
-    abstract protected function onPush(array $children, ?object $node): bool;
+    protected function valid(object $node): bool {
+        return true;
+    }
+
+    /**
+     * @param TChild $node
+     * @param TChild $previous
+     *
+     * @return new<TChild>
+     */
+    protected function merge(object $node, object $previous): object {
+        $class = $node::class;
+
+        return match (true) {
+            $node instanceof NodeString && $previous instanceof NodeString
+                => new $class($previous->string.$node->string),
+            default
+                => $node,
+        };
+    }
 }

@@ -2,16 +2,16 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob\Ast\Factories;
 
+use LastDragon_ru\GlobMatcher\Glob\Ast\Factory;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterNode;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterNodeChild;
-use LastDragon_ru\TextParser\Ast\NodeFactory;
 use Override;
 
 /**
- * @extends NodeFactory<CharacterNode, Node&CharacterNodeChild>
+ * @extends Factory<CharacterNode, Node&CharacterNodeChild>
  */
-class CharacterNodeFactory extends NodeFactory {
+class CharacterNodeFactory extends Factory {
     public function __construct(
         protected bool $negated,
     ) {
@@ -19,12 +19,7 @@ class CharacterNodeFactory extends NodeFactory {
     }
 
     #[Override]
-    protected function onCreate(array $children): ?object {
-        return $children !== [] ? new CharacterNode($this->negated, $children) : null;
-    }
-
-    #[Override]
-    protected function onPush(array $children, ?object $node): bool {
-        return true;
+    protected function make(): ?object {
+        return $this->children !== [] ? new CharacterNode($this->negated, $this->children) : null;
     }
 }

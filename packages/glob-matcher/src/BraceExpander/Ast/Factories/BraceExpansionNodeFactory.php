@@ -13,12 +13,7 @@ use Override;
  */
 class BraceExpansionNodeFactory extends NodeFactory {
     #[Override]
-    protected function onCreate(array $children): ?object {
-        return new BraceExpansionNode($children);
-    }
-
-    #[Override]
-    protected function onPush(array $children, ?object $node): bool {
-        return true;
+    protected function make(): ?object {
+        return new BraceExpansionNode($this->children);
     }
 }

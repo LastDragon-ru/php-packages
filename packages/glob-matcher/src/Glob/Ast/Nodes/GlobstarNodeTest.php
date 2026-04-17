@@ -19,10 +19,6 @@ final class GlobstarNodeTest extends TestCase {
     public function testToRegex(string $expected, GlobstarNode $node, Options $options): void {
         self::assertSame($expected, $node::toRegex($options, new Cursor($node)));
     }
-
-    public function testMerge(): void {
-        self::assertEquals(new GlobstarNode(3), GlobstarNode::merge(new GlobstarNode(1), new GlobstarNode(2)));
-    }
     // </editor-fold>
 
     // <editor-fold desc="DataProvider">

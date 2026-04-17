@@ -2,17 +2,17 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob\Ast\Factories;
 
+use LastDragon_ru\GlobMatcher\Glob\Ast\Factory;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\PatternListNode;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\PatternListNodeChild;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\PatternListQuantifier;
-use LastDragon_ru\TextParser\Ast\NodeFactory;
 use Override;
 
 /**
- * @extends NodeFactory<PatternListNode, Node&PatternListNodeChild>
+ * @extends Factory<PatternListNode, Node&PatternListNodeChild>
  */
-class PatternListNodeFactory extends NodeFactory {
+class PatternListNodeFactory extends Factory {
     public function __construct(
         protected PatternListQuantifier $quantifier,
     ) {
@@ -20,12 +20,7 @@ class PatternListNodeFactory extends NodeFactory {
     }
 
     #[Override]
-    protected function onCreate(array $children): ?object {
-        return new PatternListNode($this->quantifier, $children);
-    }
-
-    #[Override]
-    protected function onPush(array $children, ?object $node): bool {
-        return true;
+    protected function make(): ?object {
+        return new PatternListNode($this->quantifier, $this->children);
     }
 }

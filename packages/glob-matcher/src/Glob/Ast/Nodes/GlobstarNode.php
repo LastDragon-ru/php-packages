@@ -5,12 +5,11 @@ namespace LastDragon_ru\GlobMatcher\Glob\Ast\Nodes;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
 use LastDragon_ru\GlobMatcher\Glob\Options;
-use LastDragon_ru\TextParser\Ast\NodeMergeable;
 use Override;
 
 use function str_replace;
 
-readonly class GlobstarNode implements Node, GlobNodeChild, NodeMergeable {
+readonly class GlobstarNode implements Node, GlobNodeChild {
     final public function __construct(
         /**
          * @var positive-int
@@ -28,14 +27,5 @@ readonly class GlobstarNode implements Node, GlobNodeChild, NodeMergeable {
         $regex = "(?:(?<=^|/)(?:{$name}[^/]*?)(?:(?:/|$)|(?=/|$)))*?";
 
         return $regex;
-    }
-
-    #[Override]
-    public static function merge(NodeMergeable $previous, NodeMergeable $current): NodeMergeable {
-        if ($previous::class === $current::class) {
-            $current = new static($previous->count + $current->count);
-        }
-
-        return $current; // @phpstan-ignore return.type (fixme)
     }
 }
