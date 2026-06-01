@@ -1975,6 +1975,12 @@ parameters:
 			path: packages/lara-asp-testing/src/Utils/Args.php
 
 		-
+			rawMessage: 'Call to static method PHPUnit\Framework\Assert::assertSame() with array{message: mixed, ...<string, mixed>} and array{message: string, expected: mixed, actual: mixed} will always evaluate to false.'
+			identifier: staticMethod.impossibleType
+			count: 1
+			path: packages/phpunit-extensions/src/Filesystem/Constraints/DirectoryEqualsTest.php
+
+		-
 			rawMessage: 'Property LastDragon_ru\TextParser\Iterables\BufferedIterable<TValue>::$iterator (Iterator<mixed, TValue>) does not accept (iterable<TValue>&Iterator)|IteratorIterator<mixed, mixed, Traversable<TKey, TValue>>.'
 			identifier: assign.propertyType
 			count: 1
