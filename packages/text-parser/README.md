@@ -12,7 +12,7 @@ There are several tools to generate full-featured parsers even for PHP[^1]. They
 
 | Requirement  | Constraint          | Supported by |
 |--------------|---------------------|------------------|
-|  PHP  | `^8.5` |  `HEAD`  ,  `11.0.0`   |
+|  PHP  | `^8.5` |   `HEAD ⋯ 11.0.0`   |
 |  | `^8.4` |   `HEAD ⋯ 9.2.0`   |
 |  | `^8.3` |   `10.3.0 ⋯ 9.2.0`   |
 
