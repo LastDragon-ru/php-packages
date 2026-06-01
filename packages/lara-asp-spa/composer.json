@@ -30,7 +30,7 @@
     "illuminate/validation": "^13.10.0",
     "guzzlehttp/psr7": "^2.6.3",
     "lastdragon-ru/lara-asp-core": "self.version",
-    "symfony/http-kernel": "^8.0.0",
+    "symfony/http-kernel": "^8.0.13",
     "symfony/polyfill-php85": "^1.33.0"
   },
   "require-dev": {
