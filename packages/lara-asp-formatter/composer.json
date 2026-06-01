@@ -22,8 +22,8 @@
     "ext-bcmath": "*",
     "ext-intl": "*",
     "ext-mbstring": "*",
-    "illuminate/macroable": "^13.0.0",
-    "illuminate/support": "^13.0.0",
+    "illuminate/macroable": "^13.10.0",
+    "illuminate/support": "^13.10.0",
     "lastdragon-ru/lara-asp-core": "self.version"
   },
   "require-dev": {

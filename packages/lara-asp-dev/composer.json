@@ -20,9 +20,9 @@
   "require": {
     "php": "^8.4|^8.5",
     "ext-mbstring": "*",
-    "illuminate/container": "^13.0.0",
-    "illuminate/contracts": "^13.0.0",
-    "illuminate/support": "^13.0.0",
+    "illuminate/container": "^13.10.0",
+    "illuminate/contracts": "^13.10.0",
+    "illuminate/support": "^13.10.0",
     "lastdragon-ru/lara-asp-core": "self.version",
     "lastdragon-ru/lara-asp-documentator": "self.version",
     "lastdragon-ru/path": "self.version",

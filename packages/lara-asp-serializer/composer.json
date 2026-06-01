@@ -20,9 +20,9 @@
   },
   "require": {
     "php": "^8.4|^8.5",
-    "illuminate/contracts": "^13.0.0",
-    "illuminate/database": "^13.0.0",
-    "illuminate/support": "^13.0.0",
+    "illuminate/contracts": "^13.10.0",
+    "illuminate/database": "^13.10.0",
+    "illuminate/support": "^13.10.0",
     "lastdragon-ru/lara-asp-core": "self.version",
     "lastdragon-ru/path": "self.version",
     "phpdocumentor/type-resolver": "^1.10.0|^2.0.0",
