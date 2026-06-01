@@ -186,7 +186,7 @@ class Factory {
             SerializableNormalizer::class => (new SerializableNormalizerContextBuilder())
                 ->withDisableTypeEnforcement(false)
                 ->withSkipNullValues(false)
-                ->withSkipUninitializedValues(true)
+                ->withSkipUninitializedValues(false)
                 ->withPreserveEmptyObjects(true)
                 ->withAllowExtraAttributes(false)
                 ->toArray(),
