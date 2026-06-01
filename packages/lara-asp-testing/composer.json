@@ -43,7 +43,7 @@
     "symfony/console": "^8.0.4",
     "symfony/http-foundation": "^8.0.13",
     "symfony/mime": "^8.0.12",
-    "symfony/polyfill-php85": "^1.33.0",
+    "symfony/polyfill-php85": "^1.36.0",
     "symfony/psr-http-message-bridge": "^8.0.0"
   },
   "require-dev": {

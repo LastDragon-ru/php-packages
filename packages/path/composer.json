@@ -19,7 +19,7 @@
   "require": {
     "php": "^8.4|^8.5",
     "ext-mbstring": "*",
-    "symfony/polyfill-php85": "^1.33.0"
+    "symfony/polyfill-php85": "^1.36.0"
   },
   "require-dev": {
     "lastdragon-ru/phpunit-extensions": "self.version",

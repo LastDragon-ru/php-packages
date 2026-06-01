@@ -35,7 +35,7 @@
     "lastdragon-ru/lara-asp-eloquent": "self.version",
     "lastdragon-ru/lara-asp-serializer": "self.version",
     "lastdragon-ru/graphql-printer": "self.version",
-    "symfony/polyfill-php85": "^1.33.0",
+    "symfony/polyfill-php85": "^1.36.0",
     "webonyx/graphql-php": "^15.31.5"
   },
   "require-dev": {
