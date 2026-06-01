@@ -21,7 +21,7 @@
     "ext-filter": "*",
     "ext-mbstring": "*",
     "lastdragon-ru/text-parser": "self.version",
-    "symfony/polyfill-php85": "^1.33.0"
+    "symfony/polyfill-php85": "^1.36.0"
   },
   "require-dev": {
     "lastdragon-ru/phpunit-extensions": "self.version",
