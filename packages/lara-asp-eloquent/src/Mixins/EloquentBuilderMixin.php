@@ -7,17 +7,24 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use LastDragon_ru\LaraASP\Eloquent\Iterators\ChunkedChangeSafeIterator;
 use LastDragon_ru\LaraASP\Eloquent\Iterators\ChunkedIterator;
+use SortDirection;
+
+use function assert;
 
 /**
  * Eloquent builder mixin.
  */
 class EloquentBuilderMixin {
     /**
-     * @return Closure(string=): Builder<Model>
+     * @return Closure('asc'|'desc'|SortDirection=): Builder<Model>
      */
     public function orderByKey(): Closure {
-        return function (string $direction = 'asc'): Builder {
+        return function (SortDirection|string $direction = 'asc'): Builder {
             /** @var Builder<Model> $this */
+            // todo(lara-asp-eloquent): remove `assert()`, blocked by https://github.com/phpstan/phpstan/issues/3770
+
+            assert($direction === 'asc' || $direction === 'desc' || $direction instanceof SortDirection);
+
             return $this->orderBy($this->qualifyColumn($this->getModel()->getKeyName()), $direction);
         };
     }

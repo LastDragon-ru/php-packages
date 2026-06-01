@@ -122,10 +122,10 @@ abstract class DatabaseSorter implements Sorter {
                 // `CASE WHEN` works everywhere... while `column IS (NOT) NULL`
                 // doesn't work in SQL Server 🤷‍♂️
                 $builder->orderByRaw("CASE WHEN {$wrapped} {$operator} THEN 1 ELSE 0 END");
-                $builder->orderBy($column, $direction->value);
+                $builder->orderBy($column, $this->direction($direction));
             }
         } else {
-            $builder->orderBy($column, $direction->value);
+            $builder->orderBy($column, $this->direction($direction));
         }
 
         // Return
@@ -184,5 +184,15 @@ abstract class DatabaseSorter implements Sorter {
             || $grammar instanceof SQLiteGrammar;
 
         return $orderable;
+    }
+
+    /**
+     * @return 'asc'|'desc'
+     */
+    private function direction(Direction $direction): string {
+        return match ($direction) {
+            Direction::Asc  => 'asc',
+            Direction::Desc => 'desc',
+        };
     }
 }

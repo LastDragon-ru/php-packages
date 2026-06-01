@@ -11,6 +11,7 @@ use LastDragon_ru\LaraASP\Eloquent\Package\Models\TestObject;
 use LastDragon_ru\LaraASP\Eloquent\Package\Models\WithTestObject;
 use LastDragon_ru\LaraASP\Eloquent\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use SortDirection;
 
 /**
  * @internal
@@ -59,6 +60,7 @@ final class EloquentBuilderMixinTest extends TestCase {
 
         self::assertEquals([$a, $b], TestObject::query()->orderByKey()->get()->all());
         self::assertEquals([$b, $a], TestObject::query()->orderByKey('desc')->get()->all());
+        self::assertEquals([$b, $a], TestObject::query()->orderByKey(SortDirection::Descending)->get()->all());
         self::assertEquals([$b, $a], TestObject::query()->orderByKeyDesc()->get()->all());
     }
 }

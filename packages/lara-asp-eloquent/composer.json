@@ -24,7 +24,8 @@
     "illuminate/database": "^13.0.0",
     "illuminate/support": "^13.0.0",
     "lastdragon-ru/lara-asp-core": "self.version",
-    "symfony/polyfill-php85": "^1.33.0"
+    "symfony/polyfill-php85": "^1.33.0",
+    "symfony/polyfill-php86": "^1.38.0"
   },
   "require-dev": {
     "illuminate/contracts": "^13.0.0",
