@@ -25,12 +25,12 @@
     "ext-mbstring": "*",
     "doctrine/sql-formatter": "^1.1.0",
     "fakerphp/faker": "^1.21.0",
-    "illuminate/collections": "^13.0.0",
-    "illuminate/console": "^13.0.0",
-    "illuminate/contracts": "^13.0.0",
-    "illuminate/database": "^13.0.0",
-    "illuminate/testing": "^13.0.0",
-    "illuminate/translation": "^13.0.0",
+    "illuminate/collections": "^13.10.0",
+    "illuminate/console": "^13.10.0",
+    "illuminate/contracts": "^13.10.0",
+    "illuminate/database": "^13.10.0",
+    "illuminate/testing": "^13.10.0",
+    "illuminate/translation": "^13.10.0",
     "lastdragon-ru/path": "self.version",
     "lastdragon-ru/phpunit-extensions": "self.version",
     "lastdragon-ru/phpunit-xml": "self.version",
@@ -47,7 +47,7 @@
     "symfony/psr-http-message-bridge": "^8.0.0"
   },
   "require-dev": {
-    "illuminate/http": "^13.0.0",
+    "illuminate/http": "^13.10.0",
     "laravel/scout": "^11.0.0",
     "orchestra/testbench": "^11.0.0"
   },
