@@ -57,7 +57,7 @@
     "symfony/filesystem": "^8.0.0",
     "symfony/finder": "^8.0.0",
     "symfony/http-foundation": "^8.0.13",
-    "symfony/http-kernel": "^8.0.0",
+    "symfony/http-kernel": "^8.0.13",
     "symfony/mime": "^8.0.0",
     "symfony/polyfill-php85": "^1.33.0",
     "symfony/polyfill-php86": "^1.38.0",
