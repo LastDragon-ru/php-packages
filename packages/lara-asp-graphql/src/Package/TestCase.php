@@ -79,9 +79,7 @@ abstract class TestCase extends PackageTestCase {
     }
 
     /**
-     * @template M of EloquentModel
-     *
-     * @param QueryBuilder|EloquentBuilder<M>|ScoutBuilder<M> $builder
+     * @param QueryBuilder|EloquentBuilder<EloquentModel>|ScoutBuilder<EloquentModel> $builder
      */
     protected function getExposeBuilderDirective(
         QueryBuilder|EloquentBuilder|ScoutBuilder $builder,

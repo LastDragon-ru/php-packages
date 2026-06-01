@@ -74,7 +74,7 @@ final class ScoutTest extends TestCase {
         self::assertQueryLogEquals(
             [
                 [
-                    'query'    => 'select count(*) as aggregate from "test_objects"',
+                    'query'    => 'select count(*) as "aggregate" from "test_objects"',
                     'bindings' => [],
                 ],
                 [
@@ -110,7 +110,7 @@ final class ScoutTest extends TestCase {
         self::assertQueryLogEquals(
             [
                 [
-                    'query'    => 'select count(*) as aggregate from "test_objects"',
+                    'query'    => 'select count(*) as "aggregate" from "test_objects"',
                     'bindings' => [],
                 ],
                 [

@@ -73,10 +73,6 @@ parameters:
             paths:
                 - packages/lara-asp-graphql/src/Stream/Directives/Directive.php
         -
-            message: '#^Parameter \#2 \$builder of class LastDragon_ru\\LaraASP\\GraphQL\\Stream\\Exceptions\\BuilderUnsupported constructor expects class-string, mixed given\.$#'
-            paths:
-                - packages/lara-asp-graphql/src/Stream/Directives/Directive.php
-        -
             message: '#^Parameter \#5 \$args of method LastDragon_ru\\LaraASP\\GraphQL\\Stream\\Directives\\Directive::getFieldValue\(\) expects array<string, mixed>, array given\.$#'
             paths:
                 - packages/lara-asp-graphql/src/Stream/Directives/Directive.php

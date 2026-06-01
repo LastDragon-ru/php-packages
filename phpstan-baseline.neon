@@ -37,6 +37,18 @@ parameters:
 			path: packages/lara-asp-core/src/Observer/DispatcherTest.php
 
 		-
+			rawMessage: 'Parameter #1 $class of method LastDragon_ru\LaraASP\Documentator\Processor\Utils\Instances<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>>::add() expects class-string<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>>, class-string<I of LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<P of LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>> given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-documentator/src/Processor/Tasks/Preprocess/Task.php
+
+		-
+			rawMessage: 'Parameter #1 $class of method LastDragon_ru\LaraASP\Documentator\Processor\Utils\Instances<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>>::remove() expects class-string<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>>, class-string<I of LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<P of LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>> given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-documentator/src/Processor/Tasks/Preprocess/Task.php
+
+		-
 			rawMessage: 'Parameter #1 $offset of method LastDragon_ru\LaraASP\Eloquent\Iterators\IteratorImpl<TItem of Illuminate\Database\Eloquent\Model>::setOffset() expects int|string|null, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -1777,6 +1789,12 @@ parameters:
 			path: packages/lara-asp-graphql/src/SortBy/Sorters/DatabaseSorterTest.php
 
 		-
+			rawMessage: 'Parameter #1 $query of method Illuminate\Database\Eloquent\Builder<T of Illuminate\Database\Eloquent\Model>::joinSub() expects Closure|Illuminate\Database\Eloquent\Builder<*>|Illuminate\Database\Query\Builder|string, mixed given.'
+			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SortBy/Sorters/EloquentSorter.php
+
+		-
 			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\GraphQL\SortBy\Sorters\EloquentSorterTest::testSort() expects array{query: string, bindings: array<mixed>}|Exception, mixed given.'
 			identifier: argument.type
 			count: 1
@@ -1865,36 +1883,6 @@ parameters:
 			identifier: method.protected
 			count: 2
 			path: packages/lara-asp-graphql/src/Stream/Directives/DirectiveTest.php
-
-		-
-			rawMessage: 'Method LastDragon_ru\LaraASP\GraphQL\Stream\Streams\Database::getCollection() should return Illuminate\Support\Collection<(int|string), Illuminate\Database\Eloquent\Model|stdClass> but returns Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>|Illuminate\Support\Collection<(int|string), Illuminate\Database\Eloquent\Model|stdClass>.'
-			identifier: return.type
-			count: 1
-			path: packages/lara-asp-graphql/src/Stream/Streams/Database.php
-
-		-
-			rawMessage: 'Property LastDragon_ru\LaraASP\GraphQL\Stream\Streams\Database::$collection (Illuminate\Support\Collection<(int|string), Illuminate\Database\Eloquent\Model|stdClass>|null) does not accept Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>.'
-			identifier: assign.propertyType
-			count: 1
-			path: packages/lara-asp-graphql/src/Stream/Streams/Database.php
-
-		-
-			rawMessage: 'Property LastDragon_ru\LaraASP\GraphQL\Stream\Streams\Database::$collection (Illuminate\Support\Collection<(int|string), Illuminate\Database\Eloquent\Model|stdClass>|null) is never assigned Illuminate\Support\Collection<(int|string), Illuminate\Database\Eloquent\Model|stdClass> so it can be removed from the property type.'
-			identifier: property.unusedType
-			count: 1
-			path: packages/lara-asp-graphql/src/Stream/Streams/Database.php
-
-		-
-			rawMessage: 'Call to method getName() of internal interface Symfony\Component\Serializer\Mapping\AttributeMetadataInterface from outside its root namespace Symfony.'
-			identifier: method.internalInterface
-			count: 1
-			path: packages/lara-asp-serializer/src/Normalizers/SerializableNormalizer.php
-
-		-
-			rawMessage: 'Return type of method LastDragon_ru\LaraASP\Serializer\Normalizers\SerializableNormalizer::getAllowedAttributes() has typehint with internal interface Symfony\Component\Serializer\Mapping\AttributeMetadataInterface.'
-			identifier: return.internalInterface
-			count: 1
-			path: packages/lara-asp-serializer/src/Normalizers/SerializableNormalizer.php
 
 		-
 			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\Spa\Http\Controllers\SpaControllerTest::testSettings() expects LastDragon_ru\LaraASP\Testing\Constraints\Response\Response, mixed given.'

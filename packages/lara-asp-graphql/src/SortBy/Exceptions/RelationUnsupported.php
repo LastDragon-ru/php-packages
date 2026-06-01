@@ -10,7 +10,7 @@ use function sprintf;
 
 class RelationUnsupported extends SortByException {
     /**
-     * @param class-string<Relation<Model, covariant Model, mixed>> $class
+     * @param class-string<Relation<covariant Model, covariant Model, mixed>> $class
      */
     public function __construct(
         protected string $class,
@@ -26,7 +26,7 @@ class RelationUnsupported extends SortByException {
     }
 
     /**
-     * @return class-string<Relation<Model, covariant Model, mixed>>
+     * @return class-string<Relation<covariant Model, covariant Model, mixed>>
      */
     public function getClass(): string {
         return $this->class;
