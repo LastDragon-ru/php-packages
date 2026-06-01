@@ -18,7 +18,7 @@ use function max;
  */
 class Database extends Stream {
     /**
-     * @var Collection<array-key, EloquentModel|stdClass>|null
+     * @var Collection<array-key, covariant EloquentModel|stdClass>|null
      */
     private ?Collection $collection = null;
 
@@ -58,7 +58,7 @@ class Database extends Stream {
     }
 
     /**
-     * @return Collection<array-key, EloquentModel|stdClass>
+     * @return Collection<array-key, covariant EloquentModel|stdClass>
      */
     protected function getCollection(): Collection {
         if ($this->collection === null) {

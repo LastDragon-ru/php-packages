@@ -81,7 +81,7 @@ final class DatabaseTest extends TestCase {
         self::assertQueryLogEquals(
             [
                 [
-                    'query'    => 'select count(*) as aggregate from "test_objects"',
+                    'query'    => 'select count(*) as "aggregate" from "test_objects"',
                     'bindings' => [],
                 ],
             ],

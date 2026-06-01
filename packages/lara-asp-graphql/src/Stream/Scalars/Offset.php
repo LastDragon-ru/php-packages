@@ -116,6 +116,8 @@ class Offset extends ScalarType {
      * @param class-string<Exception>           $error
      *
      * @phpstan-assert StreamOffset|int<0, max> $value
+     *
+     * @return StreamOffset|int<0, max>
      */
     protected function validate(mixed $value, string $error): StreamOffset|int {
         if ($value instanceof StreamOffset) {

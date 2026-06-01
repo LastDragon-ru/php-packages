@@ -164,10 +164,10 @@ final class TransactionalIterableTest extends TestCase {
         // Top level
         $top = [];
 
-        foreach ($iterable as $value) {
-            $top[] = $value;
+        foreach ($iterable as $topValue) {
+            $top[] = $topValue;
 
-            if ($value === 'b') {
+            if ($topValue === 'b') {
                 break;
             }
         }
@@ -179,10 +179,10 @@ final class TransactionalIterableTest extends TestCase {
         // No Rewind
         $rewind = [];
 
-        foreach ($iterable as $value) {
-            $rewind[] = $value;
+        foreach ($iterable as $rewindValue) {
+            $rewind[] = $rewindValue;
 
-            if ($value === 'd') {
+            if ($rewindValue === 'd') {
                 break;
             }
         }
@@ -196,8 +196,8 @@ final class TransactionalIterableTest extends TestCase {
 
         $iterable->begin();
 
-        foreach ($iterable as $value) {
-            $transaction[] = $value;
+        foreach ($iterable as $transactionValue) {
+            $transaction[] = $transactionValue;
         }
 
         $iterable->rollback();
@@ -209,8 +209,8 @@ final class TransactionalIterableTest extends TestCase {
         // Rest
         $rest = [];
 
-        foreach ($iterable as $value) {
-            $rest[] = $value;
+        foreach ($iterable as $restValue) {
+            $rest[] = $restValue;
         }
 
         self::assertSame(['d', 'e', 'f', 'g'], $rest);
