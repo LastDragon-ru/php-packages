@@ -8,6 +8,8 @@ use LastDragon_ru\LaraASP\Serializer\Contracts\Serializable;
 use LastDragon_ru\LaraASP\Serializer\Exceptions\PartialUnserializable;
 use LastDragon_ru\LaraASP\Serializer\Metadata\MetadataFactory;
 use Override;
+use ReflectionProperty;
+use Symfony\Component\PropertyAccess\Exception\UninitializedPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -21,6 +23,7 @@ use function is_a;
 use function is_array;
 use function is_object;
 use function is_string;
+use function sprintf;
 
 /**
  * Special serializer for {@see Serializable}.
@@ -175,9 +178,21 @@ class SerializableNormalizer extends AbstractObjectNormalizer {
         ?string $format = null,
         array $context = [],
     ): mixed {
-        return $this->isDiscriminator($object::class, $attribute)
-            ? $this->classDiscriminatorResolver?->getTypeForMappedObject($object)
-            : $object->{$attribute};
+        if ($this->isDiscriminator($object::class, $attribute)) {
+            return $this->classDiscriminatorResolver?->getTypeForMappedObject($object);
+        }
+
+        if (!(new ReflectionProperty($object, $attribute))->isInitialized($object)) {
+            throw new UninitializedPropertyException(
+                sprintf(
+                    'The property "%s::$%s" is not initialized.',
+                    $object::class,
+                    $attribute,
+                ),
+            );
+        }
+
+        return $object->{$attribute};
     }
 
     /**

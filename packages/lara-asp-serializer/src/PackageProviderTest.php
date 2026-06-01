@@ -19,6 +19,7 @@ use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Stringable;
+use Symfony\Component\PropertyAccess\Exception\UninitializedPropertyException;
 use Symfony\Component\Serializer\Attribute\DiscriminatorMap;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Serializer\Exception\CircularReferenceException;
@@ -123,24 +124,25 @@ final class PackageProviderTest extends TestCase {
      * @return array<string, array{Exception|string, Serializable}>
      */
     public static function dataProviderSerialization(): array {
-        $path         = new FilePath('path/to/file.md');
-        $object       = new ProviderTest__Class();
-        $invalid      = new class($object) implements Serializable {
+        $path          = new FilePath('path/to/file.md');
+        $object        = new ProviderTest__Class();
+        $invalid       = new class($object) implements Serializable {
             public function __construct(
                 public ProviderTest__Class $a,
             ) {
                 // empty
             }
         };
-        $datetime     = Carbon::make('2023-08-11T10:45:00');
-        $unitEnum     = ProviderTest__UnitEnum::A;
-        $backedEnum   = ProviderTest__BackedEnum::A;
-        $serializable = new ProviderTest__Simple($datetime, $unitEnum, $backedEnum, $path);
-        $partial      = new ProviderTest__Partial(1, 2);
-        $curcular     = new class() implements Serializable {
+        $datetime      = Carbon::make('2023-08-11T10:45:00');
+        $unitEnum      = ProviderTest__UnitEnum::A;
+        $backedEnum    = ProviderTest__BackedEnum::A;
+        $serializable  = new ProviderTest__Simple($datetime, $unitEnum, $backedEnum, $path);
+        $uninitialized = new ProviderTest__Uninitialized();
+        $partial       = new ProviderTest__Partial(1, 2);
+        $curcular      = new class() implements Serializable {
             public Serializable $a; // @phpstan-ignore-line property.uninitialized (required for tests)
         };
-        $curcular->a  = $curcular;
+        $curcular->a   = $curcular;
 
         return [
             'empty object'                    => [
@@ -151,6 +153,7 @@ final class PackageProviderTest extends TestCase {
                 <<<'JSON'
                 {
                     "a": 123,
+                    "b": true,
                     "e": "2023-08-11T10:45:00.000+00:00",
                     "f": "A",
                     "g": 0,
@@ -164,10 +167,12 @@ final class PackageProviderTest extends TestCase {
                 <<<'JSON'
                 {
                     "a": 123,
+                    "b": true,
                     "flags": [1,2,3],
                     "datetime": "2023-08-11T10:45:00.000+00:00",
                     "nested": {
                         "a": 123,
+                        "b": true,
                         "e": "2023-08-11T10:45:00.000+00:00",
                         "f": "A",
                         "g": 0,
@@ -197,6 +202,16 @@ final class PackageProviderTest extends TestCase {
                     ),
                 )),
                 $invalid,
+            ],
+            'uninitialized property'          => [
+                new FailedToSerialize($uninitialized, 'json', [], new UninitializedPropertyException(
+                    sprintf(
+                        'The property "%s::$%s" is not initialized.',
+                        $uninitialized::class,
+                        'a',
+                    ),
+                )),
+                $uninitialized,
             ],
             'circular reference'              => [
                 new FailedToSerialize($curcular, 'json', [], new CircularReferenceException(
@@ -315,6 +330,11 @@ final class PackageProviderTest extends TestCase {
                 ProviderTest__Simple::class,
                 '{"unknown": 123}',
             ],
+            'uninitialized property'             => [
+                new ProviderTest__Uninitialized(),
+                ProviderTest__Uninitialized::class,
+                '{}',
+            ],
             'incomplete object with constructor' => [
                 new FailedToDeserialize(
                     ProviderTest__Complex::class,
@@ -406,7 +426,7 @@ final class PackageProviderTest extends TestCase {
  */
 class ProviderTest__Simple implements Serializable, Stringable, JsonSerializable {
     public int                       $a = 123;
-    public bool                      $b; // @phpstan-ignore-line property.uninitialized (required for tests)
+    public bool                      $b = true;
     protected string                 $c = 'should be ignored';
     private string                   $d = 'should be ignored';
     public ?DateTimeInterface        $e = null;
@@ -449,7 +469,7 @@ class ProviderTest__Simple implements Serializable, Stringable, JsonSerializable
  */
 class ProviderTest__Complex implements Serializable {
     public int  $a = 123;
-    public bool $b; // @phpstan-ignore-line property.uninitialized (required for tests)
+    public bool $b = true;
 
     /**
      * @var array<int, int>
@@ -469,6 +489,14 @@ class ProviderTest__Complex implements Serializable {
     ) {
         // empty
     }
+}
+
+/**
+ * @internal
+ * @noinspection PhpMultipleClassesDeclarationsInOneFile
+ */
+class ProviderTest__Uninitialized implements Serializable {
+    public int $a; // @phpstan-ignore-line property.uninitialized (required for tests)
 }
 
 /**
