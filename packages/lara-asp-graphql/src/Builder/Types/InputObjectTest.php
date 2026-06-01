@@ -66,7 +66,7 @@ final class InputObjectTest extends TestCase {
     // <editor-fold desc="DataProviders">
     // =========================================================================
     /**
-     * @return array<string, array{bool, ?list<class-string>, Directive}>
+     * @return array<string, array{bool, ?list<class-string>, Directive, ContextContract}>
      */
     public static function dataProviderIsFieldDirectiveAllowed(): array {
         return [

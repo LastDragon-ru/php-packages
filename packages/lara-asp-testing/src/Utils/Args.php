@@ -27,7 +27,6 @@ use function is_string;
 use function json_decode;
 use function json_encode;
 
-use const JSON_BIGINT_AS_STRING;
 use const JSON_PRESERVE_ZERO_FRACTION;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
@@ -109,7 +108,6 @@ class Args {
                 | JSON_UNESCAPED_SLASHES
                 | JSON_UNESCAPED_UNICODE
                 | JSON_UNESCAPED_LINE_TERMINATORS
-                | JSON_BIGINT_AS_STRING
                 | JSON_PRESERVE_ZERO_FRACTION
                 | JSON_THROW_ON_ERROR,
             );
@@ -199,7 +197,11 @@ class Args {
         $converted = [];
 
         if ($query instanceof ScoutBuilder) {
-            $converted = (array) json_decode(json_encode($query, JSON_THROW_ON_ERROR), true, JSON_THROW_ON_ERROR);
+            $converted = (array) json_decode(
+                json_encode($query, JSON_THROW_ON_ERROR),
+                true,
+                flags: JSON_THROW_ON_ERROR,
+            );
         } elseif (is_array($query)) {
             $converted = $query;
         } else {

@@ -143,7 +143,7 @@ class DirectoryEquals extends Constraint {
     /**
      * Returns properties (name, size, etc) for quick comparison.
      *
-     * @return array{name: string}&array<non-empty-string, scalar|null>
+     * @return array{name: string, ...<non-empty-string, scalar|null>}
      */
     protected function properties(SplFileInfo $info): array {
         return [
