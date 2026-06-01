@@ -67,7 +67,7 @@
     "symfony/serializer": "^8.0.0",
     "symfony/type-info": "^8.0.0",
     "symfony/var-dumper": "^8.0.0",
-    "webonyx/graphql-php": "^15.31.5"
+    "webonyx/graphql-php": "^15.32.3"
   },
   "require-dev": {
     "ext-xmlwriter": "*",
