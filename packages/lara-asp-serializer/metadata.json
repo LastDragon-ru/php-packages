@@ -5,7 +5,7 @@
     "requirements": {
         "HEAD": {
             "laravel/framework": [
-                "^13.0.0"
+                "^13.10.0"
             ],
             "php": [
                 "^8.5",
