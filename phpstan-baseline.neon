@@ -61,7 +61,7 @@ parameters:
 			path: packages/lara-asp-eloquent/src/Iterators/ChunkedChangeSafeIteratorTest.php
 
 		-
-			rawMessage: 'Parameter #2 $factory of method LastDragon_ru\LaraASP\Eloquent\Iterators\ChunkedChangeSafeIteratorTest::testGetDefaultColumn() expects Closure(): Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>, Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\Eloquent\Package\Models\TestObject> given.'
+			rawMessage: 'Parameter #2 $factory of method LastDragon_ru\LaraASP\Eloquent\Iterators\ChunkedChangeSafeIteratorTest::testGetDefaultColumn() expects Closure(): Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>, static-Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\Eloquent\Package\Models\TestObject> given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-eloquent/src/Iterators/ChunkedChangeSafeIteratorTest.php
@@ -97,13 +97,13 @@ parameters:
 			path: packages/lara-asp-eloquent/src/ModelHelperTest.php
 
 		-
-			rawMessage: 'Parameter #2 $model of method LastDragon_ru\LaraASP\Eloquent\ModelHelperTest::testIsSoftDeletable() expects Closure(): (class-string<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model), Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\Eloquent\ModelHelperTest__Model> given.'
+			rawMessage: 'Parameter #2 $model of method LastDragon_ru\LaraASP\Eloquent\ModelHelperTest::testIsSoftDeletable() expects Closure(): (class-string<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model), static-Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\Eloquent\ModelHelperTest__Model> given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-eloquent/src/ModelHelperTest.php
 
 		-
-			rawMessage: 'Parameter #2 $model of method LastDragon_ru\LaraASP\Eloquent\ModelHelperTest::testIsSoftDeletable() expects Closure(): (class-string<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model), Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\Eloquent\ModelHelperTest__ModelSoftDeletes> given.'
+			rawMessage: 'Parameter #2 $model of method LastDragon_ru\LaraASP\Eloquent\ModelHelperTest::testIsSoftDeletable() expects Closure(): (class-string<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model), static-Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\Eloquent\ModelHelperTest__ModelSoftDeletes> given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-eloquent/src/ModelHelperTest.php
@@ -1393,7 +1393,7 @@ parameters:
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Comparison/StartsWithTest.php
 
 		-
-			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Complex\RelationshipTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Complex\RelationshipTest): (Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Query\Builder), Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\GraphQL\Package\Models\User> given.'
+			rawMessage: 'Parameter #2 $builderFactory of method LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Complex\RelationshipTest::testCall() expects Closure(LastDragon_ru\LaraASP\GraphQL\SearchBy\Operators\Complex\RelationshipTest): (Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Query\Builder), static-Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\GraphQL\Package\Models\User> given.'
 			identifier: argument.type
 			count: 9
 			path: packages/lara-asp-graphql/src/SearchBy/Operators/Complex/RelationshipTest.php
