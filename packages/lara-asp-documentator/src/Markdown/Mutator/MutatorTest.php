@@ -2,7 +2,6 @@
 
 namespace LastDragon_ru\LaraASP\Documentator\Markdown\Mutator;
 
-use Closure;
 use LastDragon_ru\LaraASP\Documentator\Editor\Locations\Location;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Document;
 use LastDragon_ru\LaraASP\Documentator\Markdown\Contracts\Markdown;
@@ -125,15 +124,14 @@ final class MutatorTest extends TestCase {
             MARKDOWN,
         );
         $aMutation = new class() implements Mutation {
-            /**
-             * @var Closure(): void
-             */
-            public Closure $finalizer;
+            public Finalize $finalizer;
 
             public function __construct() {
-                $this->finalizer = static function (): void {
-                    // empty
-                };
+                $this->finalizer = new Finalize(
+                    static function (): void {
+                        // empty
+                    },
+                );
             }
 
             #[Override]
@@ -146,7 +144,7 @@ final class MutatorTest extends TestCase {
             #[Override]
             public function mutagens(Document $document, Node $node): array {
                 return [
-                    new Finalize($this->finalizer),
+                    $this->finalizer,
                     new Extract(new Location(1, 6)),
                     new Extract(new Location(9, 9)),
                 ];
@@ -186,27 +184,28 @@ final class MutatorTest extends TestCase {
 
         self::assertEquals(
             [
-                'changes'    => [
+                [
+                    new Location(1, 6),
                     [
-                        new Location(1, 6),
-                        [
-                            [new Location(0, 0), null],
-                            [new Location(2, 2, 15, 27), null],
-                            [new Location(3, 3, 15, 27), null],
-                        ],
-                    ],
-                    [
-                        new Location(9, 9),
-                        [
-                            [new Location(0, 0, 15, 27), null],
-                        ],
+                        [new Location(0, 0), null],
+                        [new Location(2, 2, 15, 27), null],
+                        [new Location(3, 3, 15, 27), null],
                     ],
                 ],
-                'finalizers' => [
-                    new Finalize($aMutation->finalizer),
+                [
+                    new Location(9, 9),
+                    [
+                        [new Location(0, 0, 15, 27), null],
+                    ],
                 ],
             ],
-            $actual,
+            $actual['changes'],
+        );
+        self::assertSame(
+            [
+                $aMutation->finalizer,
+            ],
+            $actual['finalizers'],
         );
     }
 
