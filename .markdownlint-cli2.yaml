@@ -277,16 +277,15 @@ config:
   # MD053/link-image-reference-definitions - Link and image reference definitions should be needed
   MD053:
     # Ignored definitions
-    ignored_definitions: [
-      "//",
-      "include:document-list",
-      "include:example",
-      "include:artisan",
-      "include:file",
-      "include:template",
-      "include:docblock",
-      "include:graphql-directive"
-    ]
+    ignored_definitions:
+      - "//"
+      - "include:document-list"
+      - "include:example"
+      - "include:artisan"
+      - "include:file"
+      - "include:template"
+      - "include:docblock"
+      - "include:graphql-directive"
 
   # MD056/table-column-count - Table column count
   MD056: true
