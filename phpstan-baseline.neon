@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Cannot call method handleRequest() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: dev/public/index.php
-
-		-
 			rawMessage: 'Instanceof between static(LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterNode) and LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\StringNode will always evaluate to false.'
 			identifier: instanceof.alwaysFalse
 			count: 1
@@ -1861,7 +1855,7 @@ parameters:
 			path: packages/lara-asp-graphql/src/SortBy/Sorters/QuerySorterTest.php
 
 		-
-			rawMessage: 'Method Nuwave\Lighthouse\Scout\ScoutEnhancer@anonymous/packages/lara-asp-graphql/src/Stream/Directives/Directive.php:471::enhanceEloquentBuilder() return type with generic class Laravel\Scout\Builder does not specify its types: TModel'
+			rawMessage: 'Method Nuwave\Lighthouse\Scout\ScoutEnhancer@anonymous/lara-asp-graphql/src/Stream/Directives/Directive.php:471::enhanceEloquentBuilder() return type with generic class Laravel\Scout\Builder does not specify its types: TModel'
 			identifier: missingType.generics
 			count: 1
 			path: packages/lara-asp-graphql/src/Stream/Directives/Directive.php

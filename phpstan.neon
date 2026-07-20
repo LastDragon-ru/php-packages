@@ -1,11 +1,6 @@
 parameters:
     paths:
         - packages
-        - dev
-    excludePaths:
-        - dev/bootstrap
-        - dev/storage
-        - dev/vendor (?)
     scanDirectories:
         - vendor/larastan/larastan
 
