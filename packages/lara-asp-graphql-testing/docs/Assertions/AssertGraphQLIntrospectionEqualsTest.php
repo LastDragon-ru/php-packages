@@ -8,6 +8,7 @@ use LastDragon_ru\LaraASP\GraphQL\Testing\Assertions;
 use LastDragon_ru\LaraASP\GraphQL\Testing\Package\Provider as TestProvider;
 use LastDragon_ru\LaraASP\GraphQL\Testing\Package\TestDirective;
 use LastDragon_ru\LaraASP\Testing\Testing\TestCase;
+use LastDragon_ru\PhpUnit\Extensions\Requirements\Attributes\RequiresPackage;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
 use Nuwave\Lighthouse\Schema\DirectiveLocator;
 use Override;
@@ -41,6 +42,7 @@ final class AssertGraphQLIntrospectionEqualsTest extends TestCase {
     /**
      * Assertion test.
      */
+    #[RequiresPackage('webonyx/graphql-php', '>=15.33.0')]
     public function testAssertion(): void {
         // Prepare
         $this->app()->make(DirectiveLocator::class)
@@ -127,6 +129,18 @@ final class AssertGraphQLIntrospectionEqualsTest extends TestCase {
                 | FIELD
                 | FRAGMENT_SPREAD
                 | INLINE_FRAGMENT
+
+            """
+            Exposes a URL that specifies the behavior of this scalar.
+            """
+            directive @specifiedBy(
+                """
+                The URL that specifies the behavior of this scalar.
+                """
+                url: String!
+            )
+            on
+                | SCALAR
 
             """
             A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.
@@ -425,6 +439,7 @@ final class AssertGraphQLIntrospectionEqualsTest extends TestCase {
                 name: String
                 ofType: __Type
                 possibleTypes: [__Type!]
+                specifiedByURL: String
             }
 
             GRAPHQL,

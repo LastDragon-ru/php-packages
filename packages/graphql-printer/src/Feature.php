@@ -10,12 +10,14 @@ use Composer\Semver\VersionParser;
  */
 enum Feature {
     case OneOfDirective;
+    case SpecifiedByDirective;
     case SchemaDescription;
 
     public function since(): string {
         return match ($this) {
-            self::OneOfDirective    => '15.21.0',
-            self::SchemaDescription => '15.30.0',
+            self::OneOfDirective       => '15.21.0',
+            self::SpecifiedByDirective => '15.33.0',
+            self::SchemaDescription    => '15.30.0',
         };
     }
 

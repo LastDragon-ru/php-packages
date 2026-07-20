@@ -23,7 +23,7 @@ final class IntrospectionPrinterTest extends TestCase {
      */
     #[DataProvider('dataProviderPrint')]
     public function testPrint(string $expected, Settings $settings, int $level): void {
-        $directory = 'lowest';
+        $directory = Feature::SpecifiedByDirective->available() ? Feature::SpecifiedByDirective->since().'+' : 'lowest';
         $expected  = TestData::get()->content("{$directory}/{$expected}");
         $printer   = (new IntrospectionPrinter())->setSettings($settings);
         $schema    = new Schema([]);
