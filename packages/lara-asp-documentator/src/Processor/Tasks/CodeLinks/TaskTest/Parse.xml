@@ -9,6 +9,13 @@
                         <item key="attributes">
                             <array length="0"/>
                         </item>
+                        <item key="footnote">
+                            <array length="1">
+                                <item key="backrefs">
+                                    <array length="0"/>
+                                </item>
+                            </array>
+                        </item>
                         <item key="lara-asp-documentator">
                             <array length="3">
                                 <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Input">
@@ -184,6 +191,13 @@
                     <data>
                         <item key="attributes">
                             <array length="0"/>
+                        </item>
+                        <item key="footnote">
+                            <array length="1">
+                                <item key="backrefs">
+                                    <array length="0"/>
+                                </item>
+                            </array>
                         </item>
                         <item key="lara-asp-documentator">
                             <array length="3">
@@ -411,6 +425,13 @@
                             <item key="attributes">
                                 <array length="0"/>
                             </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
+                            </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
                                     <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Input">
@@ -500,6 +521,13 @@
                             <item key="attributes">
                                 <array length="0"/>
                             </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
+                            </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
                                     <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Input">
@@ -588,6 +616,13 @@
                         <data>
                             <item key="attributes">
                                 <array length="0"/>
+                            </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
                             </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
@@ -741,6 +776,13 @@
                             <item key="attributes">
                                 <array length="0"/>
                             </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
+                            </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
                                     <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Input">
@@ -892,6 +934,13 @@
                         <data>
                             <item key="attributes">
                                 <array length="0"/>
+                            </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
                             </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
@@ -1088,6 +1137,13 @@
                         <data>
                             <item key="attributes">
                                 <array length="0"/>
+                            </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
                             </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
@@ -1287,6 +1343,13 @@
                             <item key="attributes">
                                 <array length="0"/>
                             </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
+                            </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
                                     <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Input">
@@ -1376,6 +1439,13 @@
                             <item key="attributes">
                                 <array length="0"/>
                             </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
+                            </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
                                     <item key="LastDragon_ru\LaraASP\Documentator\Markdown\Data\Input">
@@ -1464,6 +1534,13 @@
                         <data>
                             <item key="attributes">
                                 <array length="0"/>
+                            </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
                             </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">
@@ -1616,6 +1693,13 @@
                         <data>
                             <item key="attributes">
                                 <array length="0"/>
+                            </item>
+                            <item key="footnote">
+                                <array length="1">
+                                    <item key="backrefs">
+                                        <array length="0"/>
+                                    </item>
+                                </array>
                             </item>
                             <item key="lara-asp-documentator">
                                 <array length="3">

@@ -2,25 +2,33 @@
 <markdown>
     <node name="document">
         <data>
-            <item key="#fn:1">
-                <array length="1">
-                    <item key="0">
-                        <object class="League\CommonMark\Reference\Reference">
-                            <property name="destination">
-                                <string><![CDATA[#fn:1]]></string>
-                            </property>
-                            <property name="label">
-                                <string><![CDATA[1]]></string>
-                            </property>
-                            <property name="title">
-                                <string><![CDATA[1]]></string>
-                            </property>
-                        </object>
-                    </item>
-                </array>
-            </item>
             <item key="attributes">
                 <array length="0"/>
+            </item>
+            <item key="footnote">
+                <array length="1">
+                    <item key="backrefs">
+                        <array length="1">
+                            <item key="#fn:1">
+                                <array length="1">
+                                    <item key="0">
+                                        <object class="League\CommonMark\Reference\Reference">
+                                            <property name="destination">
+                                                <string><![CDATA[#fn:1]]></string>
+                                            </property>
+                                            <property name="label">
+                                                <string><![CDATA[1]]></string>
+                                            </property>
+                                            <property name="title">
+                                                <string><![CDATA[1]]></string>
+                                            </property>
+                                        </object>
+                                    </item>
+                                </array>
+                            </item>
+                        </array>
+                    </item>
+                </array>
             </item>
             <item key="lara-asp-documentator">
                 <array length="3">

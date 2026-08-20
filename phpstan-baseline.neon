@@ -19,18 +19,6 @@ parameters:
 			path: packages/glob-matcher/src/Glob/Ast/Nodes/PatternListNode.php
 
 		-
-			rawMessage: 'Call to an undefined method Mockery\LegacyMockInterface::once().'
-			identifier: method.notFound
-			count: 1
-			path: packages/lara-asp-core/src/Observer/DispatcherTest.php
-
-		-
-			rawMessage: 'Cannot call method with() on mixed.'
-			identifier: method.nonObject
-			count: 1
-			path: packages/lara-asp-core/src/Observer/DispatcherTest.php
-
-		-
 			rawMessage: 'Parameter #1 $class of method LastDragon_ru\LaraASP\Documentator\Processor\Utils\Instances<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>>::add() expects class-string<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>>, class-string<I of LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<P of LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>> given.'
 			identifier: argument.type
 			count: 1
@@ -49,22 +37,10 @@ parameters:
 			path: packages/lara-asp-eloquent/src/Iterators/ChunkedChangeSafeIterator.php
 
 		-
-			rawMessage: 'Call to an undefined method Mockery\LegacyMockInterface::times().'
-			identifier: method.notFound
-			count: 2
-			path: packages/lara-asp-eloquent/src/Iterators/ChunkedChangeSafeIteratorTest.php
-
-		-
 			rawMessage: 'Parameter #2 $factory of method LastDragon_ru\LaraASP\Eloquent\Iterators\ChunkedChangeSafeIteratorTest::testGetDefaultColumn() expects Closure(): Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>, static-Closure(): Illuminate\Database\Eloquent\Builder<LastDragon_ru\LaraASP\Eloquent\Package\Models\TestObject> given.'
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-eloquent/src/Iterators/ChunkedChangeSafeIteratorTest.php
-
-		-
-			rawMessage: 'Call to an undefined method Mockery\LegacyMockInterface::once().'
-			identifier: method.notFound
-			count: 2
-			path: packages/lara-asp-eloquent/src/Iterators/ChunkedIteratorTest.php
 
 		-
 			rawMessage: 'Parameter #1 $expected of method LastDragon_ru\LaraASP\Eloquent\ModelHelperTest::testGetRelation() expects class-string|Exception, mixed given.'
