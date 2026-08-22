@@ -39,6 +39,9 @@ readonly class Options {
          * @see GlobOptions::$matchHidden
          */
         public bool $matchHidden = false,
+        /**
+         * @deprecated %{VERSION} Will be removed in the future.
+         */
         public MatchMode $matchMode = MatchMode::Match,
         public bool $matchCase = true,
     ) {
