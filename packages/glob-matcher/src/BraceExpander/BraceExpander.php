@@ -19,6 +19,9 @@ use Traversable;
  * @implements IteratorAggregate<int, string>
  */
 readonly class BraceExpander implements Countable, IteratorAggregate {
+    /**
+     * @deprecated %{VERSION} Will be removed in the future.
+     */
     public BraceExpansionNode $node;
 
     public function __construct(string $pattern) {
