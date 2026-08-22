@@ -8,6 +8,9 @@ use Stringable;
 
 use function preg_match;
 
+/**
+ * @deprecated %{VERSION} Will be removed in the future.
+ */
 readonly class Regex implements Matcher, Stringable {
     protected string $regex;
 

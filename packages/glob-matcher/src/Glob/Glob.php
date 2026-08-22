@@ -17,9 +17,15 @@ use Stringable;
  * @see https://en.wikipedia.org/wiki/Glob_(programming)
  */
 readonly class Glob implements Matcher {
+    /**
+     * @deprecated %{VERSION} Will be removed in the future.
+     */
     public GlobNode $node;
-    public Regex    $regex;
-    public Options  $options;
+    /**
+     * @deprecated %{VERSION} Will be removed in the future.
+     */
+    public Regex   $regex;
+    public Options $options;
 
     public function __construct(string $pattern, ?Options $options = null) {
         $this->options = $options ?? new Options();
