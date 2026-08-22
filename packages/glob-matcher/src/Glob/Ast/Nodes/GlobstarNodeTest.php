@@ -36,12 +36,12 @@ final class GlobstarNodeTest extends TestCase {
             'dot = true'  => [
                 '(?:(?<=^|/)(?:(?!\.{1,2}(?:/|$))(?:(?=.))[^/]*?)(?:(?:/|$)|(?=/|$)))*?',
                 new GlobstarNode(),
-                new Options(hidden: true),
+                new Options(matchHidden: true),
             ],
             'dot = false' => [
                 '(?:(?<=^|/)(?:(?!\.)(?:(?=.))[^/]*?)(?:(?:/|$)|(?=/|$)))*?',
                 new GlobstarNode(),
-                new Options(hidden: false),
+                new Options(matchHidden: false),
             ],
         ];
     }

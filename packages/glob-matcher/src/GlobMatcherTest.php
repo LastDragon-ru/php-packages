@@ -29,6 +29,9 @@ final class GlobMatcherTest extends TestCase {
         self::assertTrue(
             (new GlobMatcher('**/*.txt', new Options(hidden: true)))->match('path/to/.hidden.txt'),
         );
+        self::assertTrue(
+            (new GlobMatcher('**/*.txt', new Options(matchHidden: true)))->match('path/to/.hidden.txt'),
+        );
         self::assertFalse(
             (new GlobMatcher('\\*.txt'))->match('a.txt'),
         );

@@ -39,9 +39,9 @@ readonly class Glob implements Matcher {
      */
     protected function regex(array $patterns, bool $hidden): ?Regex {
         $options = new Options(
-            hidden   : $hidden,
-            matchMode: MatchMode::Match,
-            matchCase: true,
+            matchHidden: $hidden,
+            matchMode  : MatchMode::Match,
+            matchCase  : true,
         );
         $regex   = [];
 

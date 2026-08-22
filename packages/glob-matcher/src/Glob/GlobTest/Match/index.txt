@@ -43,7 +43,7 @@
 #    4.9. Because of `strictSlashes` (3) the `a/*` will match `a/a` and `a/a/` both
 #
 # Picomatch options map:
-# * `dot`           => `hidden`
+# * `dot`           => `matchHidden`
 # * `nocase`        => `matchCase`
 # * `noglobstar`    => `globstar`
 # * `noextglob`     => `extended`
@@ -72,9 +72,9 @@
 #   -e 's|__QUOTE__|\\"|g' \
 #   -e 's|, \\"\(.*\)\\", |, "\1", |g' \
 #   -e 's|", \\"\(.*\)\\"]|", "\1"]|g' \
-#   -e 's|{ dot: true }]|{ "hidden": true }]|' \
-#   -e 's|{ dot: false }]|{ "hidden": false }]|' \
-#   -e 's|{ dot: true, strictSlashes: true }]|{ "hidden": false }, { "strictSlashes": true }]|' \
+#   -e 's|{ dot: true }]|{ "matchHidden": true }]|' \
+#   -e 's|{ dot: false }]|{ "matchHidden": false }]|' \
+#   -e 's|{ dot: true, strictSlashes: true }]|{ "matchHidden": false }, { "strictSlashes": true }]|' \
 #   -e 's|{ noglobstar: true }]|{ "globstar": false }]|' \
 #   -e 's|{ nocase: true }]|{ "matchCase": false }]|' \
 #   -e 's|{ strictSlashes: true }]|null, { "strictSlashes": true }]|' \
@@ -149,9 +149,9 @@
   [false, ".", "[[:digit:][:punct:][:space:]]"]
   [false, ".", "[^[:alnum:][:alpha:][:blank:][:cntrl:][:digit:][:lower:][:space:][:upper:][:xdigit:]]"]
   [false, ".md", "?(a|b).md"]
-    [true, ".md", "?(a|b).md", {"hidden": true}]
+    [true, ".md", "?(a|b).md", {"matchHidden": true}]
   [false, ".md", "*(a|b).md"]
-    [true, ".md", "*(a|b).md", {"hidden": true}]
+    [true, ".md", "*(a|b).md", {"matchHidden": true}]
 ## (4.2)
   [false, "a", "a/**"]
   [true, "a/", "a/**"]

@@ -40,7 +40,11 @@ readonly class NameNode implements Node, NodeParent, GlobNodeChild {
 
         // By default, the `.` at the start of a path or immediately
         // following a slash must be matched explicitly.
-        if ($options->hidden || ($firstChild !== null && self::isExplicitDot($firstChild->node))) {
+        if (
+            $options->matchHidden
+            || $options->hidden
+            || ($firstChild !== null && self::isExplicitDot($firstChild->node))
+        ) {
             $regex = "(?!\\.{1,2}(?:/|$))(?:{$regex})";
         } else {
             $regex = "(?!\\.)(?:{$regex})";

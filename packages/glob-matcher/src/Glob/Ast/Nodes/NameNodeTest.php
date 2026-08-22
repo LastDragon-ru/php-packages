@@ -38,7 +38,7 @@ final class NameNodeTest extends TestCase {
                 new NameNode([new StringNode('..')]),
                 new Options(),
             ],
-            'hidden = default'                => [
+            'matchHidden = default'           => [
                 '(?!\.)(?:(?=.)abc)',
                 new NameNode([new StringNode('abc')]),
                 new Options(),
@@ -57,6 +57,21 @@ final class NameNodeTest extends TestCase {
                 '(?!\.{1,2}(?:/|$))(?:(?=.)\.abc)',
                 new NameNode([new StringNode('.abc')]),
                 new Options(hidden: false),
+            ],
+            'matchHidden = false'             => [
+                '(?!\.)(?:(?=.)abc)',
+                new NameNode([new StringNode('abc')]),
+                new Options(matchHidden: false),
+            ],
+            'matchHidden = true'              => [
+                '(?!\.{1,2}(?:/|$))(?:(?=.)abc)',
+                new NameNode([new StringNode('abc')]),
+                new Options(matchHidden: true),
+            ],
+            'matchHidden = explicit'          => [
+                '(?!\.{1,2}(?:/|$))(?:(?=.)\.abc)',
+                new NameNode([new StringNode('.abc')]),
+                new Options(matchHidden: false),
             ],
         ];
     }

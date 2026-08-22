@@ -31,9 +31,14 @@ readonly class Options {
          */
         public bool $extended = true,
         /**
+         * @deprecated %{VERSION} The {@see self::$matchHidden} should be used instead.
          * @see GlobOptions::$hidden
          */
         public bool $hidden = false,
+        /**
+         * @see GlobOptions::$matchHidden
+         */
+        public bool $matchHidden = false,
         public MatchMode $matchMode = MatchMode::Match,
         public bool $matchCase = true,
     ) {
