@@ -131,21 +131,33 @@ The [`Glob`][code-links/e4c1e0ff644fe7ca] is used internally by the [`GlobMatche
 namespace LastDragon_ru\GlobMatcher\Docs\Examples;
 
 use LastDragon_ru\GlobMatcher\Glob\Glob;
+use LastDragon_ru\GlobMatcher\Glob\Options;
+use LastDragon_ru\GlobMatcher\Glob\Parser\Parser;
 use LastDragon_ru\LaraASP\Dev\App\Example;
 
-$glob = new Glob('/**/**/?.txt');
+$pattern = '/**/**/?.txt';
+$options = new Options();
+$glob    = new Glob($pattern);
+$node    = (new Parser($options))->parse($pattern);
 
-Example::dump((string) $glob->regex);
-Example::dump($glob->node);
+Example::dump($glob->match('/a/b/c.txt'));
+Example::dump($glob->match('a.txt'));
+Example::dump($node);
 ```
 
-The `(string) $glob->regex` is:
+The `$glob->match('/a/b/c.txt')` is:
 
 ```plain
-"#^(?:/)(?:(?:(?<=^|/)(?:(?!\.)(?:(?=.))[^/]*?)(?:(?:/|$)|(?=/|$)))*?)(?:(?!\.)(?:(?=.)(?:[^/])(?:\.txt)))$#us"
+true
 ```
 
-The `$glob->node` is:
+The `$glob->match('a.txt')` is:
+
+```plain
+false
+```
+
+The `$node` is:
 
 ```plain
 LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobNode {
@@ -197,12 +209,19 @@ readonly class Options {
          */
         public bool $extended = true,
         /**
+         * @deprecated %{VERSION} The {@see self::$matchHidden} should be used instead.
+         */
+        public bool $hidden = false,
+        /**
          * Filenames beginning with a dot are hidden and not matched by default
          * unless the glob begins with a dot or this option set to `true`.
          *
          * The same as `dotglob`.
          */
-        public bool $hidden = false,
+        public bool $matchHidden = false,
+        /**
+         * @deprecated %{VERSION} Will be removed in the future.
+         */
         public MatchMode $matchMode = MatchMode::Match,
         /**
          * The same as `nocasematch`.
@@ -230,14 +249,17 @@ You can also expand braces without globbing:
 namespace LastDragon_ru\GlobMatcher\Docs\Examples;
 
 use LastDragon_ru\GlobMatcher\BraceExpander\BraceExpander;
+use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Parser;
 use LastDragon_ru\LaraASP\Dev\App\Example;
 
 use function iterator_to_array;
 
-$expander = new BraceExpander('{a,{0..10..2},c}.txt');
+$pattern  = '{a,{0..10..2},c}.txt';
+$expander = new BraceExpander($pattern);
+$node     = (new Parser())->parse($pattern);
 
 Example::dump(iterator_to_array($expander));
-Example::dump($expander->node);
+Example::dump($node);
 ```
 
 The `iterator_to_array($expander)` is:
@@ -255,7 +277,7 @@ The `iterator_to_array($expander)` is:
 ]
 ```
 
-The `$expander->node` is:
+The `$node` is:
 
 ```plain
 LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode {
