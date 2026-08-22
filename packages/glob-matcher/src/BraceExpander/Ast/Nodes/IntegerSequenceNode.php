@@ -67,7 +67,7 @@ readonly class IntegerSequenceNode extends IncrementalSequenceNode {
     private static function prepare(Cursor $cursor): array {
         $start  = static::parse($cursor->node->start);
         $end    = static::parse($cursor->node->end);
-        $inc    = abs($cursor->node->increment ?? 1);
+        $inc    = max(abs($cursor->node->increment ?? 1), 1);
         $inc    = $start < $end ? $inc : -$inc;
         $steps  = (int) floor(abs(($end - $start) / $inc)) + 1;
         $steps  = max(0, $steps);

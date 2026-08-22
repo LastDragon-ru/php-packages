@@ -45,6 +45,10 @@ final class CharacterSequenceNodeTest extends TestCase {
                 ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'],
                 new CharacterSequenceNode('a', 'o'),
             ],
+            '-> with zero increment'     => [
+                ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'],
+                new CharacterSequenceNode('a', 'o', 0),
+            ],
             '-> with positive increment' => [
                 ['a', 'd', 'g', 'j', 'm'],
                 new CharacterSequenceNode('a', 'o', 3),
@@ -56,6 +60,10 @@ final class CharacterSequenceNodeTest extends TestCase {
             '<- without increment'       => [
                 ['o', 'n', 'm', 'l', 'k', 'j', 'i', 'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'],
                 new CharacterSequenceNode('o', 'a'),
+            ],
+            '<- with zero increment'     => [
+                ['o', 'n', 'm', 'l', 'k', 'j', 'i', 'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'],
+                new CharacterSequenceNode('o', 'a', 0),
             ],
             '<- with positive increment' => [
                 ['o', 'l', 'i', 'f', 'c'],
