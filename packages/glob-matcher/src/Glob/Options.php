@@ -30,6 +30,9 @@ readonly class Options {
          * The same as `dotglob`.
          */
         public bool $matchHidden = false,
+        /**
+         * @deprecated %{VERSION} Will be removed in the future.
+         */
         public MatchMode $matchMode = MatchMode::Match,
         /**
          * The same as `nocasematch`.
