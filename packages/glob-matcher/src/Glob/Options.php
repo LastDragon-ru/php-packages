@@ -20,12 +20,16 @@ readonly class Options {
          */
         public bool $extended = true,
         /**
+         * @deprecated %{VERSION} The {@see self::$matchHidden} should be used instead.
+         */
+        public bool $hidden = false,
+        /**
          * Filenames beginning with a dot are hidden and not matched by default
          * unless the glob begins with a dot or this option set to `true`.
          *
          * The same as `dotglob`.
          */
-        public bool $hidden = false,
+        public bool $matchHidden = false,
         public MatchMode $matchMode = MatchMode::Match,
         /**
          * The same as `nocasematch`.

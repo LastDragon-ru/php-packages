@@ -43,9 +43,10 @@ readonly class GlobMatcher implements Matcher {
     private function regex(): Regex {
         $regex    = [];
         $options  = new GlobOptions(
-            globstar: $this->options->globstar,
-            extended: $this->options->extended,
-            hidden  : $this->options->hidden,
+            globstar   : $this->options->globstar,
+            extended   : $this->options->extended,
+            hidden     : $this->options->hidden,
+            matchHidden: $this->options->matchHidden,
         );
         $patterns = $this->options->braces ? new BraceExpander($this->pattern) : [$this->pattern];
 

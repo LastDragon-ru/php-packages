@@ -34,37 +34,47 @@ final class GlobNodeTest extends TestCase {
      */
     public static function dataProviderToRegex(): array {
         return [
-            'default'         => [
+            'default'            => [
                 '(?!\.)(?:(?=.)file\.txt)',
                 'file.txt',
                 new Options(),
             ],
-            'hidden: true'    => [
+            'hidden: true'       => [
                 '(?!\.{1,2}(?:/|$))(?:(?=.)file\.txt)',
                 'file.txt',
                 new Options(hidden: true),
             ],
-            'hidden: false'   => [
+            'hidden: false'      => [
                 '(?!\.)(?:(?=.)file\.txt)',
                 'file.txt',
                 new Options(hidden: false),
             ],
-            'starts with dot' => [
+            'matchHidden: true'  => [
+                '(?!\.{1,2}(?:/|$))(?:(?=.)file\.txt)',
+                'file.txt',
+                new Options(matchHidden: true),
+            ],
+            'matchHidden: false' => [
+                '(?!\.)(?:(?=.)file\.txt)',
+                'file.txt',
+                new Options(matchHidden: false),
+            ],
+            'starts with dot'    => [
                 '(?!\.{1,2}(?:/|$))(?:(?=.)\.txt)',
                 '.txt',
                 new Options(),
             ],
-            '../../..'        => [
+            '../../..'           => [
                 '(?:\.\.)(?:/)(?:\.\.)(?:/)(?:\.\.)',
                 '../../..',
                 new Options(),
             ],
-            '*/.*'            => [
+            '*/.*'               => [
                 '(?:(?!\.{1,2}(?:/|$))(?:(?=.)[^/]*?))(?:/)(?:(?!\.{1,2}(?:/|$))(?:(?=.)(?:\.)(?:[^/]*?/?)))',
                 '*/.*',
-                new Options(hidden: true),
+                new Options(matchHidden: true),
             ],
-            '*/'              => [
+            '*/'                 => [
                 '(?:(?!\.)(?:(?=.)[^/]*?))(?:/)',
                 '*/',
                 new Options(),

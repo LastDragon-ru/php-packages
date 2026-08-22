@@ -101,8 +101,8 @@
   [["aaaa.a"], [".", ".a", "a", "aa", "a.a", "aa.a", "aaa", "aaa.a", "aaaa.a", "aaaaa"], "a?????"]
 
 ## it('should match non-leading dots with question marks when options.dot is true', () => {
-  [["a"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], "?", { "hidden": true }, "Original test also match `.`, but see (4.1)"]
-  [[".a"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], ".?", { "hidden": true }]
-  [[".a", "aa"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], "?a", { "hidden": true }]
-  [[".a", "aa"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], "??", { "hidden": true }]
-  [[".aa"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], "?a?", { "hidden": true }]
+  [["a"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], "?", { "matchHidden": true }, "Original test also match `.`, but see (4.1)"]
+  [[".a"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], ".?", { "matchHidden": true }]
+  [[".a", "aa"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], "?a", { "matchHidden": true }]
+  [[".a", "aa"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], "??", { "matchHidden": true }]
+  [[".aa"], [".", ".a", "a", "aa", "a.a", "aa.a", ".aa", "aaa.a", "aaaa.a", "aaaaa"], "?a?", { "matchHidden": true }]

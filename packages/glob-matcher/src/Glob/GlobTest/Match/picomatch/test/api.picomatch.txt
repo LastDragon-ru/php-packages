@@ -52,13 +52,13 @@
   [true, "a/b/c/d.a.md", "a/b/c/*.md"]
 
 ### it('should match dotfiles when options.dot is true', () => {
-  [false, "a/b/c/.xyz.md", ".*.md", { "hidden": true }]
-  [true, ".c.md", "*.md", { "hidden": true }]
-  [true, ".c.md", ".*", { "hidden": true }]
-  [true, "a/b/c/.xyz.md", "**/*.md", { "hidden": true }]
-  [true, "a/b/c/.xyz.md", "**/.*.md", { "hidden": true }]
-  [true, "a/b/c/.xyz.md", "a/b/c/*.md", { "hidden": true }]
-  [true, "a/b/c/.xyz.md", "a/b/c/.*.md", { "hidden": true }]
+  [false, "a/b/c/.xyz.md", ".*.md", { "matchHidden": true }]
+  [true, ".c.md", "*.md", { "matchHidden": true }]
+  [true, ".c.md", ".*", { "matchHidden": true }]
+  [true, "a/b/c/.xyz.md", "**/*.md", { "matchHidden": true }]
+  [true, "a/b/c/.xyz.md", "**/.*.md", { "matchHidden": true }]
+  [true, "a/b/c/.xyz.md", "a/b/c/*.md", { "matchHidden": true }]
+  [true, "a/b/c/.xyz.md", "a/b/c/.*.md", { "matchHidden": true }]
 
 ## describe('matching:', () => {
 ### it('should escape plus signs to match string literals', () => {
@@ -246,7 +246,7 @@
   [false, "a/b/d/.md", "a/b/c/*.md"]
 
 ### it('should match dotfiles when `dot` or `dotfiles` is set', () => {
-  [true, ".c.md", "*.md", { "hidden": true }]
-  [true, ".c.md", ".*", { "hidden": true }]
-  [true, "a/b/c/.xyz.md", "a/b/c/*.md", { "hidden": true }]
-  [true, "a/b/c/.xyz.md", "a/b/c/.*.md", { "hidden": true }]
+  [true, ".c.md", "*.md", { "matchHidden": true }]
+  [true, ".c.md", ".*", { "matchHidden": true }]
+  [true, "a/b/c/.xyz.md", "a/b/c/*.md", { "matchHidden": true }]
+  [true, "a/b/c/.xyz.md", "a/b/c/.*.md", { "matchHidden": true }]

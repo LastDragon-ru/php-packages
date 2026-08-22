@@ -1171,10 +1171,10 @@
   [false, "/.txt", "/*.txt"]
   [false, "/.txt", "*/*.txt"]
   [false, "/.txt", "**/*.txt"]
-  [false, "/.txt", "*.txt", { "hidden": true }]
-  [true, "/.txt", "/*.txt", { "hidden": true }]
-  [true, "/.txt", "*/*.txt", { "hidden": true }]
-  [true, "/.txt", "**/*.txt", { "hidden": true }]
+  [false, "/.txt", "*.txt", { "matchHidden": true }]
+  [true, "/.txt", "/*.txt", { "matchHidden": true }]
+  [true, "/.txt", "*/*.txt", { "matchHidden": true }]
+  [true, "/.txt", "**/*.txt", { "matchHidden": true }]
 
 ## it('should match double slashes', () => {
   [false, "https://foo.com/bar/baz/app.min.js", "https://foo.com/*"]

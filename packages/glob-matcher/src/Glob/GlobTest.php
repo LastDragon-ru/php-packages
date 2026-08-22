@@ -64,10 +64,10 @@ final class GlobTest extends TestCase {
         $data    = [];
         $default = new Options();
         $allowed = [
-            'matchCase' => true,
-            'globstar'  => true,
-            'extended'  => true,
-            'hidden'    => true,
+            'matchCase'   => true,
+            'globstar'    => true,
+            'extended'    => true,
+            'matchHidden' => true,
         ];
 
         try {
@@ -96,16 +96,16 @@ final class GlobTest extends TestCase {
                         }
 
                         $test[3] += [
-                            'matchCase' => $options->matchCase,
-                            'globstar'  => $options->globstar,
-                            'extended'  => $options->extended,
-                            'hidden'    => $options->hidden,
+                            'matchCase'   => $options->matchCase,
+                            'globstar'    => $options->globstar,
+                            'extended'    => $options->extended,
+                            'matchHidden' => $options->matchHidden,
                         ];
                         $options  = new Options(
-                            globstar : (bool) $test[3]['globstar'],
-                            extended : (bool) $test[3]['extended'],
-                            hidden   : (bool) $test[3]['hidden'],
-                            matchCase: (bool) $test[3]['matchCase'],
+                            globstar   : (bool) $test[3]['globstar'],
+                            extended   : (bool) $test[3]['extended'],
+                            matchHidden: (bool) $test[3]['matchHidden'],
+                            matchCase  : (bool) $test[3]['matchCase'],
                         );
                     }
 
