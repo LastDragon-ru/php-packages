@@ -2,6 +2,7 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander;
 
+use Countable;
 use InvalidArgumentException;
 use IteratorAggregate;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor;
@@ -17,7 +18,7 @@ use Traversable;
  *
  * @implements IteratorAggregate<int, string>
  */
-readonly class BraceExpander implements IteratorAggregate {
+readonly class BraceExpander implements Countable, IteratorAggregate {
     public BraceExpansionNode $node;
 
     public function __construct(string $pattern) {
@@ -32,6 +33,11 @@ readonly class BraceExpander implements IteratorAggregate {
         }
 
         return $node;
+    }
+
+    #[Override]
+    public function count(): int {
+        return $this->node::toCount(new Cursor($this->node));
     }
 
     #[Override]

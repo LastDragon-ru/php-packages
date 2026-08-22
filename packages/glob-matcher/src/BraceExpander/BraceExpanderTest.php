@@ -6,6 +6,7 @@ use LastDragon_ru\GlobMatcher\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
+use function count;
 use function iterator_to_array;
 
 /**
@@ -15,6 +16,14 @@ use function iterator_to_array;
 final class BraceExpanderTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
+    /**
+     * @param list<string> $expected
+     */
+    #[DataProvider('dataProviderGetIterable')]
+    public function testCount(array $expected, string $pattern): void {
+        self::assertCount(count($expected), new BraceExpander($pattern));
+    }
+
     /**
      * @param list<string> $expected
      */

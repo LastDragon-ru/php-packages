@@ -13,6 +13,13 @@ use function iterator_to_array;
  */
 #[CoversClass(StringNode::class)]
 final class StringNodeTest extends TestCase {
+    public function testToCount(): void {
+        $node   = new StringNode('string');
+        $cursor = new Cursor($node);
+
+        self::assertSame(1, $node::toCount($cursor));
+    }
+
     public function testToIterable(): void {
         $node   = new StringNode('string');
         $cursor = new Cursor($node);

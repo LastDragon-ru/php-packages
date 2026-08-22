@@ -7,6 +7,8 @@ use LastDragon_ru\GlobMatcher\Package;
 use Override;
 
 use function abs;
+use function floor;
+use function max;
 use function mb_chr;
 use function mb_ord;
 
@@ -26,15 +28,32 @@ readonly class CharacterSequenceNode extends IncrementalSequenceNode {
     }
 
     #[Override]
+    public static function toCount(Cursor $cursor): int {
+        return self::prepare($cursor)[2];
+    }
+
+    #[Override]
     public static function toIterable(Cursor $cursor): iterable {
+        [$start, $inc, $steps] = self::prepare($cursor);
+
+        for ($code = $start; $steps > 0; $steps--, $code += $inc) {
+            yield mb_chr($code, Package::Encoding);
+        }
+    }
+
+    /**
+     * @param Cursor<covariant static> $cursor
+     *
+     * @return array{int, int, int<0, max>}
+     */
+    protected static function prepare(Cursor $cursor): array {
         $start = mb_ord($cursor->node->start, Package::Encoding);
         $end   = mb_ord($cursor->node->end, Package::Encoding);
         $inc   = abs($cursor->node->increment ?? 1);
         $inc   = $start < $end ? $inc : -$inc;
-        $steps = abs(($end - $start) / $inc);
+        $steps = (int) floor(abs(($end - $start) / $inc)) + 1;
+        $steps = max(0, $steps);
 
-        for ($code = $start, $step = 0; $step <= $steps; $step++, $code += $inc) {
-            yield mb_chr($code, Package::Encoding);
-        }
+        return [$start, $inc, $steps];
     }
 }

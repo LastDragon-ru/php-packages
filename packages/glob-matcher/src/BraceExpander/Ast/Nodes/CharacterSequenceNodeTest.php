@@ -7,6 +7,7 @@ use LastDragon_ru\GlobMatcher\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
+use function count;
 use function iterator_to_array;
 
 /**
@@ -16,6 +17,14 @@ use function iterator_to_array;
 final class CharacterSequenceNodeTest extends TestCase {
     // <editor-fold desc="Tests">
     // =========================================================================
+    /**
+     * @param list<string> $expected
+     */
+    #[DataProvider('dataProviderToIterable')]
+    public function testToCount(array $expected, CharacterSequenceNode $node): void {
+        self::assertSame(count($expected), $node::toCount(new Cursor($node)));
+    }
+
     /**
      * @param list<string> $expected
      */
