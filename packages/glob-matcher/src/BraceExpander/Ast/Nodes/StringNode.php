@@ -9,6 +9,11 @@ use Override;
 
 readonly class StringNode extends NodeString implements Node, BraceExpansionNodeChild {
     #[Override]
+    public static function toCount(Cursor $cursor): int {
+        return 1;
+    }
+
+    #[Override]
     public static function toIterable(Cursor $cursor): iterable {
         return [$cursor->node->string];
     }

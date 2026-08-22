@@ -8,6 +8,7 @@ use Override;
 
 use function abs;
 use function filter_var;
+use function floor;
 use function max;
 use function mb_ltrim;
 use function mb_str_pad;
@@ -34,20 +35,15 @@ readonly class IntegerSequenceNode extends IncrementalSequenceNode {
     }
 
     #[Override]
-    public static function toIterable(Cursor $cursor): iterable {
-        $start  = static::parse($cursor->node->start);
-        $end    = static::parse($cursor->node->end);
-        $inc    = abs($cursor->node->increment ?? 1);
-        $inc    = $start < $end ? $inc : -$inc;
-        $steps  = abs(($end - $start) / $inc);
-        $length = $cursor->node->start !== (string) $start || $cursor->node->end !== (string) $end
-            ? max(
-                mb_strlen($cursor->node->start, Package::Encoding),
-                mb_strlen($cursor->node->end, Package::Encoding),
-            )
-            : 0;
+    public static function toCount(Cursor $cursor): int {
+        return self::prepare($cursor)[2];
+    }
 
-        for ($value = $start, $step = 0; $step <= $steps; $step++, $value += $inc) {
+    #[Override]
+    public static function toIterable(Cursor $cursor): iterable {
+        [$start, $inc, $steps, $length] = self::prepare($cursor);
+
+        for ($value = $start; $steps > 0; $steps--, $value += $inc) {
             yield $value < 0
                 ? '-'.mb_str_pad((string) abs($value), $length - 1, '0', STR_PAD_LEFT, Package::Encoding)
                 : mb_str_pad((string) $value, $length, '0', STR_PAD_LEFT, Package::Encoding);
@@ -61,5 +57,27 @@ readonly class IntegerSequenceNode extends IncrementalSequenceNode {
         $integer  = (int) filter_var($trimmed, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
         return $integer;
+    }
+
+    /**
+     * @param Cursor<covariant static> $cursor
+     *
+     * @return array{int, int, int<0, max>, int<0, max>}
+     */
+    private static function prepare(Cursor $cursor): array {
+        $start  = static::parse($cursor->node->start);
+        $end    = static::parse($cursor->node->end);
+        $inc    = abs($cursor->node->increment ?? 1);
+        $inc    = $start < $end ? $inc : -$inc;
+        $steps  = (int) floor(abs(($end - $start) / $inc)) + 1;
+        $steps  = max(0, $steps);
+        $length = $cursor->node->start !== (string) $start || $cursor->node->end !== (string) $end
+            ? max(
+                mb_strlen($cursor->node->start, Package::Encoding),
+                mb_strlen($cursor->node->end, Package::Encoding),
+            )
+            : 0;
+
+        return [$start, $inc, $steps, $length];
     }
 }
