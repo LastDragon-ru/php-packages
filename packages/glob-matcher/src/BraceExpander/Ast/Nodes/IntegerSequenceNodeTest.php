@@ -45,6 +45,10 @@ final class IntegerSequenceNodeTest extends TestCase {
                 ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
                 new IntegerSequenceNode('1', '9'),
             ],
+            '-> with zero increment'                              => [
+                ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+                new IntegerSequenceNode('1', '9', 0),
+            ],
             '-> with positive increment'                          => [
                 ['1', '4', '7'],
                 new IntegerSequenceNode('1', '9', 3),
@@ -56,6 +60,10 @@ final class IntegerSequenceNodeTest extends TestCase {
             '<- without increment'                                => [
                 ['9', '8', '7', '6', '5', '4', '3', '2', '1'],
                 new IntegerSequenceNode('9', '1'),
+            ],
+            '<- with zero increment'                              => [
+                ['9', '8', '7', '6', '5', '4', '3', '2', '1'],
+                new IntegerSequenceNode('9', '1', 0),
             ],
             '<- with positive increment'                          => [
                 ['9', '6', '3'],
