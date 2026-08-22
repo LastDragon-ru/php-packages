@@ -14,6 +14,15 @@ readonly class Options {
          */
         public bool $braces = true,
         /**
+         * Max amount of expansions. An exception will be thrown if pattern
+         * generates more than the value.
+         *
+         * @see BraceExpander::count()
+         *
+         * @var positive-int
+         */
+        public int $bracesLimit = 2_048,
+        /**
          * @see GlobOptions::$globstar
          */
         public bool $globstar = true,

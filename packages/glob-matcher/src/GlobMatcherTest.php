@@ -2,6 +2,7 @@
 
 namespace LastDragon_ru\GlobMatcher;
 
+use InvalidArgumentException;
 use LastDragon_ru\GlobMatcher\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -34,6 +35,13 @@ final class GlobMatcherTest extends TestCase {
         self::assertTrue(
             (new GlobMatcher('\\*.txt'))->match('*.txt'),
         );
+    }
+
+    public function testMatchBracesLimit(): void {
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage('The `$pattern` generates too many variants.');
+
+        new GlobMatcher('{1..100}{1..25}');
     }
 
     public function testEscape(): void {

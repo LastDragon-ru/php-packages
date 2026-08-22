@@ -2,6 +2,7 @@
 
 namespace LastDragon_ru\GlobMatcher;
 
+use InvalidArgumentException;
 use LastDragon_ru\GlobMatcher\BraceExpander\BraceExpander;
 use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Name as BraceExpanderName;
 use LastDragon_ru\GlobMatcher\Contracts\Matcher;
@@ -16,6 +17,7 @@ use LastDragon_ru\TextParser\Utils;
 use Override;
 use Stringable;
 
+use function count;
 use function implode;
 
 readonly class GlobMatcher implements Matcher {
@@ -43,6 +45,10 @@ readonly class GlobMatcher implements Matcher {
             hidden  : $this->options->hidden,
         );
         $patterns = $this->options->braces ? new BraceExpander($this->pattern) : [$this->pattern];
+
+        if (count($patterns) > $this->options->bracesLimit) {
+            throw new InvalidArgumentException('The `$pattern` generates too many variants.');
+        }
 
         foreach ($patterns as $pattern) {
             $regex[] = (new Glob($pattern, $options))->regex->pattern;
