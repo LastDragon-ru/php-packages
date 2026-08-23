@@ -28,7 +28,7 @@
     "illuminate/routing": "^13.10.0",
     "illuminate/support": "^13.10.0",
     "illuminate/validation": "^13.10.0",
-    "guzzlehttp/psr7": "^2.12.1",
+    "guzzlehttp/psr7": "^2.13.0|^3.0.0",
     "lastdragon-ru/lara-asp-core": "self.version",
     "symfony/http-kernel": "^8.0.13",
     "symfony/polyfill-php85": "^1.36.0"
