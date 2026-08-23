@@ -1,22 +1,18 @@
-const fs   = require('fs');
-const path = require('path');
+const fs         = require('fs');
+const path       = require('path');
+const handlebars = require("handlebars");
 
-const mainTemplate       = fs.readFileSync(path.resolve(__dirname, './templates/template.hbs')).toString();
-const commitTemplate     = fs.readFileSync(path.resolve(__dirname, './templates/commit.hbs')).toString();
-const args               = require('minimist')(process.argv.slice(2), {
-    string:  ['release.name', 'release.description', 'dump.changelog', 'dump.version'],
-    default: {
-        'release.name':        null,
-        'release.description': null,
-        'dump.changelog':      null,
-        'dump.version':        null,
-    },
-});
-const releaseName        = args.release.name || 'Release ${version}';
-const releaseDescription = args.release.description;
+const template = handlebars.compile(fs.readFileSync(path.resolve(__dirname, './templates/template.hbs')).toString());
+
+handlebars.registerPartial('commit', fs.readFileSync(path.resolve(__dirname, './templates/commit.hbs')).toString());
+
+const releaseName          = process.env.RELEASE_NAME || 'Release ${version}';
+const releaseDescription   = process.env.RELEASE_DESCRIPTION;
+const releaseDumpVersion   = process.env.RELEASE_DUMP_VERSION;
+const releaseDumpChangelog = process.env.RELEASE_DUMP_CHANGELOG;
 
 if (!releaseName) {
-    throw new Error('The release name is required! Please specify it with `--release.name="name"`.');
+    throw new Error('The release name is required! Please specify it with `RELEASE_NAME="name" ...` env var.');
 }
 
 /**
@@ -124,12 +120,12 @@ module.exports = {
         releaseNotes: (context) => {
             // Dump
             // waiting for https://github.com/release-it/release-it/issues/1031
-            if (args.dump.version) {
-                fs.writeFileSync(args.dump.version, context.version);
+            if (releaseDumpVersion) {
+                fs.writeFileSync(releaseDumpVersion, context.version);
             }
 
-            if (args.dump.changelog) {
-                fs.writeFileSync(args.dump.changelog, context.changelog);
+            if (releaseDumpChangelog) {
+                fs.writeFileSync(releaseDumpChangelog, context.changelog);
             }
 
             // The GitHub release already includes a header, so there is no need
@@ -177,8 +173,9 @@ module.exports = {
                 merges: null,
             },
             writerOpts:        {
-                mainTemplate:    mainTemplate,
-                commitPartial:   commitTemplate,
+                template:        (context) =>  {
+                    return template(context);
+                },
                 finalizeContext: (context, options, commits, keyCommit) => {
                     // Group commits by package and type, collect summary
                     const all      = '*';

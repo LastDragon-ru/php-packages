@@ -83,13 +83,13 @@ jobs:
           EOF
           )
 
+          RELEASE_NAME="${{ inputs.name }}" \
+          RELEASE_DESCRIPTION="$DESCRIPTION" \
+          RELEASE_DUMP_VERSION="$VERSION" \
+          RELEASE_DUMP_CHANGELOG="$CHANGELOG" \
           npm run release -- \
             ${{ inputs.type != 'stable' && format('--preRelease="{0}"', inputs.type) || ''}} \
             ${{ inputs.dry-run && '--dry-run' || ''}} \
-            --release.name='${{ inputs.name }}' \
-            --release.description="$DESCRIPTION" \
-            --dump.version="$VERSION" \
-            --dump.changelog="$CHANGELOG" \
             --verbose
 
           echo "version=$(cat $VERSION)" >> $GITHUB_OUTPUT
