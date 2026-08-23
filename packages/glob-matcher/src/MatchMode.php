@@ -3,7 +3,7 @@
 namespace LastDragon_ru\GlobMatcher;
 
 /**
- * @deprecated %{VERSION} Will be removed in the future.
+ * @deprecated 11.2.0 Will be removed in the future.
  */
 enum MatchMode {
     case Match;

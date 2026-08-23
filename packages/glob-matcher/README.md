@@ -209,7 +209,7 @@ readonly class Options {
          */
         public bool $extended = true,
         /**
-         * @deprecated %{VERSION} The {@see self::$matchHidden} should be used instead.
+         * @deprecated 11.2.0 The {@see self::$matchHidden} should be used instead.
          */
         public bool $hidden = false,
         /**
@@ -220,7 +220,7 @@ readonly class Options {
          */
         public bool $matchHidden = false,
         /**
-         * @deprecated %{VERSION} Will be removed in the future.
+         * @deprecated 11.2.0 Will be removed in the future.
          */
         public MatchMode $matchMode = MatchMode::Match,
         /**

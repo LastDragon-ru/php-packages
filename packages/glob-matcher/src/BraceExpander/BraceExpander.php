@@ -20,7 +20,7 @@ use Traversable;
  */
 readonly class BraceExpander implements Countable, IteratorAggregate {
     /**
-     * @deprecated %{VERSION} Will be removed in the future.
+     * @deprecated 11.2.0 Will be removed in the future.
      */
     public BraceExpansionNode $node;
 

@@ -22,7 +22,7 @@ use function implode;
 
 readonly class GlobMatcher implements Matcher {
     /**
-     * @deprecated %{VERSION} Will be removed in the future.
+     * @deprecated 11.2.0 Will be removed in the future.
      */
     public Regex   $regex;
     public Options $options;
