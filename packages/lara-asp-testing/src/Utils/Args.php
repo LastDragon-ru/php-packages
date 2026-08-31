@@ -193,6 +193,9 @@ class Args {
             'options'                => [],
             'whereNotIns'            => [],
             'afterRawSearchCallback' => null,
+            'semanticSearch'         => false,
+            'minimumSimilarity'      => null,
+            'hybridSearch'           => null,
         ];
         $converted = [];
 
