@@ -3,6 +3,7 @@
 namespace LastDragon_ru\Path;
 
 use InvalidArgumentException;
+use Override;
 
 use function pathinfo;
 use function str_ends_with;
@@ -16,6 +17,7 @@ final class FilePath extends Path {
     /**
      * @param non-empty-string $path
      */
+    #[Override]
     public function __construct(string $path) {
         parent::__construct($path);
 
