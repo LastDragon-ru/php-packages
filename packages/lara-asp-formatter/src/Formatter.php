@@ -220,7 +220,7 @@ class Formatter {
     }
 
     protected function getDefaultTimezone(): IntlTimeZone|DateTimeZone|string|null {
-        return $this->config->getInstance()->get('app.timezone') ?? null;
+        return $this->config->getInstance()->get('app.timezone');
     }
 
     public function __clone(): void {
