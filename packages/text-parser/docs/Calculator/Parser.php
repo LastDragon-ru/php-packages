@@ -151,7 +151,7 @@ class Parser {
     /**
      * @param TransactionalIterable<Token<Name>> $iterable
      */
-    protected function parseSpace(TransactionalIterable $iterable): null {
+    protected function parseSpace(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         // Only spaces allowed here
         if ($iterable[0]?->is(Name::Space) !== true) {
             throw new LogicException('The string is not a mathematical expression.');

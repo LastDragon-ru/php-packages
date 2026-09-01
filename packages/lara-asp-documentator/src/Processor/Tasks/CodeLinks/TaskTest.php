@@ -98,7 +98,7 @@ final class TaskTest extends TestCase {
         };
         $parsed   = $task->parse($document);
         $indent   = '    ';
-        $xml      = new XmlWriter();
+        $xml      = new XMLWriter();
         $xml->openMemory();
         $xml->setIndent(true);
         $xml->setIndentString($indent);
