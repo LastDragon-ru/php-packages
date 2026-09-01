@@ -65,7 +65,7 @@ final class PathTest extends TestCase {
 
         $normalized = $instance->normalized();
 
-        self::assertSame('normalized', (string) $normalized);
+        self::assertSame('normalized', $normalized->path);
         self::assertNotSame($normalized, $instance->normalized());
         self::assertFalse($instance->normalized);
     }

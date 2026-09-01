@@ -29,8 +29,11 @@ use function str_starts_with;
  * @template TPath of string = string
  *
  * @phpstan-sealed DirectoryPath|FilePath
+ *
+ * @implements Constructor<TPath>
  */
-abstract class Path implements Stringable {
+abstract class Path implements Constructor, Stringable {
+    #[Override]
     public function __construct(
         /**
          * @var TPath
@@ -77,10 +80,7 @@ abstract class Path implements Stringable {
         return $this->path;
     }
 
-    /**
-     * @return DirectoryPath|FilePath
-     */
-    public static function make(string $path): self {
+    public static function make(string $path): DirectoryPath|FilePath {
         $type  = self::type($path);
         $parts = self::parts($type, $path);
         $name  = self::name($parts);
@@ -99,16 +99,17 @@ abstract class Path implements Stringable {
     }
 
     /**
-     * @return ($path is DirectoryPath ? DirectoryPath : FilePath)
+     * @template T of self
+     *
+     * @param T $path
+     *
+     * @return new<T>
      */
     public function resolve(self $path): self {
         if ($path->is(Type::Relative)) {
-            $resolved = [...$this->directory()->parts, ...$path->parts];
-            $resolved = $path::normalize($this->type, $resolved);
-            $resolved = $path instanceof DirectoryPath
-                ? new DirectoryPath($resolved)
-                : new FilePath($resolved); // @phpstan-ignore argument.type (ok. it will throw error if empty)
-
+            $resolved             = [...$this->directory()->parts, ...$path->parts];
+            $resolved             = $path::normalize($this->type, $resolved);
+            $resolved             = new ($path::class)($resolved);
             $resolved->type       = $this->type;
             $resolved->normalized = true;
         } elseif ($path->is(Type::WindowsRelative)) {
@@ -131,11 +132,8 @@ abstract class Path implements Stringable {
                 $resolved = [$path->parts[0].'/', ...array_slice($path->parts, 1)];
             }
 
-            $resolved = $path::normalize($type, $resolved);
-            $resolved = $path instanceof DirectoryPath
-                ? new DirectoryPath($resolved)
-                : new FilePath($resolved); // @phpstan-ignore argument.type (ok. it will throw error if empty)
-
+            $resolved             = $path::normalize($type, $resolved);
+            $resolved             = new ($path::class)($resolved);
             $resolved->type       = $type;
             $resolved->normalized = true;
         } else {
@@ -163,7 +161,11 @@ abstract class Path implements Stringable {
     }
 
     /**
-     * @return ($path is DirectoryPath ? DirectoryPath|null : FilePath|null)
+     * @template T of self
+     *
+     * @param T $path
+     *
+     * @return new<T>|null
      */
     public function relative(self $path): ?self {
         // Relative?
@@ -192,14 +194,11 @@ abstract class Path implements Stringable {
             $count++;
         }
 
-        $type     = Type::Relative;
-        $repeat   = count($root) - $count;
-        $relative = ($repeat > 0 ? str_repeat('../', $repeat) : '').implode('/', $parts);
-        $relative = $path::normalize($type, $path::parts($type, $relative));
-        $relative = $path instanceof DirectoryPath
-            ? new DirectoryPath($relative)
-            : new FilePath($relative); // @phpstan-ignore argument.type (ok. it will throw error if empty)
-
+        $type                 = Type::Relative;
+        $repeat               = count($root) - $count;
+        $relative             = ($repeat > 0 ? str_repeat('../', $repeat) : '').implode('/', $parts);
+        $relative             = $path::normalize($type, $path::parts($type, $relative));
+        $relative             = new ($path::class)($relative);
         $relative->type       = $type;
         $relative->normalized = true;
 
@@ -208,19 +207,15 @@ abstract class Path implements Stringable {
     }
 
     /**
-     * @return ($this is DirectoryPath ? DirectoryPath : FilePath)
+     * @return new<$this>
      */
     public function normalized(): self {
         if ($this->normalized) {
-            // @phpstan-ignore return.type (sealed not narrowed correctly, see https://github.com/phpstan/phpstan/issues/13839)
             return $this;
         }
 
-        $path = static::normalize($this->type, $this->parts);
-        $path = $this instanceof DirectoryPath
-            ? new DirectoryPath($path)
-            : new FilePath($path); // @phpstan-ignore argument.type (ok. it will throw error if empty)
-
+        $path             = static::normalize($this->type, $this->parts);
+        $path             = new ($this::class)($path);
         $path->type       = $this->type;
         $path->normalized = true;
 
