@@ -1,5 +1,5 @@
 {
-    "version": "11.2.0",
+    "version": "11.2.1",
     "require": {
         "php": "PHP",
         "webonyx/graphql-php": "`webonyx/graphql-php`"
@@ -7,6 +7,15 @@
     "merge": null,
     "requirements": {
         "HEAD": {
+            "php": [
+                "^8.5",
+                "^8.4"
+            ],
+            "webonyx/graphql-php": [
+                "^15.32.3"
+            ]
+        },
+        "11.2.1": {
             "php": [
                 "^8.5",
                 "^8.4"
