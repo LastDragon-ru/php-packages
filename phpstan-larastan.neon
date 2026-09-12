@@ -16,6 +16,7 @@ parameters:
     checkOctaneCompatibility: false
     noEnvCallsOutsideOfConfig: true
     noModelMake: true
+    noImplicitQueryBuilderCall: false
     noUnnecessaryCollectionCall: true
     noUnnecessaryCollectionCallOnly: []
     noUnnecessaryCollectionCallExcept: []
@@ -36,12 +37,20 @@ parameters:
     checkConfigTypes: false
     checkAuthCallsWhenInRequestScope: false
     parseModelCastsMethod: false
-    enableMigrationCache: false
+    enableMigrationCache: true
+    checkUniqueJobUniqueFor: false
+    checkUniqueJobUniqueId: false
+    noBatchedUniqueJob: false
+    checkJobSerializesModels: false
+    checkBatchedJobIsBatchable: false
+    checkBatchableJobChecksCancellation: false
+    checkDispatchInTransactionAfterCommit: false
 
 parametersSchema:
     checkOctaneCompatibility: bool()
     noEnvCallsOutsideOfConfig: bool()
     noModelMake: bool()
+    noImplicitQueryBuilderCall: bool()
     noUnnecessaryCollectionCall: bool()
     noUnnecessaryCollectionCallOnly: listOf(string())
     noUnnecessaryCollectionCallExcept: listOf(string())
@@ -63,6 +72,13 @@ parametersSchema:
     checkAuthCallsWhenInRequestScope: bool()
     parseModelCastsMethod: bool()
     enableMigrationCache: bool()
+    checkUniqueJobUniqueFor: bool()
+    checkUniqueJobUniqueId: bool()
+    noBatchedUniqueJob: bool()
+    checkJobSerializesModels: bool()
+    checkBatchedJobIsBatchable: bool()
+    checkBatchableJobChecksCancellation: bool()
+    checkDispatchInTransactionAfterCommit: bool()
 
 conditionalTags:
     Larastan\Larastan\Rules\NoEnvCallsOutsideOfConfigRule:
@@ -70,6 +86,9 @@ conditionalTags:
 
     Larastan\Larastan\Rules\NoModelMakeRule:
         phpstan.rules.rule: %noModelMake%
+
+    Larastan\Larastan\Rules\NoImplicitQueryBuilderCallRule:
+        phpstan.rules.rule: %noImplicitQueryBuilderCall%
 
     Larastan\Larastan\Rules\NoUnnecessaryCollectionCallRule:
         phpstan.rules.rule: %noUnnecessaryCollectionCall%
@@ -112,6 +131,27 @@ conditionalTags:
 
     Larastan\Larastan\Rules\ConfigCollectionRule:
         phpstan.rules.rule: %checkConfigTypes%
+
+    Larastan\Larastan\Rules\Queue\UniqueJobDeclaresUniqueForRule:
+        phpstan.rules.rule: %checkUniqueJobUniqueFor%
+
+    Larastan\Larastan\Rules\Queue\UniqueJobDeclaresUniqueIdRule:
+        phpstan.rules.rule: %checkUniqueJobUniqueId%
+
+    Larastan\Larastan\Rules\Queue\NoBatchedUniqueJobRule:
+        phpstan.rules.rule: %noBatchedUniqueJob%
+
+    Larastan\Larastan\Rules\Queue\JobWithModelPropertyDeclaresSerializesModelsRule:
+        phpstan.rules.rule: %checkJobSerializesModels%
+
+    Larastan\Larastan\Rules\Queue\BatchedJobIsBatchableRule:
+        phpstan.rules.rule: %checkBatchedJobIsBatchable%
+
+    Larastan\Larastan\Rules\Queue\BatchableJobChecksCancellationRule:
+        phpstan.rules.rule: %checkBatchableJobChecksCancellation%
+
+    Larastan\Larastan\Rules\Queue\JobDispatchedInTransactionUsesAfterCommitRule:
+        phpstan.rules.rule: %checkDispatchInTransactionAfterCommit%
 
 services:
     -
@@ -203,6 +243,11 @@ services:
         class: Larastan\Larastan\Properties\ModelRelationsExtension
         tags:
             - phpstan.broker.propertiesClassReflectionExtension
+
+    -
+        class: Larastan\Larastan\ReturnTypes\ModelSerializationDynamicMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
         class: Larastan\Larastan\ReturnTypes\ModelOnlyDynamicMethodReturnTypeExtension
@@ -318,11 +363,6 @@ services:
             - phpstan.broker.dynamicMethodReturnTypeExtension
 
     -
-        class: Larastan\Larastan\ReturnTypes\NewModelQueryDynamicMethodReturnTypeExtension
-        tags:
-            - phpstan.broker.dynamicMethodReturnTypeExtension
-
-    -
         class: Larastan\Larastan\ReturnTypes\FactoryDynamicMethodReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
@@ -410,6 +450,9 @@ services:
         class: Larastan\Larastan\Rules\NoModelMakeRule
 
     -
+        class: Larastan\Larastan\Rules\NoImplicitQueryBuilderCallRule
+
+    -
         class: Larastan\Larastan\Rules\NoUnnecessaryCollectionCallRule
         arguments:
             onlyMethods: %noUnnecessaryCollectionCallOnly%
@@ -460,6 +503,17 @@ services:
 
     -
         class: Larastan\Larastan\Types\CollectionOf\CollectionOfTypeNodeResolverExtension
+        tags:
+            - phpstan.phpDoc.typeNodeResolverExtension
+
+    -
+        class: Larastan\Larastan\ClosureTypes\RelationshipQueryCallbackExtension
+        tags:
+            - phpstan.methodParameterClosureTypeExtension
+            - phpstan.staticMethodParameterClosureTypeExtension
+
+    -
+        class: Larastan\Larastan\Types\BuilderOf\BuilderOfTypeNodeResolverExtension
         tags:
             - phpstan.phpDoc.typeNodeResolverExtension
 
@@ -516,6 +570,14 @@ services:
             checkProperties: %checkModelProperties%
 
     -
+        class: Larastan\Larastan\Rules\ModelRelationDefaultsRule
+        tags:
+            - phpstan.rules.rule
+
+    -
+        class: Larastan\Larastan\Rules\RelationExistenceHelper
+
+    -
         class: Larastan\Larastan\Rules\RelationExistenceRule
         tags:
             - phpstan.rules.rule
@@ -554,6 +616,16 @@ services:
 
     -
         class: Larastan\Larastan\Collectors\UsedEmailViewCollector
+        tags:
+            - phpstan.collector
+
+    -
+        class: Larastan\Larastan\Collectors\UsedEmailAlternativeSyntaxViewCollector
+        tags:
+            - phpstan.collector
+
+    -
+        class: Larastan\Larastan\Collectors\UsedEmailSendViewCollector
         tags:
             - phpstan.collector
 
@@ -700,6 +772,29 @@ services:
 
     -
         class: Larastan\Larastan\Rules\ConfigCollectionRule
+
+    -
+        class: Larastan\Larastan\Rules\Queue\UniqueJobDeclaresUniqueForRule
+
+    -
+        class: Larastan\Larastan\Rules\Queue\UniqueJobDeclaresUniqueIdRule
+
+    -
+        class: Larastan\Larastan\Rules\Queue\NoBatchedUniqueJobRule
+
+    -
+        class: Larastan\Larastan\Rules\Queue\JobWithModelPropertyDeclaresSerializesModelsRule
+
+    -
+        class: Larastan\Larastan\Rules\Queue\BatchedJobIsBatchableRule
+
+    -
+        class: Larastan\Larastan\Rules\Queue\BatchableJobChecksCancellationRule
+        arguments:
+            parser: @currentPhpVersionSimpleDirectParser
+
+    -
+        class: Larastan\Larastan\Rules\Queue\JobDispatchedInTransactionUsesAfterCommitRule
 
     -
         class: Illuminate\Filesystem\Filesystem

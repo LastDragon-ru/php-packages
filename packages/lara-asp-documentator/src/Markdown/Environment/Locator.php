@@ -138,7 +138,7 @@ class Locator {
         $lines     = Lines::get($node);
         $startLine = array_key_first($lines);
         $endLine   = array_key_last($lines);
-        $location  = $startLine !== null && $endLine !== null
+        $location  = $startLine !== null
             ? new Location($startLine, $endLine)
             : null;
 

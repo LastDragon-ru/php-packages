@@ -69,7 +69,7 @@ class ChunkedChangeSafeIterator extends IteratorImpl {
             )
             ->get();
 
-        return $builder; // @phpstan-ignore return.type (T is lost, not sure why...)
+        return $builder;
     }
 
     #[Override]

@@ -4,6 +4,9 @@ namespace LastDragon_ru\LaraASP\Core\Helpers;
 
 use Illuminate\Contracts\View\Factory as ViewFactoryContract;
 use Illuminate\Contracts\View\View as ViewContract;
+use InvalidArgumentException;
+
+use function sprintf;
 
 /**
  * Special wrapper around {@see ViewFactoryContract} to help render package's views.
@@ -24,7 +27,15 @@ abstract class Viewer {
      * @param array<string, mixed> $data
      */
     public function get(string $view, array $data = []): ViewContract {
-        return $this->factory->make("{$this->getName()}::{$view}", $data);
+        $view = "{$this->getName()}::{$view}";
+
+        if (!$this->factory->exists($view)) {
+            throw new InvalidArgumentException(
+                sprintf('View `%s` not found.', $view),
+            );
+        }
+
+        return $this->factory->make($view, $data);
     }
 
     /**
