@@ -2,8 +2,6 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob;
 
-use LastDragon_ru\GlobMatcher\MatchMode;
-
 readonly class Options {
     public function __construct(
         /**
@@ -20,20 +18,12 @@ readonly class Options {
          */
         public bool $extended = true,
         /**
-         * @deprecated 11.2.0 The {@see self::$matchHidden} should be used instead.
-         */
-        public bool $hidden = false,
-        /**
          * Filenames beginning with a dot are hidden and not matched by default
          * unless the glob begins with a dot or this option set to `true`.
          *
          * The same as `dotglob`.
          */
         public bool $matchHidden = false,
-        /**
-         * @deprecated 11.2.0 Will be removed in the future.
-         */
-        public MatchMode $matchMode = MatchMode::Match,
         /**
          * The same as `nocasematch`.
          */

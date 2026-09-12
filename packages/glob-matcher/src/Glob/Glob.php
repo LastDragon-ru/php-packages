@@ -10,6 +10,7 @@ use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegex;
 use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegexOptions;
 use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToString;
 use LastDragon_ru\GlobMatcher\Glob\Parser\Parser;
+use LastDragon_ru\GlobMatcher\MatchMode;
 use LastDragon_ru\GlobMatcher\Package;
 use LastDragon_ru\GlobMatcher\Regex;
 use Override;
@@ -61,12 +62,12 @@ readonly class Glob implements Stringable, Matcher {
         $converter = new CursorToRegex(
             new CursorToRegexOptions(
                 matchCase  : $options->matchCase,
-                matchHidden: $options->matchHidden || $options->hidden,
+                matchHidden: $options->matchHidden,
             ),
         );
         $regex     = $converter(new Cursor($node));
         $regex     = mb_substr($regex, 1, (int) mb_strrpos($regex, '#', 0, Package::Encoding) - 1, Package::Encoding);
-        $regex     = new Regex($regex, $options->matchMode, $options->matchCase);
+        $regex     = new Regex($regex, MatchMode::Match, $options->matchCase);
 
         return $regex;
     }

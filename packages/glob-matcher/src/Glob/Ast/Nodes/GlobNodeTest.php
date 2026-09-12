@@ -39,16 +39,6 @@ final class GlobNodeTest extends TestCase {
                 'file.txt',
                 new Options(),
             ],
-            'hidden: true'       => [
-                '(?!\.{1,2}(?:/|$))(?:(?=.)file\.txt)',
-                'file.txt',
-                new Options(hidden: true),
-            ],
-            'hidden: false'      => [
-                '(?!\.)(?:(?=.)file\.txt)',
-                'file.txt',
-                new Options(hidden: false),
-            ],
             'matchHidden: true'  => [
                 '(?!\.{1,2}(?:/|$))(?:(?=.)file\.txt)',
                 'file.txt',
