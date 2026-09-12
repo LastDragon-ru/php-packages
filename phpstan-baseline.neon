@@ -1,6 +1,36 @@
 parameters:
 	ignoreErrors:
 		-
+			rawMessage: 'Parameter #1 $cursor of static method LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode::toCount() expects LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode>, LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode> given.'
+			identifier: argument.type
+			count: 1
+			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/BraceExpansionNodeTest.php
+
+		-
+			rawMessage: 'Parameter #1 $cursor of static method LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode::toCount() expects LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode>, LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode> given.'
+			identifier: argument.type
+			count: 2
+			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/SequenceNodeTest.php
+
+		-
+			rawMessage: 'Parameter #1 $cursor of static method LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode::toIterable() expects LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode>, LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode> given.'
+			identifier: argument.type
+			count: 1
+			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/SequenceNodeTest.php
+
+		-
+			rawMessage: 'Parameter #1 $cursor of static method LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode::toCount() expects LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode>, LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode> given.'
+			identifier: argument.type
+			count: 1
+			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/StringNodeTest.php
+
+		-
+			rawMessage: 'Parameter #1 $cursor of static method LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode::toIterable() expects LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode>, LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode> given.'
+			identifier: argument.type
+			count: 1
+			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/StringNodeTest.php
+
+		-
 			rawMessage: 'Instanceof between static(LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\CharacterNode) and LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\StringNode will always evaluate to false.'
 			identifier: instanceof.alwaysFalse
 			count: 1
@@ -1761,6 +1791,12 @@ parameters:
 		-
 			rawMessage: 'Parameter #1 $query of method Illuminate\Database\Eloquent\Builder<T of Illuminate\Database\Eloquent\Model>::joinSub() expects Closure|Illuminate\Database\Eloquent\Builder<*>|Illuminate\Database\Query\Builder|string, mixed given.'
 			identifier: argument.type
+			count: 1
+			path: packages/lara-asp-graphql/src/SortBy/Sorters/EloquentSorter.php
+
+		-
+			rawMessage: 'Parameter #2 $parentQuery of method Illuminate\Database\Eloquent\Relations\Relation<Illuminate\Database\Eloquent\Model,covariant Illuminate\Database\Eloquent\Model,mixed>::getRelationExistenceQuery() contains unresolvable type.'
+			identifier: argument.unresolvableType
 			count: 1
 			path: packages/lara-asp-graphql/src/SortBy/Sorters/EloquentSorter.php
 
