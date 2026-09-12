@@ -40,7 +40,6 @@ readonly class Glob implements Matcher {
     protected function regex(array $patterns, bool $hidden): ?Regex {
         $options = new Options(
             matchHidden: $hidden,
-            matchMode  : MatchMode::Match,
             matchCase  : true,
         );
         $regex   = [];
@@ -52,7 +51,7 @@ readonly class Glob implements Matcher {
         }
 
         return $regex !== []
-            ? new Regex('(?:'.implode('|', $regex).')', $options->matchMode, $options->matchCase)
+            ? new Regex('(?:'.implode('|', $regex).')', MatchMode::Match, $options->matchCase)
             : null;
     }
 }

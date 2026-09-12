@@ -45,7 +45,6 @@ readonly class GlobMatcher implements Matcher {
         $options  = new GlobOptions(
             globstar   : $this->options->globstar,
             extended   : $this->options->extended,
-            hidden     : $this->options->hidden,
             matchHidden: $this->options->matchHidden,
         );
         $patterns = $this->options->braces ? new BraceExpander($this->pattern) : [$this->pattern];
@@ -60,7 +59,7 @@ readonly class GlobMatcher implements Matcher {
 
         return new Regex(
             '(?:'.implode('|', $regex).')',
-            $this->options->matchMode,
+            MatchMode::Match,
             $this->options->matchCase,
         );
     }
