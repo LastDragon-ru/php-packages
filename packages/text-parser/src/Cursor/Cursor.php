@@ -2,12 +2,17 @@
 
 namespace LastDragon_ru\TextParser\Cursor;
 
+use Override;
+
 /**
  * @template TNode of object
  * @template TNodeInterface of object
+ *
+ * @implements CursorConstructor<TNode, TNodeInterface>
  */
-abstract class Cursor {
-    final public function __construct(
+abstract class Cursor implements CursorConstructor {
+    #[Override]
+    public function __construct(
         /**
          * @var TNode&TNodeInterface
          */
