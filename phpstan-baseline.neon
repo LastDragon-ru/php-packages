@@ -43,7 +43,7 @@ parameters:
 			path: packages/glob-matcher/src/Glob/Ast/Nodes/CharacterNode.php
 
 		-
-			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\GlobMatcher\Glob\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node>, LastDragon_ru\TextParser\Cursor\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node, LastDragon_ru\GlobMatcher\Glob\Ast\Node> given.'
+			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\GlobMatcher\Glob\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node>, LastDragon_ru\TextParser\Cursor\Cursor<LastDragon_ru\GlobMatcher\Glob\Ast\Node, covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node> given.'
 			identifier: argument.type
 			count: 1
 			path: packages/glob-matcher/src/Glob/Ast/Nodes/PatternListNode.php

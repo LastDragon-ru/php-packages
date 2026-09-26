@@ -10,7 +10,7 @@ use LastDragon_ru\TextParser\Cursor\Offsettable;
 /**
  * @template TNode of Node
  *
- * @extends NodeCursor<TNode, Node>
+ * @extends NodeCursor<Node, TNode>
  */
 class Cursor extends NodeCursor {
     /**

@@ -89,7 +89,7 @@ class ArrayAxisTest_Parent implements ArrayAxisTest_Node {
 /**
  * @internal
  * @template TNode of ArrayAxisTest_Node
- * @extends Cursor<TNode, ArrayAxisTest_Node>
+ * @extends Cursor<ArrayAxisTest_Node, TNode>
  */
 class ArrayAxisTest_Cursor extends Cursor {
     /**

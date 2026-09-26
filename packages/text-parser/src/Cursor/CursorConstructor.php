@@ -3,13 +3,13 @@
 namespace LastDragon_ru\TextParser\Cursor;
 
 /**
- * @template TNode of object
  * @template TNodeInterface of object
+ * @template TNode of TNodeInterface
  */
 interface CursorConstructor {
     /**
-     * @param TNode&TNodeInterface                              $node
-     * @param ?Cursor<covariant TNodeInterface, TNodeInterface> $parent
+     * @param TNode                                             $node
+     * @param ?Cursor<TNodeInterface, covariant TNodeInterface> $parent
      * @param ?int<0, max>                                      $offset
      */
     public function __construct(object $node, ?Cursor $parent = null, ?int $offset = null);
