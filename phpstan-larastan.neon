@@ -11,7 +11,7 @@ parameters:
         - Eloquent
 
     bootstrapFiles:
-        - vendor/larastan/larastan/bootstrap.php
+        - vendor-bin/phpstan/vendor/larastan/larastan/bootstrap.php
 
     checkOctaneCompatibility: false
     noEnvCallsOutsideOfConfig: true

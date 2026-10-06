@@ -154,7 +154,7 @@ class Extension {
     }
 
     private static function getRootPath(): DirectoryPath {
-        return new DirectoryPath((string) getcwd());
+        return (new DirectoryPath((string) getcwd()))->directory('../..');
     }
 
     private static function hasLarastan(): bool {
