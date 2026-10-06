@@ -70,7 +70,7 @@ final class UnionTypeDefinitionTest extends TestCase {
         $block     = new UnionTypeDefinition($context, $union);
         $content   = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['Test' => 'Test', 'A' => 'A', 'B' => 'B'], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a'], $collector->getUsedDirectives());
 

@@ -64,7 +64,7 @@ final class FieldTest extends TestCase {
         $block      = new Field($context, $definition, $type);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['A' => 'A', 'B' => 'B', 'String' => 'String', 'Int' => 'Int'], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a'], $collector->getUsedDirectives());
 
@@ -84,7 +84,7 @@ final class FieldTest extends TestCase {
         $block      = new Field($context, $definition, $type);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals([], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a'], $collector->getUsedDirectives());
 

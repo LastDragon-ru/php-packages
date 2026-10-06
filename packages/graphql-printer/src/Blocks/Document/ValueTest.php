@@ -73,7 +73,7 @@ final class ValueTest extends TestCase {
         $block     = new Value($context, $literal, Type::int());
         $content   = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['Int' => 'Int'], $collector->getUsedTypes());
         self::assertEquals([], $collector->getUsedDirectives());
     }
@@ -103,7 +103,7 @@ final class ValueTest extends TestCase {
         $block     = new Value($context, $literal, $schema->getType('A'));
         $content   = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(
             [
                 'Int'     => 'Int',
@@ -115,7 +115,7 @@ final class ValueTest extends TestCase {
             ],
             $collector->getUsedTypes(),
         );
-        self::assertEmpty($collector->getUsedDirectives());
+        self::assertEquals([], $collector->getUsedDirectives());
     }
 
     public function testStatisticsObjectValueNoSchema(): void {
@@ -134,14 +134,14 @@ final class ValueTest extends TestCase {
         );
         $content = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(
             [
                 'A' => 'A',
             ],
             $collector->getUsedTypes(),
         );
-        self::assertEmpty($collector->getUsedDirectives());
+        self::assertEquals([], $collector->getUsedDirectives());
     }
     // </editor-fold>
 

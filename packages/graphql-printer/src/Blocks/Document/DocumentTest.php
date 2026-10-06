@@ -62,7 +62,7 @@ final class DocumentTest extends TestCase {
         $block      = new Document($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(
             [
                 'String' => 'String',

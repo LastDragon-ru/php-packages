@@ -69,7 +69,7 @@ final class ListBlockTest extends TestCase {
             }
         };
 
-        self::assertNotEmpty($list->serialize($collector, 0, 0));
+        self::assertTrue($list->serialize($collector, 0, 0) !== '');
         self::assertEquals(['ta' => 'ta', 'tb' => 'tb'], $collector->getUsedTypes());
         self::assertEquals(['da' => 'da', 'db' => 'db'], $collector->getUsedDirectives());
     }

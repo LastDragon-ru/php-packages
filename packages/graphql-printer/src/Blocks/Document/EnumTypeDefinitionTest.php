@@ -53,7 +53,7 @@ final class EnumTypeDefinitionTest extends TestCase {
         $block      = new EnumTypeDefinition($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['Test' => 'Test'], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a'], $collector->getUsedDirectives());
 

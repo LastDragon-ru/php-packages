@@ -61,7 +61,7 @@ final class InputValueDefinitionTest extends TestCase {
         $block      = new InputValueDefinition($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['A' => 'A'], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a'], $collector->getUsedDirectives());
 
