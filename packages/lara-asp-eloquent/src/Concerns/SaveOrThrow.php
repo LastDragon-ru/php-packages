@@ -11,9 +11,6 @@ use Override;
  * @mixin Model|Pivot
  */
 trait SaveOrThrow {
-    /**
-     * @param array<string, mixed> $options
-     */
     #[Override]
     public function save(array $options = []): bool {
         $result = parent::save($options);
