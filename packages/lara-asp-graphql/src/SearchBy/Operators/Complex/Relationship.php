@@ -120,7 +120,6 @@ class Relationship extends Operator {
                 ? $where['operator']
                 : $operator;
         } elseif ($notExists) {
-            $count    = 1;
             $operator = '<';
         } else {
             // empty

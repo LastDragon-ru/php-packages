@@ -156,8 +156,7 @@ class Args {
             $sql      = $query['query'] ?? null;
             $bindings = $query['bindings'] ?? null;
         } elseif (is_string($query)) {
-            $sql      = $query;
-            $bindings = [];
+            $sql = $query;
         } else {
             // empty
         }
