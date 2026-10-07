@@ -53,9 +53,7 @@ class InputValueDefinition extends DefinitionBlock {
 
     #[Override]
     protected function value(bool $multiline): ?Block {
-        $type       = null;
         $value      = null;
-        $default    = null;
         $definition = $this->getDefinition();
 
         if ($definition instanceof InputValueDefinitionNode) {

@@ -203,8 +203,6 @@ class AstManipulator {
     public function isDeprecated(
         Node|Argument|EnumValueDefinition|FieldDefinition|InputObjectField $node,
     ): bool {
-        $deprecated = false;
-
         if ($node instanceof Node) {
             $deprecated = $this->getDirective($node, DeprecatedDirective::class) !== null;
         } else {
@@ -477,8 +475,6 @@ class AstManipulator {
             // empty
         }
 
-        $name = null;
-
         if ($node instanceof NameNode) {
             $name = $node->value;
         } elseif ($node instanceof InputObjectField || $node instanceof FieldDefinition || $node instanceof Argument) {
@@ -584,8 +580,6 @@ class AstManipulator {
         InterfaceTypeDefinitionNode|ObjectTypeDefinitionNode|HasFieldsType $node,
         string $name,
     ): FieldDefinitionNode|FieldDefinition|null {
-        $field = null;
-
         if ($node instanceof HasFieldsType) {
             $field = $node->hasField($name) ? $node->getField($name) : null;
         } else {
@@ -861,7 +855,6 @@ class AstManipulator {
      */
     private function toType((TypeNode&Node)|string $name, string $expected): Type {
         // todo(lara-asp-graphql): Is there a better way to get Type?
-        $type = null;
         $node = is_string($name) ? Parser::typeReference($name) : $name;
 
         if ($node instanceof ListTypeNode) {

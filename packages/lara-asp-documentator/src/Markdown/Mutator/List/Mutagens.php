@@ -437,8 +437,6 @@ class Mutagens {
     }
 
     protected function position(Location $a, Location $b): Position {
-        $position = null;
-
         if ($a->startLine === $b->startLine && $a->endLine === $b->endLine) {
             $position = $a->offset !== $b->offset || $a->length !== $b->length
                 ? $this->pos($a->offset, $this->end($a), $b->offset, $this->end($b))

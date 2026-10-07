@@ -98,8 +98,6 @@ class Manipulator extends AstManipulator implements TypeProvider {
 
     #[Override]
     public function getTypeSource((TypeDefinitionNode&Node)|(TypeNode&Node)|Type $type): TypeSource {
-        $source = null;
-
         if ($type instanceof InputObjectTypeDefinitionNode || $type instanceof InputObjectType) {
             $source = new InputSource($this, $type);
         } elseif ($type instanceof ObjectTypeDefinitionNode || $type instanceof ObjectType) {

@@ -171,9 +171,8 @@ class Task implements FileTask {
 
                 // Replace
                 foreach ($token->nodes as $node) {
-                    $location = null;
-                    $text     = "{$content}\n";
-                    $next     = $node->next();
+                    $text = "{$content}\n";
+                    $next = $node->next();
 
                     if ($next instanceof GeneratedNode) {
                         $location = Location::get($next);

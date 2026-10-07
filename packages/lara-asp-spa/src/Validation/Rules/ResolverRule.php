@@ -25,7 +25,7 @@ class ResolverRule extends Rule implements ValueProvider {
     public function isValid(string $attribute, mixed $value): bool {
         try {
             return (bool) $this->getValue($value);
-        } catch (UnresolvedValueException $exception) {
+        } catch (UnresolvedValueException) {
             // no action
         }
 

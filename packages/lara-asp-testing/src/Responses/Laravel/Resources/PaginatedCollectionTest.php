@@ -23,11 +23,10 @@ final class PaginatedCollectionTest extends TestCase {
         $schema     = new PaginatedCollection(self::class);
         $constraint = new JsonMatchesSchema($schema);
         $message    = '';
-        $actual     = null;
+        $actual     = true;
 
         try {
-            $actual = $constraint->evaluate($json);
-            $actual = true;
+            $constraint->evaluate($json);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
             $actual  = false;
