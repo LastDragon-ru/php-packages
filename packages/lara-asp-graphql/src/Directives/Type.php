@@ -75,7 +75,7 @@ class Type extends BaseDirective implements TypeResolver {
             is_a($class, GraphQLType::class, true) && is_a($class, NamedType::class, true)
                 => $this->createType($name, $class, $node),
             is_a($class, UnitEnum::class, true)
-                => $this->createEnum($name, $class, $node),
+                => $this->createEnum($name, $class),
             default
                 => null,
         };
@@ -99,7 +99,7 @@ class Type extends BaseDirective implements TypeResolver {
     /**
      * @param class-string<UnitEnum> $class
      */
-    private function createEnum(string $name, string $class, ScalarTypeDefinitionNode $node): EnumType {
+    private function createEnum(string $name, string $class): EnumType {
         return new PhpEnumType($class, $name);
     }
 
@@ -113,7 +113,7 @@ class Type extends BaseDirective implements TypeResolver {
         ];
 
         if (is_a($class, ScalarType::class, true)) {
-            $args['config'] = $this->createTypeScalarConfig($name, $class, $node);
+            $args['config'] = $this->createTypeScalarConfig($name, $node);
         }
 
         return $this->container->getInstance()->make($class, $args);
@@ -122,7 +122,7 @@ class Type extends BaseDirective implements TypeResolver {
     /**
      * @return ScalarConfig
      */
-    private function createTypeScalarConfig(string $name, string $class, ScalarTypeDefinitionNode $node): array {
+    private function createTypeScalarConfig(string $name, ScalarTypeDefinitionNode $node): array {
         return [
             'name'        => $name,
             'astNode'     => $node,
