@@ -1,7 +1,7 @@
 {
   "require-dev": {
     "larastan/larastan": "^3.12.3",
-    "phpstan/phpstan": "2.2.16",
+    "phpstan/phpstan": "^2.3.0",
     "phpstan/phpstan-mockery": "^2.0.0",
     "phpstan/phpstan-phpunit": "^2.0.21",
     "phpstan/phpstan-strict-rules": "^2.0.1",
