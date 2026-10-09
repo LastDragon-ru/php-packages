@@ -24,7 +24,6 @@
     "ext-dom": "*",
     "ext-mbstring": "*",
     "doctrine/sql-formatter": "^1.1.0",
-    "fakerphp/faker": "^1.21.0",
     "illuminate/collections": "^13.10.0",
     "illuminate/console": "^13.10.0",
     "illuminate/contracts": "^13.10.0",
@@ -47,6 +46,7 @@
     "symfony/psr-http-message-bridge": "^8.0.0"
   },
   "require-dev": {
+    "fakerphp/faker": "^1.21.0",
     "illuminate/http": "^13.10.0",
     "laravel/scout": "^11.0.0",
     "orchestra/testbench": "^11.0.0"
