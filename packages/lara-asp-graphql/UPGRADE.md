@@ -406,10 +406,10 @@ This section is actual only if you are extending the package. Please review and 
 [code-links/bed52c4a6cb03cac]: src/Stream/Directives/Directive.php
     "\LastDragon_ru\LaraASP\GraphQL\Stream\Directives\Directive"
 
-[code-links/2b084802cce4981b]: ../lara-asp-graphql-testing/src/Assertions.php#L87-L96
+[code-links/2b084802cce4981b]: ../lara-asp-graphql-testing/src/Assertions.php#L88-L97
     "\LastDragon_ru\LaraASP\GraphQL\Testing\Assertions::assertGraphQLSchemaEquals()"
 
-[code-links/947cddaaef5e3f1b]: src/Utils/AstManipulator.php#L298-L339
+[code-links/947cddaaef5e3f1b]: src/Utils/AstManipulator.php#L296-L337
     "\LastDragon_ru\LaraASP\GraphQL\Utils\AstManipulator::getOriginType()"
 
 [//]: # (end: code-links)

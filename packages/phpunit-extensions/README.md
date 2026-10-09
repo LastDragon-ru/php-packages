@@ -210,7 +210,7 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 [code-links/43d8e2c832b53052]: ../path/src/FilePath.php
     "\LastDragon_ru\Path\FilePath"
 
-[code-links/4159fe98c06c052e]: ../path/src/Path.php#L230-L233
+[code-links/4159fe98c06c052e]: ../path/src/Path.php#L225-L228
     "\LastDragon_ru\Path\Path::equals()"
 
 [code-links/8ddbbc27bf46e25a]: src/Assertions.php
