@@ -66,21 +66,6 @@ parameters:
             paths:
                 - packages/lara-asp-testing/src/Mixins/TestResponseMixin.php
 
-        # Closure parameters cannot be inferred from return type yet
-        # https://github.com/phpstan/phpstan/issues/11317
-        -
-            message: '#^Parameter \#3 \$args of method LastDragon_ru\\LaraASP\\GraphQL\\Stream\\Directives\\Directive::getBuilder\(\) expects array<string, mixed>, array given\.$#'
-            paths:
-                - packages/lara-asp-graphql/src/Stream/Directives/Directive.php
-        -
-            message: '#^Parameter \#5 \$args of method LastDragon_ru\\LaraASP\\GraphQL\\Stream\\Directives\\Directive::getFieldValue\(\) expects array<string, mixed>, array given\.$#'
-            paths:
-                - packages/lara-asp-graphql/src/Stream/Directives/Directive.php
-        -
-            message: '#^Parameter \#4 \$args of method Nuwave\\Lighthouse\\Execution\\ResolveInfo::enhanceBuilder\(\) expects array<string, mixed>, array given\.$#'
-            paths:
-                - packages/lara-asp-graphql/src/Package/Directives/ExposeBuilderDirective.php
-
         # is_a(static::class, Class::class, true) false positive
         # https://github.com/phpstan/phpstan/issues/1239
         -
