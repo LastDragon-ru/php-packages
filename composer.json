@@ -106,25 +106,7 @@
   },
   "autoload-dev": {
     "exclude-from-classmap": [
-      "packages/glob-matcher/docs/",
-      "packages/graphql-printer/docs/",
-      "packages/lara-asp-core/docs/",
-      "packages/lara-asp-dev/docs/",
-      "packages/lara-asp-documentator/docs/",
-      "packages/lara-asp-eloquent/docs/",
-      "packages/lara-asp-formatter/docs/",
-      "packages/lara-asp-graphql/docs/",
-      "packages/lara-asp-migrator/docs/",
-      "packages/lara-asp-migrator/src/Migrations/MigratorTest/raw/",
-      "packages/lara-asp-serializer/docs/",
-      "packages/lara-asp-spa/docs/",
-      "packages/lara-asp-testing/docs/",
-      "packages/path/docs/",
-      "packages/phpunit-extensions/docs/",
-      "packages/phpunit-graphql/docs/",
-      "packages/phpunit-xml/docs/",
-      "packages/text-parser/docs/",
-      "packages/**/*Test/"
+      "packages/**/docs/"
     ],
     "psr-4": {
       "LastDragon_ru\\GlobMatcher\\Docs\\": "packages/glob-matcher/docs",

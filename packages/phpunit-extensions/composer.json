@@ -39,7 +39,10 @@
       "LastDragon_ru\\PhpUnit\\Docs\\": "docs"
     },
     "exclude-from-classmap": [
-      "docs/"
+      "docs/",
+      "src/Package/",
+      "src/**/*Test/",
+      "src/**/*Test.php"
     ]
   },
   "config": {

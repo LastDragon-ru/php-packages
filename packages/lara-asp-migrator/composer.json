@@ -56,7 +56,9 @@
     },
     "exclude-from-classmap": [
       "docs/",
-      "src/Migrations/MigratorTest/raw/"
+      "src/Package/",
+      "src/**/*Test/",
+      "src/**/*Test.php"
     ]
   },
   "conflict": {
