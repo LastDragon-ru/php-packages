@@ -2,7 +2,7 @@
 
 namespace LastDragon_ru\LaraASP\Eloquent\Package;
 
-use LastDragon_ru\LaraASP\Testing\Testing\TestCase as PackageTestCase;
+use LastDragon_ru\LaraASP\Testing\Package\TestCase as PackageTestCase;
 
 /**
  * @internal

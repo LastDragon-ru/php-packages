@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\LaraASP\Testing\Testing;
+namespace LastDragon_ru\LaraASP\Testing\Package;
 
 use LastDragon_ru\PhpUnit\Package\IntegrationTests;
 use PHPUnit\Framework\Attributes\CoversNothing;
