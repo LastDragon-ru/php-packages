@@ -69,7 +69,7 @@ final class DirectiveDefinitionTest extends TestCase {
         $block      = new DirectiveDefinition($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['B' => 'B'], $collector->getUsedTypes());
         self::assertEquals(['@A' => '@A'], $collector->getUsedDirectives());
 

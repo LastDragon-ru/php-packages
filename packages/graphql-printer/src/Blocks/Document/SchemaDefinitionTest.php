@@ -53,7 +53,7 @@ final class SchemaDefinitionTest extends TestCase {
         $block      = new SchemaDefinition($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['Query' => 'Query', 'Mutation' => 'Mutation'], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a', '@b' => '@b'], $collector->getUsedDirectives());
 
@@ -88,7 +88,7 @@ final class SchemaDefinitionTest extends TestCase {
         $block      = new SchemaDefinition($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertEmpty($content);
+        self::assertTrue($content === '');
         self::assertEquals(['Query' => 'Query'], $collector->getUsedTypes());
         self::assertEquals([], $collector->getUsedDirectives());
     }

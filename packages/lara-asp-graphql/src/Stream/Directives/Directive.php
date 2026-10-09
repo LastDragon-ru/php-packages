@@ -740,9 +740,6 @@ class Directive extends BaseDirective implements FieldResolver, FieldManipulator
         }
 
         // Value
-        $argument = null;
-        $instance = null;
-
         if (count($values) > 1) {
             throw new ArgumentsMutuallyExclusive($source, $values);
         } elseif (count($instances) === 0) {

@@ -9,8 +9,6 @@ use function array_merge;
 use function array_reduce;
 use function array_reverse;
 use function array_slice;
-use function assert;
-use function is_array;
 
 /**
  * The data provider allows merging several data providers into one. It works in
@@ -75,8 +73,6 @@ class CompositeDataProvider extends BaseDataProvider {
                     $data[$cKey] = array_merge([$cExpected], $cParameters);
                 } else {
                     foreach ($previous as $pKey => $pData) {
-                        assert(is_array($pData));
-
                         $key         = "{$cKey} / {$pKey}";
                         $pExpected   = array_first($pData);
                         $pParameters = array_slice($pData, 1);

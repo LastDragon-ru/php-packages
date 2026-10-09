@@ -26,7 +26,6 @@ trait Field {
 
     public function hasArguments(): bool {
         $node = $this->getField();
-        $args = false;
 
         if ($node instanceof FieldDefinitionNode) {
             $args = $node->arguments->count() > 0;

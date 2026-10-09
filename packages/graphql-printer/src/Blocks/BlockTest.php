@@ -136,7 +136,7 @@ final class BlockTest extends TestCase {
         $invalid = array_values(array_unique($invalid));
 
         self::assertEquals([], $invalid);
-        self::assertNotEmpty($valid);
+        self::assertNotEquals([], $valid);
 
         return $valid;
     }

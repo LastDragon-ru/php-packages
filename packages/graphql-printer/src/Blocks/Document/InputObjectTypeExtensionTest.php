@@ -49,7 +49,7 @@ final class InputObjectTypeExtensionTest extends TestCase {
         $block      = new InputObjectTypeExtension($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['A' => 'A'], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a', '@b' => '@b'], $collector->getUsedDirectives());
 

@@ -121,12 +121,6 @@ parameters:
 			path: packages/lara-asp-eloquent/src/ModelHelperTest.php
 
 		-
-			rawMessage: 'Variable $currency on left side of ??= always exists and is always null.'
-			identifier: nullCoalesce.variable
-			count: 1
-			path: packages/lara-asp-formatter/src/Formats/IntlNumber/IntlCurrencyFormat.php
-
-		-
 			rawMessage: 'Method LastDragon_ru\LaraASP\Formatter\Formatter::getDefaultTimezone() should return DateTimeZone|IntlTimeZone|string|null but returns mixed.'
 			identifier: return.type
 			count: 1
@@ -137,6 +131,18 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: packages/lara-asp-graphql/src/Builder/BuilderInfoDetectorTest.php
+
+		-
+			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
+			identifier: foreach.nonIterable
+			count: 1
+			path: packages/lara-asp-graphql/src/Builder/Directives/HandlerDirective.php
+
+		-
+			rawMessage: 'Strict comparison using === between Nuwave\Lighthouse\Execution\Arguments\Argument and null will always evaluate to false.'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: packages/lara-asp-graphql/src/Builder/Directives/HandlerDirective.php
 
 		-
 			rawMessage: 'Static property LastDragon_ru\LaraASP\GraphQL\Package\Directives\ExposeBuilderDirective::$result (Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Relations\Relation<Illuminate\Database\Eloquent\Model, covariant Illuminate\Database\Eloquent\Model, mixed>|Illuminate\Database\Query\Builder|Laravel\Scout\Builder<Illuminate\Database\Eloquent\Model>|null) does not accept Illuminate\Database\Eloquent\Builder<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Relations\Relation<Illuminate\Database\Eloquent\Model>|Illuminate\Database\Query\Builder|Laravel\Scout\Builder.'
@@ -1987,7 +1993,13 @@ parameters:
 			path: packages/phpunit-extensions/src/Filesystem/Constraints/DirectoryEqualsTest.php
 
 		-
-			rawMessage: 'Property LastDragon_ru\TextParser\Iterables\BufferedIterable<TValue>::$iterator (Iterator<mixed, TValue>) does not accept (iterable<TValue>&Iterator)|IteratorIterator<mixed, mixed, Traversable<TKey, TValue>>.'
+			rawMessage: 'Strict comparison using !== between non-empty-array<float|int> and array{} will always evaluate to true.'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: packages/text-parser/docs/Calculator/Ast/ExpressionNode.php
+
+		-
+			rawMessage: 'Property LastDragon_ru\TextParser\Iterables\BufferedIterable<TValue>::$iterator (Iterator<mixed, TValue>) does not accept (iterable<TValue>&Iterator)|IteratorIterator<mixed, mixed, Traversable<mixed, mixed>>.'
 			identifier: assign.propertyType
 			count: 1
 			path: packages/text-parser/src/Iterables/BufferedIterable.php

@@ -52,7 +52,7 @@ final class SchemaExtensionTest extends TestCase {
         $block      = new SchemaExtension($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['Query' => 'Query', 'Mutation' => 'Mutation'], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a', '@b' => '@b'], $collector->getUsedDirectives());
 

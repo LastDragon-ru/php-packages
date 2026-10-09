@@ -53,7 +53,7 @@ class Extension {
 
         // Process
         $extension = self::updateBootstrapFiles($target, $extension);
-        $extension = self::updateServices($target, $extension);
+        $extension = self::updateServices($extension);
 
         // Save
         $neon = Neon::encode($extension, true, '    ');
@@ -105,7 +105,7 @@ class Extension {
      *
      * @return array<array-key, mixed>
      */
-    private static function updateServices(FilePath $path, array $extension): array {
+    private static function updateServices(array $extension): array {
         // Valid?
         if (!isset($extension['services']) || !is_array($extension['services'])) {
             throw new Exception('The `$extension[\'services\'])` expected to be an array.');
@@ -154,7 +154,7 @@ class Extension {
     }
 
     private static function getRootPath(): DirectoryPath {
-        return new DirectoryPath((string) getcwd());
+        return (new DirectoryPath((string) getcwd()))->directory('../..');
     }
 
     private static function hasLarastan(): bool {

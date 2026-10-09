@@ -61,7 +61,7 @@ final class TypeTest extends TestCase {
         $type      = $node->getInnermostType()->name();
         $content   = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals([$type => $type], $collector->getUsedTypes());
         self::assertEquals([], $collector->getUsedDirectives());
 

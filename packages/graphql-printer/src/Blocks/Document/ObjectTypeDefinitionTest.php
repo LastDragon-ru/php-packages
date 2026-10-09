@@ -88,7 +88,7 @@ final class ObjectTypeDefinitionTest extends TestCase {
         $block      = new ObjectTypeDefinition($context, $definition);
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D'], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a', '@b' => '@b', '@c' => '@c'], $collector->getUsedDirectives());
 

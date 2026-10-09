@@ -50,7 +50,7 @@ final class ArgumentTest extends TestCase {
         $block      = new Argument($context, $definition, Type::int());
         $content    = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals(['Int' => 'Int'], $collector->getUsedTypes());
         self::assertEquals([], $collector->getUsedDirectives());
     }

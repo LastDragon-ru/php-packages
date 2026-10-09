@@ -42,8 +42,6 @@ readonly class Remove implements Mutation {
     }
 
     private function isComment(HtmlBlock|HtmlInline|ReferenceNode $node): bool {
-        $comment = false;
-
         if ($node instanceof HtmlBlock) {
             $comment = $node->getType() === HtmlBlock::TYPE_2_COMMENT;
         } elseif ($node instanceof HtmlInline) {

@@ -30,6 +30,7 @@ use Nuwave\Lighthouse\Schema\SchemaBuilder;
 use Nuwave\Lighthouse\Testing\TestSchemaProvider;
 use PHPUnit\Framework\Assert;
 
+use function array_merge;
 use function assert;
 use function implode;
 use function ksort;
@@ -174,7 +175,7 @@ trait Assertions {
             $schema = new DocumentNode([
                 'definitions' => (new NodeList([]))
                     ->merge($schema->types)
-                    ->merge($schema->typeExtensions)
+                    ->merge(array_merge(...$schema->typeExtensions))
                     ->merge($schema->directives),
             ]);
         }

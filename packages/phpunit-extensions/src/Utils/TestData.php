@@ -80,8 +80,6 @@ class TestData {
         }
 
         // Create
-        $instance = null;
-
         if (is_object($class)) {
             self::$map[$class] ??= new static($class);
             $instance            = self::$map[$class];

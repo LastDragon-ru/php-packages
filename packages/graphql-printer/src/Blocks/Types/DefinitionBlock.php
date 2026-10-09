@@ -367,9 +367,8 @@ abstract class DefinitionBlock extends Block implements NamedBlock {
 
         // Some directives converted into type/object property
         if (property_exists($definition, 'deprecationReason') && is_string($definition->deprecationReason)) {
-            $deprecatedName      = Directive::DEPRECATED_NAME;
-            $deprecatedReason    = $definition->deprecationReason;
-            $deprecatedDirective = null;
+            $deprecatedName   = Directive::DEPRECATED_NAME;
+            $deprecatedReason = $definition->deprecationReason;
 
             // todo(graphql): Is there a better way to create directive node?
             if ($deprecatedReason !== Directive::DEFAULT_DEPRECATION_REASON && $deprecatedReason !== '') {

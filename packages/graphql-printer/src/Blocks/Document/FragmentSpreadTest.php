@@ -65,7 +65,7 @@ final class FragmentSpreadTest extends TestCase {
         $block     = new FragmentSpread($context, $definition, $type);
         $content   = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals($expected['types'], $collector->getUsedTypes());
         self::assertEquals($expected['directives'], $collector->getUsedDirectives());
 

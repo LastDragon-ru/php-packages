@@ -91,8 +91,6 @@ class Offset extends ScalarType {
      */
     #[Override]
     public function parseLiteral(Node $valueNode, ?array $variables = null): StreamOffset|int {
-        $value = null;
-
         if ($valueNode instanceof StringValueNode) {
             $value = $this->parseValue($valueNode->value);
         } elseif ($valueNode instanceof IntValueNode) {

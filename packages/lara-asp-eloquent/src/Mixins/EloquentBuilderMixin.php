@@ -9,8 +9,6 @@ use LastDragon_ru\LaraASP\Eloquent\Iterators\ChunkedChangeSafeIterator;
 use LastDragon_ru\LaraASP\Eloquent\Iterators\ChunkedIterator;
 use SortDirection;
 
-use function assert;
-
 /**
  * Eloquent builder mixin.
  */
@@ -21,10 +19,6 @@ class EloquentBuilderMixin {
     public function orderByKey(): Closure {
         return function (SortDirection|string $direction = 'asc'): Builder {
             /** @var Builder<Model> $this */
-            // todo(lara-asp-eloquent): remove `assert()`, blocked by https://github.com/phpstan/phpstan/issues/3770
-
-            assert($direction === 'asc' || $direction === 'desc' || $direction instanceof SortDirection);
-
             return $this->orderBy($this->qualifyColumn($this->getModel()->getKeyName()), $direction);
         };
     }

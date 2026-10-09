@@ -61,7 +61,7 @@ readonly class TempFile {
                 } elseif (fwrite($target, (string) $source) !== false) {
                     $path = $variant;
                 } else {
-                    $path = null;
+                    // empty
                 }
 
                 break;

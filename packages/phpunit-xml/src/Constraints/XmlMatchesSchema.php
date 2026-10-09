@@ -126,8 +126,6 @@ class XmlMatchesSchema extends Constraint {
      * @return T
      */
     protected function call(Closure $closure): mixed {
-        $errors   = null;
-        $result   = null;
         $previous = libxml_use_internal_errors(true);
         libxml_clear_errors();
 

@@ -48,7 +48,7 @@ final class DirectivesTest extends TestCase {
         $block     = new Directives($context, [$a, $b]);
         $content   = $block->serialize($collector, 0, 0);
 
-        self::assertNotEmpty($content);
+        self::assertTrue($content !== '');
         self::assertEquals([], $collector->getUsedTypes());
         self::assertEquals(['@a' => '@a', '@b' => '@b'], $collector->getUsedDirectives());
     }

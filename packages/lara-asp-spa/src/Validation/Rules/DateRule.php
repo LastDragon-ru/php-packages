@@ -20,7 +20,7 @@ class DateRule extends Rule implements ValueProvider {
         try {
             $date  = $this->getValue($value);
             $valid = $date !== null && $date->format($this->getFormat()) === $value;
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException) {
             // ignored
         }
 

@@ -133,8 +133,6 @@ class Args {
     }
 
     public static function getResponse(mixed $response): ResponseInterface {
-        $psr = null;
-
         if ($response instanceof ResponseInterface) {
             $psr = $response;
         } else {
@@ -158,8 +156,7 @@ class Args {
             $sql      = $query['query'] ?? null;
             $bindings = $query['bindings'] ?? null;
         } elseif (is_string($query)) {
-            $sql      = $query;
-            $bindings = [];
+            $sql = $query;
         } else {
             // empty
         }
@@ -179,8 +176,8 @@ class Args {
      * @return array<string, mixed>
      */
     public static function getScoutQuery(mixed $query): array {
-        $actual    = [];
-        $default   = [
+        $actual  = [];
+        $default = [
             'model'                  => [],
             'query'                  => '',
             'callback'               => null,
@@ -197,7 +194,6 @@ class Args {
             'minimumSimilarity'      => null,
             'hybridSearch'           => null,
         ];
-        $converted = [];
 
         if ($query instanceof ScoutBuilder) {
             $converted = (array) json_decode(

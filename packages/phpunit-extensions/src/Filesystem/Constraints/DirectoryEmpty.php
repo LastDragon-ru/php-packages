@@ -34,14 +34,14 @@ class DirectoryEmpty extends Constraint {
         }
 
         // Empty?
-        $empty    = true;
+        $first    = null;
         $iterator = new FilesystemIterator($other->path);
 
         foreach ($iterator as $info) {
-            $empty = false;
+            $first = $info;
             break;
         }
 
-        return $empty;
+        return $first === null;
     }
 }
