@@ -332,6 +332,9 @@ services:
         tags:
             - phpstan.broker.dynamicFunctionReturnTypeExtension
 
+        arguments:
+            inferFromUsage: %featureToggles.unresolvedTemplateArguments%
+
     -
         class: Larastan\Larastan\ReturnTypes\Helpers\NowAndTodayExtension
         tags:
@@ -514,6 +517,11 @@ services:
 
     -
         class: Larastan\Larastan\Types\BuilderOf\BuilderOfTypeNodeResolverExtension
+        tags:
+            - phpstan.phpDoc.typeNodeResolverExtension
+
+    -
+        class: Larastan\Larastan\Types\RelationOf\RelationOfTypeNodeResolverExtension
         tags:
             - phpstan.phpDoc.typeNodeResolverExtension
 
