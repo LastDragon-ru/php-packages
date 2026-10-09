@@ -6,7 +6,7 @@ use LastDragon_ru\LaraASP\Core\PackageProvider as CoreProvider;
 use LastDragon_ru\LaraASP\Documentator\PackageProvider;
 use LastDragon_ru\LaraASP\Formatter\PackageProvider as FormatterProvider;
 use LastDragon_ru\LaraASP\Serializer\PackageProvider as SerializerProvider;
-use LastDragon_ru\LaraASP\Testing\Testing\TestCase as PackageTestCase;
+use LastDragon_ru\LaraASP\Testing\Package\TestCase as PackageTestCase;
 use Override;
 
 use function array_merge;

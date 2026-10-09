@@ -3,7 +3,7 @@
 namespace LastDragon_ru\LaraASP\Core\Package;
 
 use LastDragon_ru\LaraASP\Core\PackageProvider;
-use LastDragon_ru\LaraASP\Testing\Testing\TestCase as PackageTestCase;
+use LastDragon_ru\LaraASP\Testing\Package\TestCase as PackageTestCase;
 use Override;
 
 use function array_merge;

@@ -31,15 +31,18 @@
   },
   "autoload": {
     "psr-4": {
-      "LastDragon_ru\\PhpUnit\\XML\\": "src/"
+      "LastDragon_ru\\PhpUnit\\Xml\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "LastDragon_ru\\PhpUnit\\XML\\Docs\\": "docs/"
+      "LastDragon_ru\\PhpUnit\\Xml\\Docs\\": "docs/"
     },
     "exclude-from-classmap": [
-      "docs/"
+      "docs/",
+      "src/Package/",
+      "src/**/*Test/",
+      "src/**/*Test.php"
     ]
   },
   "conflict": {

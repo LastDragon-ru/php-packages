@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\LaraASP\Testing\Testing;
+namespace LastDragon_ru\LaraASP\Testing\Package;
 
 use Illuminate\Contracts\Config\Repository;
 use LastDragon_ru\LaraASP\Core\Application\Configuration\Configuration;

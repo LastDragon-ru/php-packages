@@ -24,7 +24,6 @@
     "ext-dom": "*",
     "ext-mbstring": "*",
     "doctrine/sql-formatter": "^1.1.0",
-    "fakerphp/faker": "^1.21.0",
     "illuminate/collections": "^13.10.0",
     "illuminate/console": "^13.10.0",
     "illuminate/contracts": "^13.10.0",
@@ -32,7 +31,6 @@
     "illuminate/testing": "^13.10.0",
     "illuminate/translation": "^13.10.0",
     "lastdragon-ru/path": "self.version",
-    "lastdragon-ru/phpunit-extensions": "self.version",
     "lastdragon-ru/phpunit-xml": "self.version",
     "nyholm/psr7": "^1.8.0",
     "mockery/mockery": "^1.6.6",
@@ -47,8 +45,10 @@
     "symfony/psr-http-message-bridge": "^8.0.0"
   },
   "require-dev": {
+    "fakerphp/faker": "^1.21.0",
     "illuminate/http": "^13.10.0",
     "laravel/scout": "^11.0.0",
+    "lastdragon-ru/phpunit-extensions": "self.version",
     "orchestra/testbench": "^11.0.0"
   },
   "autoload": {
@@ -64,7 +64,10 @@
       "LastDragon_ru\\LaraASP\\Testing\\Docs\\": "docs"
     },
     "exclude-from-classmap": [
-      "docs/"
+      "docs/",
+      "src/Package/",
+      "src/**/*Test/",
+      "src/**/*Test.php"
     ]
   },
   "conflict": {

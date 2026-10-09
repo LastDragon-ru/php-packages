@@ -5,7 +5,7 @@ namespace LastDragon_ru\LaraASP\GraphQL\Testing\Package;
 use LastDragon_ru\LaraASP\Core\PackageProvider as CorePackageProvider;
 use LastDragon_ru\LaraASP\GraphQL\PackageProvider as GraphQLPackageProvider;
 use LastDragon_ru\LaraASP\GraphQL\Testing\Assertions;
-use LastDragon_ru\LaraASP\Testing\Testing\TestCase as PackageTestCase;
+use LastDragon_ru\LaraASP\Testing\Package\TestCase as PackageTestCase;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
 use Nuwave\Lighthouse\Testing\TestingServiceProvider as LighthouseTestingServiceProvider;
 use Nuwave\Lighthouse\Validation\ValidationServiceProvider as LighthouseValidationServiceProvider;

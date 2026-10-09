@@ -19,7 +19,6 @@
     "ext-xmlreader": "*",
     "composer/semver": "^3.2.0",
     "doctrine/sql-formatter": "^1.1.0",
-    "fakerphp/faker": "^1.21.0",
     "guzzlehttp/psr7": "^2.13.0|^3.0.0",
     "illuminate/collections": "^13.10.0",
     "illuminate/conditionable": "^13.10.0",
@@ -74,6 +73,7 @@
     "ext-pdo_sqlite": "*",
     "bamarni/composer-bin-plugin": "^1.8.0",
     "composer/class-map-generator": "^1.7.0",
+    "fakerphp/faker": "^1.21.0",
     "illuminate/config": "^13.10.0",
     "laravel/scout": "^11.0.0",
     "orchestra/testbench": "^11.0.0"
@@ -106,25 +106,7 @@
   },
   "autoload-dev": {
     "exclude-from-classmap": [
-      "packages/glob-matcher/docs/",
-      "packages/graphql-printer/docs/",
-      "packages/lara-asp-core/docs/",
-      "packages/lara-asp-dev/docs/",
-      "packages/lara-asp-documentator/docs/",
-      "packages/lara-asp-eloquent/docs/",
-      "packages/lara-asp-formatter/docs/",
-      "packages/lara-asp-graphql/docs/",
-      "packages/lara-asp-migrator/docs/",
-      "packages/lara-asp-migrator/src/Migrations/MigratorTest/raw/",
-      "packages/lara-asp-serializer/docs/",
-      "packages/lara-asp-spa/docs/",
-      "packages/lara-asp-testing/docs/",
-      "packages/path/docs/",
-      "packages/phpunit-extensions/docs/",
-      "packages/phpunit-graphql/docs/",
-      "packages/phpunit-xml/docs/",
-      "packages/text-parser/docs/",
-      "packages/**/*Test/"
+      "packages/**/docs/"
     ],
     "psr-4": {
       "LastDragon_ru\\GlobMatcher\\Docs\\": "packages/glob-matcher/docs",

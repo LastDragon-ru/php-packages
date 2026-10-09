@@ -4,7 +4,7 @@ namespace LastDragon_ru\LaraASP\Testing\Responses\Laravel\Resources;
 
 use Exception;
 use LastDragon_ru\LaraASP\Testing\Constraints\Json\JsonMatchesSchema;
-use LastDragon_ru\LaraASP\Testing\Testing\TestCase;
+use LastDragon_ru\LaraASP\Testing\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 

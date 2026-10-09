@@ -2,7 +2,7 @@
 
 namespace LastDragon_ru\LaraASP\Testing\Utils;
 
-use LastDragon_ru\LaraASP\Testing\Testing\TestCase;
+use LastDragon_ru\LaraASP\Testing\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 use function dirname;

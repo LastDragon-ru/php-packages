@@ -3,7 +3,7 @@
 namespace LastDragon_ru\LaraASP\Testing\Constraints\Response;
 
 use LastDragon_ru\LaraASP\Testing\Exceptions\InvalidArgumentResponse;
-use LastDragon_ru\LaraASP\Testing\Testing\TestCase;
+use LastDragon_ru\LaraASP\Testing\Package\TestCase;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use stdClass;

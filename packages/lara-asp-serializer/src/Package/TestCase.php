@@ -4,7 +4,7 @@ namespace LastDragon_ru\LaraASP\Serializer\Package;
 
 use LastDragon_ru\LaraASP\Core\PackageProvider as CoreProvider;
 use LastDragon_ru\LaraASP\Serializer\PackageProvider;
-use LastDragon_ru\LaraASP\Testing\Testing\TestCase as PackageTestCase;
+use LastDragon_ru\LaraASP\Testing\Package\TestCase as PackageTestCase;
 use Override;
 
 use function array_merge;

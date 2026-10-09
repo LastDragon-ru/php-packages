@@ -49,7 +49,10 @@
       "LastDragon_ru\\LaraASP\\Serializer\\Docs\\": "docs"
     },
     "exclude-from-classmap": [
-      "docs/"
+      "docs/",
+      "src/Package/",
+      "src/**/*Test/",
+      "src/**/*Test.php"
     ]
   },
   "conflict": {
