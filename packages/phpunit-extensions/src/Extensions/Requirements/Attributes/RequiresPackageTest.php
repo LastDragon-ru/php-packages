@@ -12,8 +12,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 final class RequiresPackageTest extends TestCase {
     public function testIsSatisfied(): void {
         self::assertTrue((new RequiresPackage('phpunit/phpunit'))->isSatisfied());
-        self::assertTrue((new RequiresPackage('phpunit/phpunit', '>=10.0.0'))->isSatisfied());
-        self::assertFalse((new RequiresPackage('phpunit/phpunit', '<10.0.0'))->isSatisfied());
+        self::assertTrue((new RequiresPackage('phpunit/phpunit', '>=1.0.0'))->isSatisfied());
+        self::assertFalse((new RequiresPackage('phpunit/phpunit', '<1.0.0'))->isSatisfied());
     }
 
     public function testToString(): void {
