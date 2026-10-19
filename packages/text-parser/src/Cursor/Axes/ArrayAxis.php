@@ -12,7 +12,8 @@ use Traversable;
 use function count;
 
 /**
- * @template TCursor of Cursor
+ * @template TNodeInterface of object
+ * @template TCursor of Cursor<TNodeInterface, covariant TNodeInterface>
  *
  * @implements Axis<TCursor>
  * @implements Offsettable<TCursor>
@@ -20,11 +21,11 @@ use function count;
 class ArrayAxis implements Axis, Offsettable {
     public function __construct(
         /**
-         * @var Closure(template-type<TCursor, Cursor, 'TNodeInterface'>, int<0, max>): TCursor
+         * @var Closure(TNodeInterface, int<0, max>): TCursor
          */
         protected readonly Closure $factory,
         /**
-         * @var list<template-type<TCursor, Cursor, 'TNodeInterface'>>
+         * @var list<TNodeInterface>
          */
         protected readonly array $nodes,
     ) {
