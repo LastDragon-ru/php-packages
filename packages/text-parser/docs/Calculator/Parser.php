@@ -2,16 +2,16 @@
 
 namespace LastDragon_ru\TextParser\Docs\Calculator;
 
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeChild;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeFactory;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Factories\ExpressionNodeFactory;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\Node;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorAdditionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorMultiplicationNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorSubtractionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNodeChild;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorAdditionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorDivisionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorMultiplicationNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorSubtractionNode;
 use LastDragon_ru\TextParser\Iterables\TransactionalIterable;
 use LastDragon_ru\TextParser\Tokenizer\Token;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;

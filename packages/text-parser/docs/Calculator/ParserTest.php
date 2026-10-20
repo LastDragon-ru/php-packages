@@ -2,12 +2,12 @@
 
 namespace LastDragon_ru\TextParser\Docs\Calculator;
 
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorAdditionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorMultiplicationNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorSubtractionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorAdditionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorDivisionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorMultiplicationNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorSubtractionNode;
 use LastDragon_ru\TextParser\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;

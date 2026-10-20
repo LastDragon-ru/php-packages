@@ -1990,4 +1990,4 @@ parameters:
 			rawMessage: 'Strict comparison using !== between non-empty-array<float|int> and array{} will always evaluate to true.'
 			identifier: notIdentical.alwaysTrue
 			count: 1
-			path: packages/text-parser/docs/Calculator/Ast/ExpressionNode.php
+			path: packages/text-parser/docs/Calculator/Ast/Nodes/ExpressionNode.php

@@ -1,8 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
+namespace LastDragon_ru\TextParser\Docs\Calculator\Ast\Factories;
 
 use LastDragon_ru\TextParser\Ast\NodeFactory;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Node;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNodeChild;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorNode;
 use LogicException;
 use Override;
 

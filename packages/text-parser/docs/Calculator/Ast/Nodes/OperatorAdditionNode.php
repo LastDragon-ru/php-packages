@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
+namespace LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes;
 
 use Override;
 
-readonly class OperatorSubtractionNode extends OperatorNode {
+readonly class OperatorAdditionNode extends OperatorNode {
     #[Override]
     public function priority(): int {
         return 0;
@@ -12,6 +12,6 @@ readonly class OperatorSubtractionNode extends OperatorNode {
 
     #[Override]
     public function calculate(float|int $left, float|int $right): float|int {
-        return $left - $right;
+        return $left + $right;
     }
 }

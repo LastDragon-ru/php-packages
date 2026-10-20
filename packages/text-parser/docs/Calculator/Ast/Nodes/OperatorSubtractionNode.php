@@ -1,17 +1,17 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
+namespace LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes;
 
 use Override;
 
-readonly class OperatorMultiplicationNode extends OperatorNode {
+readonly class OperatorSubtractionNode extends OperatorNode {
     #[Override]
     public function priority(): int {
-        return 1;
+        return 0;
     }
 
     #[Override]
     public function calculate(float|int $left, float|int $right): float|int {
-        return $left * $right;
+        return $left - $right;
     }
 }

@@ -19,7 +19,7 @@ class Cursor extends NodeCursor {
     public Axis&Offsettable $children {
         get => new ArrayAxis(
             fn ($node, $offset) => new static($node, $this, $offset),
-            $this->node instanceof ParentNode ? $this->node->children : [],
+            $this->node instanceof NodeParent ? $this->node->children : [],
         );
     }
 }

@@ -894,11 +894,11 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 [code-links/9281635e2ef16472]: src/Cursor/Cursor.php
     "\LastDragon_ru\TextParser\Cursor\Cursor"
 
-[code-links/c6b92ea7e293ac9d]: docs/Calculator/Ast/ExpressionNode.php
-    "\LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode"
+[code-links/c6b92ea7e293ac9d]: docs/Calculator/Ast/Nodes/ExpressionNode.php
+    "\LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode"
 
-[code-links/4564b80f054a86d3]: docs/Calculator/Ast/ExpressionNodeFactory.php
-    "\LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeFactory"
+[code-links/4564b80f054a86d3]: docs/Calculator/Ast/Factories/ExpressionNodeFactory.php
+    "\LastDragon_ru\TextParser\Docs\Calculator\Ast\Factories\ExpressionNodeFactory"
 
 [code-links/b84ae5a44e02f512]: docs/Calculator/Parser.php#L31-L42
     "\LastDragon_ru\TextParser\Docs\Calculator\Parser::parse()"

@@ -1,6 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
+namespace LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes;
+
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Node;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\NodeParent;
 
 use function array_last;
 use function array_pop;
@@ -10,9 +13,9 @@ use function is_nan;
 use const NAN;
 
 /**
- * @implements ParentNode<Node&ExpressionNodeChild>
+ * @implements NodeParent<Node&ExpressionNodeChild>
  */
-readonly class ExpressionNode implements Node, ParentNode, ExpressionNodeChild {
+readonly class ExpressionNode implements Node, NodeParent, ExpressionNodeChild {
     public function __construct(
         /**
          * @var list<Node&ExpressionNodeChild>
