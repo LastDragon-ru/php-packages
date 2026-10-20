@@ -18,7 +18,7 @@ abstract class Cursor implements CursorConstructor {
          */
         public readonly object $node,
         /**
-         * @var ?self<TNodeInterface, covariant TNodeInterface>
+         * @var ?static<TNodeInterface, *>
          */
         public readonly ?self $parent = null,
         /**
@@ -30,7 +30,7 @@ abstract class Cursor implements CursorConstructor {
     }
 
     /**
-     * @var ?self<TNodeInterface, covariant TNodeInterface>
+     * @var ?static<TNodeInterface, *>
      */
     public ?self $next {
         get => $this->offset !== null
@@ -39,7 +39,7 @@ abstract class Cursor implements CursorConstructor {
     }
 
     /**
-     * @var ?self<TNodeInterface, covariant TNodeInterface>
+     * @var ?static<TNodeInterface, *>
      */
     public ?self $previous {
         get => $this->offset !== null && $this->offset > 1
@@ -48,14 +48,14 @@ abstract class Cursor implements CursorConstructor {
     }
 
     /**
-     * @var Axis<covariant self<TNodeInterface, covariant TNodeInterface>>
+     * @var Axis<covariant static<TNodeInterface, *>>
      */
     abstract public Axis $children {
         get;
     }
 
     /**
-     * @return ?Offsettable<self<TNodeInterface, covariant TNodeInterface>>
+     * @return ?Offsettable<static<TNodeInterface, *>>
      */
     private function children(): ?Offsettable {
         // Offset?

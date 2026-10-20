@@ -13,7 +13,7 @@ use function count;
 
 /**
  * @template TNodeInterface of object
- * @template TCursor of Cursor<TNodeInterface, covariant TNodeInterface>
+ * @template TCursor of Cursor<TNodeInterface, *>
  *
  * @implements Axis<TCursor>
  * @implements Offsettable<TCursor>

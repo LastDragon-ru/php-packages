@@ -95,7 +95,7 @@ class ArrayAxisTest_NodeParent implements ArrayAxisTest_Node {
  */
 class ArrayAxisTest_Cursor extends Cursor {
     /**
-     * @var Axis<covariant self<ArrayAxisTest_Node>>&Offsettable<covariant self<ArrayAxisTest_Node>>
+     * @var Axis<static<ArrayAxisTest_Node>>&Offsettable<static<ArrayAxisTest_Node>>
      */
     public Axis&Offsettable $children {
         get => new ArrayAxis(

@@ -8,9 +8,9 @@ namespace LastDragon_ru\TextParser\Cursor;
  */
 interface CursorConstructor {
     /**
-     * @param TNode                                             $node
-     * @param ?Cursor<TNodeInterface, covariant TNodeInterface> $parent
-     * @param ?int<0, max>                                      $offset
+     * @param TNode                      $node
+     * @param ?Cursor<TNodeInterface, *> $parent
+     * @param ?int<0, max>               $offset
      */
     public function __construct(object $node, ?Cursor $parent = null, ?int $offset = null);
 }
