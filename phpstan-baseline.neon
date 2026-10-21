@@ -1985,9 +1985,3 @@ parameters:
 			identifier: staticMethod.impossibleType
 			count: 1
 			path: packages/phpunit-extensions/src/Filesystem/Constraints/DirectoryEqualsTest.php
-
-		-
-			rawMessage: 'Strict comparison using !== between non-empty-array<float|int> and array{} will always evaluate to true.'
-			identifier: notIdentical.alwaysTrue
-			count: 1
-			path: packages/text-parser/docs/Calculator/Ast/Nodes/ExpressionNode.php

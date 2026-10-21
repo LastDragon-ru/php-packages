@@ -8,8 +8,4 @@ abstract readonly class OperatorNode implements Node, ExpressionNodeChild {
     public function __construct() {
         // empty
     }
-
-    abstract public function priority(): int;
-
-    abstract public function calculate(float|int $left, float|int $right): float|int;
 }

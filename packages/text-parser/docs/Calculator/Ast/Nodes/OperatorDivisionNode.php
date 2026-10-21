@@ -2,23 +2,6 @@
 
 namespace LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes;
 
-use DivisionByZeroError;
-use Override;
-
-use const NAN;
-
 readonly class OperatorDivisionNode extends OperatorNode {
-    #[Override]
-    public function priority(): int {
-        return 1;
-    }
-
-    #[Override]
-    public function calculate(float|int $left, float|int $right): float|int {
-        try {
-            return $left / $right;
-        } catch (DivisionByZeroError) {
-            return NAN;
-        }
-    }
+    // empty
 }
