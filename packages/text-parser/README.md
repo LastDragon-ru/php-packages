@@ -78,16 +78,16 @@ We will start from the end, from the complete implementation of the parser, and 
 
 namespace LastDragon_ru\TextParser\Docs\Calculator;
 
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeChild;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNodeFactory;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Factories\ExpressionNodeFactory;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\Node;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorAdditionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorMultiplicationNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorNode;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorSubtractionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNodeChild;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorAdditionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorDivisionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorMultiplicationNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorSubtractionNode;
 use LastDragon_ru\TextParser\Iterables\TransactionalIterable;
 use LastDragon_ru\TextParser\Tokenizer\Token;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
@@ -264,25 +264,25 @@ Example::dump(
 The `(new Parser())->parse('2 - (1 + 2) / 3')` is:
 
 ```plain
-LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode {
+LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode {
   +children: [
-    LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+    LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
       +value: 2
     },
-    LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorSubtractionNode {},
-    LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode {
+    LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorSubtractionNode {},
+    LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode {
       +children: [
-        LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+        LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
           +value: 1
         },
-        LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorAdditionNode {},
-        LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+        LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorAdditionNode {},
+        LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
           +value: 2
         },
       ]
     },
-    LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode {},
-    LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+    LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorDivisionNode {},
+    LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
       +value: 3
     },
   ]
@@ -556,7 +556,7 @@ LastDragon_ru\TextParser\Tokenizer\Token {
 
 [//]: # (end: preprocess/b06c2cb28b3533e3)
 
-All other methods just create AST nodes and check that the expression is correct. You may notice the [`ExpressionNodeFactory`][code-links/4564b80f054a86d3] class, which is a subclass of [`NodeFactory`][code-links/9f54b060f507219d]. In our case, the [`ExpressionNodeFactory`][code-links/4564b80f054a86d3] helps to simplify the code, and it also checks that an operator between numbers/expressions (one of our requirements).
+All other methods just create AST nodes and check that the expression is correct. You may notice the [`ExpressionNodeFactory`][code-links/67f9a6d07d654cf5] class, which is a subclass of [`NodeFactory`][code-links/9f54b060f507219d]. In our case, the [`ExpressionNodeFactory`][code-links/67f9a6d07d654cf5] helps to simplify the code, and it also checks that an operator between numbers/expressions (one of our requirements).
 
 In the general case, the main reason of '\LastDragon_ru\TextParser\Ast\NodeFactory' is merging sequence of child nodes (of the same class) into one node. The [`Tokenizer`][code-links/680ddd300ebebd55] may generate a lot of "string" tokens (especially if escaping is supported), but we usually want only one (`abc`) node in AST instead of multiple (`a`, `b`, and `c`) nodes. If you use static analysis tools like PHPStan, the class will guaranties the type safety too.
 
@@ -651,7 +651,7 @@ namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Parser;
 
 use function assert;
@@ -681,7 +681,7 @@ Example::dump($cursor->children->get(2)->previous->node ?? null);
 <details><summary>Example output</summary>
 
 ```plain
-LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
   +value: 2
 }
 ```
@@ -690,27 +690,27 @@ The `$cursor->children->get(2)` is:
 
 ```plain
 LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor {
-  +node: LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode {#1
+  +node: LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode {#1
     +children: [
-      LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+      LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
         +value: 1
       },
-      LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorAdditionNode {},
-      LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+      LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorAdditionNode {},
+      LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
         +value: 2
       },
     ]
   }
   +parent: LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor {
-    +node: LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode {
+    +node: LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode {
       +children: [
-        LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+        LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
           +value: 2
         },
-        LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorSubtractionNode {},
-        LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode {#1},
-        LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode {},
-        LastDragon_ru\TextParser\Docs\Calculator\Ast\NumberNode {
+        LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorSubtractionNode {},
+        LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode {#1},
+        LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorDivisionNode {},
+        LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\NumberNode {
           +value: 3
         },
       ]
@@ -764,13 +764,13 @@ LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor {
 The `$cursor->children->get(2)->next->node ?? null` is:
 
 ```plain
-LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorDivisionNode {}
+LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorDivisionNode {}
 ```
 
 The `$cursor->children->get(2)->previous->node ?? null` is:
 
 ```plain
-LastDragon_ru\TextParser\Docs\Calculator\Ast\OperatorSubtractionNode {}
+LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorSubtractionNode {}
 ```
 
 </details>
@@ -869,7 +869,7 @@ There is also no special code to check nested/closed parentheses or throw an err
 
 # Bonus
 
-For calculate mathematical expressions, we are using [shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) to convert our AST into [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation). Implementation is ever simpler than usual, because `(...)` represented as sub-nodes and no need any special actions, please see the [`ExpressionNode`][code-links/c6b92ea7e293ac9d] class.
+For calculate mathematical expressions, we are using [shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) to convert our AST into [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation). Implementation is ever simpler than usual, because `(...)` represented as sub-nodes and no need any special actions, please see the [`Calculator`][code-links/d908d60f571f6934] class.
 
 # Upgrading
 
@@ -894,11 +894,11 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 [code-links/9281635e2ef16472]: src/Cursor/Cursor.php
     "\LastDragon_ru\TextParser\Cursor\Cursor"
 
-[code-links/c6b92ea7e293ac9d]: docs/Calculator/Ast/Nodes/ExpressionNode.php
-    "\LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode"
-
-[code-links/4564b80f054a86d3]: docs/Calculator/Ast/Factories/ExpressionNodeFactory.php
+[code-links/67f9a6d07d654cf5]: docs/Calculator/Ast/Factories/ExpressionNodeFactory.php
     "\LastDragon_ru\TextParser\Docs\Calculator\Ast\Factories\ExpressionNodeFactory"
+
+[code-links/d908d60f571f6934]: docs/Calculator/Calculator.php
+    "\LastDragon_ru\TextParser\Docs\Calculator\Calculator"
 
 [code-links/b84ae5a44e02f512]: docs/Calculator/Parser.php#L31-L42
     "\LastDragon_ru\TextParser\Docs\Calculator\Parser::parse()"
