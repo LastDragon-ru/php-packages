@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function count;
-use function iterator_to_array;
 
 /**
  * @internal
@@ -23,14 +22,6 @@ final class IntegerSequenceNodeTest extends TestCase {
     #[DataProvider('dataProviderToIterable')]
     public function testToCount(array $expected, IntegerSequenceNode $node): void {
         self::assertSame(count($expected), $node::toCount(new Cursor($node)));
-    }
-
-    /**
-     * @param list<string> $expected
-     */
-    #[DataProvider('dataProviderToIterable')]
-    public function testToIterable(array $expected, IntegerSequenceNode $node): void {
-        self::assertSame($expected, iterator_to_array($node::toIterable(new Cursor($node)), false));
     }
     // </editor-fold>
 

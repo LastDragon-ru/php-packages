@@ -12,9 +12,4 @@ readonly class StringNode extends NodeString implements Node, BraceExpansionNode
     public static function toCount(Cursor $cursor): int {
         return 1;
     }
-
-    #[Override]
-    public static function toIterable(Cursor $cursor): iterable {
-        return [$cursor->node->string];
-    }
 }

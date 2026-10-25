@@ -13,19 +13,7 @@ parameters:
 			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/SequenceNodeTest.php
 
 		-
-			rawMessage: 'Parameter #1 $cursor of static method LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode::toIterable() expects LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode>, LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode> given.'
-			identifier: argument.type
-			count: 1
-			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/SequenceNodeTest.php
-
-		-
 			rawMessage: 'Parameter #1 $cursor of static method LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode::toCount() expects LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode>, LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode> given.'
-			identifier: argument.type
-			count: 1
-			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/StringNodeTest.php
-
-		-
-			rawMessage: 'Parameter #1 $cursor of static method LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode::toIterable() expects LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode>, LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor<LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode> given.'
 			identifier: argument.type
 			count: 1
 			path: packages/glob-matcher/src/BraceExpander/Ast/Nodes/StringNodeTest.php

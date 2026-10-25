@@ -11,13 +11,11 @@ use function filter_var;
 use function floor;
 use function max;
 use function mb_ltrim;
-use function mb_str_pad;
 use function mb_strlen;
 use function mb_strpos;
 
 use const FILTER_NULL_ON_FAILURE;
 use const FILTER_VALIDATE_INT;
-use const STR_PAD_LEFT;
 
 readonly class IntegerSequenceNode extends IncrementalSequenceNode {
     public function __construct(
@@ -37,17 +35,6 @@ readonly class IntegerSequenceNode extends IncrementalSequenceNode {
     #[Override]
     public static function toCount(Cursor $cursor): int {
         return self::prepare($cursor)[2];
-    }
-
-    #[Override]
-    public static function toIterable(Cursor $cursor): iterable {
-        [$start, $inc, $steps, $length] = self::prepare($cursor);
-
-        for ($value = $start; $steps > 0; $steps--, $value += $inc) {
-            yield $value < 0
-                ? '-'.mb_str_pad((string) abs($value), $length - 1, '0', STR_PAD_LEFT, Package::Encoding)
-                : mb_str_pad((string) $value, $length, '0', STR_PAD_LEFT, Package::Encoding);
-        }
     }
 
     protected static function parse(string $string): int {

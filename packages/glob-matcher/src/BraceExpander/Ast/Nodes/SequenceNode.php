@@ -40,11 +40,4 @@ readonly class SequenceNode implements Node, NodeParent, BraceExpansionNodeChild
 
         return $count;
     }
-
-    #[Override]
-    public static function toIterable(Cursor $cursor): iterable {
-        foreach ($cursor->children as $child) {
-            yield from $child->node::toIterable($child);
-        }
-    }
 }
