@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Converters\NodeToIterable;
 use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Parser;
 use Override;
 use Traversable;
@@ -45,11 +46,6 @@ readonly class BraceExpander implements Countable, IteratorAggregate {
 
     #[Override]
     public function getIterator(): Traversable {
-        $cursor   = new Cursor($this->node);
-        $iterator = $this->node::toIterable($cursor);
-
-        foreach ($iterator as $string) {
-            yield $string;
-        }
+        return (new NodeToIterable())($this->node);
     }
 }
