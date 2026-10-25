@@ -24,6 +24,7 @@
     "symfony/polyfill-php85": "^1.36.0"
   },
   "require-dev": {
+    "composer/class-map-generator": "^1.7.0",
     "lastdragon-ru/phpunit-extensions": "self.version",
     "mockery/mockery": "^1.6.6",
     "phpunit/phpunit": "^13.0.0"
