@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function count;
-use function iterator_to_array;
 
 use const PHP_INT_MAX;
 
@@ -36,34 +35,16 @@ final class BraceExpansionNodeTest extends TestCase {
                 public static function toCount(Cursor $cursor): int {
                     return PHP_INT_MAX - 1;
                 }
-
-                #[Override]
-                public static function toIterable(Cursor $cursor): iterable {
-                    return [];
-                }
             },
             new class () implements Node, BraceExpansionNodeChild {
                 #[Override]
                 public static function toCount(Cursor $cursor): int {
                     return 2;
                 }
-
-                #[Override]
-                public static function toIterable(Cursor $cursor): iterable {
-                    return [];
-                }
             },
         ]);
 
         self::assertSame(PHP_INT_MAX, $node::toCount(new Cursor($node)));
-    }
-
-    /**
-     * @param list<string> $expected
-     */
-    #[DataProvider('dataProviderToIterable')]
-    public function testToIterable(array $expected, BraceExpansionNode $node): void {
-        self::assertSame($expected, iterator_to_array($node::toIterable(new Cursor($node)), false));
     }
     // </editor-fold>
 

@@ -9,7 +9,6 @@ use Override;
 use function abs;
 use function floor;
 use function max;
-use function mb_chr;
 use function mb_ord;
 
 readonly class CharacterSequenceNode extends IncrementalSequenceNode {
@@ -30,15 +29,6 @@ readonly class CharacterSequenceNode extends IncrementalSequenceNode {
     #[Override]
     public static function toCount(Cursor $cursor): int {
         return self::prepare($cursor)[2];
-    }
-
-    #[Override]
-    public static function toIterable(Cursor $cursor): iterable {
-        [$start, $inc, $steps] = self::prepare($cursor);
-
-        for ($code = $start; $steps > 0; $steps--, $code += $inc) {
-            yield mb_chr($code, Package::Encoding);
-        }
     }
 
     /**

@@ -6,8 +6,6 @@ use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
-use function iterator_to_array;
-
 /**
  * @internal
  */
@@ -18,15 +16,5 @@ final class StringNodeTest extends TestCase {
         $cursor = new Cursor($node);
 
         self::assertSame(1, $node::toCount($cursor));
-    }
-
-    public function testToIterable(): void {
-        $node   = new StringNode('string');
-        $cursor = new Cursor($node);
-
-        self::assertSame(
-            [$node->string],
-            iterator_to_array($node::toIterable($cursor), false),
-        );
     }
 }
