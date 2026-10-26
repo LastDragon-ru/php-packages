@@ -2,14 +2,8 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes;
 
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Node;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\NodeParent;
-use Override;
-
-use function is_int;
-
-use const PHP_INT_MAX;
 
 /**
  * @implements NodeParent<Node&BraceExpansionNodeChild>
@@ -22,23 +16,5 @@ readonly class BraceExpansionNode implements Node, NodeParent, SequenceNodeChild
         public array $children,
     ) {
         // empty
-    }
-
-    #[Override]
-    public static function toCount(Cursor $cursor): int {
-        $count = 1;
-
-        foreach ($cursor->children as $child) {
-            $value = $child->node::toCount($child);
-            $count = ($value > 0 ? $value : 1) * $count;
-
-            // @phpstan-ignore function.alreadyNarrowedType (if overflow it will be float)
-            if (!is_int($count)) {
-                $count = PHP_INT_MAX;
-                break;
-            }
-        }
-
-        return $count;
     }
 }
