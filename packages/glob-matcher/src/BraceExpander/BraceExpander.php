@@ -5,8 +5,8 @@ namespace LastDragon_ru\GlobMatcher\BraceExpander;
 use Countable;
 use InvalidArgumentException;
 use IteratorAggregate;
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode;
+use LastDragon_ru\GlobMatcher\BraceExpander\Converters\NodeToCount;
 use LastDragon_ru\GlobMatcher\BraceExpander\Converters\NodeToIterable;
 use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Parser;
 use Override;
@@ -41,7 +41,7 @@ readonly class BraceExpander implements Countable, IteratorAggregate {
 
     #[Override]
     public function count(): int {
-        return $this->node::toCount(new Cursor($this->node));
+        return (new NodeToCount())($this->node);
     }
 
     #[Override]
