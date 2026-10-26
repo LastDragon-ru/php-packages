@@ -2,21 +2,6 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes;
 
-use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Cursor;
-use LastDragon_ru\GlobMatcher\Package;
-use Override;
-
-use function abs;
-use function filter_var;
-use function floor;
-use function max;
-use function mb_ltrim;
-use function mb_strlen;
-use function mb_strpos;
-
-use const FILTER_NULL_ON_FAILURE;
-use const FILTER_VALIDATE_INT;
-
 readonly class IntegerSequenceNode extends IncrementalSequenceNode {
     public function __construct(
         /**
@@ -30,41 +15,5 @@ readonly class IntegerSequenceNode extends IncrementalSequenceNode {
         public ?int $increment = null,
     ) {
         // empty
-    }
-
-    #[Override]
-    public static function toCount(Cursor $cursor): int {
-        return self::prepare($cursor)[2];
-    }
-
-    protected static function parse(string $string): int {
-        $negative = mb_strpos($string, '-', 0, Package::Encoding) === 0;
-        $trimmed  = mb_ltrim($string, '-0', Package::Encoding);
-        $trimmed  = ($negative ? '-' : '').($trimmed !== '' ? $trimmed : '0');
-        $integer  = (int) filter_var($trimmed, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
-
-        return $integer;
-    }
-
-    /**
-     * @param Cursor<covariant static> $cursor
-     *
-     * @return array{int, int, int<0, max>, int<0, max>}
-     */
-    private static function prepare(Cursor $cursor): array {
-        $start  = static::parse($cursor->node->start);
-        $end    = static::parse($cursor->node->end);
-        $inc    = max(abs($cursor->node->increment ?? 1), 1);
-        $inc    = $start < $end ? $inc : -$inc;
-        $steps  = (int) floor(abs(($end - $start) / $inc)) + 1;
-        $steps  = max(0, $steps);
-        $length = $cursor->node->start !== (string) $start || $cursor->node->end !== (string) $end
-            ? max(
-                mb_strlen($cursor->node->start, Package::Encoding),
-                mb_strlen($cursor->node->end, Package::Encoding),
-            )
-            : 0;
-
-        return [$start, $inc, $steps, $length];
     }
 }
