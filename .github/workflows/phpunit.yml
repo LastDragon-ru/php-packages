@@ -47,7 +47,7 @@ jobs:
       optional-packages: ${{ steps.settings.outputs.optional-packages }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install PHP
         uses: ./.github/actions/php
@@ -123,7 +123,7 @@ jobs:
 
       # Checkout
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Install PHP
       - name: Install PHP
@@ -187,7 +187,7 @@ jobs:
           done <<< "${PACKAGES}"
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           working-directory: ${{ env.WORKING_DIRECTORY }}
           dependency-versions: ${{ matrix.dependencies }}

@@ -52,7 +52,7 @@ runs:
 
     - name: Install dependencies
       if: ${{ inputs.dependencies == 'true' || inputs.dependencies == 1 }} # https://github.com/actions/runner/issues/1483
-      uses: ramsey/composer-install@v3
+      uses: ramsey/composer-install@v4
       with:
         working-directory: ${{ inputs.working-directory }}
 
