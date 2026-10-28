@@ -5,7 +5,7 @@ namespace LastDragon_ru\TextParser\Docs\Calculator\Ast;
 /**
  * @template TChild of Node
  */
-interface ParentNode {
+interface NodeParent {
     /**
      * @var list<TChild>
      */

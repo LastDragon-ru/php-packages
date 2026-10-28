@@ -4,7 +4,7 @@ namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
 use LastDragon_ru\TextParser\Docs\Calculator\Ast\Cursor;
-use LastDragon_ru\TextParser\Docs\Calculator\Ast\ExpressionNode;
+use LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode;
 use LastDragon_ru\TextParser\Docs\Calculator\Parser;
 
 use function assert;

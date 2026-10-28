@@ -2,18 +2,23 @@
 
 namespace LastDragon_ru\TextParser\Cursor;
 
+use Override;
+
 /**
- * @template TNode of object
  * @template TNodeInterface of object
+ * @template TNode of TNodeInterface
+ *
+ * @implements CursorConstructor<TNodeInterface, TNode>
  */
-abstract class Cursor {
-    final public function __construct(
+abstract class Cursor implements CursorConstructor {
+    #[Override]
+    public function __construct(
         /**
-         * @var TNode&TNodeInterface
+         * @var TNode
          */
         public readonly object $node,
         /**
-         * @var ?self<covariant TNodeInterface, TNodeInterface>
+         * @var ?static<TNodeInterface, *>
          */
         public readonly ?self $parent = null,
         /**
@@ -25,7 +30,7 @@ abstract class Cursor {
     }
 
     /**
-     * @var ?self<covariant TNodeInterface, TNodeInterface>
+     * @var ?static<TNodeInterface, *>
      */
     public ?self $next {
         get => $this->offset !== null
@@ -34,7 +39,7 @@ abstract class Cursor {
     }
 
     /**
-     * @var ?self<covariant TNodeInterface, TNodeInterface>
+     * @var ?static<TNodeInterface, *>
      */
     public ?self $previous {
         get => $this->offset !== null && $this->offset > 1
@@ -43,14 +48,14 @@ abstract class Cursor {
     }
 
     /**
-     * @var Axis<covariant self<covariant TNodeInterface, TNodeInterface>>
+     * @var Axis<covariant static<TNodeInterface, *>>
      */
     abstract public Axis $children {
         get;
     }
 
     /**
-     * @return ?Offsettable<self<covariant TNodeInterface, TNodeInterface>>
+     * @return ?Offsettable<static<TNodeInterface, *>>
      */
     private function children(): ?Offsettable {
         // Offset?

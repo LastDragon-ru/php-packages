@@ -10,16 +10,16 @@ use LastDragon_ru\TextParser\Cursor\Offsettable;
 /**
  * @template TNode of Node
  *
- * @extends NodeCursor<TNode, Node>
+ * @extends NodeCursor<Node, TNode>
  */
 class Cursor extends NodeCursor {
     /**
-     * @var Axis<covariant self<covariant TNode>>&Offsettable<covariant self<covariant TNode>>
+     * @var Axis<static<Node>>&Offsettable<static<Node>>
      */
     public Axis&Offsettable $children {
         get => new ArrayAxis(
             fn ($node, $offset) => new static($node, $this, $offset),
-            $this->node instanceof ParentNode ? $this->node->children : [],
+            $this->node instanceof NodeParent ? $this->node->children : [],
         );
     }
 }
