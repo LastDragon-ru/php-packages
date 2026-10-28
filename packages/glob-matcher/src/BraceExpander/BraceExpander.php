@@ -8,8 +8,10 @@ use IteratorAggregate;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\BraceExpansionNode;
 use LastDragon_ru\GlobMatcher\BraceExpander\Converters\NodeToCount;
 use LastDragon_ru\GlobMatcher\BraceExpander\Converters\NodeToIterable;
+use LastDragon_ru\GlobMatcher\BraceExpander\Converters\NodeToString;
 use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Parser;
 use Override;
+use Stringable;
 use Traversable;
 
 /**
@@ -19,7 +21,7 @@ use Traversable;
  *
  * @implements IteratorAggregate<int, string>
  */
-readonly class BraceExpander implements Countable, IteratorAggregate {
+readonly class BraceExpander implements Stringable, Countable, IteratorAggregate {
     /**
      * @deprecated 11.2.0 Will be removed in the future.
      */
@@ -47,5 +49,10 @@ readonly class BraceExpander implements Countable, IteratorAggregate {
     #[Override]
     public function getIterator(): Traversable {
         return (new NodeToIterable())($this->node);
+    }
+
+    #[Override]
+    public function __toString(): string {
+        return (new NodeToString())($this->node);
     }
 }
