@@ -22,6 +22,6 @@ runs:
       run: |
         echo "value=$(jq '.extra."bamarni-bin"."target-directory" // "vendor-bin"' -r -c composer.json)" >> $GITHUB_OUTPUT
     - name: Install
-      uses: ramsey/composer-install@v3
+      uses: ramsey/composer-install@v4
       with:
         working-directory: ${{ inputs.working-directory && inputs.working-directory || '.' }}/${{ steps.path.outputs.value }}/${{ inputs.tool }}

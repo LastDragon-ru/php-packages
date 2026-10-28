@@ -25,7 +25,7 @@ jobs:
     if: ${{ github.event_name != 'schedule' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install PHP
         uses: ./.github/actions/php
         with:
@@ -44,7 +44,7 @@ jobs:
           composer remove --no-interaction --no-progress --ansi --no-update --dev "larastan/larastan"
           composer remove --no-interaction --no-progress --ansi --no-update --dev "spaze/phpstan-disallowed-calls"
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
 
       - name: Install monorepo-builder
         uses: ./.github/actions/tool
@@ -68,7 +68,7 @@ jobs:
     if: ${{ github.event_name != 'schedule' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install PHP
         uses: ./.github/actions/php
         with:
@@ -87,7 +87,7 @@ jobs:
           composer remove --no-interaction --no-progress --ansi --no-update --dev "larastan/larastan"
           composer remove --no-interaction --no-progress --ansi --no-update --dev "spaze/phpstan-disallowed-calls"
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           dependency-versions: lowest
       - name: Check
@@ -131,7 +131,7 @@ jobs:
     if: ${{ github.event_name != 'schedule' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install PHP
         uses: ./.github/actions/php
         with:
@@ -164,7 +164,7 @@ jobs:
           composer config minimum-stability dev
           composer config prefer-stable true
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           working-directory: ${{ needs.settings.outputs.packages-directory }}/${{ matrix.package }}
 
@@ -182,7 +182,7 @@ jobs:
     if: ${{ github.event_name != 'schedule' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install PHP
         uses: ./.github/actions/php
         with:
@@ -200,7 +200,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install PHP
         uses: ./.github/actions/php
       - name: Install phpstan
@@ -246,7 +246,7 @@ jobs:
     if: ${{ github.event_name != 'schedule' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install Node.js
         uses: ./.github/actions/npm
       - name: Setup problem matcher
