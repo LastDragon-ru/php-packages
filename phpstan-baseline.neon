@@ -133,12 +133,6 @@ parameters:
 			path: packages/lara-asp-graphql/src/Builder/BuilderInfoDetectorTest.php
 
 		-
-			rawMessage: 'Argument of an invalid type mixed supplied for foreach, only iterables are supported.'
-			identifier: foreach.nonIterable
-			count: 1
-			path: packages/lara-asp-graphql/src/Builder/Directives/HandlerDirective.php
-
-		-
 			rawMessage: 'Strict comparison using === between Nuwave\Lighthouse\Execution\Arguments\Argument and null will always evaluate to false.'
 			identifier: identical.alwaysFalse
 			count: 1
@@ -1997,9 +1991,3 @@ parameters:
 			identifier: notIdentical.alwaysTrue
 			count: 1
 			path: packages/text-parser/docs/Calculator/Ast/ExpressionNode.php
-
-		-
-			rawMessage: 'Property LastDragon_ru\TextParser\Iterables\BufferedIterable<TValue>::$iterator (Iterator<mixed, TValue>) does not accept (iterable<TValue>&Iterator)|IteratorIterator<mixed, mixed, Traversable<mixed, mixed>>.'
-			identifier: assign.propertyType
-			count: 1
-			path: packages/text-parser/src/Iterables/BufferedIterable.php
