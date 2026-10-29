@@ -6,10 +6,16 @@ use InvalidArgumentException;
 use LastDragon_ru\GlobMatcher\Contracts\Matcher;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobNode;
+use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegex;
+use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegexOptions;
 use LastDragon_ru\GlobMatcher\Glob\Parser\Parser;
+use LastDragon_ru\GlobMatcher\Package;
 use LastDragon_ru\GlobMatcher\Regex;
 use Override;
 use Stringable;
+
+use function mb_strrpos;
+use function mb_substr;
 
 /**
  * Parse/Match glob pattern.
@@ -49,8 +55,15 @@ readonly class Glob implements Matcher {
     }
 
     private function regex(Options $options, GlobNode $node): Regex {
-        $regex = $node::toRegex($options, new Cursor($node));
-        $regex = new Regex($regex, $options->matchMode, $options->matchCase);
+        $converter = new CursorToRegex(
+            new CursorToRegexOptions(
+                matchCase  : $options->matchCase,
+                matchHidden: $options->matchHidden || $options->hidden,
+            ),
+        );
+        $regex     = $converter(new Cursor($node));
+        $regex     = mb_substr($regex, 1, (int) mb_strrpos($regex, '#', 0, Package::Encoding) - 1, Package::Encoding);
+        $regex     = new Regex($regex, $options->matchMode, $options->matchCase);
 
         return $regex;
     }
