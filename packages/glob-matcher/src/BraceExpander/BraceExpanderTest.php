@@ -31,6 +31,11 @@ final class BraceExpanderTest extends TestCase {
     public function testGetIterator(array $expected, string $pattern): void {
         self::assertSame($expected, iterator_to_array(new BraceExpander($pattern)));
     }
+
+    #[DataProvider('dataProviderToString')]
+    public function testToString(string $expected, string $pattern): void {
+        self::assertSame($expected, (string) new BraceExpander($pattern));
+    }
     // </editor-fold>
 
     // <editor-fold desc="DataProviders">
@@ -119,6 +124,38 @@ final class BraceExpanderTest extends TestCase {
             [['0{1..}2'], '0{1..}2'],
             [['{a..1..5}'], '{a..1..5}'],
             [['a{1..a}1', 'a{1..a}2', 'b{1..a}1', 'b{1..a}2'], '{a,b}{1..a}{1,2}'],
+        ];
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function dataProviderToString(): array {
+        return [
+            'StringNode'                                       => [
+                'string',
+                'string',
+            ],
+            'SequenceNode'                                     => [
+                '{a,b}',
+                '{a,b}',
+            ],
+            'IntegerSequenceNode -> with one increment'        => [
+                '{1..9}',
+                '{1..9..1}',
+            ],
+            'CharacterSequenceNode -> with positive increment' => [
+                '{a..o..3}',
+                '{a..o..3}',
+            ],
+            'BraceExpansionNode - empty'                       => [
+                '',
+                '',
+            ],
+            'BraceExpansionNode - complex'                     => [
+                'path{/to,/from,}/file-{{00..10}.{txt,js},{a..e}.php}.tmp',
+                'path{/to,/from,}/file-{{00..10}.{txt,js},{a..e}.php}.tmp',
+            ],
         ];
     }
     //</editor-fold>
