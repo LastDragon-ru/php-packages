@@ -10,14 +10,10 @@ use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegex;
 use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegexOptions;
 use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToString;
 use LastDragon_ru\GlobMatcher\Glob\Parser\Parser;
-use LastDragon_ru\GlobMatcher\MatchMode;
-use LastDragon_ru\GlobMatcher\Package;
-use LastDragon_ru\GlobMatcher\Regex;
 use Override;
 use Stringable;
 
-use function mb_strrpos;
-use function mb_substr;
+use function preg_match;
 
 /**
  * Parse/Match glob pattern.
@@ -26,11 +22,8 @@ use function mb_substr;
  */
 readonly class Glob implements Stringable, Matcher {
     public GlobNode $node;
-    /**
-     * @deprecated 11.2.0 Will be removed in the future.
-     */
-    public Regex   $regex;
-    public Options $options;
+    public Options  $options;
+    private string  $regex;
 
     public function __construct(string $pattern, ?Options $options = null) {
         $this->options = $options ?? new Options();
@@ -40,7 +33,7 @@ readonly class Glob implements Stringable, Matcher {
 
     #[Override]
     public function match(Stringable|string $string): bool {
-        return $this->regex->match($string);
+        return (bool) preg_match($this->regex, (string) $string);
     }
 
     #[Override]
@@ -58,7 +51,7 @@ readonly class Glob implements Stringable, Matcher {
         return $node;
     }
 
-    private function regex(Options $options, GlobNode $node): Regex {
+    private function regex(Options $options, GlobNode $node): string {
         $converter = new CursorToRegex(
             new CursorToRegexOptions(
                 matchCase  : $options->matchCase,
@@ -66,8 +59,6 @@ readonly class Glob implements Stringable, Matcher {
             ),
         );
         $regex     = $converter(new Cursor($node));
-        $regex     = mb_substr($regex, 1, (int) mb_strrpos($regex, '#', 0, Package::Encoding) - 1, Package::Encoding);
-        $regex     = new Regex($regex, MatchMode::Match, $options->matchCase);
 
         return $regex;
     }

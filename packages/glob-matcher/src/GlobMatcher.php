@@ -6,6 +6,9 @@ use InvalidArgumentException;
 use LastDragon_ru\GlobMatcher\BraceExpander\BraceExpander;
 use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Name as BraceExpanderName;
 use LastDragon_ru\GlobMatcher\Contracts\Matcher;
+use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
+use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegex;
+use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegexOptions;
 use LastDragon_ru\GlobMatcher\Glob\Glob;
 use LastDragon_ru\GlobMatcher\Glob\Options as GlobOptions;
 use LastDragon_ru\GlobMatcher\Glob\Parser\Name as GlobName;
@@ -19,12 +22,12 @@ use Stringable;
 
 use function count;
 use function implode;
+use function mb_strrpos;
+use function mb_substr;
+use function preg_match;
 
 readonly class GlobMatcher implements Matcher {
-    /**
-     * @deprecated 11.2.0 Will be removed in the future.
-     */
-    public Regex   $regex;
+    private string $regex;
     public Options $options;
 
     public function __construct(
@@ -37,15 +40,16 @@ readonly class GlobMatcher implements Matcher {
 
     #[Override]
     public function match(Stringable|string $string): bool {
-        return $this->regex->match($string);
+        return (bool) preg_match($this->regex, (string) $string);
     }
 
-    private function regex(): Regex {
-        $regex    = [];
+    private function regex(): string {
+        $regexes  = [];
         $options  = new GlobOptions(
             globstar   : $this->options->globstar,
             extended   : $this->options->extended,
             matchHidden: $this->options->matchHidden,
+            matchCase  : $this->options->matchCase,
         );
         $patterns = $this->options->braces ? new BraceExpander($this->pattern) : [$this->pattern];
 
@@ -53,15 +57,29 @@ readonly class GlobMatcher implements Matcher {
             throw new InvalidArgumentException('The `$pattern` generates too many variants.');
         }
 
+        $settings  = new CursorToRegexOptions(
+            matchCase  : $options->matchCase,
+            matchHidden: $options->matchHidden,
+        );
+        $converter = new CursorToRegex($settings);
+
         foreach ($patterns as $pattern) {
-            $regex[] = (new Glob($pattern, $options))->regex->pattern;
+            $node      = (new Glob($pattern, $options))->node;
+            $regex     = $converter(new Cursor($node));
+            $regexes[] = mb_substr(
+                $regex,
+                1,
+                (int) mb_strrpos($regex, $settings->delimiter, 0, Package::Encoding) - 1,
+                Package::Encoding,
+            );
         }
 
-        return new Regex(
-            '(?:'.implode('|', $regex).')',
-            MatchMode::Match,
-            $this->options->matchCase,
-        );
+        $delim = $settings->delimiter;
+        $flags = 'us'.($this->options->matchCase ? '' : 'i');
+        $regex = '(?:'.implode('|', $regexes).')';
+        $regex = "{$delim}^{$regex}\${$delim}{$flags}";
+
+        return $regex;
     }
 
     public static function escape(string $pattern, ?Options $options = null): string {
