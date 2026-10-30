@@ -1,24 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			rawMessage: 'Parameter #2 $cursor of static method LastDragon_ru\GlobMatcher\Glob\Ast\Node::toRegex() expects LastDragon_ru\GlobMatcher\Glob\Ast\Cursor<covariant LastDragon_ru\GlobMatcher\Glob\Ast\Node>, LastDragon_ru\GlobMatcher\Glob\Ast\Cursor<LastDragon_ru\GlobMatcher\Glob\Ast\Node> given.'
-			identifier: argument.type
-			count: 1
-			path: packages/glob-matcher/src/Glob/Ast/Nodes/CharacterNode.php
-
-		-
-			rawMessage: 'Binary operation "." between ''(?:'' and mixed results in an error.'
-			identifier: binaryOp.invalid
-			count: 1
-			path: packages/glob-matcher/src/Glob/Ast/Nodes/PatternListNode.php
-
-		-
-			rawMessage: 'Cannot call static method toRegex() on mixed.'
-			identifier: staticMethod.nonObject
-			count: 1
-			path: packages/glob-matcher/src/Glob/Ast/Nodes/PatternListNode.php
-
-		-
 			rawMessage: 'Parameter #1 $class of method LastDragon_ru\LaraASP\Documentator\Processor\Utils\Instances<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>>::add() expects class-string<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>>, class-string<I of LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Instruction<P of LastDragon_ru\LaraASP\Documentator\Processor\Tasks\Preprocess\Contracts\Parameters>> given.'
 			identifier: argument.type
 			count: 1

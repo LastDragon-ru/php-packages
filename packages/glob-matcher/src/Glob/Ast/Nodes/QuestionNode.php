@@ -2,18 +2,10 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob\Ast\Nodes;
 
-use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
-use LastDragon_ru\GlobMatcher\Glob\Options;
-use Override;
 
 readonly class QuestionNode implements Node, NameNodeChild {
     public function __construct() {
         // empty
-    }
-
-    #[Override]
-    public static function toRegex(Options $options, Cursor $cursor): string {
-        return '[^/]';
     }
 }

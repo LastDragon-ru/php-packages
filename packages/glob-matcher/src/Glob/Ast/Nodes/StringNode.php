@@ -2,17 +2,9 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob\Ast\Nodes;
 
-use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Node;
-use LastDragon_ru\GlobMatcher\Glob\Options;
 use LastDragon_ru\TextParser\Ast\NodeString;
-use Override;
-
-use function preg_quote;
 
 readonly class StringNode extends NodeString implements Node, NameNodeChild, CharacterNodeChild {
-    #[Override]
-    public static function toRegex(Options $options, Cursor $cursor): string {
-        return preg_quote($cursor->node->string);
-    }
+    // empty
 }
