@@ -24,9 +24,6 @@ use function mb_substr;
  * @see https://en.wikipedia.org/wiki/Glob_(programming)
  */
 readonly class Glob implements Stringable, Matcher {
-    /**
-     * @deprecated 11.2.0 Will be removed in the future.
-     */
     public GlobNode $node;
     /**
      * @deprecated 11.2.0 Will be removed in the future.
