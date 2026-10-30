@@ -8,6 +8,7 @@ use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Nodes\GlobNode;
 use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegex;
 use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegexOptions;
+use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToString;
 use LastDragon_ru\GlobMatcher\Glob\Parser\Parser;
 use LastDragon_ru\GlobMatcher\Package;
 use LastDragon_ru\GlobMatcher\Regex;
@@ -22,7 +23,7 @@ use function mb_substr;
  *
  * @see https://en.wikipedia.org/wiki/Glob_(programming)
  */
-readonly class Glob implements Matcher {
+readonly class Glob implements Stringable, Matcher {
     /**
      * @deprecated 11.2.0 Will be removed in the future.
      */
@@ -42,6 +43,11 @@ readonly class Glob implements Matcher {
     #[Override]
     public function match(Stringable|string $string): bool {
         return $this->regex->match($string);
+    }
+
+    #[Override]
+    public function __toString(): string {
+        return (new CursorToString())(new Cursor($this->node));
     }
 
     private function parse(Options $options, string $pattern): GlobNode {

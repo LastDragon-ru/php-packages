@@ -53,6 +53,11 @@ final class GlobTest extends TestCase {
 
         self::assertSame($expected, $actual);
     }
+
+    #[DataProvider('dataProviderToString')]
+    public function testToString(string $expected, string $pattern, ?Options $options): void {
+        self::assertSame($expected, (string) new Glob($pattern, $options));
+    }
     // </editor-fold>
 
     // <editor-fold desc="DataProvider">
@@ -130,6 +135,68 @@ final class GlobTest extends TestCase {
         }
 
         return $data;
+    }
+
+    /**
+     * @return array<string, array{string, string, ?Options}>
+     */
+    public static function dataProviderToString(): array {
+        return [
+            'string'                         => [
+                'string',
+                'string',
+                null,
+            ],
+            '*'                              => [
+                '*.jpg',
+                '*.jpg',
+                null,
+            ],
+            '* should be merged if multiple' => [
+                '*/*/*.jpg',
+                '****/**/**.jpg',
+                new Options(
+                    globstar: false,
+                ),
+            ],
+            '**/*.jpg'                       => [
+                '**/*.jpg',
+                '**/**/*.jpg',
+                new Options(
+                    globstar: true,
+                ),
+            ],
+            '?'                              => [
+                '?at.png',
+                '?at.png',
+                null,
+            ],
+            'characters'                     => [
+                '[abc[:alpha:]][[.ch.][=a=]]',
+                '[abc[:alpha:]][[.ch.][=a=]]',
+                null,
+            ],
+            '!characters'                    => [
+                '[!abc[:alpha:]][[.ch.][=a=]]',
+                '[!abc[:alpha:]][[.ch.][=a=]]',
+                null,
+            ],
+            '^characters'                    => [
+                '[!abc[:alpha:]][[.ch.][=a=]]',
+                '[^abc[:alpha:]][[.ch.][=a=]]',
+                null,
+            ],
+            'extglob = off'                  => [
+                '+(a|b|c)',
+                '+(a|b|c)',
+                new Options(extended: false),
+            ],
+            'extglob'                        => [
+                '/a/+(b|c|*(d|e)|?(f))',
+                '/a/+(b|c|*(d|e)|?(f))',
+                null,
+            ],
+        ];
     }
     // </editor-fold>
 
