@@ -4,30 +4,32 @@ namespace LastDragon_ru\LaraASP\Documentator\Processor\FileSystem;
 
 use LastDragon_ru\GlobMatcher\Contracts\Matcher;
 use LastDragon_ru\GlobMatcher\GlobMatcher;
-use LastDragon_ru\GlobMatcher\MatchMode;
 use LastDragon_ru\GlobMatcher\Options;
-use LastDragon_ru\GlobMatcher\Regex;
 use Override;
 use Stringable;
 
-use function implode;
+use function array_find;
+use function array_values;
 
 /**
  * @internal
  */
 readonly class Glob implements Matcher {
-    private ?Regex $regex;
+    /**
+     * @var list<Matcher>
+     */
+    private array $matchers;
 
     /**
      * @param list<non-empty-string> $patterns
      */
     public function __construct(array $patterns, bool $hidden) {
-        $this->regex = $this->regex($patterns, $hidden);
+        $this->matchers = $this->matchers($patterns, $hidden);
     }
 
     #[Override]
     public function match(Stringable|string $string): bool {
-        return (bool) $this->regex?->match($string);
+        return array_find($this->matchers, static fn ($matcher) => $matcher->match($string)) !== null;
     }
 
     public function mismatch(Stringable|string $string): bool {
@@ -36,22 +38,24 @@ readonly class Glob implements Matcher {
 
     /**
      * @param list<string> $patterns
+     *
+     * @return list<Matcher>
      */
-    protected function regex(array $patterns, bool $hidden): ?Regex {
-        $options = new Options(
+    protected function matchers(array $patterns, bool $hidden): array {
+        $matchers = [];
+        $options  = new Options(
             matchHidden: $hidden,
             matchCase  : true,
         );
-        $regex   = [];
 
         foreach ($patterns as $pattern) {
-            if (!isset($regex[$pattern]) && $pattern !== '') {
-                $regex[$pattern] = (new GlobMatcher($pattern, $options))->regex->pattern;
+            if (isset($matchers[$pattern]) || $pattern === '') {
+                continue;
             }
+
+            $matchers[$pattern] = new GlobMatcher($pattern, $options);
         }
 
-        return $regex !== []
-            ? new Regex('(?:'.implode('|', $regex).')', MatchMode::Match, $options->matchCase)
-            : null;
+        return array_values($matchers);
     }
 }
