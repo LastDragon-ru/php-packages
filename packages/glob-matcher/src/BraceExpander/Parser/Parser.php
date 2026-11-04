@@ -69,7 +69,7 @@ class Parser {
      */
     protected function parseIncrementalSequence(TransactionalIterable $iterable): ?IncrementalSequenceNode {
         // Is `{`?
-        if ($iterable[0]?->is(Name::LeftCurlyBracket) !== true) {
+        if ($iterable[0]?->name !== Name::LeftCurlyBracket) {
             return null;
         }
 
@@ -78,11 +78,11 @@ class Parser {
         $iterable->next();
 
         // Start
-        $start          = $iterable[0]?->is(null) === true ? $iterable[0]->value : '';
+        $start          = $iterable[0] !== null && $iterable[0]->name === null ? $iterable[0]->value : '';
         $startInteger   = $this->isInteger($start) ? $start : null;
         $startCharacter = $startInteger === null && $this->isCharacter($start) ? $start : null;
 
-        if ($iterable[1]?->is(Name::DoubleDot) === true && ($startInteger !== null || $startCharacter !== null)) {
+        if ($iterable[1]?->name === Name::DoubleDot && ($startInteger !== null || $startCharacter !== null)) {
             $iterable->next(2);
         } else {
             $iterable->rollback();
@@ -91,7 +91,7 @@ class Parser {
         }
 
         // End
-        $end          = $iterable[0]?->is(null) === true ? $iterable[0]->value : '';
+        $end          = $iterable[0] !== null && $iterable[0]->name === null ? $iterable[0]->value : '';
         $endInteger   = $this->isInteger($end) ? $end : null;
         $endCharacter = $endInteger === null && $this->isCharacter($end) ? $end : null;
 
@@ -106,8 +106,8 @@ class Parser {
         // Increment
         $increment = null;
 
-        if ($iterable[0]?->is(Name::DoubleDot) === true) {
-            $increment = $iterable[1]?->is(null) === true ? $iterable[1]->value : '';
+        if ($iterable[0]?->name === Name::DoubleDot) {
+            $increment = $iterable[1] !== null && $iterable[1]->name === null ? $iterable[1]->value : '';
             $increment = mb_ltrim($increment, '0', Package::Encoding);
             $increment = $increment !== '' ? $increment : '0';
             $increment = filter_var($increment, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
@@ -122,7 +122,7 @@ class Parser {
         }
 
         // Is `}`?
-        if ($iterable[0]?->is(Name::RightCurlyBracket) === true) {
+        if ($iterable[0]?->name === Name::RightCurlyBracket) {
             $iterable->next();
         } else {
             $iterable->rollback();
@@ -152,7 +152,7 @@ class Parser {
      */
     protected function parseSequence(TransactionalIterable $iterable): ?SequenceNode {
         // Is `{`?
-        if ($iterable[0]?->is(Name::LeftCurlyBracket) !== true) {
+        if ($iterable[0]?->name !== Name::LeftCurlyBracket) {
             return null;
         }
 
@@ -169,7 +169,7 @@ class Parser {
 
         while ($iterable->valid()) {
             // Is comma?
-            if ($iterable[0]?->is(Name::Comma) === true) {
+            if ($iterable[0]?->name === Name::Comma) {
                 $sequenceFactory->push($expansionFactory->create());
                 $iterable->next();
 
@@ -179,7 +179,7 @@ class Parser {
             }
 
             // Is `}`?
-            if ($iterable[0]?->is(Name::RightCurlyBracket) === true) {
+            if ($iterable[0]?->name === Name::RightCurlyBracket) {
                 // If `..` and no comma -> it is a malformed incremental sequence,
                 // and it should be parsed as a string.
                 if (!$hasDoubleDot || $hasComma) {
@@ -194,7 +194,7 @@ class Parser {
             }
 
             // Is `..`?
-            if ($iterable[0]?->is(Name::DoubleDot) === true) {
+            if ($iterable[0]?->name === Name::DoubleDot) {
                 $hasDoubleDot = true;
             }
 

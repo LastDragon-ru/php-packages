@@ -70,7 +70,7 @@ class Parser {
      */
     protected function parseSubExpression(TransactionalIterable $iterable): ?ExpressionNode {
         // Is `(`?
-        if ($iterable[0]?->is(Name::LeftParenthesis) !== true) {
+        if ($iterable[0]?->name !== Name::LeftParenthesis) {
             return null;
         }
 
@@ -84,7 +84,7 @@ class Parser {
 
         while ($iterable->valid()) {
             // Is `)`?
-            if ($iterable[0]?->is(Name::RightParenthesis) === true) {
+            if ($iterable[0]?->name === Name::RightParenthesis) {
                 $node = $factory->create();
 
                 $iterable->next();
@@ -129,7 +129,7 @@ class Parser {
      */
     protected function parseNumber(TransactionalIterable $iterable): ?NumberNode {
         // String?
-        if ($iterable[0]?->is(null) !== true) {
+        if ($iterable[0] === null || $iterable[0]->name !== null) {
             return null;
         }
 
@@ -153,7 +153,7 @@ class Parser {
      */
     protected function parseSpace(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         // Only spaces allowed here
-        if ($iterable[0]?->is(Name::Space) !== true) {
+        if ($iterable[0]?->name !== Name::Space) {
             throw new LogicException('The string is not a mathematical expression.');
         } else {
             $iterable->next();

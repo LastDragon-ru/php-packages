@@ -18,8 +18,4 @@ readonly class Token {
     ) {
         // empty
     }
-
-    public function is(?BackedEnum $name): bool {
-        return $this->name === $name;
-    }
 }
