@@ -163,10 +163,8 @@ class Parser {
         $node = null;
 
         if ($iterable[0] !== null) {
-            $string = (string) $iterable[0];
-
-            if ($string !== '') {
-                $node = new StringNode($string);
+            if ($iterable[0]->name !== Name::Backslash && $iterable[0]->value !== '') {
+                $node = new StringNode($iterable[0]->value);
             }
 
             $iterable->next();

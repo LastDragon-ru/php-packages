@@ -2,32 +2,25 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob\Parser;
 
-use LastDragon_ru\TextParser\Iterables\StringTokenizeIterable;
 use LastDragon_ru\TextParser\Iterables\TokenUnescapeIterable;
-use LastDragon_ru\TextParser\Tokenizer\Token;
+use LastDragon_ru\TextParser\Tokenizer\Tokenizer as TextParserTokenizer;
+use Override;
 
-readonly class Tokenizer {
+/**
+ * @extends TextParserTokenizer<Name>
+ */
+readonly class Tokenizer extends TextParserTokenizer {
     public function __construct() {
-        // empty
+        parent::__construct(Name::class);
     }
 
-    /**
-     * @param iterable<mixed, string> $iterable
-     *
-     * @return iterable<mixed, Token<Name>>
-     */
+    #[Override]
     public function tokenize(iterable $iterable, int $offset = 0): iterable {
-        $iterable = new StringTokenizeIterable($iterable, Name::class, offset: $offset);
+        $iterable = parent::tokenize($iterable, $offset);
         $iterable = new TokenUnescapeIterable($iterable, Name::Backslash, static function ($token) {
             return $token->name !== Name::Slash;
         });
 
-        foreach ($iterable as $key => $token) {
-            if ($token->name === Name::Backslash) {
-                continue;
-            }
-
-            yield $key => $token;
-        }
+        return $iterable;
     }
 }
