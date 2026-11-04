@@ -12,8 +12,8 @@ use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegexOptions;
 use LastDragon_ru\GlobMatcher\Glob\Glob;
 use LastDragon_ru\GlobMatcher\Glob\Options as GlobOptions;
 use LastDragon_ru\GlobMatcher\Glob\Parser\Name as GlobName;
-use LastDragon_ru\TextParser\Iterables\StringifyIterable;
 use LastDragon_ru\TextParser\Iterables\TokenEscapeIterable;
+use LastDragon_ru\TextParser\Iterables\TransformIterable;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
 use LastDragon_ru\TextParser\Utils;
 use Override;
@@ -93,7 +93,7 @@ readonly class GlobMatcher implements Matcher {
                 && $token->name !== BraceExpanderName::Comma
                 && $token->name !== BraceExpanderName::DoubleDot;
         });
-        $iterable = new StringifyIterable($iterable);
+        $iterable = new TransformIterable($iterable, static fn($token): string => $token->value);
         $escaped  = Utils::toString($iterable);
 
         return $escaped;

@@ -78,7 +78,7 @@ class Parser {
         $iterable->next();
 
         // Start
-        $start          = $iterable[0]?->is(null) === true ? (string) $iterable[0] : '';
+        $start          = $iterable[0]?->is(null) === true ? $iterable[0]->value : '';
         $startInteger   = $this->isInteger($start) ? $start : null;
         $startCharacter = $startInteger === null && $this->isCharacter($start) ? $start : null;
 
@@ -91,7 +91,7 @@ class Parser {
         }
 
         // End
-        $end          = $iterable[0]?->is(null) === true ? (string) $iterable[0] : '';
+        $end          = $iterable[0]?->is(null) === true ? $iterable[0]->value : '';
         $endInteger   = $this->isInteger($end) ? $end : null;
         $endCharacter = $endInteger === null && $this->isCharacter($end) ? $end : null;
 
@@ -107,7 +107,7 @@ class Parser {
         $increment = null;
 
         if ($iterable[0]?->is(Name::DoubleDot) === true) {
-            $increment = $iterable[1]?->is(null) === true ? (string) $iterable[1] : '';
+            $increment = $iterable[1]?->is(null) === true ? $iterable[1]->value : '';
             $increment = mb_ltrim($increment, '0', Package::Encoding);
             $increment = $increment !== '' ? $increment : '0';
             $increment = filter_var($increment, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
@@ -218,7 +218,7 @@ class Parser {
         $node = null;
 
         if ($iterable[0] !== null) {
-            $string = (string) $iterable[0];
+            $string = $iterable[0]->value;
 
             if ($string !== '') {
                 $node = new StringNode($string);

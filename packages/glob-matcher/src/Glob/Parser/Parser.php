@@ -328,7 +328,7 @@ class Parser {
 
         while ($iterable->valid()) {
             if (!($iterable[0]?->is($name) === true && $iterable[1]?->is(Name::RightSquareBracket) === true)) {
-                $string .= $iterable[0];
+                $string .= $iterable[0]->value ?? '';
 
                 $iterable->next();
             } else {
