@@ -7,12 +7,11 @@ use IteratorAggregate;
 use LastDragon_ru\TextParser\Tokenizer\Token;
 use Override;
 use Traversable;
-use UnitEnum;
 
 /**
  * Escapes tokens (= adds {@see self::$escape} before each non {@see self::$string} token).
  *
- * @template TToken of UnitEnum
+ * @template TToken of BackedEnum
  *
  * @implements IteratorAggregate<int, Token<TToken>>
  */
@@ -25,7 +24,7 @@ readonly class TokenEscapeIterable implements IteratorAggregate {
         /**
          * @var TToken
          */
-        protected UnitEnum $escape,
+        protected BackedEnum $escape,
     ) {
         // empty
     }
@@ -36,7 +35,7 @@ readonly class TokenEscapeIterable implements IteratorAggregate {
             if ($this->isEscapable($token)) {
                 yield new Token(
                     $this->escape,
-                    $this->escape instanceof BackedEnum ? (string) $this->escape->value : '',
+                    (string) $this->escape->value,
                     $token->offset,
                 );
             }

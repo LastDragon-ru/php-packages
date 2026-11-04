@@ -2,26 +2,26 @@
 
 namespace LastDragon_ru\TextParser\Tokenizer;
 
+use BackedEnum;
 use Override;
 use Stringable;
-use UnitEnum;
 
 /**
- * @template-covariant TName of UnitEnum
+ * @template-covariant TName of BackedEnum
  */
 readonly class Token implements Stringable {
     public function __construct(
         /**
          * @var TName|null
          */
-        public ?UnitEnum $name,
+        public ?BackedEnum $name,
         public string $value,
         public int $offset,
     ) {
         // empty
     }
 
-    public function is(?UnitEnum $name): bool {
+    public function is(?BackedEnum $name): bool {
         return $this->name === $name;
     }
 

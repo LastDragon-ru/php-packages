@@ -2,16 +2,16 @@
 
 namespace LastDragon_ru\TextParser\Iterables;
 
+use BackedEnum;
 use IteratorAggregate;
 use LastDragon_ru\TextParser\Tokenizer\Token;
 use Override;
 use Traversable;
-use UnitEnum;
 
 /**
  * Converts escaped tokens into string.
  *
- * @template TToken of UnitEnum
+ * @template TToken of BackedEnum
  *
  * @implements IteratorAggregate<int, Token<TToken>>
  */
@@ -24,7 +24,7 @@ readonly class TokenUnescapeIterable implements IteratorAggregate {
         /**
          * @var TToken
          */
-        protected UnitEnum $escape,
+        protected BackedEnum $escape,
     ) {
         // empty
     }
