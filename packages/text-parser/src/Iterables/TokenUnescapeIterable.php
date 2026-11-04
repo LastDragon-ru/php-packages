@@ -3,6 +3,7 @@
 namespace LastDragon_ru\TextParser\Iterables;
 
 use BackedEnum;
+use Closure;
 use IteratorAggregate;
 use LastDragon_ru\TextParser\Tokenizer\Token;
 use Override;
@@ -25,6 +26,10 @@ readonly class TokenUnescapeIterable implements IteratorAggregate {
          * @var TToken
          */
         protected BackedEnum $escape,
+        /**
+         * @var Closure(Token<TToken>): bool
+         */
+        protected ?Closure $escapable = null,
     ) {
         // empty
     }
@@ -35,7 +40,7 @@ readonly class TokenUnescapeIterable implements IteratorAggregate {
 
         foreach ($this->iterable as $token) {
             if ($escaped !== null) {
-                if ($this->isEscapable($token)) {
+                if ($token->name !== null && ($this->escapable === null || ($this->escapable)($token))) {
                     /** @phpstan-ignore generator.valueType (`null` is fine) */
                     yield new Token(null, $token->value, $token->offset);
                 } else {
@@ -50,12 +55,5 @@ readonly class TokenUnescapeIterable implements IteratorAggregate {
                 yield $token;
             }
         }
-    }
-
-    /**
-     * @param Token<TToken> $token
-     */
-    protected function isEscapable(Token $token): bool {
-        return $token->name !== null;
     }
 }
