@@ -14,7 +14,6 @@ use LastDragon_ru\GlobMatcher\Glob\Options as GlobOptions;
 use LastDragon_ru\GlobMatcher\Glob\Parser\Name as GlobName;
 use LastDragon_ru\TextParser\Iterables\StringifyIterable;
 use LastDragon_ru\TextParser\Iterables\TokenEscapeIterable;
-use LastDragon_ru\TextParser\Tokenizer\Token;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
 use LastDragon_ru\TextParser\Utils;
 use Override;
@@ -86,18 +85,14 @@ readonly class GlobMatcher implements Matcher {
         $options  = self::options($options);
         $tokens   = $options->braces ? [BraceExpanderName::class, GlobName::class] : [GlobName::class];
         $iterable = (new Tokenizer($tokens))->tokenize([$pattern]);
-        $iterable = new readonly class($iterable, GlobName::Backslash) extends TokenEscapeIterable {
-            #[Override]
-            protected function isEscapable(Token $token): bool {
-                return parent::isEscapable($token)
-                    && $token->name !== GlobName::Colon
-                    && $token->name !== GlobName::Dot
-                    && $token->name !== GlobName::Equal
-                    && $token->name !== GlobName::Slash
-                    && $token->name !== BraceExpanderName::Comma
-                    && $token->name !== BraceExpanderName::DoubleDot;
-            }
-        };
+        $iterable = new TokenEscapeIterable($iterable, GlobName::Backslash, static function ($token) {
+            return $token->name !== GlobName::Colon
+                && $token->name !== GlobName::Dot
+                && $token->name !== GlobName::Equal
+                && $token->name !== GlobName::Slash
+                && $token->name !== BraceExpanderName::Comma
+                && $token->name !== BraceExpanderName::DoubleDot;
+        });
         $iterable = new StringifyIterable($iterable);
         $escaped  = Utils::toString($iterable);
 
