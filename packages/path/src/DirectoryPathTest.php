@@ -4,12 +4,15 @@ namespace LastDragon_ru\Path;
 
 use LastDragon_ru\Path\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @internal
  */
 #[CoversClass(DirectoryPath::class)]
 final class DirectoryPathTest extends TestCase {
+    // <editor-fold desc="Tests">
+    // =========================================================================
     public function testPropertyName(): void {
         $path       = new DirectoryPath('path/./to/./directory');
         $normalized = $path->normalized();
@@ -52,14 +55,9 @@ final class DirectoryPathTest extends TestCase {
         self::assertSame('/absolute/path/', (string) $absolute->parent()->parent());
     }
 
-    public function testContains(): void {
-        $path = new DirectoryPath('/path/to/directory');
-
-        self::assertFalse($path->contains($path));
-        self::assertTrue($path->contains(new FilePath('/path/to/directory/file.md')));
-        self::assertTrue($path->contains(new FilePath('file.md')));
-        self::assertFalse($path->contains(new FilePath('/path/to/directory/../file.md')));
-        self::assertFalse($path->contains(new FilePath('/path/to/file.md')));
+    #[DataProvider('dataProviderContains')]
+    public function testContains(bool $expected, string $root, string $path): void {
+        self::assertSame($expected, (new DirectoryPath($root))->contains(Path::make($path)));
     }
 
     public function testNormalized(): void {
@@ -68,4 +66,22 @@ final class DirectoryPathTest extends TestCase {
         self::assertSame('../', (string) (new DirectoryPath('..'))->normalized());
         self::assertSame('/path/to/', (string) (new DirectoryPath('/path/to'))->normalized());
     }
+    //</editor-fold>
+
+    // <editor-fold desc="DataProviders">
+    // =========================================================================
+    /**
+     * @return array<string, array{bool, string, string}>
+     */
+    public static function dataProviderContains(): array {
+        return [
+            'self'                                    => [false, '/path/to/directory', '/path/to/directory/'],
+            'absolute inside'                         => [true, '/path/to/directory', '/path/to/directory/file.md'],
+            'absolute outside'                        => [false, '/path/to/directory', '/path/to/directory/../file.md'],
+            'absolute outside (not normalized)'       => [false, '/path/to/directory', '/path/to/file.md'],
+            'relative file'                           => [true, '/path/to/directory', 'file.md'],
+            'PKSA-g499-cm4q-v35y/GHSA-6prc-h956-hxjq' => [false, '/base', '/base/../x://../secret.txt'],
+        ];
+    }
+    //</editor-fold>
 }
