@@ -45,6 +45,7 @@ parameters:
     checkBatchedJobIsBatchable: false
     checkBatchableJobChecksCancellation: false
     checkDispatchInTransactionAfterCommit: false
+    redisDriver: null
 
 parametersSchema:
     checkOctaneCompatibility: bool()
@@ -79,6 +80,7 @@ parametersSchema:
     checkBatchedJobIsBatchable: bool()
     checkBatchableJobChecksCancellation: bool()
     checkDispatchInTransactionAfterCommit: bool()
+    redisDriver: schema(anyOf(phpredis, predis), nullable())
 
 conditionalTags:
     Larastan\Larastan\Rules\NoEnvCallsOutsideOfConfigRule:
@@ -253,6 +255,16 @@ services:
         class: Larastan\Larastan\ReturnTypes\ModelOnlyDynamicMethodReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
+
+    -
+        class: Larastan\Larastan\ReturnTypes\ArrGetDynamicStaticMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+
+    -
+        class: Larastan\Larastan\Types\ArrPullParameterOutTypeExtension
+        tags:
+            - phpstan.staticMethodParameterOutTypeExtension
 
     -
         class: Larastan\Larastan\ReturnTypes\ModelFactoryDynamicStaticMethodReturnTypeExtension
@@ -614,6 +626,9 @@ services:
 
     -
         class: Larastan\Larastan\LarastanStubFilesExtension
+        arguments:
+            redisDriver: %redisDriver%
+
         tags:
             - phpstan.stubFilesExtension
 
@@ -755,7 +770,7 @@ services:
     -
         class: Larastan\Larastan\Support\ConfigParser
         arguments:
-            parser: @currentPhpVersionSimpleDirectParser
+            parser: @currentPhpVersionRichParser
             configPaths: %configDirectories%
             treatPhpDocTypesAsCertain: %treatPhpDocTypesAsCertain%
 
@@ -820,6 +835,7 @@ services:
         autowired: false
 
 rules:
+    - Larastan\Larastan\Rules\ArrKeyExistenceRule
     - Larastan\Larastan\Rules\UselessConstructs\NoUselessWithFunctionCallsRule
     - Larastan\Larastan\Rules\UselessConstructs\NoUselessValueFunctionCallsRule
     - Larastan\Larastan\Rules\DeferrableServiceProviderMissingProvidesRule
