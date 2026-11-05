@@ -146,7 +146,7 @@ class Parser {
      */
     protected function parseSubExpression(TransactionalIterable $iterable): ?ExpressionNode {
         // Is `(`?
-        if ($iterable[0]?->is(Lexeme::LeftParenthesis) !== true) {
+        if ($iterable[0]?->name !== Lexeme::LeftParenthesis) {
             return null;
         }
 
@@ -160,7 +160,7 @@ class Parser {
 
         while ($iterable->valid()) {
             // Is `)`?
-            if ($iterable[0]?->is(Lexeme::RightParenthesis) === true) {
+            if ($iterable[0]?->name === Lexeme::RightParenthesis) {
                 $node = $factory->create();
 
                 $iterable->next();
@@ -190,7 +190,7 @@ class Parser {
             Lexeme::Minus    => new OperatorSubtractionNode(),
             Lexeme::Asterisk => new OperatorMultiplicationNode(),
             Lexeme::Slash    => new OperatorDivisionNode(),
-            default        => null,
+            default          => null,
         };
 
         if ($node !== null) {
@@ -205,7 +205,7 @@ class Parser {
      */
     protected function parseNumber(TransactionalIterable $iterable): ?NumberNode {
         // String?
-        if ($iterable[0]?->is(null) !== true) {
+        if ($iterable[0] === null || $iterable[0]->name !== null) {
             return null;
         }
 
@@ -229,7 +229,7 @@ class Parser {
      */
     protected function parseSpace(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         // Only spaces allowed here
-        if ($iterable[0]?->is(Lexeme::Space) !== true) {
+        if ($iterable[0]?->name !== Lexeme::Space) {
             throw new LogicException('The string is not a mathematical expression.');
         } else {
             $iterable->next();
@@ -296,7 +296,7 @@ LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode {
 First, we should split the input string into tokens that is happening inside the [`Parser::parse()`][code-links/b84ae5a44e02f512]. The [`Tokenizer`][code-links/680ddd300ebebd55] accept a backed enum(s) and uses their values as delimiters (value can be a single character or a string). According to our rules, we need the following tokens:
 
 [include:example]: docs/Calculator/Lexeme.php
-[//]: # (start: preprocess/4a7c6a4d1e17a5e4)
+[//]: # (start: preprocess/25f4ad3089ae74a5)
 [//]: # (warning: Generated automatically. Do not edit.)
 
 ```php
@@ -315,7 +315,7 @@ enum Lexeme: string {
 }
 ```
 
-[//]: # (end: preprocess/4a7c6a4d1e17a5e4)
+[//]: # (end: preprocess/25f4ad3089ae74a5)
 
 After tokenization, we will have the list of tokens for further processing. Note that [`Token::$name`][code-links/0d92bddcd098f4b5] contains the enum case or `null` for strings.
 
@@ -909,10 +909,10 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 [code-links/080b62df2cf20def]: src/Iterables/TransactionalIterable.php
     "\LastDragon_ru\TextParser\Iterables\TransactionalIterable"
 
-[code-links/0d92bddcd098f4b5]: src/Tokenizer/Token.php#L14-L17
+[code-links/0d92bddcd098f4b5]: src/Tokenizer/Token.php#L12-L15
     "\LastDragon_ru\TextParser\Tokenizer\Token::$name"
 
-[code-links/f66047d5bcf6fb77]: src/Tokenizer/Token.php#L19
+[code-links/f66047d5bcf6fb77]: src/Tokenizer/Token.php#L17
     "\LastDragon_ru\TextParser\Tokenizer\Token::$offset"
 
 [code-links/680ddd300ebebd55]: src/Tokenizer/Tokenizer.php
