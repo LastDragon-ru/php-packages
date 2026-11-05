@@ -2,7 +2,7 @@
 
 namespace LastDragon_ru\GlobMatcher\Glob\Parser;
 
-enum Name: string {
+enum Lexeme: string {
     case Asterisk           = '*';
     case Question           = '?';
     case Slash              = '/';

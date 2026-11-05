@@ -3,12 +3,12 @@
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
-use LastDragon_ru\TextParser\Docs\Calculator\Name;
+use LastDragon_ru\TextParser\Docs\Calculator\Lexeme;
 use LastDragon_ru\TextParser\Iterables\TransactionalIterable;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
 
 $input    = '1 + 2';
-$tokens   = (new Tokenizer(Name::class))->tokenize([$input]);
+$tokens   = (new Tokenizer(Lexeme::class))->tokenize([$input]);
 $iterable = new TransactionalIterable($tokens, 5, 5);
 
 Example::dump($iterable[0]);

@@ -3,29 +3,33 @@
 namespace LastDragon_ru\TextParser\Iterables;
 
 use BackedEnum;
+use Closure;
 use IteratorAggregate;
 use LastDragon_ru\TextParser\Tokenizer\Token;
 use Override;
 use Traversable;
-use UnitEnum;
 
 /**
- * Escapes tokens (= adds {@see self::$escape} before each non {@see self::$string} token).
+ * Escapes tokens (adds {@see self::$escape} before each token).
  *
- * @template TToken of UnitEnum
+ * @template TLexeme of BackedEnum
  *
- * @implements IteratorAggregate<int, Token<TToken>>
+ * @implements IteratorAggregate<int, Token<TLexeme>>
  */
 readonly class TokenEscapeIterable implements IteratorAggregate {
     public function __construct(
         /**
-         * @var iterable<mixed, Token<TToken>>
+         * @var iterable<mixed, Token<TLexeme>>
          */
         protected iterable $iterable,
         /**
-         * @var TToken
+         * @var TLexeme
          */
-        protected UnitEnum $escape,
+        protected BackedEnum $escape,
+        /**
+         * @var Closure(Token<TLexeme>): bool
+         */
+        protected ?Closure $escapable = null,
     ) {
         // empty
     }
@@ -33,22 +37,11 @@ readonly class TokenEscapeIterable implements IteratorAggregate {
     #[Override]
     public function getIterator(): Traversable {
         foreach ($this->iterable as $token) {
-            if ($this->isEscapable($token)) {
-                yield new Token(
-                    $this->escape,
-                    $this->escape instanceof BackedEnum ? (string) $this->escape->value : '',
-                    $token->offset,
-                );
+            if ($token->name !== null && ($this->escapable === null || ($this->escapable)($token))) {
+                yield new Token($this->escape, (string) $this->escape->value, $token->offset);
             }
 
             yield $token;
         }
-    }
-
-    /**
-     * @param Token<TToken> $token
-     */
-    protected function isEscapable(Token $token): bool {
-        return $token->name !== null;
     }
 }

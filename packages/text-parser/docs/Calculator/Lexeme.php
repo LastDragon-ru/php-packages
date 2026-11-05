@@ -2,7 +2,7 @@
 
 namespace LastDragon_ru\TextParser\Docs\Calculator;
 
-enum Name: string {
+enum Lexeme: string {
     case Plus             = '+';
     case Minus            = '-';
     case Asterisk         = '*';

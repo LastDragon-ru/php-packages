@@ -32,7 +32,7 @@ class Parser {
         $node = null;
 
         try {
-            $iterable = (new Tokenizer(Name::class))->tokenize([$pattern]);
+            $iterable = (new Tokenizer(Lexeme::class))->tokenize([$pattern]);
             $node     = $this->parseExpression($iterable);
         } catch (LogicException) {
             // The `$pattern` is not a valid expression
@@ -42,7 +42,7 @@ class Parser {
     }
 
     /**
-     * @param iterable<mixed, Token<Name>> $iterable
+     * @param iterable<mixed, Token<Lexeme>> $iterable
      */
     protected function parseExpression(iterable $iterable): ?ExpressionNode {
         $iterable = new TransactionalIterable($iterable, 64, 1);
@@ -56,7 +56,7 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseExpressionChild(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         return $this->parseSubExpression($iterable)
@@ -66,11 +66,11 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseSubExpression(TransactionalIterable $iterable): ?ExpressionNode {
         // Is `(`?
-        if ($iterable[0]?->is(Name::LeftParenthesis) !== true) {
+        if ($iterable[0]?->name !== Lexeme::LeftParenthesis) {
             return null;
         }
 
@@ -84,7 +84,7 @@ class Parser {
 
         while ($iterable->valid()) {
             // Is `)`?
-            if ($iterable[0]?->is(Name::RightParenthesis) === true) {
+            if ($iterable[0]?->name === Lexeme::RightParenthesis) {
                 $node = $factory->create();
 
                 $iterable->next();
@@ -106,15 +106,15 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseOperator(TransactionalIterable $iterable): ?OperatorNode {
         $node = match ($iterable[0]->name ?? null) {
-            Name::Plus     => new OperatorAdditionNode(),
-            Name::Minus    => new OperatorSubtractionNode(),
-            Name::Asterisk => new OperatorMultiplicationNode(),
-            Name::Slash    => new OperatorDivisionNode(),
-            default        => null,
+            Lexeme::Plus     => new OperatorAdditionNode(),
+            Lexeme::Minus    => new OperatorSubtractionNode(),
+            Lexeme::Asterisk => new OperatorMultiplicationNode(),
+            Lexeme::Slash    => new OperatorDivisionNode(),
+            default          => null,
         };
 
         if ($node !== null) {
@@ -125,11 +125,11 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseNumber(TransactionalIterable $iterable): ?NumberNode {
         // String?
-        if ($iterable[0]?->is(null) !== true) {
+        if ($iterable[0] === null || $iterable[0]->name !== null) {
             return null;
         }
 
@@ -149,11 +149,11 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseSpace(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         // Only spaces allowed here
-        if ($iterable[0]?->is(Name::Space) !== true) {
+        if ($iterable[0]?->name !== Lexeme::Space) {
             throw new LogicException('The string is not a mathematical expression.');
         } else {
             $iterable->next();

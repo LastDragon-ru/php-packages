@@ -47,7 +47,7 @@ class Parser {
     }
 
     /**
-     * @param iterable<mixed, Token<Name>> $iterable
+     * @param iterable<mixed, Token<Lexeme>> $iterable
      */
     protected function parseGlob(iterable $iterable): ?GlobNode {
         $iterable = new TransactionalIterable($iterable, 1, 3);
@@ -75,7 +75,7 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseGlobChild(TransactionalIterable $iterable): (Node&GlobNodeChild)|null {
         return $this->parseGlobstar($iterable)
@@ -83,7 +83,7 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseGlobstar(TransactionalIterable $iterable): ?GlobstarNode {
         // Enabled?
@@ -93,14 +93,14 @@ class Parser {
 
         // Globstar?
         if (
-            $iterable[0]?->is(Name::Asterisk) !== true
-            || $iterable[1]?->is(Name::Asterisk) !== true
-            || ($iterable[2]?->is(Name::Slash) ?? true) !== true
+            $iterable[0]?->name !== Lexeme::Asterisk
+            || $iterable[1]?->name !== Lexeme::Asterisk
+            || ($iterable[2] !== null && $iterable[2]->name !== Lexeme::Slash)
         ) {
             return null;
         }
 
-        if (($iterable[-1]?->is(Name::Slash) ?? true) !== true) {
+        if ($iterable[-1] !== null && $iterable[-1]->name !== Lexeme::Slash) {
             return null;
         }
 
@@ -108,7 +108,7 @@ class Parser {
         $iterable->next(2);
 
         // Skip trailing `/` if it is not the last of the stream
-        if ($iterable[0]?->is(Name::Slash) === true && $iterable[1] !== null) {
+        if ($iterable[0]?->name === Lexeme::Slash && $iterable[1] !== null) {
             $iterable->next();
         }
 
@@ -117,12 +117,12 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseSegment(TransactionalIterable $iterable): ?SegmentNode {
         $node = null;
 
-        if ($iterable[0]?->is(Name::Slash) === true) {
+        if ($iterable[0]?->name === Lexeme::Slash) {
             $node = new SegmentNode();
 
             $iterable->next();
@@ -132,7 +132,7 @@ class Parser {
     }
 
     /**
-     * @param iterable<mixed, Token<Name>> $iterable
+     * @param iterable<mixed, Token<Lexeme>> $iterable
      */
     protected function parseName(iterable $iterable): ?NameNode {
         $iterable = new TransactionalIterable($iterable, 4096, 5);
@@ -146,7 +146,7 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseNameChild(TransactionalIterable $iterable): (Node&NameNodeChild)|null {
         return $this->parsePatternList($iterable)
@@ -157,16 +157,14 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseString(TransactionalIterable $iterable): ?StringNode {
         $node = null;
 
         if ($iterable[0] !== null) {
-            $string = (string) $iterable[0];
-
-            if ($string !== '') {
-                $node = new StringNode($string);
+            if ($iterable[0]->name !== Lexeme::Backslash && $iterable[0]->value !== '') {
+                $node = new StringNode($iterable[0]->value);
             }
 
             $iterable->next();
@@ -176,12 +174,12 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseQuestion(TransactionalIterable $iterable): ?QuestionNode {
         $node = null;
 
-        if ($iterable[0]?->is(Name::Question) === true) {
+        if ($iterable[0]?->name === Lexeme::Question) {
             $node = new QuestionNode();
 
             $iterable->next();
@@ -191,12 +189,12 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseAsterisk(TransactionalIterable $iterable): ?AsteriskNode {
         $node = null;
 
-        if ($iterable[0]?->is(Name::Asterisk) === true) {
+        if ($iterable[0]?->name === Lexeme::Asterisk) {
             $node = new AsteriskNode();
 
             $iterable->next();
@@ -206,11 +204,11 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseCharacter(TransactionalIterable $iterable): ?CharacterNode {
         // Match?
-        if ($iterable[0]?->is(Name::LeftSquareBracket) !== true) {
+        if ($iterable[0]?->name !== Lexeme::LeftSquareBracket) {
             return null;
         }
 
@@ -221,7 +219,7 @@ class Parser {
         // Negated?
         $negated = false;
 
-        if ($iterable[0]?->is(Name::ExclamationMark) === true || $iterable[0]?->is(Name::Circumflex) === true) {
+        if ($iterable[0]?->name === Lexeme::ExclamationMark || $iterable[0]?->name === Lexeme::Circumflex) {
             $negated = true;
 
             $iterable->next();
@@ -233,7 +231,7 @@ class Parser {
 
         while ($iterable->valid()) {
             // End?
-            if ($iterable[0]?->is(Name::RightSquareBracket) === true && !$factory->empty) {
+            if ($iterable[0]?->name === Lexeme::RightSquareBracket && !$factory->empty) {
                 $node = $factory->create();
 
                 $iterable->next();
@@ -258,12 +256,12 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseCharacterClass(TransactionalIterable $iterable): ?CharacterClassNode {
         return $this->parseCharacterBrackets(
             $iterable,
-            Name::Colon,
+            Lexeme::Colon,
             static function (string $class): ?CharacterClassNode {
                 $class = CharacterClass::tryFrom($class);
                 $node  = $class !== null
@@ -276,12 +274,12 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseCharacterCollatingSymbol(TransactionalIterable $iterable): ?CharacterCollatingSymbolNode {
         return $this->parseCharacterBrackets(
             $iterable,
-            Name::Dot,
+            Lexeme::Dot,
             static function (string $symbol): CharacterCollatingSymbolNode {
                 return new CharacterCollatingSymbolNode($symbol);
             },
@@ -289,14 +287,14 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseCharacterCharacterEquivalenceClass(
         TransactionalIterable $iterable,
     ): ?CharacterEquivalenceClassNode {
         return $this->parseCharacterBrackets(
             $iterable,
-            Name::Equal,
+            Lexeme::Equal,
             static function (string $class): CharacterEquivalenceClassNode {
                 return new CharacterEquivalenceClassNode($class);
             },
@@ -306,18 +304,18 @@ class Parser {
     /**
      * @template T of Node&CharacterNodeChild
      *
-     * @param TransactionalIterable<Token<Name>> $iterable
-     * @param Closure(string): ?T                 $factory
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
+     * @param Closure(string): ?T                  $factory
      *
      * @return T
      */
     private function parseCharacterBrackets(
         TransactionalIterable $iterable,
-        Name $name,
+        Lexeme $name,
         Closure $factory,
     ): (Node&CharacterNodeChild)|null {
         // Match?
-        if (!($iterable[0]?->is(Name::LeftSquareBracket) === true && $iterable[1]?->is($name) === true)) {
+        if (!($iterable[0]?->name === Lexeme::LeftSquareBracket && $iterable[1]?->name === $name)) {
             return null;
         }
 
@@ -329,8 +327,8 @@ class Parser {
         $string = '';
 
         while ($iterable->valid()) {
-            if (!($iterable[0]?->is($name) === true && $iterable[1]?->is(Name::RightSquareBracket) === true)) {
-                $string .= $iterable[0];
+            if (!($iterable[0]?->name === $name && $iterable[1]?->name === Lexeme::RightSquareBracket)) {
+                $string .= $iterable[0]->value ?? '';
 
                 $iterable->next();
             } else {
@@ -357,7 +355,7 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parsePatternList(TransactionalIterable $iterable): ?PatternListNode {
         // Enabled?
@@ -367,15 +365,15 @@ class Parser {
 
         // List?
         $quantifier = match ($iterable[0]->name ?? null) {
-            Name::ExclamationMark => PatternListQuantifier::Not,
-            Name::Question        => PatternListQuantifier::ZeroOrOne,
-            Name::Asterisk        => PatternListQuantifier::ZeroOrMore,
-            Name::Plus            => PatternListQuantifier::OneOrMore,
-            Name::At              => PatternListQuantifier::OneOf,
-            default               => null,
+            Lexeme::ExclamationMark => PatternListQuantifier::Not,
+            Lexeme::Question        => PatternListQuantifier::ZeroOrOne,
+            Lexeme::Asterisk        => PatternListQuantifier::ZeroOrMore,
+            Lexeme::Plus            => PatternListQuantifier::OneOrMore,
+            Lexeme::At              => PatternListQuantifier::OneOf,
+            default                 => null,
         };
 
-        if ($quantifier === null || $iterable[1]?->is(Name::LeftParenthesis) !== true) {
+        if ($quantifier === null || $iterable[1]?->name !== Lexeme::LeftParenthesis) {
             return null;
         }
 
@@ -390,14 +388,14 @@ class Parser {
 
         while ($iterable->valid()) {
             switch (true) {
-                case $iterable[0]?->is(Name::RightParenthesis):
+                case $iterable[0]?->name === Lexeme::RightParenthesis:
                     $listFactory->push($patternFactory->create());
                     $iterable->next();
 
                     $node = $listFactory->create();
 
                     break 2;
-                case $iterable[0]?->is(Name::VerticalLine):
+                case $iterable[0]?->name === Lexeme::VerticalLine:
                     $listFactory->push($patternFactory->create());
 
                     $iterable->next();

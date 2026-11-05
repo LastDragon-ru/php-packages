@@ -2,7 +2,7 @@
 
 namespace LastDragon_ru\GlobMatcher\BraceExpander\Parser;
 
-enum Name: string {
+enum Lexeme: string {
     case Comma             = ',';
     case DoubleDot         = '..';
     case Backslash         = '\\';

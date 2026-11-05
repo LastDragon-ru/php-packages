@@ -35,14 +35,14 @@ class Parser {
     public function parse(string $pattern): ?BraceExpansionNode {
         // TODO(glob-matcher): Better limits (count/max length/etc)
         // TODO(glob-matcher): Error if transaction is not finished?
-        $iterable = (new Tokenizer(Name::class, Name::Backslash))->tokenize([$pattern]);
+        $iterable = (new Tokenizer(Lexeme::class, Lexeme::Backslash))->tokenize([$pattern]);
         $node     = $this->parseBraceExpansion($iterable);
 
         return $node;
     }
 
     /**
-     * @param iterable<mixed, Token<Name>> $iterable
+     * @param iterable<mixed, Token<Lexeme>> $iterable
      */
     protected function parseBraceExpansion(iterable $iterable): ?BraceExpansionNode {
         $iterable = new TransactionalIterable($iterable, 4096, 5);
@@ -56,7 +56,7 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseBraceExpansionChild(TransactionalIterable $iterable): (Node&BraceExpansionNodeChild)|null {
         return $this->parseIncrementalSequence($iterable)
@@ -65,11 +65,11 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseIncrementalSequence(TransactionalIterable $iterable): ?IncrementalSequenceNode {
         // Is `{`?
-        if ($iterable[0]?->is(Name::LeftCurlyBracket) !== true) {
+        if ($iterable[0]?->name !== Lexeme::LeftCurlyBracket) {
             return null;
         }
 
@@ -78,11 +78,11 @@ class Parser {
         $iterable->next();
 
         // Start
-        $start          = $iterable[0]?->is(null) === true ? (string) $iterable[0] : '';
+        $start          = $iterable[0] !== null && $iterable[0]->name === null ? $iterable[0]->value : '';
         $startInteger   = $this->isInteger($start) ? $start : null;
         $startCharacter = $startInteger === null && $this->isCharacter($start) ? $start : null;
 
-        if ($iterable[1]?->is(Name::DoubleDot) === true && ($startInteger !== null || $startCharacter !== null)) {
+        if ($iterable[1]?->name === Lexeme::DoubleDot && ($startInteger !== null || $startCharacter !== null)) {
             $iterable->next(2);
         } else {
             $iterable->rollback();
@@ -91,7 +91,7 @@ class Parser {
         }
 
         // End
-        $end          = $iterable[0]?->is(null) === true ? (string) $iterable[0] : '';
+        $end          = $iterable[0] !== null && $iterable[0]->name === null ? $iterable[0]->value : '';
         $endInteger   = $this->isInteger($end) ? $end : null;
         $endCharacter = $endInteger === null && $this->isCharacter($end) ? $end : null;
 
@@ -106,8 +106,8 @@ class Parser {
         // Increment
         $increment = null;
 
-        if ($iterable[0]?->is(Name::DoubleDot) === true) {
-            $increment = $iterable[1]?->is(null) === true ? (string) $iterable[1] : '';
+        if ($iterable[0]?->name === Lexeme::DoubleDot) {
+            $increment = $iterable[1] !== null && $iterable[1]->name === null ? $iterable[1]->value : '';
             $increment = mb_ltrim($increment, '0', Package::Encoding);
             $increment = $increment !== '' ? $increment : '0';
             $increment = filter_var($increment, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
@@ -122,7 +122,7 @@ class Parser {
         }
 
         // Is `}`?
-        if ($iterable[0]?->is(Name::RightCurlyBracket) === true) {
+        if ($iterable[0]?->name === Lexeme::RightCurlyBracket) {
             $iterable->next();
         } else {
             $iterable->rollback();
@@ -148,11 +148,11 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseSequence(TransactionalIterable $iterable): ?SequenceNode {
         // Is `{`?
-        if ($iterable[0]?->is(Name::LeftCurlyBracket) !== true) {
+        if ($iterable[0]?->name !== Lexeme::LeftCurlyBracket) {
             return null;
         }
 
@@ -169,7 +169,7 @@ class Parser {
 
         while ($iterable->valid()) {
             // Is comma?
-            if ($iterable[0]?->is(Name::Comma) === true) {
+            if ($iterable[0]?->name === Lexeme::Comma) {
                 $sequenceFactory->push($expansionFactory->create());
                 $iterable->next();
 
@@ -179,7 +179,7 @@ class Parser {
             }
 
             // Is `}`?
-            if ($iterable[0]?->is(Name::RightCurlyBracket) === true) {
+            if ($iterable[0]?->name === Lexeme::RightCurlyBracket) {
                 // If `..` and no comma -> it is a malformed incremental sequence,
                 // and it should be parsed as a string.
                 if (!$hasDoubleDot || $hasComma) {
@@ -194,7 +194,7 @@ class Parser {
             }
 
             // Is `..`?
-            if ($iterable[0]?->is(Name::DoubleDot) === true) {
+            if ($iterable[0]?->name === Lexeme::DoubleDot) {
                 $hasDoubleDot = true;
             }
 
@@ -212,13 +212,13 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseString(TransactionalIterable $iterable): ?StringNode {
         $node = null;
 
         if ($iterable[0] !== null) {
-            $string = (string) $iterable[0];
+            $string = $iterable[0]->value;
 
             if ($string !== '') {
                 $node = new StringNode($string);
