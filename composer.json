@@ -63,7 +63,7 @@
     "symfony/property-access": "^8.0.0",
     "symfony/property-info": "^8.0.0",
     "symfony/psr-http-message-bridge": "^8.0.0",
-    "symfony/serializer": "^8.0.0",
+    "symfony/serializer": "^8.1.11",
     "symfony/type-info": "^8.0.0",
     "symfony/var-dumper": "^8.0.0",
     "webonyx/graphql-php": "^15.32.3"
