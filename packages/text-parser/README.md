@@ -108,7 +108,7 @@ class Parser {
         $node = null;
 
         try {
-            $iterable = (new Tokenizer(Name::class))->tokenize([$pattern]);
+            $iterable = (new Tokenizer(Lexeme::class))->tokenize([$pattern]);
             $node     = $this->parseExpression($iterable);
         } catch (LogicException) {
             // The `$pattern` is not a valid expression
@@ -118,7 +118,7 @@ class Parser {
     }
 
     /**
-     * @param iterable<mixed, Token<Name>> $iterable
+     * @param iterable<mixed, Token<Lexeme>> $iterable
      */
     protected function parseExpression(iterable $iterable): ?ExpressionNode {
         $iterable = new TransactionalIterable($iterable, 64, 1);
@@ -132,7 +132,7 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseExpressionChild(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         return $this->parseSubExpression($iterable)
@@ -142,11 +142,11 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseSubExpression(TransactionalIterable $iterable): ?ExpressionNode {
         // Is `(`?
-        if ($iterable[0]?->is(Name::LeftParenthesis) !== true) {
+        if ($iterable[0]?->is(Lexeme::LeftParenthesis) !== true) {
             return null;
         }
 
@@ -160,7 +160,7 @@ class Parser {
 
         while ($iterable->valid()) {
             // Is `)`?
-            if ($iterable[0]?->is(Name::RightParenthesis) === true) {
+            if ($iterable[0]?->is(Lexeme::RightParenthesis) === true) {
                 $node = $factory->create();
 
                 $iterable->next();
@@ -182,14 +182,14 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseOperator(TransactionalIterable $iterable): ?OperatorNode {
         $node = match ($iterable[0]->name ?? null) {
-            Name::Plus     => new OperatorAdditionNode(),
-            Name::Minus    => new OperatorSubtractionNode(),
-            Name::Asterisk => new OperatorMultiplicationNode(),
-            Name::Slash    => new OperatorDivisionNode(),
+            Lexeme::Plus     => new OperatorAdditionNode(),
+            Lexeme::Minus    => new OperatorSubtractionNode(),
+            Lexeme::Asterisk => new OperatorMultiplicationNode(),
+            Lexeme::Slash    => new OperatorDivisionNode(),
             default        => null,
         };
 
@@ -201,7 +201,7 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseNumber(TransactionalIterable $iterable): ?NumberNode {
         // String?
@@ -225,11 +225,11 @@ class Parser {
     }
 
     /**
-     * @param TransactionalIterable<Token<Name>> $iterable
+     * @param TransactionalIterable<Token<Lexeme>> $iterable
      */
     protected function parseSpace(TransactionalIterable $iterable): (Node&ExpressionNodeChild)|null {
         // Only spaces allowed here
-        if ($iterable[0]?->is(Name::Space) !== true) {
+        if ($iterable[0]?->is(Lexeme::Space) !== true) {
             throw new LogicException('The string is not a mathematical expression.');
         } else {
             $iterable->next();
@@ -295,7 +295,7 @@ LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\ExpressionNode {
 
 First, we should split the input string into tokens that is happening inside the [`Parser::parse()`][code-links/b84ae5a44e02f512]. The [`Tokenizer`][code-links/680ddd300ebebd55] accept a backed enum(s) and uses their values as delimiters (value can be a single character or a string). According to our rules, we need the following tokens:
 
-[include:example]: ./docs/Calculator/Name.php
+[include:example]: docs/Calculator/Lexeme.php
 [//]: # (start: preprocess/4a7c6a4d1e17a5e4)
 [//]: # (warning: Generated automatically. Do not edit.)
 
@@ -304,7 +304,7 @@ First, we should split the input string into tokens that is happening inside the
 
 namespace LastDragon_ru\TextParser\Docs\Calculator;
 
-enum Name: string {
+enum Lexeme: string {
     case Plus             = '+';
     case Minus            = '-';
     case Asterisk         = '*';
@@ -329,13 +329,13 @@ After tokenization, we will have the list of tokens for further processing. Note
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
-use LastDragon_ru\TextParser\Docs\Calculator\Name;
+use LastDragon_ru\TextParser\Docs\Calculator\Lexeme;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
 
 use function iterator_to_array;
 
 $input     = '2 - (1 + 2) / 3';
-$tokenizer = new Tokenizer(Name::class);
+$tokenizer = new Tokenizer(Lexeme::class);
 $tokens    = $tokenizer->tokenize([$input]);
 
 Example::dump(iterator_to_array($tokens));
@@ -353,7 +353,7 @@ The `iterator_to_array($tokens)` is:
     +offset: 0
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {#1
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {#1
       +name: "Space"
       +value: " "
     }
@@ -361,7 +361,7 @@ The `iterator_to_array($tokens)` is:
     +offset: 1
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {
       +name: "Minus"
       +value: "-"
     }
@@ -369,12 +369,12 @@ The `iterator_to_array($tokens)` is:
     +offset: 2
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {#1}
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {#1}
     +value: " "
     +offset: 3
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {
       +name: "LeftParenthesis"
       +value: "("
     }
@@ -387,12 +387,12 @@ The `iterator_to_array($tokens)` is:
     +offset: 5
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {#1}
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {#1}
     +value: " "
     +offset: 6
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {
       +name: "Plus"
       +value: "+"
     }
@@ -400,7 +400,7 @@ The `iterator_to_array($tokens)` is:
     +offset: 7
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {#1}
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {#1}
     +value: " "
     +offset: 8
   },
@@ -410,7 +410,7 @@ The `iterator_to_array($tokens)` is:
     +offset: 9
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {
       +name: "RightParenthesis"
       +value: ")"
     }
@@ -418,12 +418,12 @@ The `iterator_to_array($tokens)` is:
     +offset: 10
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {#1}
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {#1}
     +value: " "
     +offset: 11
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {
       +name: "Slash"
       +value: "/"
     }
@@ -431,7 +431,7 @@ The `iterator_to_array($tokens)` is:
     +offset: 12
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Calculator\Name {#1}
+    +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {#1}
     +value: " "
     +offset: 13
   },
@@ -461,12 +461,12 @@ Next, we pass tokens into [`Parser::parseExpression()`][code-links/9110a629f7b2d
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
-use LastDragon_ru\TextParser\Docs\Calculator\Name;
+use LastDragon_ru\TextParser\Docs\Calculator\Lexeme;
 use LastDragon_ru\TextParser\Iterables\TransactionalIterable;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
 
 $input    = '1 + 2';
-$tokens   = (new Tokenizer(Name::class))->tokenize([$input]);
+$tokens   = (new Tokenizer(Lexeme::class))->tokenize([$input]);
 $iterable = new TransactionalIterable($tokens, 5, 5);
 
 Example::dump($iterable[0]);
@@ -520,7 +520,7 @@ The `$iterable[0]` is:
 
 ```plain
 LastDragon_ru\TextParser\Tokenizer\Token {
-  +name: LastDragon_ru\TextParser\Docs\Calculator\Name {
+  +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {
     +name: "Plus"
     +value: "+"
   }
@@ -543,7 +543,7 @@ The `$iterable[0]` is:
 
 ```plain
 LastDragon_ru\TextParser\Tokenizer\Token {
-  +name: LastDragon_ru\TextParser\Docs\Calculator\Name {
+  +name: LastDragon_ru\TextParser\Docs\Calculator\Lexeme {
     +name: "Plus"
     +value: "+"
   }
@@ -798,13 +798,13 @@ use function iterator_to_array;
 // phpcs:disable PSR1.Files.SideEffects
 // phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 
-enum Name: string {
+enum Lexeme: string {
     case Slash     = '/';
     case Backslash = '\\';
 }
 
 $input     = 'a/b\\/\\c';
-$tokenizer = new Tokenizer(Name::class, Name::Backslash);
+$tokenizer = new Tokenizer(Lexeme::class, Lexeme::Backslash);
 $tokens    = $tokenizer->tokenize([$input]);
 
 Example::dump(iterator_to_array($tokens));
@@ -820,7 +820,7 @@ The `iterator_to_array($tokens)` is:
     +offset: 0
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Examples\Name {
+    +name: LastDragon_ru\TextParser\Docs\Examples\Lexeme {
       +name: "Slash"
       +value: "/"
     }
@@ -838,7 +838,7 @@ The `iterator_to_array($tokens)` is:
     +offset: 4
   },
   LastDragon_ru\TextParser\Tokenizer\Token {
-    +name: LastDragon_ru\TextParser\Docs\Examples\Name {
+    +name: LastDragon_ru\TextParser\Docs\Examples\Lexeme {
       +name: "Backslash"
       +value: "\"
     }

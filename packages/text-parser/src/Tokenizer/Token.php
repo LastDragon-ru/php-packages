@@ -5,12 +5,12 @@ namespace LastDragon_ru\TextParser\Tokenizer;
 use BackedEnum;
 
 /**
- * @template-covariant TName of BackedEnum
+ * @template-covariant TLexeme of BackedEnum
  */
 readonly class Token {
     public function __construct(
         /**
-         * @var TName|null
+         * @var TLexeme|null
          */
         public ?BackedEnum $name,
         public string $value,

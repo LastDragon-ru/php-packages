@@ -18,13 +18,13 @@ final class TokenizerTest extends TestCase {
         $source    = ['a/b\\/c*\\d\\*e'];
         $expected  = [
             new Token(null, 'a', 0),
-            new Token(Name::Slash, '/', 1),
+            new Token(Lexeme::Slash, '/', 1),
             new Token(null, 'b', 2),
-            new Token(Name::Backslash, '\\', 3),
-            new Token(Name::Slash, '/', 4),
+            new Token(Lexeme::Backslash, '\\', 3),
+            new Token(Lexeme::Slash, '/', 4),
             new Token(null, 'c', 5),
-            new Token(Name::Asterisk, '*', 6),
-            new Token(Name::Backslash, '\\', 7),
+            new Token(Lexeme::Asterisk, '*', 6),
+            new Token(Lexeme::Backslash, '\\', 7),
             new Token(null, 'd', 8),
             new Token(null, '*', 10),
             new Token(null, 'e', 11),

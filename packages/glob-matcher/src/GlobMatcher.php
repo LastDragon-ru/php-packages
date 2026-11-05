@@ -4,14 +4,14 @@ namespace LastDragon_ru\GlobMatcher;
 
 use InvalidArgumentException;
 use LastDragon_ru\GlobMatcher\BraceExpander\BraceExpander;
-use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Name as BraceExpanderName;
+use LastDragon_ru\GlobMatcher\BraceExpander\Parser\Lexeme as BraceExpanderLexeme;
 use LastDragon_ru\GlobMatcher\Contracts\Matcher;
 use LastDragon_ru\GlobMatcher\Glob\Ast\Cursor;
 use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegex;
 use LastDragon_ru\GlobMatcher\Glob\Converters\CursorToRegexOptions;
 use LastDragon_ru\GlobMatcher\Glob\Glob;
 use LastDragon_ru\GlobMatcher\Glob\Options as GlobOptions;
-use LastDragon_ru\GlobMatcher\Glob\Parser\Name as GlobName;
+use LastDragon_ru\GlobMatcher\Glob\Parser\Lexeme as GlobLexeme;
 use LastDragon_ru\TextParser\Iterables\TokenEscapeIterable;
 use LastDragon_ru\TextParser\Iterables\TransformIterable;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
@@ -83,15 +83,15 @@ readonly class GlobMatcher implements Matcher {
 
     public static function escape(string $pattern, ?Options $options = null): string {
         $options  = self::options($options);
-        $tokens   = $options->braces ? [BraceExpanderName::class, GlobName::class] : [GlobName::class];
+        $tokens   = $options->braces ? [BraceExpanderLexeme::class, GlobLexeme::class] : [GlobLexeme::class];
         $iterable = (new Tokenizer($tokens))->tokenize([$pattern]);
-        $iterable = new TokenEscapeIterable($iterable, GlobName::Backslash, static function ($token) {
-            return $token->name !== GlobName::Colon
-                && $token->name !== GlobName::Dot
-                && $token->name !== GlobName::Equal
-                && $token->name !== GlobName::Slash
-                && $token->name !== BraceExpanderName::Comma
-                && $token->name !== BraceExpanderName::DoubleDot;
+        $iterable = new TokenEscapeIterable($iterable, GlobLexeme::Backslash, static function ($token) {
+            return $token->name !== GlobLexeme::Colon
+                && $token->name !== GlobLexeme::Dot
+                && $token->name !== GlobLexeme::Equal
+                && $token->name !== GlobLexeme::Slash
+                && $token->name !== BraceExpanderLexeme::Comma
+                && $token->name !== BraceExpanderLexeme::DoubleDot;
         });
         $iterable = new TransformIterable($iterable, static fn($token): string => $token->value);
         $escaped  = Utils::toString($iterable);

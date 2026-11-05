@@ -14,10 +14,10 @@ use function iterator_to_array;
 final class TokenizerTest extends TestCase {
     public function testTokenize(): void {
         $source    = ['abc*cd\\*e'];
-        $tokenizer = new Tokenizer(TokenizerTest_TokenA::class, TokenizerTest_TokenA::Backslash);
+        $tokenizer = new Tokenizer(TokenizerTest_LexemeA::class, TokenizerTest_LexemeA::Backslash);
         $expected  = [
             new Token(null, 'abc', 0),
-            new Token(TokenizerTest_TokenA::Asterisk, '*', 3),
+            new Token(TokenizerTest_LexemeA::Asterisk, '*', 3),
             new Token(null, 'cd', 4),
             new Token(null, '*', 7),
             new Token(null, 'e', 8),
@@ -29,12 +29,12 @@ final class TokenizerTest extends TestCase {
     public function testTokenizeAliases(): void {
         $source    = ['abc*cd\\*e'];
         $tokenizer = new Tokenizer(
-            [TokenizerTest_TokenA::class, TokenizerTest_TokenB::class],
-            TokenizerTest_TokenA::Backslash,
+            [TokenizerTest_LexemeA::class, TokenizerTest_LexemeB::class],
+            TokenizerTest_LexemeA::Backslash,
         );
         $expected  = [
             new Token(null, 'abc', 0),
-            new Token(TokenizerTest_TokenA::Asterisk, '*', 3),
+            new Token(TokenizerTest_LexemeA::Asterisk, '*', 3),
             new Token(null, 'cd', 4),
             new Token(null, '*', 7),
             new Token(null, 'e', 8),
@@ -46,13 +46,13 @@ final class TokenizerTest extends TestCase {
     public function testTokenizeNoEscape(): void {
         $source    = ['abc*cd\\*e'];
         $offset    = 2;
-        $tokenizer = new Tokenizer(TokenizerTest_TokenA::class);
+        $tokenizer = new Tokenizer(TokenizerTest_LexemeA::class);
         $expected  = [
             new Token(null, 'abc', $offset + 0),
-            new Token(TokenizerTest_TokenA::Asterisk, '*', $offset + 3),
+            new Token(TokenizerTest_LexemeA::Asterisk, '*', $offset + 3),
             new Token(null, 'cd', $offset + 4),
-            new Token(TokenizerTest_TokenA::Backslash, '\\', $offset + 6),
-            new Token(TokenizerTest_TokenA::Asterisk, '*', $offset + 7),
+            new Token(TokenizerTest_LexemeA::Backslash, '\\', $offset + 6),
+            new Token(TokenizerTest_LexemeA::Asterisk, '*', $offset + 7),
             new Token(null, 'e', $offset + 8),
         ];
 
@@ -74,11 +74,11 @@ final class TokenizerTest extends TestCase {
     }
 
     public function testName(): void {
-        $tokenizer = new Tokenizer([TokenizerTest_TokenA::class, TokenizerTest_TokenB::class]);
+        $tokenizer = new Tokenizer([TokenizerTest_LexemeA::class, TokenizerTest_LexemeB::class]);
 
         self::assertSame(
-            TokenizerTest_TokenA::Asterisk,
-            $tokenizer->name(TokenizerTest_TokenB::Asterisk),
+            TokenizerTest_LexemeA::Asterisk,
+            $tokenizer->name(TokenizerTest_LexemeB::Asterisk),
         );
     }
 }
@@ -86,14 +86,14 @@ final class TokenizerTest extends TestCase {
 // @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 // @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
 
-enum TokenizerTest_TokenA: string {
+enum TokenizerTest_LexemeA: string {
     case String    = '';
     case Slash     = '/';
     case Asterisk  = '*';
     case Backslash = '\\';
 }
 
-enum TokenizerTest_TokenB: string {
+enum TokenizerTest_LexemeB: string {
     case Asterisk = '*';
 }
 

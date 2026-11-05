@@ -15,36 +15,36 @@ use function mb_strtolower;
 use function mb_strtoupper;
 
 /**
- * @template TToken of BackedEnum
+ * @template TLexeme of BackedEnum
  */
 readonly class Tokenizer {
     /**
-     * @var array<non-empty-string, TToken>
+     * @var array<non-empty-string, TLexeme>
      */
-    protected array $tokens;
+    protected array $lexemes;
     /**
-     * @var ArrayAccess<TToken, TToken>
+     * @var ArrayAccess<TLexeme, TLexeme>
      */
     protected ArrayAccess $aliases;
 
     /**
-     * @param list<class-string<TToken>>|class-string<TToken> $tokens
-     * @param ?TToken                                         $escape
-     * @param ?positive-int                                   $buffer
+     * @param list<class-string<TLexeme>>|class-string<TLexeme> $lexemes
+     * @param ?TLexeme                                          $escape
+     * @param ?positive-int                                     $buffer
      */
     public function __construct(
-        array|string $tokens,
+        array|string $lexemes,
         protected ?BackedEnum $escape = null,
         protected ?int $buffer = null,
         protected bool $caseSensitive = true,
     ) {
-        [$this->tokens, $this->aliases] = $this->prepare((array) $tokens, $this->caseSensitive);
+        [$this->lexemes, $this->aliases] = $this->prepare((array) $lexemes, $this->caseSensitive);
     }
 
     /**
-     * @param TToken $alias
+     * @param TLexeme $alias
      *
-     * @return TToken
+     * @return TLexeme
      */
     public function name(BackedEnum $alias): BackedEnum {
         return $this->aliases[$alias] ?? $alias;
@@ -53,18 +53,18 @@ readonly class Tokenizer {
     /**
      * @param iterable<mixed, string> $iterable
      *
-     * @return iterable<mixed, Token<TToken>>
+     * @return iterable<mixed, Token<TLexeme>>
      */
     public function tokenize(iterable $iterable, int $offset = 0): iterable {
         $iterable = new StringSplitIterable(
             $iterable,
-            array_keys($this->tokens),
+            array_keys($this->lexemes),
             $this->buffer,
             $offset,
             $this->caseSensitive,
         );
-        $iterable = new TransformIterable($iterable, function ($token, $offset) {
-            return new Token($this->tokens[$token] ?? null, $token, $offset);
+        $iterable = new TransformIterable($iterable, function ($lexeme, $offset) {
+            return new Token($this->lexemes[$lexeme] ?? null, $lexeme, $offset);
         });
 
         if ($this->escape !== null) {
@@ -75,16 +75,16 @@ readonly class Tokenizer {
     }
 
     /**
-     * @param list<class-string<TToken>> $enums
+     * @param list<class-string<TLexeme>> $enums
      *
-     * @return array{array<non-empty-string, TToken>, ArrayAccess<TToken, TToken>}
+     * @return array{array<non-empty-string, TLexeme>, ArrayAccess<TLexeme, TLexeme>}
      */
     private function prepare(array $enums, bool $caseSensitive): array {
         // todo(parser): Need to warning/error if
         //      * values have intersections, eg `(` and `!(` (the shortest value will be lost)
         //      * empty value (will be ignored)
 
-        $tokens   = [];
+        $lexemes  = [];
         $aliases  = new WeakMap();
         $prepared = [];
 
@@ -101,22 +101,22 @@ readonly class Tokenizer {
                 // Save case and aliases
                 $value = (string) $case->value;
 
-                if (!isset($tokens[$value])) {
-                    $tokens[$value] = $case;
+                if (!isset($lexemes[$value])) {
+                    $lexemes[$value] = $case;
                 } else {
-                    $aliases[$case] = $tokens[$value];
+                    $aliases[$case] = $lexemes[$value];
                 }
 
                 // If case doesn't matter, then we save both
                 if ($caseSensitive === false) {
-                    $tokens[mb_strtolower($value, Package::Encoding)] = $case;
-                    $tokens[mb_strtoupper($value, Package::Encoding)] = $case;
+                    $lexemes[mb_strtolower($value, Package::Encoding)] = $case;
+                    $lexemes[mb_strtoupper($value, Package::Encoding)] = $case;
                 }
             }
         }
 
-        unset($tokens['']);
+        unset($lexemes['']);
 
-        return [$tokens, $aliases];
+        return [$lexemes, $aliases];
     }
 }

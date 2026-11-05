@@ -10,13 +10,13 @@ use function iterator_to_array;
 // phpcs:disable PSR1.Files.SideEffects
 // phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
 
-enum Name: string {
+enum Lexeme: string {
     case Slash     = '/';
     case Backslash = '\\';
 }
 
 $input     = 'a/b\\/\\c';
-$tokenizer = new Tokenizer(Name::class, Name::Backslash);
+$tokenizer = new Tokenizer(Lexeme::class, Lexeme::Backslash);
 $tokens    = $tokenizer->tokenize([$input]);
 
 Example::dump(iterator_to_array($tokens));

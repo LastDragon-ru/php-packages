@@ -12,22 +12,22 @@ use Traversable;
 /**
  * Escapes tokens (adds {@see self::$escape} before each token).
  *
- * @template TToken of BackedEnum
+ * @template TLexeme of BackedEnum
  *
- * @implements IteratorAggregate<int, Token<TToken>>
+ * @implements IteratorAggregate<int, Token<TLexeme>>
  */
 readonly class TokenEscapeIterable implements IteratorAggregate {
     public function __construct(
         /**
-         * @var iterable<mixed, Token<TToken>>
+         * @var iterable<mixed, Token<TLexeme>>
          */
         protected iterable $iterable,
         /**
-         * @var TToken
+         * @var TLexeme
          */
         protected BackedEnum $escape,
         /**
-         * @var Closure(Token<TToken>): bool
+         * @var Closure(Token<TLexeme>): bool
          */
         protected ?Closure $escapable = null,
     ) {
