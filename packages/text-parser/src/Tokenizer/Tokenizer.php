@@ -5,7 +5,6 @@ namespace LastDragon_ru\TextParser\Tokenizer;
 use ArrayAccess;
 use BackedEnum;
 use LastDragon_ru\TextParser\Iterables\StringSplitIterable;
-use LastDragon_ru\TextParser\Iterables\TokenUnescapeIterable;
 use LastDragon_ru\TextParser\Iterables\TransformIterable;
 use LastDragon_ru\TextParser\Package;
 use WeakMap;
@@ -29,13 +28,11 @@ readonly class Tokenizer {
 
     /**
      * @param list<class-string<TLexeme>>|class-string<TLexeme> $lexemes
-     * @param ?TLexeme                                          $escape
      * @param ?TLexeme                                          $unknown
      * @param ?positive-int                                     $buffer
      */
     public function __construct(
         array|string $lexemes,
-        protected ?BackedEnum $escape = null,
         protected ?BackedEnum $unknown = null,
         protected ?int $buffer = null,
         protected bool $caseSensitive = true,
@@ -68,10 +65,6 @@ readonly class Tokenizer {
         $iterable = new TransformIterable($iterable, function ($lexeme, $offset) {
             return new Token($this->lexemes[$lexeme] ?? $this->unknown, $lexeme, $offset);
         });
-
-        if ($this->escape !== null) {
-            $iterable = new TokenUnescapeIterable($iterable, $this->escape);
-        }
 
         return $iterable;
     }

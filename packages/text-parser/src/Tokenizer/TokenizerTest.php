@@ -14,12 +14,13 @@ use function iterator_to_array;
 final class TokenizerTest extends TestCase {
     public function testTokenize(): void {
         $source    = ['abc*cd\\*e'];
-        $tokenizer = new Tokenizer(TokenizerTest_LexemeA::class, TokenizerTest_LexemeA::Backslash);
+        $tokenizer = new Tokenizer(TokenizerTest_LexemeA::class);
         $expected  = [
             new Token(null, 'abc', 0),
             new Token(TokenizerTest_LexemeA::Asterisk, '*', 3),
             new Token(null, 'cd', 4),
-            new Token(null, '*', 7),
+            new Token(TokenizerTest_LexemeA::Backslash, '\\', 6),
+            new Token(TokenizerTest_LexemeA::Asterisk, '*', 7),
             new Token(null, 'e', 8),
         ];
 
@@ -30,13 +31,13 @@ final class TokenizerTest extends TestCase {
         $source    = ['abc*cd\\*e'];
         $tokenizer = new Tokenizer(
             [TokenizerTest_LexemeA::class, TokenizerTest_LexemeB::class],
-            TokenizerTest_LexemeA::Backslash,
         );
         $expected  = [
             new Token(null, 'abc', 0),
             new Token(TokenizerTest_LexemeA::Asterisk, '*', 3),
             new Token(null, 'cd', 4),
-            new Token(null, '*', 7),
+            new Token(TokenizerTest_LexemeA::Backslash, '\\', 6),
+            new Token(TokenizerTest_LexemeA::Asterisk, '*', 7),
             new Token(null, 'e', 8),
         ];
 
@@ -51,22 +52,6 @@ final class TokenizerTest extends TestCase {
             new Token(TokenizerTest_TokenC::A, 'a', $offset + 0),
             new Token(TokenizerTest_LexemeA::Asterisk, '*', $offset + 1),
             new Token(TokenizerTest_TokenC::A, 'b', $offset + 2),
-        ];
-
-        self::assertEquals($expected, iterator_to_array($tokenizer->tokenize($source, $offset), false));
-    }
-
-    public function testTokenizeNoEscape(): void {
-        $source    = ['abc*cd\\*e'];
-        $offset    = 2;
-        $tokenizer = new Tokenizer(TokenizerTest_LexemeA::class);
-        $expected  = [
-            new Token(null, 'abc', $offset + 0),
-            new Token(TokenizerTest_LexemeA::Asterisk, '*', $offset + 3),
-            new Token(null, 'cd', $offset + 4),
-            new Token(TokenizerTest_LexemeA::Backslash, '\\', $offset + 6),
-            new Token(TokenizerTest_LexemeA::Asterisk, '*', $offset + 7),
-            new Token(null, 'e', $offset + 8),
         ];
 
         self::assertEquals($expected, iterator_to_array($tokenizer->tokenize($source, $offset), false));

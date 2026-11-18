@@ -3,6 +3,7 @@
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
+use LastDragon_ru\TextParser\Iterables\TokenUnescapeIterable;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
 
 use function iterator_to_array;
@@ -16,7 +17,8 @@ enum Lexeme: string {
 }
 
 $input     = 'a/b\\/\\c';
-$tokenizer = new Tokenizer(Lexeme::class, Lexeme::Backslash);
+$tokenizer = new Tokenizer(Lexeme::class);
 $tokens    = $tokenizer->tokenize([$input]);
+$tokens    = new TokenUnescapeIterable($tokens, Lexeme::Backslash);
 
 Example::dump(iterator_to_array($tokens));

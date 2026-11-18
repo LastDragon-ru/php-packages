@@ -13,6 +13,7 @@ use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\IntegerSequenceNode;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\SequenceNode;
 use LastDragon_ru\GlobMatcher\BraceExpander\Ast\Nodes\StringNode;
 use LastDragon_ru\GlobMatcher\Package;
+use LastDragon_ru\TextParser\Iterables\TokenUnescapeIterable;
 use LastDragon_ru\TextParser\Iterables\TransactionalIterable;
 use LastDragon_ru\TextParser\Tokenizer\Token;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
@@ -35,7 +36,8 @@ class Parser {
     public function parse(string $pattern): ?BraceExpansionNode {
         // TODO(glob-matcher): Better limits (count/max length/etc)
         // TODO(glob-matcher): Error if transaction is not finished?
-        $iterable = (new Tokenizer(Lexeme::class, Lexeme::Backslash))->tokenize([$pattern]);
+        $iterable = (new Tokenizer(Lexeme::class))->tokenize([$pattern]);
+        $iterable = new TokenUnescapeIterable($iterable, Lexeme::Backslash);
         $node     = $this->parseBraceExpansion($iterable);
 
         return $node;
