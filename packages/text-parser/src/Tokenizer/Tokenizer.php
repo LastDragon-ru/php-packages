@@ -11,7 +11,6 @@ use WeakMap;
 
 use function array_keys;
 use function mb_strtolower;
-use function mb_strtoupper;
 
 /**
  * @template TLexeme of BackedEnum
@@ -62,9 +61,10 @@ readonly class Tokenizer {
             $offset,
             $this->caseSensitive,
         );
-        $iterable = new TransformIterable($iterable, function ($lexeme, $offset) {
-            return new Token($this->lexemes[$lexeme] ?? $this->unknown, $lexeme, $offset);
-        });
+        $iterable = new TransformIterable(
+            $iterable,
+            $this->caseSensitive ? $this->tcs(...) : $this->tci(...),
+        );
 
         return $iterable;
     }
@@ -93,19 +93,16 @@ readonly class Tokenizer {
 
             // Save
             foreach ($enum::cases() as $case) {
-                // Save case and aliases
                 $value = (string) $case->value;
 
                 if (!isset($lexemes[$value])) {
                     $lexemes[$value] = $case;
+
+                    if (!$caseSensitive) {
+                        $lexemes[mb_strtolower($value, Package::Encoding)] = $case;
+                    }
                 } else {
                     $aliases[$case] = $lexemes[$value];
-                }
-
-                // If case doesn't matter, then we save both
-                if ($caseSensitive === false) {
-                    $lexemes[mb_strtolower($value, Package::Encoding)] = $case;
-                    $lexemes[mb_strtoupper($value, Package::Encoding)] = $case;
                 }
             }
         }
@@ -113,5 +110,27 @@ readonly class Tokenizer {
         unset($lexemes['']);
 
         return [$lexemes, $aliases];
+    }
+
+    /**
+     * @return Token<TLexeme>
+     */
+    private function tcs(string $lexeme, int $offset): Token {
+        return new Token(
+            $this->lexemes[$lexeme] ?? $this->unknown,
+            $lexeme,
+            $offset,
+        );
+    }
+
+    /**
+     * @return Token<TLexeme>
+     */
+    private function tci(string $lexeme, int $offset): Token {
+        return new Token(
+            $this->lexemes[$lexeme] ?? $this->lexemes[mb_strtolower($lexeme, Package::Encoding)] ?? $this->unknown,
+            $lexeme,
+            $offset,
+        );
     }
 }

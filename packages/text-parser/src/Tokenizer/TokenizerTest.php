@@ -47,25 +47,31 @@ final class TokenizerTest extends TestCase {
     public function testTokenizeUnknown(): void {
         $source    = ['a*b'];
         $offset    = 2;
-        $tokenizer = new Tokenizer(TokenizerTest_LexemeA::class, unknown: TokenizerTest_TokenC::A);
+        $tokenizer = new Tokenizer(TokenizerTest_LexemeA::class, unknown: TokenizerTest_LexemeC::A);
         $expected  = [
-            new Token(TokenizerTest_TokenC::A, 'a', $offset + 0),
+            new Token(TokenizerTest_LexemeC::A, 'a', $offset + 0),
             new Token(TokenizerTest_LexemeA::Asterisk, '*', $offset + 1),
-            new Token(TokenizerTest_TokenC::A, 'b', $offset + 2),
+            new Token(TokenizerTest_LexemeC::A, 'b', $offset + 2),
         ];
 
         self::assertEquals($expected, iterator_to_array($tokenizer->tokenize($source, $offset), false));
     }
 
     public function testTokenizeCaseInsensitive(): void {
-        $source    = ['aBcbA'];
-        $tokenizer = new Tokenizer(TokenizerTest_TokenC::class, caseSensitive: false);
+        $source    = ['LeXeMeA LexeMea lexemea LeXeMeB LexemeB lexemeb'];
+        $tokenizer = new Tokenizer(TokenizerTest_LexemeC::class, caseSensitive: false);
         $expected  = [
-            new Token(TokenizerTest_TokenC::A, 'a', 0),
-            new Token(TokenizerTest_TokenC::B, 'B', 1),
-            new Token(null, 'c', 2),
-            new Token(TokenizerTest_TokenC::B, 'b', 3),
-            new Token(TokenizerTest_TokenC::A, 'A', 4),
+            new Token(TokenizerTest_LexemeC::A, 'LeXeMeA', 0),
+            new Token(null, ' ', 7),
+            new Token(TokenizerTest_LexemeC::A, 'LexeMea', 8),
+            new Token(null, ' ', 15),
+            new Token(TokenizerTest_LexemeC::A, 'lexemea', 16),
+            new Token(null, ' ', 23),
+            new Token(TokenizerTest_LexemeC::B, 'LeXeMeB', 24),
+            new Token(null, ' ', 31),
+            new Token(TokenizerTest_LexemeC::B, 'LexemeB', 32),
+            new Token(null, ' ', 39),
+            new Token(TokenizerTest_LexemeC::B, 'lexemeb', 40),
         ];
 
         self::assertEquals($expected, iterator_to_array($tokenizer->tokenize($source), false));
@@ -95,7 +101,7 @@ enum TokenizerTest_LexemeB: string {
     case Asterisk = '*';
 }
 
-enum TokenizerTest_TokenC: string {
-    case A = 'a';
-    case B = 'B';
+enum TokenizerTest_LexemeC: string {
+    case A = 'LexemeA';
+    case B = 'LeXeMeB';
 }
