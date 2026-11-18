@@ -43,6 +43,19 @@ final class TokenizerTest extends TestCase {
         self::assertEquals($expected, iterator_to_array($tokenizer->tokenize($source), false));
     }
 
+    public function testTokenizeUnknown(): void {
+        $source    = ['a*b'];
+        $offset    = 2;
+        $tokenizer = new Tokenizer(TokenizerTest_LexemeA::class, unknown: TokenizerTest_TokenC::A);
+        $expected  = [
+            new Token(TokenizerTest_TokenC::A, 'a', $offset + 0),
+            new Token(TokenizerTest_LexemeA::Asterisk, '*', $offset + 1),
+            new Token(TokenizerTest_TokenC::A, 'b', $offset + 2),
+        ];
+
+        self::assertEquals($expected, iterator_to_array($tokenizer->tokenize($source, $offset), false));
+    }
+
     public function testTokenizeNoEscape(): void {
         $source    = ['abc*cd\\*e'];
         $offset    = 2;

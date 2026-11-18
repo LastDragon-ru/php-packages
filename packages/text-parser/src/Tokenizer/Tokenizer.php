@@ -30,11 +30,13 @@ readonly class Tokenizer {
     /**
      * @param list<class-string<TLexeme>>|class-string<TLexeme> $lexemes
      * @param ?TLexeme                                          $escape
+     * @param ?TLexeme                                          $unknown
      * @param ?positive-int                                     $buffer
      */
     public function __construct(
         array|string $lexemes,
         protected ?BackedEnum $escape = null,
+        protected ?BackedEnum $unknown = null,
         protected ?int $buffer = null,
         protected bool $caseSensitive = true,
     ) {
@@ -64,7 +66,7 @@ readonly class Tokenizer {
             $this->caseSensitive,
         );
         $iterable = new TransformIterable($iterable, function ($lexeme, $offset) {
-            return new Token($this->lexemes[$lexeme] ?? null, $lexeme, $offset);
+            return new Token($this->lexemes[$lexeme] ?? $this->unknown, $lexeme, $offset);
         });
 
         if ($this->escape !== null) {
