@@ -45,7 +45,7 @@ final class SplitterTest extends TestCase {
         );
 
         // Short buffer
-        $splitter = new Splitter($separators, 2);
+        $splitter = new Splitter($separators, buffer: 2);
         $short    = iterator_to_array($splitter->split($strings));
 
         self::assertSame($string, implode('', $short));

@@ -32,13 +32,13 @@ readonly class Splitter {
          * @var list<non-empty-string|int>
          */
         protected array $separators,
+        protected bool $caseSensitive = true,
         /**
          * Internal buffer size in characters (not bytes!).
          *
          * @var positive-int|null
          */
         protected ?int $buffer = null,
-        protected bool $caseSensitive = true,
     ) {
         [$this->regexp, $this->longest] = $this->prepare();
     }

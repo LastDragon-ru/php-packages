@@ -33,14 +33,14 @@ readonly class Tokenizer {
     public function __construct(
         array|string $lexemes,
         protected ?BackedEnum $unknown = null,
-        protected ?int $buffer = null,
         protected bool $caseSensitive = true,
+        protected ?int $buffer = null,
     ) {
         [$this->lexemes, $this->aliases] = $this->prepare((array) $lexemes, $this->caseSensitive);
         $this->splitter                  = new Splitter(
             array_keys($this->lexemes),
-            $this->buffer,
             $this->caseSensitive,
+            $this->buffer,
         );
     }
 
