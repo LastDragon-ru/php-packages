@@ -4,7 +4,6 @@ namespace LastDragon_ru\TextParser\Tokenizer;
 
 use ArrayAccess;
 use BackedEnum;
-use LastDragon_ru\TextParser\Iterables\StringSplitIterable;
 use LastDragon_ru\TextParser\Iterables\TransformIterable;
 use LastDragon_ru\TextParser\Package;
 use WeakMap;
@@ -24,6 +23,7 @@ readonly class Tokenizer {
      * @var ArrayAccess<TLexeme, TLexeme>
      */
     protected ArrayAccess $aliases;
+    protected Splitter    $splitter;
 
     /**
      * @param list<class-string<TLexeme>>|class-string<TLexeme> $lexemes
@@ -37,6 +37,11 @@ readonly class Tokenizer {
         protected bool $caseSensitive = true,
     ) {
         [$this->lexemes, $this->aliases] = $this->prepare((array) $lexemes, $this->caseSensitive);
+        $this->splitter                  = new Splitter(
+            array_keys($this->lexemes),
+            $this->buffer,
+            $this->caseSensitive,
+        );
     }
 
     /**
@@ -54,19 +59,10 @@ readonly class Tokenizer {
      * @return iterable<mixed, Token<TLexeme>>
      */
     public function tokenize(iterable $iterable, int $offset = 0): iterable {
-        $iterable = new StringSplitIterable(
-            $iterable,
-            array_keys($this->lexemes),
-            $this->buffer,
-            $offset,
-            $this->caseSensitive,
-        );
-        $iterable = new TransformIterable(
-            $iterable,
+        return new TransformIterable(
+            $this->splitter->split($iterable, $offset),
             $this->caseSensitive ? $this->tcs(...) : $this->tci(...),
         );
-
-        return $iterable;
     }
 
     /**

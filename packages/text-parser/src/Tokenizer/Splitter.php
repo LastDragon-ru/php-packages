@@ -1,26 +1,19 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\TextParser\Iterables;
+namespace LastDragon_ru\TextParser\Tokenizer;
 
 use Generator;
-use IteratorAggregate;
 use LastDragon_ru\TextParser\Package;
-use Override;
-use Traversable;
 
-use function array_first;
 use function array_last;
-use function array_map;
 use function array_pop;
 use function array_reverse;
-use function array_unique;
 use function implode;
 use function max;
 use function mb_strlen;
+use function mb_strtolower;
 use function preg_quote;
 use function preg_split;
-use function strval;
-use function usort;
 
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
@@ -29,20 +22,14 @@ use const PREG_SPLIT_OFFSET_CAPTURE;
 /**
  * Splits iterable of strings by the separator(s) where the key is an offset of
  * the string/separator.
- *
- * @implements IteratorAggregate<int, string>
  */
-readonly class StringSplitIterable implements IteratorAggregate {
+readonly class Splitter {
     protected string $regexp;
     protected int    $longest;
 
     public function __construct(
         /**
-         * @var iterable<mixed, string>
-         */
-        protected iterable $iterable,
-        /**
-         * @var list<string|int>
+         * @var list<non-empty-string|int>
          */
         protected array $separators,
         /**
@@ -51,23 +38,25 @@ readonly class StringSplitIterable implements IteratorAggregate {
          * @var positive-int|null
          */
         protected ?int $buffer = null,
-        protected int $offset = 0,
         protected bool $caseSensitive = true,
     ) {
-        [$this->regexp, $this->longest] = $this->prepare($this->separators);
+        [$this->regexp, $this->longest] = $this->prepare();
     }
 
-    #[Override]
-    public function getIterator(): Traversable {
+    /**
+     * @param iterable<mixed, string> $iterable
+     *
+     * @return iterable<int, non-empty-string>
+     */
+    public function split(iterable $iterable, int $offset = 0): iterable {
         $buffer = '';
-        $offset = $this->offset;
         $limit  = max($this->buffer ?? Package::BufferCharacters, 2 * $this->longest);
 
-        foreach ($this->iterable as $string) {
+        foreach ($iterable as $string) {
             $buffer .= $string;
 
             if (mb_strlen($buffer, Package::Encoding) >= $limit) {
-                $items   = $this->split($buffer);
+                $items   = $this->explode($buffer);
                 $length  = 0;
                 $skipped = [];
 
@@ -85,38 +74,43 @@ readonly class StringSplitIterable implements IteratorAggregate {
             }
         }
 
-        yield from $this->iterator($offset, $this->split($buffer));
+        yield from $this->iterator($offset, $this->explode($buffer));
     }
 
     /**
-     * @param list<string|int> $separators
-     *
-     * @return array{string, int}
+     * @return array{non-empty-string, int}
      */
-    protected function prepare(array $separators): array {
-        // Remove duplicates
-        $separators = array_map(strval(...), $separators);
-        $separators = array_unique($separators);
+    private function prepare(): array {
+        // Collect separators
+        $separators = [];
+        $longest    = 0;
 
-        // Sort (longest must be first)
-        usort($separators, static fn ($a, $b) => mb_strlen($b, Package::Encoding) <=> mb_strlen($a, Package::Encoding));
+        foreach ($this->separators as $separator) {
+            $separator = (string) $separator;
 
-        // Longest
-        $longest = mb_strlen((string) array_first($separators), Package::Encoding);
+            if (!$this->caseSensitive) {
+                $separator = mb_strtolower($separator, Package::Encoding);
+            }
+
+            if (isset($separators[$separator])) {
+                continue;
+            }
+
+            $separators[$separator] = preg_quote($separator);
+            $longest                = max($longest, mb_strlen($separator, Package::Encoding));
+        }
 
         // Regexp
-        $quoted = array_map(preg_quote(...), $separators);
-        $regexp = '#('.implode('|', $quoted).')#u'.($this->caseSensitive ? '' : 'i');
+        $regexp = '#('.implode('|', $separators).')#u'.($this->caseSensitive ? '' : 'i');
 
+        // Return
         return [$regexp, $longest];
     }
 
     /**
-     * @return list<array{string, int<0, max>}>
+     * @return list<array{non-empty-string, int<0, max>}>
      */
-    private function split(string $string): array {
-        /** @see https://github.com/phpstan/phpstan-strict-rules/issues/268 */
-
+    private function explode(string $string): array {
         $flags = PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE;
         $split = preg_split($this->regexp, $string, -1, $flags);
         $split = $split !== false ? $split : [];
@@ -125,9 +119,9 @@ readonly class StringSplitIterable implements IteratorAggregate {
     }
 
     /**
-     * @param list<array{string, int}> $items
+     * @param list<array{non-empty-string, int}> $items
      *
-     * @return Generator<int, string>
+     * @return Generator<int, non-empty-string>
      */
     private function iterator(int $offset, array $items): Generator {
         foreach ($items as $item) {
