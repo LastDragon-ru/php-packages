@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LastDragon_ru\TextParser\Iterables;
+namespace LastDragon_ru\TextParser\Tokenizer;
 
 use LastDragon_ru\TextParser\Package\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -11,9 +11,9 @@ use function iterator_to_array;
 /**
  * @internal
  */
-#[CoversClass(StringSplitIterable::class)]
-final class StringSplitIterableTest extends TestCase {
-    public function testGetIterator(): void {
+#[CoversClass(Splitter::class)]
+final class SplitterTest extends TestCase {
+    public function testSplit(): void {
         // Prepare
         $separators = ['[', '!!!', ']['];
         $strings    = [
@@ -25,9 +25,8 @@ final class StringSplitIterableTest extends TestCase {
         $string     = implode('', $strings);
 
         // Long buffer
-        $long = iterator_to_array(
-            new StringSplitIterable($strings, $separators),
-        );
+        $splitter = new Splitter($separators);
+        $long     = iterator_to_array($splitter->split($strings));
 
         self::assertSame($string, implode('', $long));
         self::assertSame(
@@ -46,9 +45,8 @@ final class StringSplitIterableTest extends TestCase {
         );
 
         // Short buffer
-        $short = iterator_to_array(
-            new StringSplitIterable($strings, $separators, 2),
-        );
+        $splitter = new Splitter($separators, buffer: 2);
+        $short    = iterator_to_array($splitter->split($strings));
 
         self::assertSame($string, implode('', $short));
         self::assertSame(
@@ -70,13 +68,10 @@ final class StringSplitIterableTest extends TestCase {
     public function testGetIteratorCaseInsensitive(): void {
         $separators = ['a'];
         $input      = ['A[a]A'];
+        $splitter   = new Splitter($separators, caseSensitive: false);
+        $actual     = iterator_to_array($splitter->split($input));
         $expected   = ['A', '[', 'a', ']', 'A'];
 
-        self::assertSame(
-            $expected,
-            iterator_to_array(
-                new StringSplitIterable($input, $separators, caseSensitive: false),
-            ),
-        );
+        self::assertSame($expected, $actual);
     }
 }

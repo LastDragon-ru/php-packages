@@ -779,7 +779,7 @@ LastDragon_ru\TextParser\Docs\Calculator\Ast\Nodes\OperatorSubtractionNode {}
 
 # Escape
 
-Of course, it is supported. You just need to specify the token to use as escaping string:
+You can wrap tokens into [`TokenUnescapeIterable`][code-links/c8a490f0d02d6c18]:
 
 [include:example]: ./docs/Examples/Escape.php
 [//]: # (start: preprocess/49c559faa304d8f3)
@@ -791,6 +791,7 @@ Of course, it is supported. You just need to specify the token to use as escapin
 namespace LastDragon_ru\TextParser\Docs\Examples;
 
 use LastDragon_ru\LaraASP\Dev\App\Example;
+use LastDragon_ru\TextParser\Iterables\TokenUnescapeIterable;
 use LastDragon_ru\TextParser\Tokenizer\Tokenizer;
 
 use function iterator_to_array;
@@ -804,8 +805,9 @@ enum Lexeme: string {
 }
 
 $input     = 'a/b\\/\\c';
-$tokenizer = new Tokenizer(Lexeme::class, Lexeme::Backslash);
+$tokenizer = new Tokenizer(Lexeme::class);
 $tokens    = $tokenizer->tokenize([$input]);
+$tokens    = new TokenUnescapeIterable($tokens, Lexeme::Backslash);
 
 Example::dump(iterator_to_array($tokens));
 ```
@@ -905,6 +907,9 @@ Please use the [main repository](https://github.com/LastDragon-ru/php-packages) 
 
 [code-links/9110a629f7b2dbe5]: docs/Calculator/Parser.php#L44-L56
     "\LastDragon_ru\TextParser\Docs\Calculator\Parser::parseExpression()"
+
+[code-links/c8a490f0d02d6c18]: src/Iterables/TokenUnescapeIterable.php
+    "\LastDragon_ru\TextParser\Iterables\TokenUnescapeIterable"
 
 [code-links/080b62df2cf20def]: src/Iterables/TransactionalIterable.php
     "\LastDragon_ru\TextParser\Iterables\TransactionalIterable"

@@ -4,15 +4,12 @@ namespace LastDragon_ru\TextParser\Tokenizer;
 
 use ArrayAccess;
 use BackedEnum;
-use LastDragon_ru\TextParser\Iterables\StringSplitIterable;
-use LastDragon_ru\TextParser\Iterables\TokenUnescapeIterable;
 use LastDragon_ru\TextParser\Iterables\TransformIterable;
 use LastDragon_ru\TextParser\Package;
 use WeakMap;
 
 use function array_keys;
 use function mb_strtolower;
-use function mb_strtoupper;
 
 /**
  * @template TLexeme of BackedEnum
@@ -26,19 +23,25 @@ readonly class Tokenizer {
      * @var ArrayAccess<TLexeme, TLexeme>
      */
     protected ArrayAccess $aliases;
+    protected Splitter    $splitter;
 
     /**
      * @param list<class-string<TLexeme>>|class-string<TLexeme> $lexemes
-     * @param ?TLexeme                                          $escape
+     * @param ?TLexeme                                          $unknown
      * @param ?positive-int                                     $buffer
      */
     public function __construct(
         array|string $lexemes,
-        protected ?BackedEnum $escape = null,
-        protected ?int $buffer = null,
+        protected ?BackedEnum $unknown = null,
         protected bool $caseSensitive = true,
+        protected ?int $buffer = null,
     ) {
-        [$this->lexemes, $this->aliases] = $this->prepare((array) $lexemes, $this->caseSensitive);
+        [$this->lexemes, $this->aliases] = $this->prepare((array) $lexemes);
+        $this->splitter                  = new Splitter(
+            array_keys($this->lexemes),
+            $this->caseSensitive,
+            $this->buffer,
+        );
     }
 
     /**
@@ -56,22 +59,10 @@ readonly class Tokenizer {
      * @return iterable<mixed, Token<TLexeme>>
      */
     public function tokenize(iterable $iterable, int $offset = 0): iterable {
-        $iterable = new StringSplitIterable(
-            $iterable,
-            array_keys($this->lexemes),
-            $this->buffer,
-            $offset,
-            $this->caseSensitive,
+        return new TransformIterable(
+            $this->splitter->split($iterable, $offset),
+            $this->caseSensitive ? $this->tcs(...) : $this->tci(...),
         );
-        $iterable = new TransformIterable($iterable, function ($lexeme, $offset) {
-            return new Token($this->lexemes[$lexeme] ?? null, $lexeme, $offset);
-        });
-
-        if ($this->escape !== null) {
-            $iterable = new TokenUnescapeIterable($iterable, $this->escape);
-        }
-
-        return $iterable;
     }
 
     /**
@@ -79,7 +70,7 @@ readonly class Tokenizer {
      *
      * @return array{array<non-empty-string, TLexeme>, ArrayAccess<TLexeme, TLexeme>}
      */
-    private function prepare(array $enums, bool $caseSensitive): array {
+    private function prepare(array $enums): array {
         // todo(parser): Need to warning/error if
         //      * values have intersections, eg `(` and `!(` (the shortest value will be lost)
         //      * empty value (will be ignored)
@@ -98,19 +89,16 @@ readonly class Tokenizer {
 
             // Save
             foreach ($enum::cases() as $case) {
-                // Save case and aliases
                 $value = (string) $case->value;
 
                 if (!isset($lexemes[$value])) {
                     $lexemes[$value] = $case;
+
+                    if (!$this->caseSensitive) {
+                        $lexemes[mb_strtolower($value, Package::Encoding)] = $case;
+                    }
                 } else {
                     $aliases[$case] = $lexemes[$value];
-                }
-
-                // If case doesn't matter, then we save both
-                if ($caseSensitive === false) {
-                    $lexemes[mb_strtolower($value, Package::Encoding)] = $case;
-                    $lexemes[mb_strtoupper($value, Package::Encoding)] = $case;
                 }
             }
         }
@@ -118,5 +106,27 @@ readonly class Tokenizer {
         unset($lexemes['']);
 
         return [$lexemes, $aliases];
+    }
+
+    /**
+     * @return Token<TLexeme>
+     */
+    private function tcs(string $lexeme, int $offset): Token {
+        return new Token(
+            $this->lexemes[$lexeme] ?? $this->unknown,
+            $lexeme,
+            $offset,
+        );
+    }
+
+    /**
+     * @return Token<TLexeme>
+     */
+    private function tci(string $lexeme, int $offset): Token {
+        return new Token(
+            $this->lexemes[$lexeme] ?? $this->lexemes[mb_strtolower($lexeme, Package::Encoding)] ?? $this->unknown,
+            $lexeme,
+            $offset,
+        );
     }
 }
