@@ -36,7 +36,7 @@ readonly class Tokenizer {
         protected bool $caseSensitive = true,
         protected ?int $buffer = null,
     ) {
-        [$this->lexemes, $this->aliases] = $this->prepare((array) $lexemes, $this->caseSensitive);
+        [$this->lexemes, $this->aliases] = $this->prepare((array) $lexemes);
         $this->splitter                  = new Splitter(
             array_keys($this->lexemes),
             $this->caseSensitive,
@@ -70,7 +70,7 @@ readonly class Tokenizer {
      *
      * @return array{array<non-empty-string, TLexeme>, ArrayAccess<TLexeme, TLexeme>}
      */
-    private function prepare(array $enums, bool $caseSensitive): array {
+    private function prepare(array $enums): array {
         // todo(parser): Need to warning/error if
         //      * values have intersections, eg `(` and `!(` (the shortest value will be lost)
         //      * empty value (will be ignored)
@@ -94,7 +94,7 @@ readonly class Tokenizer {
                 if (!isset($lexemes[$value])) {
                     $lexemes[$value] = $case;
 
-                    if (!$caseSensitive) {
+                    if (!$this->caseSensitive) {
                         $lexemes[mb_strtolower($value, Package::Encoding)] = $case;
                     }
                 } else {
